@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/register_company_code_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -32,9 +34,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Text(
                     'Kenari',
-                    style: HeadingTextStyles.headingS().copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: HeadingTextStyles.headingS(),
                   ),
                   const SizedBox(
                     height: 5.0,
@@ -141,8 +141,9 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                       child: Text(
                         'Masuk',
-                        style: LTextStyles.regular().copyWith(
+                        style: LTextStyles.medium().copyWith(
                           color: emailController.text != '' && passwordController.text != '' ? LTextStyles.regular().color : Colors.black54,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -151,17 +152,20 @@ class _LoginPageState extends State<LoginPage> {
                     height: 55.0,
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+                    },
                     child: Text(
                       'Belum memiliki akun?',
-                      style: STextStyles.medium().copyWith(
+                      style: STextStyles.regular().copyWith(
                         color: Colors.black54,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ),
                   ElevatedButton(
                     onPressed: () {
-
+                      MoveToPage(context: context, target: const RegisterCompanyCodePage()).go();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: PrimaryColorStyles.primarySurface(),
@@ -170,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                       child: Text(
                         'Daftar',
-                        style: LTextStyles.regular().copyWith(
+                        style: LTextStyles.medium().copyWith(
                           color: PrimaryColorStyles.primaryMain(),
                         ),
                       ),
