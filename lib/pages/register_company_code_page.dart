@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/register_form_page.dart';
+import 'package:kenari_app/pages/success_register_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -138,7 +139,11 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
                       message: 'dapatkan Kode Perusahaan melalui pengelola perusahaan.',
                     ).show();
                   } else {
-                    MoveToPage(context: context, target: RegisterFormPage(companyCode: companyCodeController.text)).go();
+                    MoveToPage(context: context, target: RegisterFormPage(companyCode: companyCodeController.text), callback: (callbackResult) {
+                      if(callbackResult != null && callbackResult == true) {
+                        ReplaceToPage(context: context, target: const SuccessRegisterPage()).go();
+                      }
+                    }).go();
                   }
                 },
                 style: ElevatedButton.styleFrom(
