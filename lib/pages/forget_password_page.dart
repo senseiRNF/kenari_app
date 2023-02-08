@@ -1,21 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/pages/register_form_page.dart';
-import 'package:kenari_app/pages/success_register_page.dart';
-import 'package:kenari_app/services/local/models/register_form_result.dart';
+import 'package:kenari_app/pages/reset_password_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class RegisterCompanyCodePage extends StatefulWidget {
-  const RegisterCompanyCodePage({super.key});
+class ForgetPasswordPage extends StatefulWidget {
+  const ForgetPasswordPage({super.key});
 
   @override
-  State<RegisterCompanyCodePage> createState() => _RegisterCompanyCodePageState();
+  State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
 }
 
-class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
-  TextEditingController companyCodeController = TextEditingController();
+class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
+  TextEditingController emailController = TextEditingController();
+
+  bool showErrorHint = false;
+
+  void checkEmail() {
+    if(emailController.text != 'razy.firdana@intidata.net') {
+      setState(() {
+        showErrorHint = true;
+      });
+    } else {
+      if(showErrorHint = true) {
+        setState(() {
+          showErrorHint = false;
+        });
+      }
+
+      OkDialog(
+        context: context,
+        title: 'Email berhasil terkirim!',
+        message: 'Silahkan cek email Anda untuk mengatur ulang kata sandi',
+        okFunction: () {
+          ReplaceToPage(context: context, target: const ResetPasswordPage()).go();
+        },
+      ).show();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +71,7 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
                   ),
                   Expanded(
                     child: Text(
-                      'Daftar Akun',
+                      'Lupa Password',
                       style: HeadingTextStyles.headingS(),
                     ),
                   ),
@@ -69,60 +92,36 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
                       height: 15.0,
                     ),
                     Text(
-                      'Silahkan masukkan kode perusahaan Anda untuk mendaftar akun',
-                      style: MTextStyles.regular(),
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Card(
-                      color: InfoColorStyles.infoSurface(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.info,
-                              color: InfoColorStyles.infoMain(),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                child: Text(
-                                  'Kode perusahaan didapatkan melalui pengelola perusahaan',
-                                  style: XSTextStyles.medium().copyWith(
-                                    color: InfoColorStyles.infoMain(),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      'Silahkan masukkan alamat email terdaftar untuk menerima email pengaturan ulang kata sandi',
+                      style: STextStyles.regular(),
                     ),
                     const SizedBox(
                       height: 25.0,
                     ),
                     Text(
-                      'Kode Perusahaan',
+                      'Email',
                       style: STextStyles.medium().copyWith(
                         fontWeight: FontWeight.bold,
+                        color: showErrorHint ? DangerColorStyles.dangerMain() : STextStyles.medium().color,
                       ),
                     ),
                     TextField(
-                      controller: companyCodeController,
+                      controller: emailController,
                       decoration: InputDecoration(
-                        hintText: 'Contoh: KPSFC',
+                        hintText: 'Masukkan alamat email',
                         hintStyle: MTextStyles.regular(),
+                        errorText: showErrorHint ? 'Email tidak terdaftar' : null,
                       ),
-                      textCapitalization: TextCapitalization.characters,
+                      keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
                       onChanged: (_) {
                         setState(() {});
-                      },
-                      onSubmitted: (data) {
 
+                        if(showErrorHint == true) {
+                          setState(() {
+                            showErrorHint = false;
+                          });
+                        }
                       },
                     ),
                   ],
@@ -133,29 +132,17 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
                 onPressed: () {
-                  if(companyCodeController.text != 'SFC') {
-                    OkDialog(
-                      context: context,
-                      title: 'Kode Perusahaan tidak ditemukan',
-                      message: 'dapatkan Kode Perusahaan melalui pengelola perusahaan.',
-                    ).show();
-                  } else {
-                    MoveToPage(context: context, target: RegisterFormPage(companyCode: companyCodeController.text), callback: (RegisterFormResult? callbackResult) {
-                      if(callbackResult != null && callbackResult.registerResult == true && callbackResult.email != null) {
-                        ReplaceToPage(context: context, target: SuccessRegisterPage(email: callbackResult.email!)).go();
-                      }
-                    }).go();
-                  }
+                  checkEmail();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: companyCodeController.text != '' ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
+                  backgroundColor: emailController.text != '' ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                   child: Text(
                     'Lanjutkan',
                     style: LTextStyles.medium().copyWith(
-                      color: companyCodeController.text != '' ? LTextStyles.regular().color : Colors.black54,
+                      color: emailController.text != '' ? LTextStyles.regular().color : Colors.black54,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

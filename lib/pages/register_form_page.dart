@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/services/local/models/register_form_result.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -61,7 +62,13 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
             } else {
               showUserAgreementBottomDialog().then((result) {
                 if(result != null && result == true) {
-                  BackFromThisPage(context: context, callbackData: true).go();
+                  BackFromThisPage(
+                    context: context,
+                    callbackData: RegisterFormResult(
+                      registerResult: true,
+                      email: emailController.text,
+                    ),
+                  ).go();
                 }
               });
             }
@@ -1327,9 +1334,6 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                                       showErrorPasswordConfHint = false;
                                     });
                                   }
-                                },
-                                onSubmitted: (_) {
-                                  checkForm();
                                 },
                               ),
                             ],

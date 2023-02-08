@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/forget_password_page.dart';
+import 'package:kenari_app/pages/home_page.dart';
 import 'package:kenari_app/pages/register_company_code_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -100,6 +102,12 @@ class _LoginPageState extends State<LoginPage> {
                     textInputAction: TextInputAction.done,
                     onChanged: (_) {
                       setState(() {});
+
+                      if(showErrorHint = true) {
+                        setState(() {
+                          showErrorHint = false;
+                        });
+                      }
                     },
                   ),
                   const SizedBox(
@@ -109,7 +117,9 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          MoveToPage(context: context, target: const ForgetPasswordPage()).go();
+                        },
                         child: Text(
                           'Lupa password?',
                           style: MTextStyles.medium(),
@@ -132,6 +142,8 @@ class _LoginPageState extends State<LoginPage> {
                             showErrorHint = false;
                           });
                         }
+
+                        ReplaceToPage(context: context, target: const HomePage()).go();
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -149,19 +161,15 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 55.0,
+                    height: 50.0,
                   ),
-                  TextButton(
-                    onPressed: () {
-
-                    },
-                    child: Text(
-                      'Belum memiliki akun?',
-                      style: STextStyles.regular().copyWith(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                  Text(
+                    'Belum memiliki akun?',
+                    style: STextStyles.regular(),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 10.0,
                   ),
                   ElevatedButton(
                     onPressed: () {
