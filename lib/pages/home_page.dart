@@ -90,28 +90,144 @@ class _HomePageState extends State<HomePage> {
                           });
                         },
                       ),
-                      items: [1, 2].map((i) {
-                        return Builder(
-                          builder: (BuildContext itemContext) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.bottomLeft,
-                                    end: Alignment.topRight,
-                                    colors: [
-                                      Color(0xff242424),
-                                      Color(0xff363636),
+                      items: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topRight,
+                                colors: [
+                                  Color(0xff242424),
+                                  Color(0xff363636),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Image.asset(
+                                        'assets/images/dipay_logo.png',
+                                        fit: BoxFit.fitWidth,
+                                        width: 50.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                    child: Text(
+                                      'Aktivasi akun Dipay untuk segala\nmacam transaksi di Kenari',
+                                      style: STextStyles.medium().copyWith(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Aktivasi Akun',
+                                        style: XSTextStyles.medium().copyWith(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5.0,
+                                      ),
+                                      const Icon(
+                                        Icons.chevron_right,
+                                        color: Colors.white,
+                                      ),
                                     ],
                                   ),
-                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topRight,
+                                colors: [
+                                  Color(0xff101828),
+                                  Color(0xff475467),
+                                ],
                               ),
-                            );
-                          },
-                        );
-                      }).toList(),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Image.asset(
+                                        'assets/images/indofund_logo.png',
+                                        fit: BoxFit.fitWidth,
+                                        width: 50.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                                    child: Text(
+                                      'Aktivasi akun Indofund untuk\nkemudahan fitur pinjaman di Kenari',
+                                      style: STextStyles.medium().copyWith(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Aktivasi Akun',
+                                        style: XSTextStyles.medium().copyWith(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5.0,
+                                      ),
+                                      const Icon(
+                                        Icons.chevron_right,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 10.0,
@@ -148,23 +264,30 @@ class _HomePageState extends State<HomePage> {
                       height: 30.0,
                     ),
                     Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: GridView(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 54.0,
-                                  height: 54.0,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: BorderColorStyles.borderStrokes(),
-                                    ),
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: GridView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 54.0,
+                                height: 54.0,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: BorderColorStyles.borderStrokes(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+
+                                  },
+                                  customBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Padding(
@@ -174,26 +297,34 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 8.0,
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Text(
+                                'Iuran',
+                                style: STextStyles.medium(),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 54.0,
+                                height: 54.0,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: BorderColorStyles.borderStrokes(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
-                                Text(
-                                  'Iuran',
-                                  style: STextStyles.medium(),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 54.0,
-                                  height: 54.0,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: BorderColorStyles.borderStrokes(),
-                                    ),
+                                child: InkWell(
+                                  onTap: () {
+
+                                  },
+                                  customBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Padding(
@@ -203,26 +334,34 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 8.0,
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Text(
+                                'Pinjaman',
+                                style: STextStyles.medium(),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 54.0,
+                                height: 54.0,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: BorderColorStyles.borderStrokes(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
-                                Text(
-                                  'Pinjaman',
-                                  style: STextStyles.medium(),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 54.0,
-                                  height: 54.0,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: BorderColorStyles.borderStrokes(),
-                                    ),
+                                child: InkWell(
+                                  onTap: () {
+
+                                  },
+                                  customBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Padding(
@@ -232,26 +371,34 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 8.0,
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Text(
+                                'Titip Jual',
+                                style: STextStyles.medium(),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 54.0,
+                                height: 54.0,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: BorderColorStyles.borderStrokes(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
-                                Text(
-                                  'Titip Jual',
-                                  style: STextStyles.medium(),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 54.0,
-                                  height: 54.0,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: BorderColorStyles.borderStrokes(),
-                                    ),
+                                child: InkWell(
+                                  onTap: () {
+
+                                  },
+                                  customBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Padding(
@@ -261,17 +408,18 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 8.0,
-                                ),
-                                Text(
-                                  'Semua',
-                                  style: STextStyles.medium(),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Text(
+                                'Semua',
+                                style: STextStyles.medium(),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 40.0,
@@ -296,6 +444,258 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 200.0,
+                            child: ListView(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                const SizedBox(
+                                  width: 25.0,
+                                ),
+                                SizedBox(
+                                  width: 150.0,
+                                  height: 200.0,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                  'assets/images/example_images/cabai-rawit-merah.png',
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10.0),
+                                                topRight: Radius.circular(10.0),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                  'Sembako',
+                                                  style: XSTextStyles.regular(),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                  child: Text(
+                                                    'Cabai Merah',
+                                                    style: STextStyles.medium(),
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        'Rp 25.000 - 65.000',
+                                                        style: XSTextStyles.medium().copyWith(
+                                                          color: PrimaryColorStyles.primaryMain(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Icon(
+                                                      Icons.more_horiz,
+                                                      size: 15.0,
+                                                      color: IconColorStyles.iconColor(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10.0,
+                                ),
+                                SizedBox(
+                                  width: 150.0,
+                                  height: 200.0,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                  'assets/images/example_images/keripik-kentang.png',
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10.0),
+                                                topRight: Radius.circular(10.0),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                  'Makanan',
+                                                  style: XSTextStyles.regular(),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                  child: Text(
+                                                    'Keripik Kentang',
+                                                    style: STextStyles.medium(),
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        'Rp 55.000',
+                                                        style: XSTextStyles.medium().copyWith(
+                                                          color: PrimaryColorStyles.primaryMain(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Icon(
+                                                      Icons.more_horiz,
+                                                      size: 15.0,
+                                                      color: IconColorStyles.iconColor(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10.0,
+                                ),
+                                SizedBox(
+                                  width: 150.0,
+                                  height: 200.0,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                  'assets/images/example_images/jambu-air.png',
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10.0),
+                                                topRight: Radius.circular(10.0),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                  'Buah-buahan',
+                                                  style: XSTextStyles.regular(),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                  child: Text(
+                                                    'Jambu Air',
+                                                    style: STextStyles.medium(),
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        'Rp 25.000',
+                                                        style: XSTextStyles.medium().copyWith(
+                                                          color: PrimaryColorStyles.primaryMain(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Icon(
+                                                      Icons.more_horiz,
+                                                      size: 15.0,
+                                                      color: IconColorStyles.iconColor(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 25.0,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30.0,
                     ),
                   ],
                 ),

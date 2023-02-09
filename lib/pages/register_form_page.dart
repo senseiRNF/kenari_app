@@ -1142,207 +1142,254 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 ],
               ),
             ),
-            Expanded(
-              child: Stack(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Image.asset(
-                      'assets/images/banner_register_form.png',
-                      fit: BoxFit.fitWidth,
-                    ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 120.0,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/banner_register_form.png',
                   ),
-                  Column(
-                    children: [
-                      const SizedBox(
-                        height: 150.0,
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: ListView(
-                            children: [
-                              Text(
-                                'Silahkan lengkapi informasi dibawah ini untuk melanjutkan pendaftaran',
-                                style: MTextStyles.regular(),
-                              ),
-                              const SizedBox(
-                                height: 30.0,
-                              ),
-                              Text(
-                                'Nama Lengkap',
-                                style: STextStyles.medium().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextField(
-                                controller: nameController,
-                                decoration: InputDecoration(
-                                  hintText: 'Isi Nama lengkap disini',
-                                  hintStyle: MTextStyles.regular(),
-                                  errorText: showErrorNameHint ? 'Harap masukkan nama terlebih dahulu' : null,
-                                ),
-                                textCapitalization: TextCapitalization.words,
-                                textInputAction: TextInputAction.next,
-                                onChanged: (_) {
-                                  setState(() {});
-
-                                  if(showErrorNameHint == true) {
-                                    setState(() {
-                                      showErrorNameHint = false;
-                                    });
-                                  }
-                                },
-                              ),
-                              const SizedBox(
-                                height: 25.0,
-                              ),
-                              Text(
-                                'Nomor Handphone',
-                                style: STextStyles.medium().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextField(
-                                controller: phoneController,
-                                decoration: InputDecoration(
-                                  hintText: 'Isi nomor Handphone aktif',
-                                  hintStyle: MTextStyles.regular(),
-                                  errorText: showErrorPhoneHint ? phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu' : null,
-                                ),
-                                keyboardType: TextInputType.phone,
-                                textInputAction: TextInputAction.next,
-                                onChanged: (_) {
-                                  setState(() {});
-
-                                  if(showErrorPhoneHint == true) {
-                                    setState(() {
-                                      showErrorPhoneHint = false;
-                                    });
-                                  }
-                                },
-                              ),
-                              const SizedBox(
-                                height: 25.0,
-                              ),
-                              Text(
-                                'Email',
-                                style: STextStyles.medium().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextField(
-                                controller: emailController,
-                                decoration: InputDecoration(
-                                  hintText: 'Isi Email aktif mu disini',
-                                  hintStyle: MTextStyles.regular(),
-                                  errorText: showErrorEmailHint ? emailController.text != '' ? 'Email telah terdaftar' : 'Harap masukkan email terlebih dahulu' : null,
-                                ),
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                onChanged: (_) {
-                                  setState(() {});
-
-                                  if(showErrorEmailHint == true) {
-                                    setState(() {
-                                      showErrorEmailHint = false;
-                                    });
-                                  }
-                                },
-                              ),
-                              const SizedBox(
-                                height: 25.0,
-                              ),
-                              Text(
-                                'Password',
-                                style: STextStyles.medium().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextField(
-                                controller: passwordController,
-                                obscureText: obscurePassword,
-                                decoration: InputDecoration(
-                                  hintText: 'Buat Password mu disini',
-                                  hintStyle: MTextStyles.regular(),
-                                  suffixIcon: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        obscurePassword = !obscurePassword;
-                                      });
-                                    },
-                                    customBorder: const CircleBorder(),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(0.0),
-                                      child: Icon(
-                                        obscurePassword ? Icons.visibility : Icons.visibility_off,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ),
-                                  errorText: showErrorPasswordHint ? passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Harap masukkan password terlebih dahulu' : null,
-                                ),
-                                textInputAction: TextInputAction.next,
-                                onChanged: (_) {
-                                  setState(() {});
-
-                                  if(showErrorPasswordHint == true) {
-                                    setState(() {
-                                      showErrorPasswordHint = false;
-                                    });
-                                  }
-                                },
-                              ),
-                              const SizedBox(
-                                height: 25.0,
-                              ),
-                              Text(
-                                'Konfirmasi Password',
-                                style: STextStyles.medium().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextField(
-                                controller: confirmPasswordController,
-                                obscureText: obscureConfPassword,
-                                decoration: InputDecoration(
-                                  hintText: 'Ulangi Password',
-                                  hintStyle: MTextStyles.regular(),
-                                  suffixIcon: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        obscureConfPassword = !obscureConfPassword;
-                                      });
-                                    },
-                                    customBorder: const CircleBorder(),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(0.0),
-                                      child: Icon(
-                                        obscureConfPassword ? Icons.visibility : Icons.visibility_off,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ),
-                                  errorText: showErrorPasswordConfHint ? confirmPasswordController.text != '' ? 'Password harus sama' : 'Harap masukkan kembali password terlebih dahulu' : null,
-                                ),
-                                textInputAction: TextInputAction.done,
-                                onChanged: (_) {
-                                  setState(() {});
-
-                                  if(showErrorPasswordConfHint == true) {
-                                    setState(() {
-                                      showErrorPasswordConfHint = false;
-                                    });
-                                  }
-                                },
-                              ),
-                            ],
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 40.0,
+                          height: 40.0,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          'Surya Fajar',
+                          style: HeadingTextStyles.headingS().copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Row(
+                              children: [
+                                Material(
+                                  color: PrimaryColorStyles.primaryMain(),
+                                  shape: const CircleBorder(),
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 15.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(
+              height: 15.0,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: ListView(
+                  children: [
+                    Text(
+                      'Silahkan lengkapi informasi dibawah ini untuk melanjutkan pendaftaran',
+                      style: MTextStyles.regular(),
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    Text(
+                      'Nama Lengkap',
+                      style: STextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        hintText: 'Isi Nama lengkap disini',
+                        hintStyle: MTextStyles.regular(),
+                        errorText: showErrorNameHint ? 'Harap masukkan nama terlebih dahulu' : null,
+                      ),
+                      textCapitalization: TextCapitalization.words,
+                      textInputAction: TextInputAction.next,
+                      onChanged: (_) {
+                        setState(() {});
+
+                        if(showErrorNameHint == true) {
+                          setState(() {
+                            showErrorNameHint = false;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
+                    Text(
+                      'Nomor Handphone',
+                      style: STextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextField(
+                      controller: phoneController,
+                      decoration: InputDecoration(
+                        hintText: 'Isi nomor Handphone aktif',
+                        hintStyle: MTextStyles.regular(),
+                        errorText: showErrorPhoneHint ? phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu' : null,
+                      ),
+                      keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.next,
+                      onChanged: (_) {
+                        setState(() {});
+
+                        if(showErrorPhoneHint == true) {
+                          setState(() {
+                            showErrorPhoneHint = false;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
+                    Text(
+                      'Email',
+                      style: STextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Isi Email aktif mu disini',
+                        hintStyle: MTextStyles.regular(),
+                        errorText: showErrorEmailHint ? emailController.text != '' ? 'Email telah terdaftar' : 'Harap masukkan email terlebih dahulu' : null,
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      onChanged: (_) {
+                        setState(() {});
+
+                        if(showErrorEmailHint == true) {
+                          setState(() {
+                            showErrorEmailHint = false;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
+                    Text(
+                      'Password',
+                      style: STextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextField(
+                      controller: passwordController,
+                      obscureText: obscurePassword,
+                      decoration: InputDecoration(
+                        hintText: 'Buat Password mu disini',
+                        hintStyle: MTextStyles.regular(),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              obscurePassword = !obscurePassword;
+                            });
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: Icon(
+                              obscurePassword ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ),
+                        errorText: showErrorPasswordHint ? passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Harap masukkan password terlebih dahulu' : null,
+                      ),
+                      textInputAction: TextInputAction.next,
+                      onChanged: (_) {
+                        setState(() {});
+
+                        if(showErrorPasswordHint == true) {
+                          setState(() {
+                            showErrorPasswordHint = false;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
+                    Text(
+                      'Konfirmasi Password',
+                      style: STextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextField(
+                      controller: confirmPasswordController,
+                      obscureText: obscureConfPassword,
+                      decoration: InputDecoration(
+                        hintText: 'Ulangi Password',
+                        hintStyle: MTextStyles.regular(),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              obscureConfPassword = !obscureConfPassword;
+                            });
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: Icon(
+                              obscureConfPassword ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ),
+                        errorText: showErrorPasswordConfHint ? confirmPasswordController.text != '' ? 'Password harus sama' : 'Harap masukkan kembali password terlebih dahulu' : null,
+                      ),
+                      textInputAction: TextInputAction.done,
+                      onChanged: (_) {
+                        setState(() {});
+
+                        if(showErrorPasswordConfHint == true) {
+                          setState(() {
+                            showErrorPasswordConfHint = false;
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(
