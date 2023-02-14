@@ -14,6 +14,377 @@ class _HomePageState extends State<HomePage> {
   int selectedMenu = 0;
   int selectedCard = 0;
 
+  Future<void> showAllMenuBottomDialog() async {
+    await showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      isScrollControlled: true,
+      builder: (BuildContext modalBottomContext) {
+        return FractionallySizedBox(
+          heightFactor: 0.70,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.all(10.0),
+                  height: 5.0,
+                  width: 60.0,
+                  color: NeutralColorStyles.neutral04(),
+                ),
+              ),
+              const SizedBox(
+                height: 25.0,
+              ),
+              Expanded(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Text(
+                        'Layanan Keuangan',
+                        style: STextStyles.medium().copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: InkWell(
+                        onTap: () {
+
+                        },
+                        customBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 54.0,
+                              height: 54.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: BorderColorStyles.borderStrokes(),
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  showAllMenuBottomDialog();
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Image.asset(
+                                    'assets/images/icon_iuran.png',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 15.0,
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    'Iuran',
+                                    style: STextStyles.medium(),
+                                  ),
+                                  Text(
+                                    'Bayar Iuran wajib dan berjangka Perusahaan kamu disini',
+                                    style: XSTextStyles.regular(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: InkWell(
+                        onTap: () {
+
+                        },
+                        customBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 54.0,
+                              height: 54.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: BorderColorStyles.borderStrokes(),
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  showAllMenuBottomDialog();
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Image.asset(
+                                    'assets/images/icon_pinjaman.png',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 15.0,
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    'Pinjaman',
+                                    style: STextStyles.medium(),
+                                  ),
+                                  Text(
+                                    'Dapatkan pinjaman uang untuk pengembangan usaha mu dan kebutuhan lainnya disini',
+                                    style: XSTextStyles.regular(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Text(
+                        'Jualan Produk',
+                        style: STextStyles.medium().copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: InkWell(
+                        onTap: () {
+
+                        },
+                        customBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 54.0,
+                              height: 54.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: BorderColorStyles.borderStrokes(),
+                                ),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  showAllMenuBottomDialog();
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Image.asset(
+                                    'assets/images/icon_titip_jual.png',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 15.0,
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    'Titip Jual',
+                                    style: STextStyles.medium(),
+                                  ),
+                                  Text(
+                                    'Dapatkan penghasilan tambahan dengan Titip Jual barang apapun disini',
+                                    style: XSTextStyles.regular(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Text(
+                        'Coming Soon',
+                        style: STextStyles.medium().copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 54.0,
+                            height: 54.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                showAllMenuBottomDialog();
+                              },
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Image.asset(
+                                  'assets/images/icon_reksadana.png',
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15.0,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'Reksadana',
+                                  style: STextStyles.medium(),
+                                ),
+                                Text(
+                                  'Sisihkan gaji untuk Investasi yang kekinian, nggak ribet, dan bisa dimulai dengan modal kecil.',
+                                  style: XSTextStyles.regular(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 54.0,
+                            height: 54.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                showAllMenuBottomDialog();
+                              },
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Image.asset(
+                                  'assets/images/icon_ppob.png',
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15.0,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'PPOB',
+                                  style: STextStyles.regular(),
+                                ),
+                                Text(
+                                  'Memudahkanmu dalam membayarkan berbagai jenis tagihan bulanan.',
+                                  style: XSTextStyles.regular(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -396,7 +767,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 child: InkWell(
                                   onTap: () {
-
+                                    showAllMenuBottomDialog();
                                   },
                                   customBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12.0),

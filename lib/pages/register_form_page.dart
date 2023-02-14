@@ -110,12 +110,15 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                     color: NeutralColorStyles.neutral04(),
                   ),
                 ),
+                const SizedBox(
+                  height: 25.0,
+                ),
                 Expanded(
                   child: ListView(
                     controller: controller,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Text(
                           'Syarat dan Ketentuan Umum Kenari',
                           style: LTextStyles.medium().copyWith(
@@ -123,6 +126,9 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                           ),
                           textAlign: TextAlign.start,
                         ),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
