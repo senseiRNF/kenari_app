@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:kenari_app/services/local/models/new_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -13,6 +17,29 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedMenu = 0;
   int selectedCard = 0;
+
+  List<NewProduct> newProductList = [
+    NewProduct(
+      type: 'Sembako', name: 'Cabai Merah',
+      variant: ['1/4 Kg', '1/2 Kg', '1 Kg', '1,25 Kg', '1,5 Kg', '2 Kg'],
+      price: [25000, 45000, 65000],
+      stock: [50, 50, 50],
+      imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
+    ),
+    NewProduct(
+      type: 'Makanan', name: 'Keripik Kentang',
+      price: [55000],
+      stock: [50],
+      imagePath: ['assets/images/example_images/keripik-kentang.png'],
+    ),
+    NewProduct(
+      type: 'Buah-buahan', name: 'Jambu Air',
+      variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
+      price: [25000, 45000, 65000],
+      stock: [50, 50, 50],
+      imagePath: ['assets/images/example_images/jambu-air.png'],
+    ),
+  ];
 
   Future<void> showAllMenuBottomDialog() async {
     await showModalBottomSheet(
@@ -380,6 +407,216 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+
+  Future<void> showProductBottomDialog(NewProduct newProduct) async {
+    await showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      builder: (BuildContext modalBottomContext) {
+        return StatefulBuilder(
+          builder: (BuildContext modalContext, stateSetter) {
+            int index = 0;
+            int stock = newProduct.stock[index];
+
+            String price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProduct.price[index]).replaceAll(',', '.')}';
+            String imagePath = newProduct.imagePath[index] ?? '';
+            String? variant;
+
+            if(newProduct.variant != null) {
+              variant = newProduct.variant![index];
+            }
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.all(10.0),
+                    height: 5.0,
+                    width: 60.0,
+                    color: NeutralColorStyles.neutral04(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 25.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Text(
+                    'Varian Produk',
+                    style: LTextStyles.medium().copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              imagePath,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: const SizedBox(
+                          width: 80.0,
+                          height: 80.0,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              newProduct.name,
+                              style: MTextStyles.medium().copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            variant != null ?
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    color: NeutralColorStyles.neutral04(),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                    child: Text(
+                                      variant,
+                                      style: XSTextStyles.medium(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ) :
+                            const Material(),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Text(
+                              price,
+                              style: LTextStyles.medium().copyWith(
+                                color: PrimaryColorStyles.primaryMain(),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Stok:',
+                                  style: STextStyles.regular(),
+                                ),
+                                const SizedBox(
+                                  width: 5.0,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    newProduct.type == 'Sembako' ? 'Selalu ada' : stock.toString(),
+                                    style: STextStyles.medium(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                newProduct.variant != null ?
+                Column (
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Text(
+                        'Pilih Varian :',
+                        style: STextStyles.medium().copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: SizedBox(
+                        height: 30.0,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: newProduct.variant!.length,
+                          separatorBuilder: (BuildContext separatorContext, int index) {
+                            return const SizedBox(
+                              width: 10.0,
+                            );
+                          },
+                          itemBuilder: (BuildContext gridContext, int gridIndex) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1.0,
+                                  color: BorderColorStyles.borderStrokes(),
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                child: Text(
+                                  newProduct.variant![gridIndex],
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ) :
+                const Material(),
+                const SizedBox(
+                  height: 25.0,
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -824,242 +1061,107 @@ class _HomePageState extends State<HomePage> {
                         Expanded(
                           child: SizedBox(
                             height: 200.0,
-                            child: ListView(
+                            child: ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
-                              children: [
-                                const SizedBox(
-                                  width: 25.0,
-                                ),
-                                SizedBox(
-                                  width: 150.0,
-                                  height: 200.0,
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                  'assets/images/example_images/cabai-rawit-merah.png',
+                              itemCount: newProductList.length,
+                              itemBuilder: (BuildContext listContext, int index) {
+                                String price = '';
+
+                                if(newProductList[index].price.length == 1) {
+                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProductList[index].price[0]).replaceAll(',', '.')}';
+                                } else {
+                                  int lowest = newProductList[index].price.reduce(min);
+                                  int highest = newProductList[index].price.reduce(max);
+
+                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
+                                }
+
+                                return Padding(
+                                  padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 5.0) : index == newProductList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0) : const EdgeInsets.symmetric(horizontal: 5.0),
+                                  child: SizedBox(
+                                    width: 150.0,
+                                    height: 200.0,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                    newProductList[index].imagePath[0] != null ? newProductList[index].imagePath[0]! : '',
+                                                  ),
+                                                  fit: BoxFit.cover,
                                                 ),
-                                                fit: BoxFit.cover,
-                                              ),
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10.0),
-                                                topRight: Radius.circular(10.0),
+                                                borderRadius: const BorderRadius.only(
+                                                  topLeft: Radius.circular(10.0),
+                                                  topRight: Radius.circular(10.0),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Text(
-                                                  'Sembako',
-                                                  style: XSTextStyles.regular(),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(10.0),
                                                   child: Text(
-                                                    'Cabai Merah',
-                                                    style: STextStyles.medium(),
+                                                    newProductList[index].type,
+                                                    style: XSTextStyles.regular(),
                                                   ),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        'Rp 25.000 - 65.000',
-                                                        style: XSTextStyles.medium().copyWith(
-                                                          color: PrimaryColorStyles.primaryMain(),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                    child: Text(
+                                                      newProductList[index].name,
+                                                      style: STextStyles.medium(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(10.0),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          price,
+                                                          style: XSTextStyles.medium().copyWith(
+                                                            color: PrimaryColorStyles.primaryMain(),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Icon(
-                                                      Icons.more_horiz,
-                                                      size: 15.0,
-                                                      color: IconColorStyles.iconColor(),
-                                                    ),
-                                                  ],
+                                                      InkWell(
+                                                        onTap: () {
+                                                          showProductBottomDialog(
+                                                            newProductList[index],
+                                                          );
+                                                        },
+                                                        customBorder: const CircleBorder(),
+                                                        child: Icon(
+                                                          Icons.more_horiz,
+                                                          size: 15.0,
+                                                          color: IconColorStyles.iconColor(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10.0,
-                                ),
-                                SizedBox(
-                                  width: 150.0,
-                                  height: 200.0,
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                  'assets/images/example_images/keripik-kentang.png',
-                                                ),
-                                                fit: BoxFit.cover,
-                                              ),
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10.0),
-                                                topRight: Radius.circular(10.0),
-                                              ),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Text(
-                                                  'Makanan',
-                                                  style: XSTextStyles.regular(),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                  child: Text(
-                                                    'Keripik Kentang',
-                                                    style: STextStyles.medium(),
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        'Rp 55.000',
-                                                        style: XSTextStyles.medium().copyWith(
-                                                          color: PrimaryColorStyles.primaryMain(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Icon(
-                                                      Icons.more_horiz,
-                                                      size: 15.0,
-                                                      color: IconColorStyles.iconColor(),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 10.0,
-                                ),
-                                SizedBox(
-                                  width: 150.0,
-                                  height: 200.0,
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                  'assets/images/example_images/jambu-air.png',
-                                                ),
-                                                fit: BoxFit.cover,
-                                              ),
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10.0),
-                                                topRight: Radius.circular(10.0),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Text(
-                                                  'Buah-buahan',
-                                                  style: XSTextStyles.regular(),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                  child: Text(
-                                                    'Jambu Air',
-                                                    style: STextStyles.medium(),
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        'Rp 25.000',
-                                                        style: XSTextStyles.medium().copyWith(
-                                                          color: PrimaryColorStyles.primaryMain(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Icon(
-                                                      Icons.more_horiz,
-                                                      size: 15.0,
-                                                      color: IconColorStyles.iconColor(),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 25.0,
-                                ),
-                              ],
+                                );
+                              },
                             ),
                           ),
                         ),
