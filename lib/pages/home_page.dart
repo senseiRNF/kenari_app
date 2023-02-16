@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   List<NewProduct> newProductList = [
     NewProduct(
       type: 'Sembako', name: 'Cabai Merah',
-      variant: ['1/4 Kg', '1/2 Kg', '1 Kg', '1,25 Kg', '1,5 Kg', '2 Kg'],
+      variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
       price: [25000, 45000, 65000],
       stock: [50, 50, 50],
       imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
@@ -422,19 +422,20 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       builder: (BuildContext modalBottomContext) {
+        int index = 0;
+        int qty = 0;
+        int stock = newProduct.stock[index];
+
+        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProduct.price[index]).replaceAll(',', '.')}';
+        String imagePath = newProduct.imagePath[index] ?? '';
+        String? variant;
+
+        if(newProduct.variant != null) {
+          variant = newProduct.variant![index];
+        }
+
         return StatefulBuilder(
           builder: (BuildContext modalContext, stateSetter) {
-            int index = 0;
-            int stock = newProduct.stock[index];
-
-            String price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProduct.price[index]).replaceAll(',', '.')}';
-            String imagePath = newProduct.imagePath[index] ?? '';
-            String? variant;
-
-            if(newProduct.variant != null) {
-              variant = newProduct.variant![index];
-            }
-
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -453,7 +454,7 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Text(
-                    'Varian Produk',
+                    newProduct.variant != null ? 'Varian Produk' : 'Tambah Troli',
                     style: LTextStyles.medium().copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -510,7 +511,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
-                                      variant,
+                                      variant!,
                                       style: XSTextStyles.medium(),
                                     ),
                                   ),
@@ -587,20 +588,31 @@ class _HomePageState extends State<HomePage> {
                               width: 10.0,
                             );
                           },
-                          itemBuilder: (BuildContext gridContext, int gridIndex) {
+                          itemBuilder: (BuildContext gridContext, int itemIndex) {
                             return Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   width: 1.0,
-                                  color: BorderColorStyles.borderStrokes(),
+                                  color: index == itemIndex ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                                 ),
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                                child: Text(
-                                  newProduct.variant![gridIndex],
-                                  textAlign: TextAlign.center,
+                              child: InkWell(
+                                onTap: () {
+                                  stateSetter(() {
+                                    index = itemIndex;
+                                    variant = newProduct.variant![itemIndex];
+                                  });
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                  child: Text(
+                                    newProduct.variant![itemIndex],
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
                             );
@@ -611,6 +623,113 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ) :
                 const Material(),
+                const SizedBox(
+                  height: 25.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: qty == 0 ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04(),
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            if(qty != 0) {
+                              stateSetter(() {
+                                qty = qty - 1;
+                              });
+                            }
+                          },
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Icon(
+                            Icons.remove,
+                            color: qty == 0 ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor(),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Text(
+                          '$qty',
+                          style: HeadingTextStyles.headingS(),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: newProduct.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            if(newProduct.type != 'Sembako') {
+                              if(qty < stock) {
+                                stateSetter(() {
+                                  qty = qty + 1;
+                                });
+                              }
+                            } else {
+                              stateSetter(() {
+                                qty = qty + 1;
+                              });
+                            }
+                          },
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Icon(
+                            Icons.add,
+                            color: newProduct.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 15.0,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: PrimaryColorStyles.primaryMain(),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(
+                                  width: 5.0,
+                                ),
+                                Text(
+                                  'Tambah ke Troli',
+                                  style: LTextStyles.medium().copyWith(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 25.0,
                 ),
@@ -1170,6 +1289,7 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 30.0,
                     ),
+
                   ],
                 ),
               ),
