@@ -3,7 +3,10 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kenari_app/services/local/models/new_product.dart';
+import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/product_list_page.dart';
+import 'package:kenari_app/services/local/models/category_product_data.dart';
+import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -18,26 +21,103 @@ class _HomePageState extends State<HomePage> {
   int selectedMenu = 0;
   int selectedCard = 0;
 
-  List<NewProduct> newProductList = [
-    NewProduct(
+  List<LocalProductData> newProductList = [
+    LocalProductData(
       type: 'Sembako', name: 'Cabai Merah',
       variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-      price: [25000, 45000, 65000],
+      normalPrice: [25000, 45000, 65000],
+      discountPrice: [0, 0, 0],
       stock: [50, 50, 50],
       imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
     ),
-    NewProduct(
+    LocalProductData(
       type: 'Makanan', name: 'Keripik Kentang',
-      price: [55000],
+      normalPrice: [55000],
+      discountPrice: [0],
       stock: [50],
       imagePath: ['assets/images/example_images/keripik-kentang.png'],
     ),
-    NewProduct(
+    LocalProductData(
       type: 'Buah-buahan', name: 'Jambu Air',
       variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-      price: [25000, 45000, 65000],
+      normalPrice: [25000, 45000, 65000],
+      discountPrice: [0, 0, 0],
       stock: [50, 50, 50],
       imagePath: ['assets/images/example_images/jambu-air.png'],
+    ),
+  ];
+  List<LocalProductData> popularProductList = [
+    LocalProductData(
+      type: 'Makanan',
+      name: 'Paket sayuran untuk masak',
+      normalPrice: [400000],
+      discountPrice: [200000],
+      stock: [50],
+      imagePath: ['assets/images/example_images/paket-sayuran.png'],
+    ),
+    LocalProductData(
+      type: 'Outfit',
+      name: 'Kaos Terkini',
+      normalPrice: [400000],
+      discountPrice: [200000],
+      stock: [50],
+      imagePath: ['assets/images/example_images/kaos-terkini.png'],
+    ),
+    LocalProductData(
+      type: 'Outfit',
+      name: 'Blue Jeans',
+      normalPrice: [400000],
+      discountPrice: [200000],
+      stock: [50],
+      imagePath: ['assets/images/example_images/blue-jeans.png'],
+    ),
+    LocalProductData(
+      type: 'Elektronik',
+      name: 'Vape Electric',
+      normalPrice: [400000],
+      discountPrice: [0],
+      stock: [50],
+      imagePath: ['assets/images/example_images/vape-electric.png'],
+    ),
+  ];
+  List<LocalProductData> discountProductList = [
+    LocalProductData(
+      type: 'Makanan', name: 'Cookies',
+      variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
+      normalPrice: [20000],
+      discountPrice: [15000],
+      stock: [50],
+      imagePath: ['assets/images/example_images/cookies.png'],
+    ),
+    LocalProductData(
+      type: 'Makanan', name: 'Strawberry Cake',
+      normalPrice: [50000],
+      discountPrice: [46000],
+      stock: [50],
+      imagePath: ['assets/images/example_images/strawberry-cupcakes.png'],
+    ),
+    LocalProductData(
+      type: 'Buah-buahan', name: 'Jambu Air',
+      variant: ['1/4 Kg'],
+      normalPrice: [25000],
+      discountPrice: [20000],
+      stock: [50],
+      imagePath: ['assets/images/example_images/jambu-air.png'],
+    ),
+  ];
+
+  List<CategoryProductData> categoryList = [
+    CategoryProductData(
+      title: 'Elektronik',
+      imagePath: 'assets/images/icon_elektronik.png',
+    ),
+    CategoryProductData(
+      title: 'Makanan',
+      imagePath: 'assets/images/icon_makanan.png',
+    ),
+    CategoryProductData(
+      title: 'Sembako',
+      imagePath: 'assets/images/icon_sembako.png',
     ),
   ];
 
@@ -412,7 +492,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> showProductBottomDialog(NewProduct newProduct) async {
+  Future<void> showProductBottomDialog(LocalProductData newProduct) async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -426,7 +506,7 @@ class _HomePageState extends State<HomePage> {
         int qty = 0;
         int stock = newProduct.stock[index];
 
-        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProduct.price[index]).replaceAll(',', '.')}';
+        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProduct.normalPrice[index]).replaceAll(',', '.')}';
         String imagePath = newProduct.imagePath[index] ?? '';
         String? variant;
 
@@ -1161,7 +1241,9 @@ class _HomePageState extends State<HomePage> {
                             style: MTextStyles.medium(),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              MoveToPage(context: context, target: const ProductListPage(filterType: 'Terbaru',)).go();
+                            },
                             child: Text(
                               'Lihat semua',
                               style: MTextStyles.medium().copyWith(
@@ -1187,11 +1269,11 @@ class _HomePageState extends State<HomePage> {
                               itemBuilder: (BuildContext listContext, int index) {
                                 String price = '';
 
-                                if(newProductList[index].price.length == 1) {
-                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProductList[index].price[0]).replaceAll(',', '.')}';
+                                if(newProductList[index].normalPrice.length == 1) {
+                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProductList[index].normalPrice[0]).replaceAll(',', '.')}';
                                 } else {
-                                  int lowest = newProductList[index].price.reduce(min);
-                                  int highest = newProductList[index].price.reduce(max);
+                                  int lowest = newProductList[index].normalPrice.reduce(min);
+                                  int highest = newProductList[index].normalPrice.reduce(max);
 
                                   price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
                                 }
@@ -1289,7 +1371,394 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 30.0,
                     ),
+                    CarouselSlider(
+                      options: CarouselOptions(
+                        height: 150,
+                        enableInfiniteScroll: true,
+                        viewportFraction: 0.9,
+                      ),
+                      items: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/banner_discount.png',
+                                ),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/banner_new_collection.png',
+                                ),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Text(
+                        'Kategori Produk',
+                        style: MTextStyles.medium(),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 50.0,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: categoryList.length,
+                              itemBuilder: (BuildContext categoryContext, int categoryIndex) {
+                                return Padding(
+                                  padding: categoryIndex == 0 ? const EdgeInsets.only(left: 25.0, right: 5) : categoryIndex == categoryList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0,) : const EdgeInsets.symmetric(horizontal: 5.0),
+                                  child: Container(
+                                    width: 150.0,
+                                    height: 35.0,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: BorderColorStyles.borderStrokes(),
+                                      ),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {
+                                        MoveToPage(context: context, target: ProductListPage(filterType: 'Kategori_${categoryList[categoryIndex].title}',)).go();
+                                      },
+                                      customBorder: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              categoryList[categoryIndex].imagePath,
+                                              width: 20.0,
+                                              height: 20.0,
+                                            ),
+                                            const SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                categoryList[categoryIndex].title,
+                                                style: XSTextStyles.regular(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Text(
+                        'Produk Populer',
+                        style: MTextStyles.medium(),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: popularProductList.length,
+                      separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                          child: Divider(
+                            thickness: 0.5,
+                            color: BorderColorStyles.borderDivider(),
+                          ),
+                        );
+                      },
+                      itemBuilder: (BuildContext popularContext, int popularIndex) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                popularProductList[popularIndex].imagePath[0] ?? '',
+                                fit: BoxFit.cover,
+                                width: 110.0,
+                                height: 100.0,
+                              ),
+                              const SizedBox(
+                                width: 15.0,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      popularProductList[popularIndex].name,
+                                      style: STextStyles.medium(),
+                                    ),
+                                    const SizedBox(
+                                      height: 15.0,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: BorderColorStyles.borderStrokes(),
+                                            ),
+                                            borderRadius: BorderRadius.circular(20.0),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                            child: Text(
+                                              popularProductList[popularIndex].type,
+                                              style: XSTextStyles.regular(),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Expanded(
+                                          child: popularProductList[popularIndex].discountPrice[0] != 0 ?
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              const SizedBox(
+                                                height: 10.0,
+                                              ),
+                                              Text(
+                                                'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].discountPrice[0]).replaceAll(',', '.')}',
+                                                style: STextStyles.regular().copyWith(
+                                                  color: PrimaryColorStyles.primaryMain(),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Text(
+                                                'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
+                                                style: STextStyles.regular().copyWith(
+                                                  color: TextColorStyles.textDisabled(),
+                                                  decoration: TextDecoration.lineThrough,
+                                                ),
+                                              ),
+                                            ],
+                                          ) :
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              const SizedBox(
+                                                height: 25.0,
+                                              ),
+                                              Text(
+                                                'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
+                                                style: STextStyles.regular().copyWith(
+                                                  color: PrimaryColorStyles.primaryMain(),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.shopping_cart,
+                                          color: IconColorStyles.iconColor(),
+                                          size: 20.0,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Diskon',
+                            style: MTextStyles.medium(),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              MoveToPage(context: context, target: const ProductListPage(filterType: 'Diskon',)).go();
+                            },
+                            child: Text(
+                              'Lihat semua',
+                              style: MTextStyles.medium().copyWith(
+                                color: PrimaryColorStyles.primaryMain(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 210.0,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: discountProductList.length,
+                              itemBuilder: (BuildContext listContext, int index) {
+                                String normalPrice = '';
+                                String discountPrice = '';
 
+                                normalPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(discountProductList[index].normalPrice[0]).replaceAll(',', '.')}';
+                                discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(discountProductList[index].normalPrice[0]).replaceAll(',', '.')}';
+
+                                return Padding(
+                                  padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 5.0) : index == discountProductList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0) : const EdgeInsets.symmetric(horizontal: 5.0),
+                                  child: SizedBox(
+                                    width: 150.0,
+                                    height: 200.0,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                    discountProductList[index].imagePath[0] != null ? discountProductList[index].imagePath[0]! : '',
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                borderRadius: const BorderRadius.only(
+                                                  topLeft: Radius.circular(10.0),
+                                                  topRight: Radius.circular(10.0),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(10.0),
+                                                  child: Text(
+                                                    discountProductList[index].type,
+                                                    style: XSTextStyles.regular(),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                    child: Text(
+                                                      discountProductList[index].name,
+                                                      style: STextStyles.medium(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10.0,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                  child: Text(
+                                                    discountPrice,
+                                                    style: XSTextStyles.medium().copyWith(
+                                                      color: PrimaryColorStyles.primaryMain(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(10.0),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          normalPrice,
+                                                          style: XSTextStyles.medium().copyWith(
+                                                            color: TextColorStyles.textDisabled(),
+                                                            decoration: TextDecoration.lineThrough,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+
+                                                        },
+                                                        customBorder: const CircleBorder(),
+                                                        child: Icon(
+                                                          Icons.more_horiz,
+                                                          size: 15.0,
+                                                          color: IconColorStyles.iconColor(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 25.0,
+                    ),
                   ],
                 ),
               ),
