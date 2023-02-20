@@ -3,6 +3,7 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/forget_password_page.dart';
 import 'package:kenari_app/pages/home_page.dart';
 import 'package:kenari_app/pages/register_company_code_page.dart';
+import 'package:kenari_app/services/api/authorization/api_login_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -132,18 +133,31 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if(passwordController.text != 'password') {
-                        setState(() {
-                          showErrorHint = true;
-                        });
-                      } else {
+                      if(emailController.text != '' && passwordController.text != '') {
                         if(showErrorHint = true) {
                           setState(() {
                             showErrorHint = false;
                           });
                         }
 
-                        ReplaceToPage(context: context, target: const HomePage()).go();
+                        APILoginServices(
+                          context: context,
+                          email: emailController.text,
+                          password: passwordController.text,
+                          rememberMe: false,
+                        ).call().then((callResult) {
+                          if(callResult == true) {
+                            ReplaceToPage(context: context, target: const HomePage()).go();
+                          } else {
+                            setState(() {
+                              showErrorHint = true;
+                            });
+                          }
+                        });
+                      } else {
+                        setState(() {
+                          showErrorHint = true;
+                        });
                       }
                     },
                     style: ElevatedButton.styleFrom(

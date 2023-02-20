@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/home_page.dart';
 import 'package:kenari_app/pages/login_page.dart';
+import 'package:kenari_app/services/local/local_shared_prefs.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -16,8 +18,18 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
 
     Future.delayed(
-      const Duration(seconds: 2), () => ReplaceToPage(context: context, target: const LoginPage()).go(),
+      const Duration(seconds: 2), () => checkAuth(),
     );
+  }
+
+  Future<void> checkAuth() async {
+    await LocalSharedPrefs().readKey('token').then((tokenResult) {
+      if(tokenResult != null) {
+        ReplaceToPage(context: context, target: const HomePage()).go();
+      } else {
+        ReplaceToPage(context: context, target: const LoginPage()).go();
+      }
+    });
   }
 
   @override

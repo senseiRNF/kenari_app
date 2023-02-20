@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/services/api/authorization/api_register_services.dart';
 import 'package:kenari_app/services/local/models/register_form_result.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -38,12 +39,12 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
         showErrorNameHint = true;
       });
     } else {
-      if(phoneController.text == '' || phoneController.text == '082123802060' || phoneController.text == '+6282123802060') {
+      if(phoneController.text == '') {
         setState(() {
           showErrorPhoneHint = true;
         });
       } else {
-        if(emailController.text == '' || emailController.text == 'novian.shatter@gmail.com') {
+        if(emailController.text == '') {
           setState(() {
             showErrorEmailHint = true;
           });
@@ -60,15 +61,24 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 showErrorPasswordConfHint = true;
               });
             } else {
-              showUserAgreementBottomDialog().then((result) {
+              showUserAgreementBottomDialog().then((result) async {
                 if(result != null && result == true) {
-                  BackFromThisPage(
+                  await APIRegisterServices(
                     context: context,
-                    callbackData: RegisterFormResult(
-                      registerResult: true,
-                      email: emailController.text,
-                    ),
-                  ).go();
+                    name: nameController.text,
+                    email: emailController.text,
+                    password: passwordController.text,
+                  ).call().then((callResult) {
+                    if(callResult == true) {
+                      BackFromThisPage(
+                        context: context,
+                        callbackData: RegisterFormResult(
+                          registerResult: true,
+                          email: emailController.text,
+                        ),
+                      ).go();
+                    }
+                  });
                 }
               });
             }
