@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/fragments/home_fragment.dart';
+import 'package:kenari_app/fragments/profile_fragment.dart';
 import 'package:kenari_app/fragments/search_fragment.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
@@ -37,31 +38,7 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return ListView();
       case 3:
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  await LocalSharedPrefs().removeAllKey().then((removeResult) {
-                    if(removeResult == true) {
-                      RedirectToSplashPage(context: context).go();
-                    }
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  child: Text(
-                    'Logout',
-                    style: MTextStyles.medium(),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
+        return const ProfileFragment();
       default:
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
