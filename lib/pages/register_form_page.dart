@@ -33,20 +33,29 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
   bool showErrorPasswordHint = false;
   bool showErrorPasswordConfHint = false;
 
+  late String errorNameMessage;
+  late String errorPhoneMessage;
+  late String errorEmailMessage;
+  late String errorPasswordMessage;
+  late String errorPasswordConfMessage;
+
   void checkForm() {
     if(nameController.text == '') {
       setState(() {
         showErrorNameHint = true;
+        errorNameMessage = 'Harap masukkan nama terlebih dahulu';
       });
     } else {
       if(phoneController.text == '') {
         setState(() {
           showErrorPhoneHint = true;
+          errorPhoneMessage = phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu';
         });
       } else {
         if(emailController.text == '') {
           setState(() {
             showErrorEmailHint = true;
+            errorEmailMessage = emailController.text != '' ? 'Email telah terdaftar' : 'Harap masukkan email terlebih dahulu';
           });
         } else {
           RegExp regExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
@@ -54,11 +63,13 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
           if(passwordController.text == '' || !regExp.hasMatch(passwordController.text) == true || passwordController.text.length < 7) {
             setState(() {
               showErrorPasswordHint = true;
+              errorPasswordMessage = passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Harap masukkan password terlebih dahulu';
             });
           } else {
             if(confirmPasswordController.text == '' || confirmPasswordController.text != passwordController.text) {
               setState(() {
                 showErrorPasswordConfHint = true;
+                errorPasswordConfMessage = confirmPasswordController.text != '' ? 'Password harus sama' : 'Harap masukkan kembali password terlebih dahulu';
               });
             } else {
               showUserAgreementBottomDialog().then((result) async {
@@ -69,7 +80,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                     email: emailController.text,
                     password: passwordController.text,
                   ).call().then((callResult) {
-                    if(callResult == true) {
+                    if(callResult.apiResult == true) {
                       BackFromThisPage(
                         context: context,
                         callbackData: RegisterFormResult(
@@ -77,6 +88,36 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                           email: emailController.text,
                         ),
                       ).go();
+                    } else {
+                      if(callResult.dioError != null && callResult.dioError!.response != null && callResult.dioError!.response!.statusCode == 412) {
+                        if(callResult.dioError!.response!.data['data']['errors']['name'] != null) {
+                          setState(() {
+                            showErrorNameHint = true;
+                            errorNameMessage = 'Harap masukkan nama terlebih dahulu';
+                          });
+                        }
+
+                        if(callResult.dioError!.response!.data['data']['errors']['email'] != null) {
+                          setState(() {
+                            showErrorEmailHint = true;
+                            errorEmailMessage = 'Email telah terdaftar!';
+                          });
+                        }
+
+                        if(callResult.dioError!.response!.data['data']['errors']['phone'] != null) {
+                          setState(() {
+                            showErrorPhoneHint = true;
+                            errorPhoneMessage = phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu';
+                          });
+                        }
+
+                        if(callResult.dioError!.response!.data['data']['errors']['password'] != null) {
+                          setState(() {
+                            showErrorPasswordHint = true;
+                            errorPasswordMessage = passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Harap masukkan password terlebih dahulu';
+                          });
+                        }
+                      }
                     }
                   });
                 }
@@ -1248,13 +1289,11 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                       decoration: InputDecoration(
                         hintText: 'Isi Nama lengkap disini',
                         hintStyle: MTextStyles.regular(),
-                        errorText: showErrorNameHint ? 'Harap masukkan nama terlebih dahulu' : null,
+                        errorText: showErrorNameHint ? errorNameMessage : null,
                       ),
                       textCapitalization: TextCapitalization.words,
                       textInputAction: TextInputAction.next,
                       onChanged: (_) {
-                        setState(() {});
-
                         if(showErrorNameHint == true) {
                           setState(() {
                             showErrorNameHint = false;
@@ -1276,13 +1315,11 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                       decoration: InputDecoration(
                         hintText: 'Isi nomor Handphone aktif',
                         hintStyle: MTextStyles.regular(),
-                        errorText: showErrorPhoneHint ? phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu' : null,
+                        errorText: showErrorPhoneHint ? errorPhoneMessage : null,
                       ),
                       keyboardType: TextInputType.phone,
                       textInputAction: TextInputAction.next,
                       onChanged: (_) {
-                        setState(() {});
-
                         if(showErrorPhoneHint == true) {
                           setState(() {
                             showErrorPhoneHint = false;
@@ -1304,13 +1341,11 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                       decoration: InputDecoration(
                         hintText: 'Isi Email aktif mu disini',
                         hintStyle: MTextStyles.regular(),
-                        errorText: showErrorEmailHint ? emailController.text != '' ? 'Email telah terdaftar' : 'Harap masukkan email terlebih dahulu' : null,
+                        errorText: showErrorEmailHint ? errorEmailMessage : null,
                       ),
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       onChanged: (_) {
-                        setState(() {});
-
                         if(showErrorEmailHint == true) {
                           setState(() {
                             showErrorEmailHint = false;
@@ -1348,12 +1383,10 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                             ),
                           ),
                         ),
-                        errorText: showErrorPasswordHint ? passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Harap masukkan password terlebih dahulu' : null,
+                        errorText: showErrorPasswordHint ? errorPasswordMessage : null,
                       ),
                       textInputAction: TextInputAction.next,
                       onChanged: (_) {
-                        setState(() {});
-
                         if(showErrorPasswordHint == true) {
                           setState(() {
                             showErrorPasswordHint = false;
@@ -1391,12 +1424,10 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                             ),
                           ),
                         ),
-                        errorText: showErrorPasswordConfHint ? confirmPasswordController.text != '' ? 'Password harus sama' : 'Harap masukkan kembali password terlebih dahulu' : null,
+                        errorText: showErrorPasswordConfHint ? errorPasswordConfMessage : null,
                       ),
                       textInputAction: TextInputAction.done,
                       onChanged: (_) {
-                        setState(() {});
-
                         if(showErrorPasswordConfHint == true) {
                           setState(() {
                             showErrorPasswordConfHint = false;

@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -79,113 +79,366 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Material(
-                        color: Colors.transparent,
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: InkWell(
-                            onTap: () {
-
-                            },
-                            customBorder: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Edit Profile',
-                                    style: XSTextStyles.medium().copyWith(
-                                      color: Colors.white,
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: BorderColorStyles.borderStrokes(),
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Stack(
+                              children: [
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Container(
+                                      width: 70.0,
+                                      height: 70.0,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white,
+                                      ),
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 40.0,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 5.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Material(
+                                      color: Colors.transparent,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: InkWell(
+                                          onTap: () {
+
+                                          },
+                                          customBorder: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  'Edit Profile',
+                                                  style: XSTextStyles.medium().copyWith(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 5.0,
+                                                ),
+                                                const Icon(
+                                                  Icons.edit_square,
+                                                  size: 10.0,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Text(
+                              name ?? 'Unknown User',
+                              style: MTextStyles.regular(),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Text(
+                              'SFC_WM - 1234567890',
+                              style: XSTextStyles.regular(),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 15.0,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: BorderColorStyles.borderStrokes(),
                                   ),
-                                  const Icon(
-                                    Icons.edit_square,
-                                    size: 10.0,
-                                    color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: 25.0,
+                                        child: Image.asset(
+                                          'assets/images/saldo_dipay_logo.png',
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Rp 14.000.000',
+                                        style: STextStyles.medium(),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: BorderColorStyles.borderStrokes(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                  child: IntrinsicHeight(
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Text(
+                                                'Iuran Wajib',
+                                                style: STextStyles.regular(),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Text(
+                                                'Rp 1.200.000',
+                                                style: STextStyles.medium(),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        VerticalDivider(
+                                          color: BorderColorStyles.borderDivider(),
+                                          width: 1.0,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Text(
+                                                'Iuran Berjangka',
+                                                style: STextStyles.regular(),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Text(
+                                                'Rp 100.000',
+                                                style: STextStyles.medium(),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: BorderColorStyles.borderStrokes(),
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+                              child: InkWell(
+                                onTap: () {
+
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.lock,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
+                                      const SizedBox(
+                                        width: 20.0,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          'Ubah Kata Sandi',
+                                          style: MTextStyles.regular(),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.navigate_next,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: InkWell(
+                                onTap: () {
+
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.location_on,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
+                                      const SizedBox(
+                                        width: 20.0,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          'Daftar Alamat',
+                                          style: MTextStyles.regular(),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.navigate_next,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+                              child: InkWell(
+                                onTap: () {
+
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.credit_card,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
+                                      const SizedBox(
+                                        width: 20.0,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          'Daftar Rekening',
+                                          style: MTextStyles.regular(),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.navigate_next,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: InkWell(
+                          onTap: () {
+                            OptionDialog(
+                              context: context,
+                              message: 'Keluar dari sesi, Anda yakin?',
+                              yesFunction: () async {
+                                await LocalSharedPrefs().removeAllKey().then((removeResult) {
+                                  if(removeResult == true) {
+                                    RedirectToSplashPage(context: context).go();
+                                  }
+                                });
+                              },
+                              noFunction: () {},
+                            ).show();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.exit_to_app,
+                                  color: Colors.red,
+                                ),
+                                const SizedBox(
+                                  width: 20.0,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Keluar',
+                                    style: MTextStyles.regular().copyWith(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
                     ],
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: BorderColorStyles.borderStrokes(),
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Container(
-                              width: 70.0,
-                              height: 70.0,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: Icon(
-                                Icons.person,
-                                size: 40.0,
-                                color: IconColorStyles.iconColor(),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                          name ?? 'Unknown User',
-                          style: MTextStyles.regular(),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                          'SFC_WM - 1234567890',
-                          style: XSTextStyles.regular(),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),

@@ -5,6 +5,7 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/login_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
+import 'package:kenari_app/services/local/models/api_response_result.dart';
 
 class APILoginServices {
   BuildContext context;
@@ -19,8 +20,8 @@ class APILoginServices {
     required this.rememberMe,
   });
 
-  Future<bool> call() async {
-    bool result = false;
+  Future<APIResponseResult> call() async {
+    late APIResponseResult result;
 
     await APIOptions.init().then((dio) async {
       LoadingDialog(context: context).show();
@@ -50,12 +51,16 @@ class APILoginServices {
 
           BackFromThisPage(context: context).go();
 
-          result = true;
+          result = APIResponseResult(apiResult: true);
         });
       } on DioError catch(dioErr) {
         BackFromThisPage(context: context).go();
 
-        ErrorHandler(context: context, dioErr: dioErr).handle();
+        if(dioErr.response == null || dioErr.response!.statusCode != 412) {
+          ErrorHandler(context: context, dioErr: dioErr).handle();
+        }
+
+        result = APIResponseResult(apiResult: false, dioError: dioErr);
       }
     });
 

@@ -21,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
   bool obscurePassword = true;
   bool showErrorHint = false;
 
+  late String errorHintMessage;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +66,11 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     onChanged: (_) {
-                      setState(() {});
+                      if(showErrorHint = true) {
+                        setState(() {
+                          showErrorHint = false;
+                        });
+                      }
                     },
                   ),
                   const SizedBox(
@@ -98,12 +104,10 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      errorText: showErrorHint ? 'Email atau password salah' : null,
+                      errorText: showErrorHint ? errorHintMessage : null,
                     ),
                     textInputAction: TextInputAction.done,
                     onChanged: (_) {
-                      setState(() {});
-
                       if(showErrorHint = true) {
                         setState(() {
                           showErrorHint = false;
@@ -146,16 +150,22 @@ class _LoginPageState extends State<LoginPage> {
                           password: passwordController.text,
                           rememberMe: false,
                         ).call().then((callResult) {
-                          if(callResult == true) {
+                          if(callResult.apiResult == true) {
                             ReplaceToPage(context: context, target: const HomePage()).go();
                           } else {
-                            setState(() {
-                              showErrorHint = true;
-                            });
+                            if(callResult.dioError != null && callResult.dioError!.response != null && callResult.dioError!.response!.statusCode == 412) {
+                              if(callResult.dioError!.response!.data['data']['errors']['email'] != null || callResult.dioError!.response!.data['data']['errors']['password'] != null) {
+                                setState(() {
+                                  errorHintMessage = 'Email atau password salah';
+                                  showErrorHint = true;
+                                });
+                              }
+                            }
                           }
                         });
                       } else {
                         setState(() {
+                          errorHintMessage = 'Email atau password tidak boleh kosong';
                           showErrorHint = true;
                         });
                       }
