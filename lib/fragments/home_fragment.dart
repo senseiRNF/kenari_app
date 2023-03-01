@@ -4,7 +4,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/notification_page.dart';
 import 'package:kenari_app/pages/product_list_page.dart';
+import 'package:kenari_app/pages/trolley_page.dart';
 import 'package:kenari_app/services/local/models/category_product_data.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -882,16 +884,42 @@ class _HomeFragmentState extends State<HomeFragment> {
                     ),
                   ),
                 ),
-                const Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
+                Material(
+                  color: Colors.transparent,
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    onTap: () {
+                      MoveToPage(context: context, target: const TrolleyPage()).go();
+                    },
+                    customBorder: const CircleBorder(),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Icon(
+                        Icons.shopping_cart,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(
-                  width: 20.0,
+                  width: 10.0,
                 ),
-                const Icon(
-                  Icons.notifications,
-                  color: Colors.white,
+                Material(
+                  color: Colors.transparent,
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    onTap: () {
+                      MoveToPage(context: context, target: const NotificationPage()).go();
+                    },
+                    customBorder: const CircleBorder(),
+                    child: const Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -956,26 +984,45 @@ class _HomeFragmentState extends State<HomeFragment> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'Aktivasi Akun',
-                                    style: XSTextStyles.medium().copyWith(
-                                      color: Colors.white,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+
+                                      },
+                                      customBorder: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          const SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          Text(
+                                            'Aktivasi Akun',
+                                            style: XSTextStyles.medium().copyWith(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          const Icon(
+                                            Icons.chevron_right,
+                                            color: Colors.white,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 5.0,
-                                  ),
-                                  const Icon(
-                                    Icons.chevron_right,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -1024,26 +1071,45 @@ class _HomeFragmentState extends State<HomeFragment> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'Aktivasi Akun',
-                                    style: XSTextStyles.medium().copyWith(
-                                      color: Colors.white,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+
+                                      },
+                                      customBorder: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          const SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          Text(
+                                            'Aktivasi Akun',
+                                            style: XSTextStyles.medium().copyWith(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          const Icon(
+                                            Icons.chevron_right,
+                                            color: Colors.white,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 5.0,
-                                  ),
-                                  const Icon(
-                                    Icons.chevron_right,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

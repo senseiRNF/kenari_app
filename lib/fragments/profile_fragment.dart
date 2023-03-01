@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/edit_profile_page.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -121,7 +122,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                         padding: const EdgeInsets.all(5.0),
                                         child: InkWell(
                                           onTap: () {
-
+                                            MoveToPage(context: context, target: const EditProfilePage()).go();
                                           },
                                           customBorder: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(5.0),
@@ -195,9 +196,22 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                           fit: BoxFit.fitHeight,
                                         ),
                                       ),
-                                      Text(
-                                        'Rp 14.000.000',
-                                        style: STextStyles.medium(),
+                                      InkWell(
+                                        onTap: () {
+
+                                        },
+                                        customBorder: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5.0),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Text(
+                                            'Aktivasi Dipay',
+                                            style: STextStyles.medium().copyWith(
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -235,7 +249,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                                 height: 5.0,
                                               ),
                                               Text(
-                                                'Rp 1.200.000',
+                                                'Rp 0',
                                                 style: STextStyles.medium(),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -259,7 +273,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                                 height: 5.0,
                                               ),
                                               Text(
-                                                'Rp 100.000',
+                                                'Rp 0',
                                                 style: STextStyles.medium(),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -297,6 +311,9 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                 onTap: () {
 
                                 },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Row(
@@ -316,7 +333,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                         ),
                                       ),
                                       Icon(
-                                        Icons.navigate_next,
+                                        Icons.chevron_right,
                                         color: IconColorStyles.iconColor(),
                                       ),
                                     ],
@@ -330,6 +347,9 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                 onTap: () {
 
                                 },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Row(
@@ -349,7 +369,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                         ),
                                       ),
                                       Icon(
-                                        Icons.navigate_next,
+                                        Icons.chevron_right,
                                         color: IconColorStyles.iconColor(),
                                       ),
                                     ],
@@ -363,6 +383,9 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                 onTap: () {
 
                                 },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Row(
@@ -382,7 +405,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                         ),
                                       ),
                                       Icon(
-                                        Icons.navigate_next,
+                                        Icons.chevron_right,
                                         color: IconColorStyles.iconColor(),
                                       ),
                                     ],
@@ -413,6 +436,9 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                               noFunction: () {},
                             ).show();
                           },
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Row(

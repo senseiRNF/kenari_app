@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kenari_app/fragments/home_fragment.dart';
 import 'package:kenari_app/fragments/profile_fragment.dart';
 import 'package:kenari_app/fragments/search_fragment.dart';
-import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/local/local_shared_prefs.dart';
+import 'package:kenari_app/fragments/transaction_fragment.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -36,7 +35,7 @@ class _HomePageState extends State<HomePage> {
           productList: productList,
         );
       case 2:
-        return ListView();
+        return const TransactionFragment();
       case 3:
         return const ProfileFragment();
       default:
