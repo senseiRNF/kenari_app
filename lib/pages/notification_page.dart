@@ -55,105 +55,244 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   void changeFilter(int filter) {
-    switch(filter) {
-      case 1:
-        setState(() {
-          notificationList = [
-            LocalNotificationData(
-              type: 'iuran',
-              date: DateTime(2022, 12, 03, 01, 31),
-              title: 'Penarikan Iuran Berhasil',
-              subtitle: 'Iuran Anda telah dilunasi, silahkan cek email Anda untuk informasi lebih lanjut.',
-            ),
-          ];
-        });
-        break;
-      case 2:
-        setState(() {
-          notificationList = [
-            LocalNotificationData(
-              type: 'pinjaman',
-              date: DateTime(2022, 10, 03, 02, 31),
-              title: 'Pinjaman Berhasil',
-              subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
-            ),
-            LocalNotificationData(
-              type: 'pinjaman',
-              date: DateTime(2022, 11, 03, 02, 31),
-              title: 'Pinjaman Berhasil',
-              subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
-            ),
-          ];
-        });
-        break;
-      case 3:
-        setState(() {
-          notificationList = [
-            LocalNotificationData(
-              type: 'titip-jual',
-              date: DateTime(2022, 12, 03, 01, 31),
-              title: 'Titip Jual Disetujui',
-              subtitle: 'Penitipan jual produk Anda telah disetujui, silahkan cek daftar titip jual Anda.',
-            ),
-          ];
-        });
-        break;
-      case 4:
-        setState(() {
-          notificationList = [
-            LocalNotificationData(
-              type: 'pesanan',
-              date: DateTime(2022, 12, 03, 01, 31),
-              title: 'Barangmu sudah siap di Ambil!',
-              subtitle: 'Barang yang kamu beli siap di Ambil, pastikan barang yang kamu ambil nanti sudah sesuai.',
-            ),
-          ];
-        });
-        break;
-      default:
-        setState(() {
-          notificationList = [
-            LocalNotificationData(
-              type: 'pinjaman',
-              date: DateTime(2022, 10, 03, 02, 31),
-              title: 'Pinjaman Berhasil',
-              subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
-            ),
-            LocalNotificationData(
-              type: 'pesanan',
-              date: DateTime(2022, 12, 03, 01, 31),
-              title: 'Barangmu sudah siap di Ambil!',
-              subtitle: 'Barang yang kamu beli siap di Ambil, pastikan barang yang kamu ambil nanti sudah sesuai.',
-            ),
-            LocalNotificationData(
-              type: 'pinjaman',
-              date: DateTime(2022, 11, 03, 02, 31),
-              title: 'Pinjaman Berhasil',
-              subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
-            ),
-            LocalNotificationData(
-              type: 'titip-jual',
-              date: DateTime(2022, 12, 03, 01, 31),
-              title: 'Titip Jual Disetujui',
-              subtitle: 'Penitipan jual produk Anda telah disetujui, silahkan cek daftar titip jual Anda.',
-            ),
-            LocalNotificationData(
-              type: 'iuran',
-              date: DateTime(2022, 12, 03, 01, 31),
-              title: 'Penarikan Iuran Berhasil',
-              subtitle: 'Iuran Anda telah dilunasi, silahkan cek email Anda untuk informasi lebih lanjut.',
-            ),
-          ];
-        });
-        break;
+    if(selectedTab == 0) {
+      switch(filter) {
+        case 1:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'iuran',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Penarikan Iuran Berhasil',
+                subtitle: 'Iuran Anda telah dilunasi, silahkan cek email Anda untuk informasi lebih lanjut.',
+              ),
+            ];
+          });
+          break;
+        case 2:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'pinjaman',
+                date: DateTime(2022, 10, 03, 02, 31),
+                title: 'Pinjaman Berhasil',
+                subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+              ),
+              LocalNotificationData(
+                type: 'pinjaman',
+                date: DateTime(2022, 11, 03, 02, 31),
+                title: 'Pinjaman Berhasil',
+                subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+              ),
+            ];
+          });
+          break;
+        case 3:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'titip-jual',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Titip Jual Disetujui',
+                subtitle: 'Penitipan jual produk Anda telah disetujui, silahkan cek daftar titip jual Anda.',
+              ),
+            ];
+          });
+          break;
+        case 4:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'pesanan',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Barangmu sudah siap di Ambil!',
+                subtitle: 'Barang yang kamu beli siap di Ambil, pastikan barang yang kamu ambil nanti sudah sesuai.',
+              ),
+            ];
+          });
+          break;
+        default:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'pinjaman',
+                date: DateTime(2022, 10, 03, 02, 31),
+                title: 'Pinjaman Berhasil',
+                subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+              ),
+              LocalNotificationData(
+                type: 'pesanan',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Barangmu sudah siap di Ambil!',
+                subtitle: 'Barang yang kamu beli siap di Ambil, pastikan barang yang kamu ambil nanti sudah sesuai.',
+              ),
+              LocalNotificationData(
+                type: 'pinjaman',
+                date: DateTime(2022, 11, 03, 02, 31),
+                title: 'Pinjaman Berhasil',
+                subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+              ),
+              LocalNotificationData(
+                type: 'titip-jual',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Titip Jual Disetujui',
+                subtitle: 'Penitipan jual produk Anda telah disetujui, silahkan cek daftar titip jual Anda.',
+              ),
+              LocalNotificationData(
+                type: 'iuran',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Penarikan Iuran Berhasil',
+                subtitle: 'Iuran Anda telah dilunasi, silahkan cek email Anda untuk informasi lebih lanjut.',
+              ),
+            ];
+          });
+          break;
+      }
+    } else {
+      switch(filter) {
+        case 1:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'iuran',
+                date: DateTime(2022, 04, 12, 03, 50),
+                title: 'Iuran Wajib',
+                total: -100000,
+              ),
+              LocalNotificationData(
+                type: 'iuran',
+                date: DateTime(2022, 09, 12, 03, 50),
+                title: 'Iuran Berjangka 1',
+                total: -100000,
+              ),
+            ];
+          });
+          break;
+        case 2:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'pinjaman',
+                date: DateTime(2022, 09, 29, 03, 55),
+                title: 'Cicilan Pinjaman 1',
+                total: -1118594,
+              ),
+              LocalNotificationData(
+                type: 'pinjaman',
+                date: DateTime(2022, 08, 29, 03, 50),
+                title: 'Pencairan Pinjaman',
+                total: 3000000,
+              ),
+            ];
+          });
+          break;
+        case 3:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'titip-jual',
+                date: DateTime(2022, 09, 29, 03, 55),
+                title: 'Penjualan',
+                subtitle: 'Produk "Cabai merah"',
+                total: 65000,
+              ),
+              LocalNotificationData(
+                type: 'titip-jual',
+                date: DateTime(2022, 09, 29, 03, 55),
+                title: 'Penjualan',
+                subtitle: 'Produk "Cabai merah"',
+                total: 65000,
+              ),
+            ];
+          });
+          break;
+        case 4:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'pesanan',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Pembayaran',
+                subtitle: 'Pesanan "Pizza"',
+                total: -185000,
+              ),
+              LocalNotificationData(
+                type: 'pesanan',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Pembayaran',
+                subtitle: 'Pesanan "Sate"',
+                total: -35000,
+              ),
+            ];
+          });
+          break;
+        default:
+          setState(() {
+            notificationList = [
+              LocalNotificationData(
+                type: 'pinjaman',
+                date: DateTime(2022, 09, 29, 03, 55),
+                title: 'Cicilan Pinjaman 1',
+                total: -1118594,
+              ),
+              LocalNotificationData(
+                type: 'pesanan',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Pembayaran',
+                subtitle: 'Pesanan "Pizza"',
+                total: -185000,
+              ),
+              LocalNotificationData(
+                type: 'pinjaman',
+                date: DateTime(2022, 08, 29, 03, 50),
+                title: 'Pencairan Pinjaman',
+                total: 3000000,
+              ),
+              LocalNotificationData(
+                type: 'titip-jual',
+                date: DateTime(2022, 09, 29, 03, 55),
+                title: 'Penjualan',
+                subtitle: 'Produk "Cabai merah"',
+                total: 65000,
+              ),
+              LocalNotificationData(
+                type: 'iuran',
+                date: DateTime(2022, 04, 12, 03, 50),
+                title: 'Iuran Wajib',
+                total: -100000,
+              ),
+              LocalNotificationData(
+                type: 'pesanan',
+                date: DateTime(2022, 12, 03, 01, 31),
+                title: 'Pembayaran',
+                subtitle: 'Pesanan "Sate"',
+                total: -35000,
+              ),
+              LocalNotificationData(
+                type: 'iuran',
+                date: DateTime(2022, 09, 12, 03, 50),
+                title: 'Iuran Berjangka 1',
+                total: -100000,
+              ),
+              LocalNotificationData(
+                type: 'titip-jual',
+                date: DateTime(2022, 09, 29, 03, 55),
+                title: 'Penjualan',
+                subtitle: 'Produk "Cabai merah"',
+                total: 65000,
+              ),
+            ];
+          });
+          break;
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    notificationList.sort((b, a) => a.date.compareTo(b.date));
-
     changeFilter(selectedFilter);
+
+    notificationList.sort((b, a) => a.date.compareTo(b.date));
 
     return Scaffold(
       body: SafeArea(
@@ -447,7 +586,8 @@ class _NotificationPageState extends State<NotificationPage> {
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
-                    child: Column(
+                    child: selectedTab == 0 ?
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         showMonthHeading == true ?
@@ -482,9 +622,71 @@ class _NotificationPageState extends State<NotificationPage> {
                           height: 10.0,
                         ),
                         Text(
-                          notificationList[index].subtitle,
+                          notificationList[index].subtitle ?? '',
                           style: STextStyles.regular(),
                         ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
+                          style: STextStyles.regular(),
+                        ),
+                      ],
+                    ) :
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        showMonthHeading == true ?
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            index != 0 ?
+                            const SizedBox(
+                              height: 20.0,
+                            ) :
+                            const Material(),
+                            Text(
+                              DateFormat('MMMM yyyy').format(notificationList[index].date),
+                              style: XSTextStyles.medium(),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                          ],
+                        ) :
+                        Divider(
+                          thickness: 1.0,
+                          color: BorderColorStyles.borderStrokes(),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              notificationList[index].title,
+                              style: MTextStyles.medium().copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            notificationList[index].total != null ?
+                            Text(
+                              "${notificationList[index].total! < 0 ? '-Rp ' : '+Rp '}${NumberFormat('#,###', 'en_id').format(notificationList[index].total!.abs()).replaceAll(',', '.')}",
+                              style: MTextStyles.medium().copyWith(
+                                color: notificationList[index].total! < 0 ? Colors.red : Colors.green,
+                              ),
+                            ) :
+                            const Material(),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        notificationList[index].subtitle != null ?
+                        Text(
+                          notificationList[index].subtitle!,
+                          style: STextStyles.regular(),
+                        ) :
+                        const Material(),
                         const SizedBox(
                           height: 10.0,
                         ),
