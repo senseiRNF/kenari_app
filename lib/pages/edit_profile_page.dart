@@ -28,6 +28,209 @@ class _EditProfilePageState extends State<EditProfilePage> {
     initLoad();
   }
 
+  Future<void> showImageSourceBottomDialog() async {
+    await showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      builder: (BuildContext modalBottomContext) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                margin: const EdgeInsets.all(10.0),
+                height: 5.0,
+                width: 60.0,
+                color: NeutralColorStyles.neutral04(),
+              ),
+            ),
+            const SizedBox(
+              height: 25.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Text(
+                'Ganti foto profil',
+                style: STextStyles.medium().copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+            const SizedBox(
+              height: 15.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: InkWell(
+                onTap: () {
+
+                },
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 54.0,
+                      height: 54.0,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: BorderColorStyles.borderStrokes(),
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+
+                        },
+                        customBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Icon(
+                            Icons.image,
+                            color: PrimaryColorStyles.primaryMain(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15.0,
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Pilih dari Galeri',
+                        style: STextStyles.medium(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 15.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: InkWell(
+                onTap: () {
+
+                },
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 54.0,
+                      height: 54.0,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: BorderColorStyles.borderStrokes(),
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+
+                        },
+                        customBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: PrimaryColorStyles.primaryMain(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15.0,
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Ambil Foto',
+                        style: STextStyles.medium(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 15.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: InkWell(
+                onTap: () {
+
+                },
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 54.0,
+                      height: 54.0,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: BorderColorStyles.borderStrokes(),
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+
+                        },
+                        customBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Icon(
+                            Icons.delete,
+                            color: PrimaryColorStyles.primaryMain(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15.0,
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Hapus Foto',
+                        style: STextStyles.medium(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 25.0,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> initLoad() async {
     await LocalSharedPrefs().readKey('name').then((nameResult) async {
       setState(() {
@@ -118,7 +321,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         InkWell(
                           onTap: () {
-
+                            showImageSourceBottomDialog();
                           },
                           customBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),

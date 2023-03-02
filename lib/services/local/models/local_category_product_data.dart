@@ -1,8 +1,8 @@
-class CategoryProductData {
+class LocalCategoryProductData {
   String title;
   String imagePath;
 
-  CategoryProductData({
+  LocalCategoryProductData({
     required this.title,
     required this.imagePath,
   });

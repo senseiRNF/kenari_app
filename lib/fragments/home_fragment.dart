@@ -7,7 +7,7 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/notification_page.dart';
 import 'package:kenari_app/pages/product_list_page.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
-import 'package:kenari_app/services/local/models/category_product_data.dart';
+import 'package:kenari_app/services/local/models/local_category_product_data.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -116,16 +116,16 @@ class _HomeFragmentState extends State<HomeFragment> {
     ),
   ];
 
-  List<CategoryProductData> categoryList = [
-    CategoryProductData(
+  List<LocalCategoryProductData> categoryList = [
+    LocalCategoryProductData(
       title: 'Elektronik',
       imagePath: 'assets/images/icon_elektronik.png',
     ),
-    CategoryProductData(
+    LocalCategoryProductData(
       title: 'Makanan',
       imagePath: 'assets/images/icon_makanan.png',
     ),
-    CategoryProductData(
+    LocalCategoryProductData(
       title: 'Sembako',
       imagePath: 'assets/images/icon_sembako.png',
     ),

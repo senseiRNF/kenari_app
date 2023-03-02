@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/services/local/models/local_notification_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -14,10 +16,145 @@ class _NotificationPageState extends State<NotificationPage> {
   int selectedTab = 0;
   int selectedFilter = 0;
 
-  List notificationList = [];
+  List<LocalNotificationData> notificationList = [
+    LocalNotificationData(
+      type: 'pinjaman',
+      date: DateTime(2022, 10, 03, 02, 31),
+      title: 'Pinjaman Berhasil',
+      subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+    ),
+    LocalNotificationData(
+      type: 'pesanan',
+      date: DateTime(2022, 12, 03, 01, 31),
+      title: 'Barangmu sudah siap di Ambil!',
+      subtitle: 'Barang yang kamu beli siap di Ambil, pastikan barang yang kamu ambil nanti sudah sesuai.',
+    ),
+    LocalNotificationData(
+      type: 'pinjaman',
+      date: DateTime(2022, 11, 03, 02, 31),
+      title: 'Pinjaman Berhasil',
+      subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+    ),
+    LocalNotificationData(
+      type: 'titip-jual',
+      date: DateTime(2022, 12, 03, 01, 31),
+      title: 'Titip Jual Disetujui',
+      subtitle: 'Penitipan jual produk Anda telah disetujui, silahkan cek daftar titip jual Anda.',
+    ),
+    LocalNotificationData(
+      type: 'iuran',
+      date: DateTime(2022, 12, 03, 01, 31),
+      title: 'Penarikan Iuran Berhasil',
+      subtitle: 'Iuran Anda telah dilunasi, silahkan cek email Anda untuk informasi lebih lanjut.',
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void changeFilter(int filter) {
+    switch(filter) {
+      case 1:
+        setState(() {
+          notificationList = [
+            LocalNotificationData(
+              type: 'iuran',
+              date: DateTime(2022, 12, 03, 01, 31),
+              title: 'Penarikan Iuran Berhasil',
+              subtitle: 'Iuran Anda telah dilunasi, silahkan cek email Anda untuk informasi lebih lanjut.',
+            ),
+          ];
+        });
+        break;
+      case 2:
+        setState(() {
+          notificationList = [
+            LocalNotificationData(
+              type: 'pinjaman',
+              date: DateTime(2022, 10, 03, 02, 31),
+              title: 'Pinjaman Berhasil',
+              subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+            ),
+            LocalNotificationData(
+              type: 'pinjaman',
+              date: DateTime(2022, 11, 03, 02, 31),
+              title: 'Pinjaman Berhasil',
+              subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+            ),
+          ];
+        });
+        break;
+      case 3:
+        setState(() {
+          notificationList = [
+            LocalNotificationData(
+              type: 'titip-jual',
+              date: DateTime(2022, 12, 03, 01, 31),
+              title: 'Titip Jual Disetujui',
+              subtitle: 'Penitipan jual produk Anda telah disetujui, silahkan cek daftar titip jual Anda.',
+            ),
+          ];
+        });
+        break;
+      case 4:
+        setState(() {
+          notificationList = [
+            LocalNotificationData(
+              type: 'pesanan',
+              date: DateTime(2022, 12, 03, 01, 31),
+              title: 'Barangmu sudah siap di Ambil!',
+              subtitle: 'Barang yang kamu beli siap di Ambil, pastikan barang yang kamu ambil nanti sudah sesuai.',
+            ),
+          ];
+        });
+        break;
+      default:
+        setState(() {
+          notificationList = [
+            LocalNotificationData(
+              type: 'pinjaman',
+              date: DateTime(2022, 10, 03, 02, 31),
+              title: 'Pinjaman Berhasil',
+              subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+            ),
+            LocalNotificationData(
+              type: 'pesanan',
+              date: DateTime(2022, 12, 03, 01, 31),
+              title: 'Barangmu sudah siap di Ambil!',
+              subtitle: 'Barang yang kamu beli siap di Ambil, pastikan barang yang kamu ambil nanti sudah sesuai.',
+            ),
+            LocalNotificationData(
+              type: 'pinjaman',
+              date: DateTime(2022, 11, 03, 02, 31),
+              title: 'Pinjaman Berhasil',
+              subtitle: 'Pengajuan pinjaman Anda telah berhasil, silahkan cek email Anda untuk informasi lebih lanjut.',
+            ),
+            LocalNotificationData(
+              type: 'titip-jual',
+              date: DateTime(2022, 12, 03, 01, 31),
+              title: 'Titip Jual Disetujui',
+              subtitle: 'Penitipan jual produk Anda telah disetujui, silahkan cek daftar titip jual Anda.',
+            ),
+            LocalNotificationData(
+              type: 'iuran',
+              date: DateTime(2022, 12, 03, 01, 31),
+              title: 'Penarikan Iuran Berhasil',
+              subtitle: 'Iuran Anda telah dilunasi, silahkan cek email Anda untuk informasi lebih lanjut.',
+            ),
+          ];
+        });
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    notificationList.sort((b, a) => a.date.compareTo(b.date));
+
+    changeFilter(selectedFilter);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -291,7 +428,75 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
             Expanded(
               child: notificationList.isNotEmpty ?
-              ListView() :
+              ListView.builder(
+                itemCount: notificationList.length,
+                itemBuilder: (BuildContext listContext, int index) {
+                  bool showMonthHeading = false;
+
+                  if(index == 0) {
+                    showMonthHeading = true;
+                  } else {
+                    if(notificationList[index].date.year != notificationList[index -1].date.year) {
+                      showMonthHeading = true;
+                    } else {
+                      if(notificationList[index].date.month != notificationList[index - 1].date.month) {
+                        showMonthHeading = true;
+                      }
+                    }
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        showMonthHeading == true ?
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            index != 0 ?
+                            const SizedBox(
+                              height: 20.0,
+                            ) :
+                            const Material(),
+                            Text(
+                              DateFormat('MMMM yyyy').format(notificationList[index].date),
+                              style: XSTextStyles.medium(),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                          ],
+                        ) :
+                        Divider(
+                          thickness: 1.0,
+                          color: BorderColorStyles.borderStrokes(),
+                        ),
+                        Text(
+                          notificationList[index].title,
+                          style: MTextStyles.medium().copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          notificationList[index].subtitle,
+                          style: STextStyles.regular(),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
+                          style: STextStyles.regular(),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ) :
               Stack(
                 children: [
                   Column(

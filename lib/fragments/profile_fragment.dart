@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/bank_account_page.dart';
+import 'package:kenari_app/pages/company_address_page.dart';
 import 'package:kenari_app/pages/edit_profile_page.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -345,7 +347,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                               padding: const EdgeInsets.symmetric(horizontal: 10.0),
                               child: InkWell(
                                 onTap: () {
-
+                                  MoveToPage(context: context, target: const CompanyAddressPage()).go();
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
@@ -381,7 +383,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                               child: InkWell(
                                 onTap: () {
-
+                                  MoveToPage(context: context, target: const BankAccountPage()).go();
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
@@ -427,11 +429,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                               context: context,
                               message: 'Keluar dari sesi, Anda yakin?',
                               yesFunction: () async {
-                                await LocalSharedPrefs().removeAllKey().then((removeResult) {
-                                  if(removeResult == true) {
-                                    RedirectToSplashPage(context: context).go();
-                                  }
-                                });
+                                logout();
                               },
                               noFunction: () {},
                             ).show();
