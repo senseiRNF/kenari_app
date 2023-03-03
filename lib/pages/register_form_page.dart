@@ -77,6 +77,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                   await APIRegisterServices(
                     context: context,
                     name: nameController.text,
+                    phone: phoneController.text,
                     email: emailController.text,
                     password: passwordController.text,
                   ).call().then((callResult) {

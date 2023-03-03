@@ -1,37 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class SearchFragment extends StatefulWidget {
+class SearchFragment extends StatelessWidget {
   final TextEditingController searchController;
   final List<LocalProductData> productList;
+  final List<CategoryData> categoryList;
+  final List filterList;
+  final String? filterType;
+  final Function onFilterChange;
 
   const SearchFragment({
     super.key,
     required this.searchController,
     required this.productList,
+    required this.categoryList,
+    required this.filterList,
+    this.filterType,
+    required this.onFilterChange,
   });
-
-  @override
-  State<SearchFragment> createState() => _SearchFragmentState();
-}
-
-class _SearchFragmentState extends State<SearchFragment> {
-  late TextEditingController searchController;
-
-  List<LocalProductData> productList = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      searchController = widget.searchController;
-      productList = widget.productList;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,116 +83,40 @@ class _SearchFragmentState extends State<SearchFragment> {
             Expanded(
               child: SizedBox(
                 height: 50.0,
-                child: ListView(
+                child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25.0, right: 5.0),
+                  itemCount: categoryList.length,
+                  itemBuilder: (BuildContext categoryContext, int categoryIndex) {
+                    return Padding(
+                      padding: categoryIndex == 0 ? const EdgeInsets.only(left: 25.0, right: 5) : categoryIndex == categoryList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0,) : const EdgeInsets.symmetric(horizontal: 5.0),
                       child: Container(
-                        width: 150.0,
-                        height: 35.0,
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: BorderColorStyles.borderStrokes(),
                           ),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/icon_elektronik.png',
-                                width: 20.0,
-                                height: 20.0,
+                        child: InkWell(
+                          onTap: () {
+
+                          },
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                categoryList[categoryIndex].name ?? 'Unknown Category',
+                                style: MTextStyles.regular(),
                               ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Elektronik',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Container(
-                        width: 150.0,
-                        height: 35.0,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: BorderColorStyles.borderStrokes(),
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/icon_makanan.png',
-                                width: 20.0,
-                                height: 20.0,
-                              ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Makanan',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Container(
-                        width: 150.0,
-                        height: 35.0,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: BorderColorStyles.borderStrokes(),
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/icon_sembako.png',
-                                width: 20.0,
-                                height: 20.0,
-                              ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Sembako',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
             ),
@@ -220,34 +134,54 @@ class _SearchFragmentState extends State<SearchFragment> {
               ),
               borderRadius: BorderRadius.circular(10.0),
             ),
-            child: InkWell(
-              onTap: () {
-
-              },
-              customBorder: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'Filter : ',
-                      style: STextStyles.medium(),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Terbaru',
-                        style: STextStyles.regular(),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Filter : ',
+                        style: STextStyles.medium(),
                       ),
-                    ),
-                    Icon(
-                      Icons.expand_more,
-                      color: IconColorStyles.iconColor(),
-                    ),
-                  ],
+                      Expanded(
+                        child: Text(
+                          filterType ?? '',
+                          style: STextStyles.regular(),
+                        ),
+                      ),
+                      Icon(
+                        Icons.expand_more,
+                        color: IconColorStyles.iconColor(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                DropdownButton(
+                  onChanged: (newValue) {
+                    onFilterChange(newValue);
+                  },
+                  borderRadius: BorderRadius.circular(10.0),
+                  isExpanded: true,
+                  icon: const Icon(
+                    Icons.expand_more,
+                    color: Colors.transparent,
+                  ),
+                  underline: const Material(),
+                  items: filterList.map<DropdownMenuItem<String>>((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                        child: Text(
+                          value,
+                          style: STextStyles.regular(),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
           ),
         ),
@@ -258,7 +192,6 @@ class _SearchFragmentState extends State<SearchFragment> {
           child: productList.isNotEmpty ?
           ListView.separated(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
             itemCount: productList.length,
             separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
               return Padding(
@@ -326,7 +259,7 @@ class _SearchFragmentState extends State<SearchFragment> {
                                       height: 10.0,
                                     ),
                                     Text(
-                                      'Rp ${NumberFormat('#,###', 'en_id').format(productList[popularIndex].discountPrice).replaceAll(',', '.')}',
+                                      'Rp ${NumberFormat('#,###', 'en_id').format(productList[popularIndex].discountPrice[0]).replaceAll(',', '.')}',
                                       style: STextStyles.regular().copyWith(
                                         color: PrimaryColorStyles.primaryMain(),
                                       ),
@@ -335,7 +268,7 @@ class _SearchFragmentState extends State<SearchFragment> {
                                       height: 5.0,
                                     ),
                                     Text(
-                                      'Rp ${NumberFormat('#,###', 'en_id').format(productList[popularIndex].normalPrice).replaceAll(',', '.')}',
+                                      'Rp ${NumberFormat('#,###', 'en_id').format(productList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
                                       style: STextStyles.regular().copyWith(
                                         color: TextColorStyles.textDisabled(),
                                         decoration: TextDecoration.lineThrough,
@@ -350,7 +283,7 @@ class _SearchFragmentState extends State<SearchFragment> {
                                       height: 25.0,
                                     ),
                                     Text(
-                                      'Rp ${NumberFormat('#,###', 'en_id').format(productList[popularIndex].normalPrice).replaceAll(',', '.')}',
+                                      'Rp ${NumberFormat('#,###', 'en_id').format(productList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
                                       style: STextStyles.regular().copyWith(
                                         color: PrimaryColorStyles.primaryMain(),
                                       ),

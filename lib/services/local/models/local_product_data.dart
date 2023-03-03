@@ -6,6 +6,9 @@ class LocalProductData {
   List<int> discountPrice;
   List<int> stock;
   List<String?> imagePath;
+  bool newFlag;
+  bool popularFlag;
+  bool discountFlag;
 
   LocalProductData({
     required this.type,
@@ -15,5 +18,8 @@ class LocalProductData {
     required this.discountPrice,
     required this.stock,
     required this.imagePath,
+    required this.newFlag,
+    required this.popularFlag,
+    required this.discountFlag,
   });
 }

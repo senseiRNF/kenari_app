@@ -5,841 +5,39 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/notification_page.dart';
+import 'package:kenari_app/pages/product_list_banner_page.dart';
 import 'package:kenari_app/pages/product_list_page.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
-import 'package:kenari_app/services/local/models/local_category_product_data.dart';
+import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class HomeFragment extends StatefulWidget {
+class HomeFragment extends StatelessWidget {
   final int selectedCard;
+  final List<String> filterList;
   final List<LocalProductData> productList;
+  final List<LocalProductData> newProductList;
+  final List<LocalProductData> popularProductList;
+  final List<LocalProductData> discountProductList;
+  final List<CategoryData> categoryList;
+  final Function onChangeSelectedPage;
+  final Function onShowAllMenuBottomDialog;
+  final Function onShowProductBottomDialog;
 
   const HomeFragment({
     super.key,
     required this.selectedCard,
+    required this.filterList,
     required this.productList,
+    required this.newProductList,
+    required this.popularProductList,
+    required this.discountProductList,
+    required this.categoryList,
+    required this.onChangeSelectedPage,
+    required this.onShowAllMenuBottomDialog,
+    required this.onShowProductBottomDialog,
   });
-
-  @override
-  State<HomeFragment> createState() => _HomeFragmentState();
-}
-
-class _HomeFragmentState extends State<HomeFragment> {
-  int selectedCard = 0;
-
-  List<LocalProductData> productList = [];
-
-  List<LocalProductData> newProductList = [
-    LocalProductData(
-      type: 'Sembako', name: 'Cabai Merah',
-      variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-      normalPrice: [25000, 45000, 65000],
-      discountPrice: [0, 0, 0],
-      stock: [50, 50, 50],
-      imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
-    ),
-    LocalProductData(
-      type: 'Makanan', name: 'Keripik Kentang',
-      normalPrice: [55000],
-      discountPrice: [0],
-      stock: [50],
-      imagePath: ['assets/images/example_images/keripik-kentang.png'],
-    ),
-    LocalProductData(
-      type: 'Buah-buahan', name: 'Jambu Air',
-      variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-      normalPrice: [25000, 45000, 65000],
-      discountPrice: [0, 0, 0],
-      stock: [50, 50, 50],
-      imagePath: ['assets/images/example_images/jambu-air.png'],
-    ),
-  ];
-  List<LocalProductData> popularProductList = [
-    LocalProductData(
-      type: 'Makanan',
-      name: 'Paket sayuran untuk masak',
-      normalPrice: [400000],
-      discountPrice: [200000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/paket-sayuran.png'],
-    ),
-    LocalProductData(
-      type: 'Outfit',
-      name: 'Kaos Terkini',
-      normalPrice: [400000],
-      discountPrice: [200000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/kaos-terkini.png'],
-    ),
-    LocalProductData(
-      type: 'Outfit',
-      name: 'Blue Jeans',
-      normalPrice: [400000],
-      discountPrice: [200000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/blue-jeans.png'],
-    ),
-    LocalProductData(
-      type: 'Elektronik',
-      name: 'Vape Electric',
-      normalPrice: [400000],
-      discountPrice: [0],
-      stock: [50],
-      imagePath: ['assets/images/example_images/vape-electric.png'],
-    ),
-  ];
-  List<LocalProductData> discountProductList = [
-    LocalProductData(
-      type: 'Makanan', name: 'Cookies',
-      variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-      normalPrice: [20000],
-      discountPrice: [15000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/cookies.png'],
-    ),
-    LocalProductData(
-      type: 'Makanan', name: 'Strawberry Cake',
-      normalPrice: [50000],
-      discountPrice: [46000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/strawberry-cupcakes.png'],
-    ),
-    LocalProductData(
-      type: 'Buah-buahan', name: 'Jambu Air',
-      variant: ['1/4 Kg'],
-      normalPrice: [25000],
-      discountPrice: [20000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/jambu-air.png'],
-    ),
-  ];
-
-  List<LocalCategoryProductData> categoryList = [
-    LocalCategoryProductData(
-      title: 'Elektronik',
-      imagePath: 'assets/images/icon_elektronik.png',
-    ),
-    LocalCategoryProductData(
-      title: 'Makanan',
-      imagePath: 'assets/images/icon_makanan.png',
-    ),
-    LocalCategoryProductData(
-      title: 'Sembako',
-      imagePath: 'assets/images/icon_sembako.png',
-    ),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      selectedCard = widget.selectedCard;
-      productList = widget.productList;
-    });
-  }
-
-  Future<void> showAllMenuBottomDialog() async {
-    await showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
-        ),
-      ),
-      isScrollControlled: true,
-      builder: (BuildContext modalBottomContext) {
-        return FractionallySizedBox(
-          heightFactor: 0.70,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Center(
-                child: Container(
-                  margin: const EdgeInsets.all(10.0),
-                  height: 5.0,
-                  width: 60.0,
-                  color: NeutralColorStyles.neutral04(),
-                ),
-              ),
-              const SizedBox(
-                height: 25.0,
-              ),
-              Expanded(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Text(
-                        'Layanan Keuangan',
-                        style: STextStyles.medium().copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: InkWell(
-                        onTap: () {
-
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 54.0,
-                              height: 54.0,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: BorderColorStyles.borderStrokes(),
-                                ),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  showAllMenuBottomDialog();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_iuran.png',
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 15.0,
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    'Iuran',
-                                    style: STextStyles.medium(),
-                                  ),
-                                  Text(
-                                    'Bayar Iuran wajib dan berjangka Perusahaan kamu disini',
-                                    style: XSTextStyles.regular(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: InkWell(
-                        onTap: () {
-
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 54.0,
-                              height: 54.0,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: BorderColorStyles.borderStrokes(),
-                                ),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  showAllMenuBottomDialog();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_pinjaman.png',
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 15.0,
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    'Pinjaman',
-                                    style: STextStyles.medium(),
-                                  ),
-                                  Text(
-                                    'Dapatkan pinjaman uang untuk pengembangan usaha mu dan kebutuhan lainnya disini',
-                                    style: XSTextStyles.regular(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Text(
-                        'Jualan Produk',
-                        style: STextStyles.medium().copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: InkWell(
-                        onTap: () {
-
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 54.0,
-                              height: 54.0,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: BorderColorStyles.borderStrokes(),
-                                ),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  showAllMenuBottomDialog();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_titip_jual.png',
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 15.0,
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    'Titip Jual',
-                                    style: STextStyles.medium(),
-                                  ),
-                                  Text(
-                                    'Dapatkan penghasilan tambahan dengan Titip Jual barang apapun disini',
-                                    style: XSTextStyles.regular(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Text(
-                        'Coming Soon',
-                        style: STextStyles.medium().copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 54.0,
-                            height: 54.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                showAllMenuBottomDialog();
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset(
-                                  'assets/images/icon_reksadana.png',
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  'Reksadana',
-                                  style: STextStyles.medium(),
-                                ),
-                                Text(
-                                  'Sisihkan gaji untuk Investasi yang kekinian, nggak ribet, dan bisa dimulai dengan modal kecil.',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 54.0,
-                            height: 54.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                showAllMenuBottomDialog();
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset(
-                                  'assets/images/icon_ppob.png',
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  'PPOB',
-                                  style: STextStyles.regular(),
-                                ),
-                                Text(
-                                  'Memudahkanmu dalam membayarkan berbagai jenis tagihan bulanan.',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> showProductBottomDialog(LocalProductData newProduct) async {
-    await showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
-        ),
-      ),
-      builder: (BuildContext modalBottomContext) {
-        int index = 0;
-        int qty = 0;
-        int stock = newProduct.stock[index];
-
-        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProduct.normalPrice[index]).replaceAll(',', '.')}';
-        String imagePath = newProduct.imagePath[index] ?? '';
-        String? variant;
-
-        if(newProduct.variant != null) {
-          variant = newProduct.variant![index];
-        }
-
-        return StatefulBuilder(
-          builder: (BuildContext modalContext, stateSetter) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.all(10.0),
-                    height: 5.0,
-                    width: 60.0,
-                    color: NeutralColorStyles.neutral04(),
-                  ),
-                ),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Text(
-                    newProduct.variant != null ? 'Varian Produk' : 'Tambah Troli',
-                    style: LTextStyles.medium().copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                const SizedBox(
-                  height: 15.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              imagePath,
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: const SizedBox(
-                          width: 80.0,
-                          height: 80.0,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              newProduct.name,
-                              style: MTextStyles.medium().copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            variant != null ?
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    color: NeutralColorStyles.neutral04(),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                                    child: Text(
-                                      variant!,
-                                      style: XSTextStyles.medium(),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ) :
-                            const Material(),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              price,
-                              style: LTextStyles.medium().copyWith(
-                                color: PrimaryColorStyles.primaryMain(),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Stok:',
-                                  style: STextStyles.regular(),
-                                ),
-                                const SizedBox(
-                                  width: 5.0,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    newProduct.type == 'Sembako' ? 'Selalu ada' : stock.toString(),
-                                    style: STextStyles.medium(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 15.0,
-                ),
-                newProduct.variant != null ?
-                Column (
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Text(
-                        'Pilih Varian :',
-                        style: STextStyles.medium().copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: SizedBox(
-                        height: 30.0,
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: newProduct.variant!.length,
-                          separatorBuilder: (BuildContext separatorContext, int index) {
-                            return const SizedBox(
-                              width: 10.0,
-                            );
-                          },
-                          itemBuilder: (BuildContext gridContext, int itemIndex) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 1.0,
-                                  color: index == itemIndex ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
-                                ),
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  stateSetter(() {
-                                    index = itemIndex;
-                                    variant = newProduct.variant![itemIndex];
-                                  });
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                                  child: Text(
-                                    newProduct.variant![itemIndex],
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ) :
-                const Material(),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: qty == 0 ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04(),
-                          ),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            if(qty != 0) {
-                              stateSetter(() {
-                                qty = qty - 1;
-                              });
-                            }
-                          },
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Icon(
-                            Icons.remove,
-                            color: qty == 0 ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor(),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          '$qty',
-                          style: HeadingTextStyles.headingS(),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: newProduct.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
-                          ),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            if(newProduct.type != 'Sembako') {
-                              if(qty < stock) {
-                                stateSetter(() {
-                                  qty = qty + 1;
-                                });
-                              }
-                            } else {
-                              stateSetter(() {
-                                qty = qty + 1;
-                              });
-                            }
-                          },
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            color: newProduct.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15.0,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: PrimaryColorStyles.primaryMain(),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.shopping_cart,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(
-                                  width: 5.0,
-                                ),
-                                Text(
-                                  'Tambah ke Troli',
-                                  style: LTextStyles.medium().copyWith(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 25.0,
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -935,9 +133,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                     enableInfiniteScroll: false,
                     viewportFraction: 1.0,
                     onPageChanged: (page, reason) {
-                      setState(() {
-                        selectedCard = page;
-                      });
+                      onChangeSelectedPage(page);
                     },
                   ),
                   items: [
@@ -1284,7 +480,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                             ),
                             child: InkWell(
                               onTap: () {
-                                showAllMenuBottomDialog();
+
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
@@ -1323,7 +519,11 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ),
                       TextButton(
                         onPressed: () {
-                          MoveToPage(context: context, target: const ProductListPage(filterType: 'Terbaru',)).go();
+                          MoveToPage(context: context, target: ProductListPage(
+                            filterType: 'Terbaru',
+                            filterList: filterList,
+                            productList: productList,
+                          )).go();
                         },
                         child: Text(
                           'Lihat semua',
@@ -1421,9 +621,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                                   ),
                                                   InkWell(
                                                     onTap: () {
-                                                      showProductBottomDialog(
-                                                        newProductList[index],
-                                                      );
+                                                      onShowProductBottomDialog(newProductList[index]);
                                                     },
                                                     customBorder: const CircleBorder(),
                                                     child: Icon(
@@ -1461,28 +659,52 @@ class _HomeFragmentState extends State<HomeFragment> {
                   items: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Container(
-                        decoration: BoxDecoration(
+                      child: InkWell(
+                        onTap: () {
+                          MoveToPage(context: context, target: ProductListBannerPage(
+                            productList: productList,
+                            bannerType: 'discount',
+                            filterList: filterList,
+                          )).go();
+                        },
+                        customBorder: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          image: const DecorationImage(
-                            image: AssetImage(
-                              'assets/images/banner_discount.png',
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            image: const DecorationImage(
+                              image: AssetImage(
+                                'assets/images/banner_discount.png',
+                              ),
+                              fit: BoxFit.contain,
                             ),
-                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Container(
-                        decoration: BoxDecoration(
+                      child: InkWell(
+                        onTap: () {
+                          MoveToPage(context: context, target: ProductListBannerPage(
+                            productList: productList,
+                            bannerType: 'clothes',
+                            filterList: filterList,
+                          )).go();
+                        },
+                        customBorder: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          image: const DecorationImage(
-                            image: AssetImage(
-                              'assets/images/banner_new_collection.png',
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            image: const DecorationImage(
+                              image: AssetImage(
+                                'assets/images/banner_new_collection.png',
+                              ),
+                              fit: BoxFit.contain,
                             ),
-                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
@@ -1515,8 +737,6 @@ class _HomeFragmentState extends State<HomeFragment> {
                             return Padding(
                               padding: categoryIndex == 0 ? const EdgeInsets.only(left: 25.0, right: 5) : categoryIndex == categoryList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0,) : const EdgeInsets.symmetric(horizontal: 5.0),
                               child: Container(
-                                width: 150.0,
-                                height: 35.0,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: BorderColorStyles.borderStrokes(),
@@ -1525,31 +745,22 @@ class _HomeFragmentState extends State<HomeFragment> {
                                 ),
                                 child: InkWell(
                                   onTap: () {
-                                    MoveToPage(context: context, target: ProductListPage(filterType: 'Kategori_${categoryList[categoryIndex].title}',)).go();
+                                    MoveToPage(context: context, target: ProductListPage(
+                                      filterType: 'Kategori_${categoryList[categoryIndex].name}',
+                                      productList: productList,
+                                      filterList: filterList,
+                                    )).go();
                                   },
                                   customBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          categoryList[categoryIndex].imagePath,
-                                          width: 20.0,
-                                          height: 20.0,
-                                        ),
-                                        const SizedBox(
-                                          width: 10.0,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            categoryList[categoryIndex].title,
-                                            style: XSTextStyles.regular(),
-                                          ),
-                                        ),
-                                      ],
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Text(
+                                        categoryList[categoryIndex].name ?? 'Unknown Category',
+                                        style: MTextStyles.regular(),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -1705,7 +916,11 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ),
                       TextButton(
                         onPressed: () {
-                          MoveToPage(context: context, target: const ProductListPage(filterType: 'Diskon',)).go();
+                          MoveToPage(context: context, target: ProductListPage(
+                            filterType: 'Diskon',
+                            productList: productList,
+                            filterList: filterList,
+                          )).go();
                         },
                         child: Text(
                           'Lihat semua',

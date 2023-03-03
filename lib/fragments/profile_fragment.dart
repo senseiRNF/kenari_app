@@ -4,42 +4,18 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/bank_account_page.dart';
 import 'package:kenari_app/pages/company_address_page.dart';
 import 'package:kenari_app/pages/edit_profile_page.dart';
-import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class ProfileFragment extends StatefulWidget {
-  const ProfileFragment({super.key});
+class ProfileFragment extends StatelessWidget {
+  final String? name;
+  final Function onLogout;
 
-  @override
-  State<ProfileFragment> createState() => _ProfileFragmentState();
-}
-
-class _ProfileFragmentState extends State<ProfileFragment> {
-  String? name;
-
-  @override
-  void initState() {
-    super.initState();
-
-    initLoad();
-  }
-
-  Future<void> initLoad() async {
-    await LocalSharedPrefs().readKey('name').then((nameResult) {
-      setState(() {
-        name = nameResult;
-      });
-    });
-  }
-
-  Future<void> logout() async {
-    await LocalSharedPrefs().removeAllKey().then((removeResult) {
-      if(removeResult == true) {
-        RedirectToSplashPage(context: context).go();
-      }
-    });
-  }
+  const ProfileFragment({
+    super.key,
+    required this.name,
+    required this.onLogout,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -429,7 +405,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                               context: context,
                               message: 'Keluar dari sesi, Anda yakin?',
                               yesFunction: () async {
-                                logout();
+                                onLogout();
                               },
                               noFunction: () {},
                             ).show();

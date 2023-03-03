@@ -1,38 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/api/models/category_model.dart';
-import 'package:kenari_app/services/api/product/api_category_services.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class ProductListPage extends StatefulWidget {
-  final String? filterType;
+class ProductListBannerPage extends StatefulWidget {
+  final String bannerType;
   final List<LocalProductData> productList;
   final List<String> filterList;
 
-  const ProductListPage({
+  const ProductListBannerPage({
     super.key,
-    this.filterType,
+    required this.bannerType,
     required this.productList,
     required this.filterList,
   });
 
   @override
-  State<ProductListPage> createState() => _ProductListPageState();
+  State<ProductListBannerPage> createState() => _ProductListBannerPageState();
 }
 
-class _ProductListPageState extends State<ProductListPage> {
-  String title = '';
-  String searchHint = '';
-  String filterType = '';
+class _ProductListBannerPageState extends State<ProductListBannerPage> {
+  late String filterType;
 
   TextEditingController searchController = TextEditingController();
 
   List<LocalProductData> productList = [];
-
-  List<CategoryData> categoryList = [];
 
   List<String> filterList = [];
 
@@ -40,48 +34,34 @@ class _ProductListPageState extends State<ProductListPage> {
   void initState() {
     super.initState();
 
-    initLoad();
-  }
+    List<LocalProductData> tempProductList = [];
 
-  Future<void> initLoad() async {
-    await APICategoryServices(context: context).call().then((result) {
-      if(result != null && result.categoryData != null) {
-        setState(() {
-          categoryList = result.categoryData!;
-        });
-      }
-    });
-
-    if(widget.filterType != null) {
+    if(widget.bannerType == 'discount') {
       setState(() {
-        if(widget.filterType! == 'Terbaru') {
-          filterType = widget.filterType!;
-          title = 'Produk Terbaru';
-          searchHint = 'Cari di produk terbaru';
-        } else if(widget.filterType! == 'Diskon') {
-          filterType = widget.filterType!;
-          title = 'Diskon';
-          searchHint = 'Cari Produk';
-        } else if(widget.filterType!.contains('Kategori')) {
-          filterType = 'Tampilkan Semua';
-          title = 'Kategori';
-          searchHint = 'Cari di ${widget.filterType!.substring(widget.filterType!.indexOf('_'), widget.filterType!.length).replaceAll('_', '')}';
-        } else {
-          filterType = 'Tampilkan Semua';
-          title = 'Cari Produk';
-          searchHint = 'Cari Produk';
-        }
+        filterType = 'Diskon';
       });
+
+      for(int i = 0; i < widget.productList.length; i++) {
+        if(widget.productList[i].discountFlag == true) {
+          tempProductList.add(widget.productList[i]);
+        }
+      }
+    } else {
+      setState(() {
+        filterType = 'Terbaru';
+      });
+
+      for(int i = 0; i < widget.productList.length; i++) {
+        if(widget.productList[i].type == 'Outfit') {
+          tempProductList.add(widget.productList[i]);
+        }
+      }
     }
 
     setState(() {
       filterList = widget.filterList;
-      productList = widget.productList;
+      productList = tempProductList;
     });
-  }
-
-  void applyAnyFilter() {
-    
   }
 
   @override
@@ -114,9 +94,35 @@ class _ProductListPageState extends State<ProductListPage> {
                     width: 10.0,
                   ),
                   Expanded(
-                    child: Text(
-                      title,
-                      style: HeadingTextStyles.headingS(),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: NeutralColorStyles.neutral02(),
+                        isDense: true,
+                        prefixIcon: const Icon(
+                          Icons.search,
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        hintText: 'Cari sesuatu',
+                      ),
+                      controller: searchController,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+
+                    },
+                    customBorder: const CircleBorder(),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                      child: Icon(
+                        Icons.shopping_cart,
+                        size: 20.0,
+                        color: IconColorStyles.iconColor(),
+                      ),
                     ),
                   ),
                 ],
@@ -127,102 +133,21 @@ class _ProductListPageState extends State<ProductListPage> {
               color: NeutralColorStyles.neutral05(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Material(
-                color: NeutralColorStyles.neutral02(),
-                borderRadius: BorderRadius.circular(10.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.search,
-                        color: IconColorStyles.iconColor(),
-                      ),
+              padding: const EdgeInsets.all(25.0),
+              child: Container(
+                height: 150.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    image: AssetImage(
+                      widget.bannerType == 'discount' ?
+                      'assets/images/banner_discount.png' :
+                      'assets/images/banner_new_collection.png',
                     ),
-                    Expanded(
-                      child: TextField(
-                        controller: searchController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: searchHint,
-                          hintStyle: MTextStyles.regular(),
-                        ),
-                        textCapitalization: TextCapitalization.words,
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (query) {
-
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 35.0,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Text(
-                'Kategori',
-                style: STextStyles.medium(),
-              ),
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: SizedBox(
-                    height: 50.0,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categoryList.length,
-                      itemBuilder: (BuildContext categoryContext, int categoryIndex) {
-                        return Padding(
-                          padding: categoryIndex == 0 ? const EdgeInsets.only(left: 25.0, right: 5) : categoryIndex == categoryList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0,) : const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                if(widget.filterType!.contains('Kategori')) {
-                                  setState(() {
-                                    searchHint = 'Cari di ${categoryList[categoryIndex].name}';
-                                  });
-                                }
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    categoryList[categoryIndex].name ?? 'Unknown Category',
-                                    style: MTextStyles.regular(),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    fit: BoxFit.contain,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 40.0,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
