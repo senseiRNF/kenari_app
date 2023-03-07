@@ -3,6 +3,7 @@ import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/register_form_page.dart';
 import 'package:kenari_app/pages/success_register_page.dart';
+import 'package:kenari_app/services/api/authorization/api_company_services.dart';
 import 'package:kenari_app/services/local/models/register_form_result.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -132,20 +133,26 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
-                onPressed: () {
-                  if(companyCodeController.text != 'SFC') {
-                    OkDialog(
-                      context: context,
-                      title: 'Kode Perusahaan tidak ditemukan',
-                      message: 'dapatkan Kode Perusahaan melalui pengelola perusahaan.',
-                    ).show();
-                  } else {
-                    MoveToPage(context: context, target: RegisterFormPage(companyCode: companyCodeController.text), callback: (RegisterFormResult? callbackResult) {
-                      if(callbackResult != null && callbackResult.registerResult == true && callbackResult.email != null) {
-                        ReplaceToPage(context: context, target: SuccessRegisterPage(email: callbackResult.email!)).go();
-                      }
-                    }).go();
-                  }
+                onPressed: () async {
+                  await APICompanyServices(context: context, companyCode: companyCodeController.text).call().then((getResult) {
+                    if(getResult != null && getResult.checkCompanyData != null && getResult.checkCompanyData!.sId != null) {
+                      MoveToPage(context: context, target: RegisterFormPage(
+                        companyId: getResult.checkCompanyData!.sId,
+                        companyCode: getResult.checkCompanyData!.code,
+                        companyName: getResult.checkCompanyData!.name,
+                      ), callback: (RegisterFormResult? callbackResult) {
+                        if(callbackResult != null && callbackResult.registerResult == true && callbackResult.email != null) {
+                          ReplaceToPage(context: context, target: SuccessRegisterPage(email: callbackResult.email!)).go();
+                        }
+                      }).go();
+                    } else {
+                      OkDialog(
+                        context: context,
+                        title: 'Kode Perusahaan tidak ditemukan',
+                        message: 'dapatkan Kode Perusahaan melalui pengelola perusahaan.',
+                      ).show();
+                    }
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: companyCodeController.text != '' ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),

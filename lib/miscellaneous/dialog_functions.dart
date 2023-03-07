@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class OkDialog {
@@ -84,38 +85,49 @@ class OkDialog {
 
 class OptionDialog {
   BuildContext context;
+  String? title;
   String message;
   Function yesFunction;
   Function noFunction;
 
   OptionDialog({
     required this.context,
+    this.title,
     required this.message,
     required this.yesFunction,
     required this.noFunction,
   });
 
-  void show() {
+  Future<void> show() async {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text(
-            'Perhatian',
+          title: Text(
+            title ?? 'Perhatian',
+            style: HeadingTextStyles.headingS(),
           ),
           content: Text(
             message,
           ),
           actions: [
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
 
                 noFunction();
               },
-              child: const Text('Tidak'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+              ),
+              child: Text(
+                'Tidak',
+                style: TextStyle(
+                  color: NeutralColorStyles.neutral09(),
+                ),
+              ),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
 
@@ -238,6 +250,10 @@ class ErrorHandler {
           ],
         );
       },
-    );
+    ).then((_) {
+      if(errCode != null && errCode == 401) {
+        //RedirectToSplashPage(context: context).go();
+      }
+    });
   }
 }

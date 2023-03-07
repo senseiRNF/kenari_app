@@ -7,7 +7,7 @@ import 'package:kenari_app/services/local/models/api_response_result.dart';
 
 class APIRegisterServices {
   BuildContext context;
-  int? companyId;
+  String? companyId;
   String name;
   String? phone;
   String email;

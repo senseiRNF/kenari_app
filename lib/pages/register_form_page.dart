@@ -6,11 +6,15 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class RegisterFormPage extends StatefulWidget {
-  final String companyCode;
+  final String? companyId;
+  final String? companyCode;
+  final String? companyName;
 
   const RegisterFormPage({
     super.key,
+    required this.companyId,
     required this.companyCode,
+    required this.companyName,
   });
 
   @override
@@ -76,6 +80,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 if(result != null && result == true) {
                   await APIRegisterServices(
                     context: context,
+                    companyId: widget.companyId,
                     name: nameController.text,
                     phone: phoneController.text,
                     email: emailController.text,
@@ -1232,7 +1237,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                           width: 20.0,
                         ),
                         Text(
-                          'Surya Fajar',
+                          widget.companyName ?? 'Unknown Company',
                           style: HeadingTextStyles.headingS().copyWith(
                             color: Colors.white,
                           ),

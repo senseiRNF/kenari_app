@@ -480,7 +480,7 @@ class HomeFragment extends StatelessWidget {
                             ),
                             child: InkWell(
                               onTap: () {
-
+                                onShowAllMenuBottomDialog();
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
