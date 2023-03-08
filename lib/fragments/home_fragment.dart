@@ -87,7 +87,58 @@ class HomeFragment extends StatelessWidget {
                   shape: const CircleBorder(),
                   child: InkWell(
                     onTap: () {
-                      MoveToPage(context: context, target: const TrolleyPage()).go();
+                      MoveToPage(
+                        context: context,
+                        target: TrolleyPage(
+                          productList: [
+                            LocalProductData(
+                              type: 'Sembako',
+                              name: 'Cabai Merah',
+                              variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
+                              normalPrice: [25000, 45000, 65000],
+                              discountPrice: [0, 0, 0],
+                              stock: [50, 50, 50],
+                              imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
+                              newFlag: true,
+                              popularFlag: false,
+                              discountFlag: false,
+                            ),
+                            LocalProductData(
+                              type: 'Outfit',
+                              name: 'Kaos Terkini',
+                              normalPrice: [400000],
+                              discountPrice: [200000],
+                              stock: [50],
+                              imagePath: ['assets/images/example_images/kaos-terkini.png'],
+                              newFlag: false,
+                              popularFlag: true,
+                              discountFlag: true,
+                            ),
+                            LocalProductData(
+                              type: 'Outfit',
+                              name: 'Blue Jeans',
+                              normalPrice: [400000],
+                              discountPrice: [200000],
+                              stock: [50],
+                              imagePath: ['assets/images/example_images/blue-jeans.png'],
+                              newFlag: false,
+                              popularFlag: true,
+                              discountFlag: true,
+                            ),
+                            LocalProductData(
+                              type: 'Elektronik',
+                              name: 'Vape Electric',
+                              normalPrice: [400000],
+                              discountPrice: [0],
+                              stock: [50],
+                              imagePath: ['assets/images/example_images/vape-electric.png'],
+                              newFlag: false,
+                              popularFlag: true,
+                              discountFlag: false,
+                            ),
+                          ],
+                        ),
+                      ).go();
                     },
                     customBorder: const CircleBorder(),
                     child: const Padding(

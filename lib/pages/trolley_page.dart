@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
@@ -8,78 +9,43 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class TrolleyPage extends StatefulWidget {
-  const TrolleyPage({super.key});
+  final List<LocalProductData> productList;
+
+  const TrolleyPage({
+    super.key,
+    required this.productList,
+  });
 
   @override
   State<TrolleyPage> createState() => _TrolleyPageState();
 }
 
 class _TrolleyPageState extends State<TrolleyPage> {
-  List<LocalTrolleyProduct> productList = [
-    LocalTrolleyProduct(
-      isSelected: false,
-      productData: LocalProductData(
-        type: 'Sembako',
-        name: 'Cabai Merah',
-        variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-        normalPrice: [25000, 45000, 65000],
-        discountPrice: [0, 0, 0],
-        stock: [50, 50, 50],
-        imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
-        newFlag: true,
-        popularFlag: false,
-        discountFlag: false,
-      ),
-      qty: 1,
-    ),
-    LocalTrolleyProduct(
-      isSelected: false,
-      productData: LocalProductData(
-        type: 'Outfit',
-        name: 'Kaos Terkini',
-        normalPrice: [400000],
-        discountPrice: [200000],
-        stock: [50],
-        imagePath: ['assets/images/example_images/kaos-terkini.png'],
-        newFlag: false,
-        popularFlag: true,
-        discountFlag: true,
-      ),
-      qty: 1,
-    ),
-    LocalTrolleyProduct(
-      isSelected: false,
-      productData: LocalProductData(
-        type: 'Outfit',
-        name: 'Blue Jeans',
-        normalPrice: [400000],
-        discountPrice: [200000],
-        stock: [50],
-        imagePath: ['assets/images/example_images/blue-jeans.png'],
-        newFlag: false,
-        popularFlag: true,
-        discountFlag: true,
-      ),
-      qty: 1,
-    ),
-    LocalTrolleyProduct(
-      isSelected: false,
-      productData: LocalProductData(
-        type: 'Elektronik',
-        name: 'Vape Electric',
-        normalPrice: [400000],
-        discountPrice: [0],
-        stock: [50],
-        imagePath: ['assets/images/example_images/vape-electric.png'],
-        newFlag: false,
-        popularFlag: true,
-        discountFlag: false,
-      ),
-      qty: 1,
-    ),
-  ];
+  List<LocalTrolleyProduct> productList = [];
 
   bool isSelectedAll = false;
+
+  GlobalKey<AnimatedListState> listKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+
+    List<LocalTrolleyProduct> tempTrolley = [];
+
+    for(int i = 0; i < widget.productList.length; i++) {
+      tempTrolley.add(
+        LocalTrolleyProduct(
+          isSelected: false,
+          productData: widget.productList[i],
+          qty: 1,
+        ),
+      );
+    }
+    setState(() {
+      productList = tempTrolley;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,200 +145,102 @@ class _TrolleyPageState extends State<TrolleyPage> {
                     ),
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: productList.length,
-                      itemBuilder: (BuildContext listTrolleyContext, int index) {
-                        final trolleyItem = productList[index].productData.name;
+                    child: AnimatedList(
+                      key: listKey,
+                      initialItemCount: productList.length,
+                      itemBuilder: (BuildContext listTrolleyContext, int index, Animation<double> animation) {
+                        return Slidable(
+                          key: ValueKey(index),
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (BuildContext pressedContext) {
+                                  OptionDialog(
+                                    context: context,
+                                    title: 'Hapus Produk?',
+                                    message: 'Produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
+                                    yesFunction: () {
+                                      LocalTrolleyProduct tempList = productList[index];
 
-                        return Dismissible(
-                          key: Key(trolleyItem),
-                          direction: DismissDirection.endToStart,
-                          onDismissed: (direction) {
-                            setState(() {
-                              productList.removeAt(index);
-                            });
-                          },
-                          confirmDismiss: (confirm) async {
-                            bool result = false;
-
-                            await OptionDialog(
-                              context: context,
-                              title: 'Hapus Produk?',
-                              message: 'Produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
-                              yesFunction: () async {
-                                result = true;
-
-                                setState(() {
-                                  productList.removeAt(index);
-                                });
-                              },
-                              noFunction: () {
-
-                              },
-                            ).show();
-
-                            return result;
-                          },
-                          background: Container(
-                            color: PrimaryColorStyles.primaryMain(),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                    size: 25.0,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Checkbox(
-                                  value: productList[index].isSelected,
-                                  onChanged: (selectProduct) {
-                                    if(selectProduct != null) {
                                       setState(() {
-                                        productList[index].isSelected = selectProduct;
+                                        productList.removeAt(index);
+                                        listKey.currentState!.removeItem(index, (context, animation) {
+                                          return ItemListWithAnimation(
+                                            product: tempList,
+                                            animation: animation,
+                                            onChangedCheckbox: (selectProduct) {
+                                              setState(() {
+                                                tempList.isSelected = selectProduct;
+                                              });
+
+                                              for(int i = 0; i < productList.length; i++) {
+                                                if(productList[i].isSelected == false) {
+                                                  setState(() {
+                                                    isSelectedAll = false;
+                                                  });
+
+                                                  break;
+                                                }
+                                              }
+                                            },
+                                            onReduceQty: () {
+                                              if(tempList.qty > 1) {
+                                                setState(() {
+                                                  tempList.qty = tempList.qty - 1;
+                                                });
+                                              }
+                                            },
+                                            onAddQty: () {
+                                              setState(() {
+                                                tempList.qty = tempList.qty + 1;
+                                              });
+                                            },
+                                          );
+                                        },
+                                        duration: const Duration(milliseconds: 500));
                                       });
+                                    },
+                                    noFunction: () {},
+                                  ).show();
+                                },
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Hapus',
+                              ),
+                            ],
+                          ),
+                          child: ItemListWithAnimation(
+                            product: productList[index],
+                            animation: animation,
+                            onChangedCheckbox: (selectProduct) {
+                              setState(() {
+                                productList[index].isSelected = selectProduct;
+                              });
 
-                                      for(int i = 0; i < productList.length; i++) {
-                                        if(productList[i].isSelected == false) {
-                                          setState(() {
-                                            isSelectedAll = false;
-                                          });
+                              for(int i = 0; i < productList.length; i++) {
+                                if(productList[i].isSelected == false) {
+                                  setState(() {
+                                    isSelectedAll = false;
+                                  });
 
-                                          break;
-                                        }
-                                      }
-                                    }
-                                  },
-                                  activeColor: Theme.of(context).primaryColor,
-                                ),
-                                const SizedBox(
-                                  width: 15.0,
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        productList[index].productData.imagePath[0] ?? '',
-                                        fit: BoxFit.cover,
-                                        width: 65.0,
-                                        height: 65.0,
-                                      ),
-                                      const SizedBox(
-                                        width: 15.0,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                                          children: [
-                                            Text(
-                                              productList[index].productData.name,
-                                              style: STextStyles.medium(),
-                                            ),
-                                            productList[index].productData.variant != null ?
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                                              children: [
-                                                const SizedBox(
-                                                  height: 15.0,
-                                                ),
-                                                Text(
-                                                  productList[index].productData.variant![0],
-                                                  style: XSTextStyles.regular(),
-                                                ),
-                                              ],
-                                            ) :
-                                            const SizedBox(
-                                              height: 15.0,
-                                            ),
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    'Rp ${NumberFormat('#,###', 'en_id').format(productList[index].productData.normalPrice[0]).replaceAll(',', '.')}',
-                                                    style: STextStyles.regular().copyWith(
-                                                      color: PrimaryColorStyles.primaryMain(),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: productList[index].qty == 1 ? NeutralColorStyles.neutral03() : BorderColorStyles.borderDivider(),
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(5.0),
-                                                  ),
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      if(productList[index].qty > 1) {
-                                                        setState(() {
-                                                          productList[index].qty = productList[index].qty - 1;
-                                                        });
-                                                      }
-                                                    },
-                                                    customBorder: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(5.0),
-                                                    ),
-                                                    child: Icon(
-                                                      Icons.remove,
-                                                      color: productList[index].qty == 1 ? NeutralColorStyles.neutral03() : IconColorStyles.iconColor(),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                                  child: SizedBox(
-                                                    width: 20.0,
-                                                    child: Text(
-                                                      '${productList[index].qty}',
-                                                      style: MTextStyles.regular(),
-                                                      textAlign: TextAlign.center,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: BorderColorStyles.borderDivider(),
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(5.0),
-                                                  ),
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        productList[index].qty = productList[index].qty + 1;
-                                                      });
-                                                    },
-                                                    customBorder: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(5.0),
-                                                    ),
-                                                    child: Icon(
-                                                      Icons.add,
-                                                      color: IconColorStyles.iconColor(),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                                  break;
+                                }
+                              }
+                            },
+                            onReduceQty: () {
+                              if(productList[index].qty > 1) {
+                                setState(() {
+                                  productList[index].qty = productList[index].qty - 1;
+                                });
+                              }
+                            },
+                            onAddQty: () {
+                              setState(() {
+                                productList[index].qty = productList[index].qty + 1;
+                              });
+                            },
                           ),
                         );
                       },
@@ -472,7 +340,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
                 onPressed: () {
-
+                  BackFromThisPage(context: context).go();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -487,6 +355,161 @@ class _TrolleyPageState extends State<TrolleyPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ItemListWithAnimation extends StatelessWidget {
+  final LocalTrolleyProduct product;
+  final Animation<double> animation;
+  final Function onChangedCheckbox;
+  final Function onReduceQty;
+  final Function onAddQty;
+
+  const ItemListWithAnimation({
+    super.key,
+    required this.product,
+    required this.animation,
+    required this.onChangedCheckbox,
+    required this.onReduceQty,
+    required this.onAddQty,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizeTransition(
+      sizeFactor: animation,
+      child: buildItem(),
+    );
+  }
+
+  Widget buildItem() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Checkbox(
+            value: product.isSelected,
+            onChanged: (selectProduct) {
+              if(selectProduct != null) {
+                onChangedCheckbox(selectProduct);
+              }
+            },
+            activeColor: PrimaryColorStyles.primaryMain(),
+          ),
+          const SizedBox(
+            width: 15.0,
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  product.productData.imagePath[0] ?? '',
+                  fit: BoxFit.cover,
+                  width: 65.0,
+                  height: 65.0,
+                ),
+                const SizedBox(
+                  width: 15.0,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        product.productData.name,
+                        style: STextStyles.medium(),
+                      ),
+                      product.productData.variant != null ?
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          Text(
+                            product.productData.variant![0],
+                            style: XSTextStyles.regular(),
+                          ),
+                        ],
+                      ) :
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Rp ${NumberFormat('#,###', 'en_id').format(product.productData.normalPrice[0]).replaceAll(',', '.')}',
+                              style: STextStyles.regular().copyWith(
+                                color: PrimaryColorStyles.primaryMain(),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: product.qty == 1 ? NeutralColorStyles.neutral03() : BorderColorStyles.borderDivider(),
+                              ),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                onReduceQty();
+                              },
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Icon(
+                                Icons.remove,
+                                color: product.qty == 1 ? NeutralColorStyles.neutral03() : IconColorStyles.iconColor(),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: SizedBox(
+                              width: 20.0,
+                              child: Text(
+                                '${product.qty}',
+                                style: MTextStyles.regular(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: BorderColorStyles.borderDivider(),
+                              ),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                onAddQty();
+                              },
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Icon(
+                                Icons.add,
+                                color: IconColorStyles.iconColor(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
