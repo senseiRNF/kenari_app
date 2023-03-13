@@ -252,7 +252,7 @@ class ErrorHandler {
       },
     ).then((_) {
       if(errCode != null && errCode == 401) {
-        //RedirectToSplashPage(context: context).go();
+        RedirectToSplashPage(context: context).go();
       }
     });
   }

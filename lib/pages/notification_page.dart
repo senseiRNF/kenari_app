@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/detail_notification_transaction_page.dart';
 import 'package:kenari_app/services/local/models/local_notification_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -567,8 +568,31 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
             Expanded(
               child: notificationList.isNotEmpty ?
-              ListView.builder(
+              ListView.separated(
                 itemCount: notificationList.length,
+                separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+                  bool showDivider = true;
+
+                  if(separatorIndex < notificationList.length) {
+                    if(notificationList[separatorIndex].date.year != notificationList[separatorIndex + 1].date.year) {
+                      showDivider = false;
+                    } else {
+                      if(notificationList[separatorIndex].date.month != notificationList[separatorIndex + 1].date.month) {
+                        showDivider = false;
+                      }
+                    }
+                  }
+
+                  return showDivider == true ?
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Divider(
+                      thickness: 1.0,
+                      color: BorderColorStyles.borderStrokes(),
+                    ),
+                  ) :
+                  const Material();
+                },
                 itemBuilder: (BuildContext listContext, int index) {
                   bool showMonthHeading = false;
 
@@ -608,10 +632,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             ),
                           ],
                         ) :
-                        Divider(
-                          thickness: 1.0,
-                          color: BorderColorStyles.borderStrokes(),
-                        ),
+                        const Material(),
                         Text(
                           notificationList[index].title,
                           style: MTextStyles.medium().copyWith(
@@ -655,44 +676,51 @@ class _NotificationPageState extends State<NotificationPage> {
                             ),
                           ],
                         ) :
-                        Divider(
-                          thickness: 1.0,
-                          color: BorderColorStyles.borderStrokes(),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              notificationList[index].title,
-                              style: MTextStyles.medium().copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            notificationList[index].total != null ?
-                            Text(
-                              "${notificationList[index].total! < 0 ? '-Rp ' : '+Rp '}${NumberFormat('#,###', 'en_id').format(notificationList[index].total!.abs()).replaceAll(',', '.')}",
-                              style: MTextStyles.medium().copyWith(
-                                color: notificationList[index].total! < 0 ? Colors.red : Colors.green,
-                              ),
-                            ) :
-                            const Material(),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        notificationList[index].subtitle != null ?
-                        Text(
-                          notificationList[index].subtitle!,
-                          style: STextStyles.regular(),
-                        ) :
                         const Material(),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
-                          style: STextStyles.regular(),
+                        InkWell(
+                          onTap: () {
+                            MoveToPage(context: context, target: DetailNotificationTransactionPage(notificationData: notificationList[index])).go();
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    notificationList[index].title,
+                                    style: MTextStyles.medium().copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  notificationList[index].total != null ?
+                                  Text(
+                                    "${notificationList[index].total! < 0 ? '-Rp ' : '+Rp '}${NumberFormat('#,###', 'en_id').format(notificationList[index].total!.abs()).replaceAll(',', '.')}",
+                                    style: MTextStyles.medium().copyWith(
+                                      color: notificationList[index].total! < 0 ? Colors.red : Colors.green,
+                                    ),
+                                  ) :
+                                  const Material(),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              notificationList[index].subtitle != null ?
+                              Text(
+                                notificationList[index].subtitle!,
+                                style: STextStyles.regular(),
+                              ) :
+                              const Material(),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Text(
+                                DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
+                                style: STextStyles.regular(),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

@@ -5,6 +5,7 @@ import 'package:kenari_app/fragments/profile_fragment.dart';
 import 'package:kenari_app/fragments/search_fragment.dart';
 import 'package:kenari_app/fragments/transaction_fragment.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/product_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/product/api_category_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
@@ -214,6 +215,9 @@ class _HomePageState extends State<HomePage> {
           },
           onShowProductBottomDialog: (LocalProductData product) {
             showProductBottomDialog(product);
+          },
+          onProductSelected: (LocalProductData product) {
+            MoveToPage(context: context, target: ProductPage(productData: product)).go();
           },
         );
       case 1:
@@ -638,7 +642,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> showProductBottomDialog(LocalProductData newProduct) async {
+  Future<void> showProductBottomDialog(LocalProductData product) async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -649,15 +653,15 @@ class _HomePageState extends State<HomePage> {
       ),
       builder: (BuildContext modalBottomContext) {
         int index = 0;
-        int qty = 0;
-        int stock = newProduct.stock[index];
+        int qty = 1;
+        int stock = product.stock[index];
 
-        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProduct.normalPrice[index]).replaceAll(',', '.')}';
-        String imagePath = newProduct.imagePath[index] ?? '';
+        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.normalPrice[index]).replaceAll(',', '.')}';
+        String imagePath = product.imagePath[index] ?? '';
         String? variant;
 
-        if(newProduct.variant != null) {
-          variant = newProduct.variant![index];
+        if(product.variant != null) {
+          variant = product.variant![index];
         }
 
         return StatefulBuilder(
@@ -680,7 +684,7 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Text(
-                    newProduct.variant != null ? 'Varian Produk' : 'Tambah Troli',
+                    product.variant != null ? 'Varian Produk' : 'Tambah Troli',
                     style: LTextStyles.medium().copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -717,7 +721,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              newProduct.name,
+                              product.name,
                               style: MTextStyles.medium().copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -769,7 +773,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    newProduct.type == 'Sembako' ? 'Selalu ada' : stock.toString(),
+                                    product.type == 'Sembako' ? 'Selalu ada' : stock.toString(),
                                     style: STextStyles.medium(),
                                   ),
                                 ),
@@ -784,7 +788,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                newProduct.variant != null ?
+                product.variant != null ?
                 Column (
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -808,7 +812,7 @@ class _HomePageState extends State<HomePage> {
                         child: ListView.separated(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount: newProduct.variant!.length,
+                          itemCount: product.variant!.length,
                           separatorBuilder: (BuildContext separatorContext, int index) {
                             return const SizedBox(
                               width: 10.0,
@@ -827,7 +831,13 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () {
                                   stateSetter(() {
                                     index = itemIndex;
-                                    variant = newProduct.variant![itemIndex];
+                                    variant = product.variant![itemIndex];
+
+                                    if(product.discountPrice[index] != 0) {
+                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.discountPrice[index]).replaceAll(',', '.')}';
+                                    } else {
+                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.normalPrice[index]).replaceAll(',', '.')}';
+                                    }
                                   });
                                 },
                                 customBorder: RoundedRectangleBorder(
@@ -836,7 +846,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                   child: Text(
-                                    newProduct.variant![itemIndex],
+                                    product.variant![itemIndex],
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -860,13 +870,13 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: qty == 0 ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04(),
+                            color: qty > 1 ? NeutralColorStyles.neutral04() : NeutralColorStyles.neutral03(),
                           ),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: InkWell(
                           onTap: () {
-                            if(qty != 0) {
+                            if(qty > 1) {
                               stateSetter(() {
                                 qty = qty - 1;
                               });
@@ -877,7 +887,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Icon(
                             Icons.remove,
-                            color: qty == 0 ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor(),
+                            color: qty > 1 ? IconColorStyles.iconColor() : NeutralColorStyles.neutral04(),
                           ),
                         ),
                       ),
@@ -891,13 +901,13 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: newProduct.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
+                            color: product.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
                           ),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: InkWell(
                           onTap: () {
-                            if(newProduct.type != 'Sembako') {
+                            if(product.type != 'Sembako') {
                               if(qty < stock) {
                                 stateSetter(() {
                                   qty = qty + 1;
@@ -914,7 +924,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Icon(
                             Icons.add,
-                            color: newProduct.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
+                            color: product.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
                           ),
                         ),
                       ),

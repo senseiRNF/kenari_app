@@ -47,6 +47,10 @@ class _TrolleyPageState extends State<TrolleyPage> {
     });
   }
 
+  Future deleteAllProduct() async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,7 +133,34 @@ class _TrolleyPageState extends State<TrolleyPage> {
                           padding: const EdgeInsets.only(left: 20.0),
                           child: InkWell(
                             onTap: () {
+                              OptionDialog(
+                                context: context,
+                                title: 'Hapus Semua Produk?',
+                                message: 'Semua produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
+                                yesFunction: () {
+                                  List<LocalTrolleyProduct> tempList = productList;
 
+                                  for(int i = tempList.length - 1; i >= 0; i--) {
+                                    if(tempList[i].isSelected == true) {
+                                      LocalTrolleyProduct tempTrolleyProduct = tempList[i];
+
+                                      setState(() {
+                                        productList.removeAt(i);
+                                        listKey.currentState!.removeItem(i, (context, animation) {
+                                          return ItemListWithAnimation(
+                                            product: tempTrolleyProduct,
+                                            animation: animation,
+                                            onChangedCheckbox: (_) {},
+                                            onReduceQty: () {},
+                                            onAddQty: () {},
+                                          );
+                                        }, duration: const Duration(milliseconds: 500));
+                                      });
+                                    }
+                                  }
+                                },
+                                noFunction: () {},
+                              ).show();
                             },
                             customBorder: const CircleBorder(),
                             child: Padding(
@@ -153,6 +184,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                           key: ValueKey(index),
                           endActionPane: ActionPane(
                             motion: const ScrollMotion(),
+                            extentRatio: 0.15,
                             children: [
                               SlidableAction(
                                 onPressed: (BuildContext pressedContext) {
@@ -207,7 +239,6 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                 backgroundColor: Colors.red,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
-                                label: 'Hapus',
                               ),
                             ],
                           ),

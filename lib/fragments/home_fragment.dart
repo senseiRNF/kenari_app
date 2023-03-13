@@ -24,6 +24,7 @@ class HomeFragment extends StatelessWidget {
   final Function onChangeSelectedPage;
   final Function onShowAllMenuBottomDialog;
   final Function onShowProductBottomDialog;
+  final Function onProductSelected;
 
   const HomeFragment({
     super.key,
@@ -37,6 +38,7 @@ class HomeFragment extends StatelessWidget {
     required this.onChangeSelectedPage,
     required this.onShowAllMenuBottomDialog,
     required this.onShowProductBottomDialog,
+    required this.onProductSelected,
   });
 
   @override
@@ -612,82 +614,88 @@ class HomeFragment extends StatelessWidget {
 
                             return Padding(
                               padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 5.0) : index == newProductList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0) : const EdgeInsets.symmetric(horizontal: 5.0),
-                              child: SizedBox(
-                                width: 150.0,
-                                height: 200.0,
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                newProductList[index].imagePath[0] != null ? newProductList[index].imagePath[0]! : '',
+                              child: InkWell(
+                                onTap: () => onProductSelected(newProductList[index]),
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: SizedBox(
+                                  width: 150.0,
+                                  height: 200.0,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                  newProductList[index].imagePath[0] != null ? newProductList[index].imagePath[0]! : '',
+                                                ),
+                                                fit: BoxFit.cover,
                                               ),
-                                              fit: BoxFit.cover,
-                                            ),
-                                            borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(10.0),
-                                              topRight: Radius.circular(10.0),
+                                              borderRadius: const BorderRadius.only(
+                                                topLeft: Radius.circular(10.0),
+                                                topRight: Radius.circular(10.0),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(10.0),
-                                              child: Text(
-                                                newProductList[index].type,
-                                                style: XSTextStyles.regular(),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(10.0),
                                                 child: Text(
-                                                  newProductList[index].name,
-                                                  style: STextStyles.medium(),
+                                                  newProductList[index].type,
+                                                  style: XSTextStyles.regular(),
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(10.0),
-                                              child: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      price,
-                                                      style: XSTextStyles.medium().copyWith(
-                                                        color: PrimaryColorStyles.primaryMain(),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                  child: Text(
+                                                    newProductList[index].name,
+                                                    style: STextStyles.medium(),
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        price,
+                                                        style: XSTextStyles.medium().copyWith(
+                                                          color: PrimaryColorStyles.primaryMain(),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      onShowProductBottomDialog(newProductList[index]);
-                                                    },
-                                                    customBorder: const CircleBorder(),
-                                                    child: Icon(
-                                                      Icons.more_horiz,
-                                                      size: 15.0,
-                                                      color: IconColorStyles.iconColor(),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        onShowProductBottomDialog(newProductList[index]);
+                                                      },
+                                                      customBorder: const CircleBorder(),
+                                                      child: Icon(
+                                                        Icons.more_horiz,
+                                                        size: 15.0,
+                                                        color: IconColorStyles.iconColor(),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
