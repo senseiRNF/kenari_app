@@ -34,7 +34,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   intl: ^0.18.0
   shared_preferences: ^2.0.17
-  dio: ^4.0.6
+  dio: ^5.0.2
   carousel_slider: ^4.2.1
   flutter_slidable: ^2.0.0
 

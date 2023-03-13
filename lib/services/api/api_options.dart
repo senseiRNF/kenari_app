@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 
 class APIOptions {
@@ -14,11 +14,12 @@ class APIOptions {
         headers: {
           'Accept': 'application/json',
         },
-        connectTimeout: 30000,
-        receiveTimeout: 30000,
+        sendTimeout: const Duration(milliseconds: 15000),
+        connectTimeout: const Duration(milliseconds: 15000),
+        receiveTimeout: const Duration(milliseconds: 15000),
       );
 
-      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
+      (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
         client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
 
         return client;

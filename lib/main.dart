@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kenari_app/miscellaneous/development_options.dart';
-import 'package:kenari_app/pages/splash_page.dart';
+// import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 
 void main() {
