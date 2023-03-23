@@ -134,7 +134,7 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  await APICompanyServices(context: context, companyCode: companyCodeController.text).call().then((getResult) {
+                  await APICompanyServices(context: context).getCompanyByCode(companyCodeController.text).then((getResult) {
                     if(getResult != null && getResult.checkCompanyData != null && getResult.checkCompanyData!.sId != null) {
                       MoveToPage(context: context, target: RegisterFormPage(
                         companyId: getResult.checkCompanyData!.sId,

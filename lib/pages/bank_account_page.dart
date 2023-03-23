@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/bank_account_form_page.dart';
-import 'package:kenari_app/services/local/models/local_bank_account_data.dart';
+import 'package:kenari_app/services/api/authorization/api_bank_services.dart';
+import 'package:kenari_app/services/api/models/bank_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -13,21 +14,23 @@ class BankAccountPage extends StatefulWidget {
 }
 
 class _BankAccountPageState extends State<BankAccountPage> {
-  List<LocalBankAccountData> bankAccountList = [
-    LocalBankAccountData(
-      bankId: 0,
-      bankName: 'Bank Central Asia',
-      accountNumber: '3891234567',
-      accountName: 'Jamie Lannister',
-    ),
-    LocalBankAccountData(
-      bankId: 1,
-      bankName: 'Bank Mandiri',
-      accountNumber: '3891234567',
-      accountName: 'Jamie Lannister',
-    ),
-  ];
-  
+  BankModel? bankModel;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initLoad();
+  }
+
+  Future initLoad() async {
+    await APIBankServices(context: context).getBankByMemberId().then((bankResult) {
+      setState(() {
+        bankModel = bankResult;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,31 +77,32 @@ class _BankAccountPageState extends State<BankAccountPage> {
               height: 5.0,
             ),
             Expanded(
-              child: bankAccountList.isNotEmpty ?
+              child: bankModel != null && bankModel!.bankData != null && bankModel!.bankData!.isNotEmpty ?
               ListView.builder(
-                itemCount: bankAccountList.length,
+                itemCount: bankModel!.bankData!.length,
                 itemBuilder: (BuildContext listContext, int index) {
-                  return Padding(
+                  return bankModel!.bankData![index].bank != null ?
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          bankAccountList[index].bankName,
+                          bankModel!.bankData![index].bank!.name ?? 'Unknown Bank',
                           style: MTextStyles.medium(),
                         ),
                         const SizedBox(
                           height: 5.0,
                         ),
                         Text(
-                          bankAccountList[index].accountNumber,
+                          bankModel!.bankData![index].accountNo ?? 'Unknown Account Number',
                           style: STextStyles.regular(),
                         ),
                         const SizedBox(
                           height: 10.0,
                         ),
                         Text(
-                          'a.n ${bankAccountList[index].accountName}',
+                          'a.n ${bankModel!.bankData![index].accountName ?? 'Unknown Name'}',
                           style: STextStyles.regular(),
                         ),
                         const SizedBox(
@@ -108,7 +112,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                           onPressed: () {
                             MoveToPage(
                               context: context,
-                              target: BankAccountFormPage(editData: bankAccountList[index]),
+                              target: BankAccountFormPage(editData: bankModel!.bankData![index]),
                             ).go();
                           },
                           child: Text(
@@ -120,7 +124,8 @@ class _BankAccountPageState extends State<BankAccountPage> {
                         )
                       ],
                     ),
-                  );
+                  ) :
+                  const Material();
                 },
               ) :
               Stack(),

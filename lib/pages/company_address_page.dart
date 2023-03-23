@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/local/models/local_company_address_data.dart';
+import 'package:kenari_app/services/api/authorization/api_company_services.dart';
+import 'package:kenari_app/services/api/models/company_model.dart';
+import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -12,23 +14,25 @@ class CompanyAddressPage extends StatefulWidget {
 }
 
 class _CompanyAddressPageState extends State<CompanyAddressPage> {
-  List<LocalCompanyAddress> companyAddressList = [
-    LocalCompanyAddress(
-      companydId: 0,
-      companyName: 'PT Surya Fajar Capital.tbk',
-      phone: '0123456789',
-      isMainAddress: true,
-      address: 'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
-    ),
-    LocalCompanyAddress(
-      companydId: 1,
-      companyName: 'PT Bursa Akselerasi Indonesia',
-      phone: '0123456789',
-      isMainAddress: false,
-      address: 'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
-    ),
-  ];
-  
+  CompanyModel? companyModel;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initLoad();
+  }
+
+  Future initLoad() async {
+    await LocalSharedPrefs().readKey('company_id').then((companyId) async {
+      await APICompanyServices(context: context).getCompanyById(companyId).then((companyResult) {
+        setState(() {
+          companyModel = companyResult;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,9 +79,9 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
               height: 5.0,
             ),
             Expanded(
-              child: companyAddressList.isNotEmpty ?
+              child: companyModel != null && companyModel!.companyData != null && companyModel!.companyData!.addresses != null && companyModel!.companyData!.addresses!.isNotEmpty ?
               ListView.builder(
-                itemCount: companyAddressList.length,
+                itemCount: companyModel!.companyData!.addresses!.length,
                 itemBuilder: (BuildContext listContext, int index) {
                   return InkWell(
                     onTap: () {
@@ -93,11 +97,11 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  companyAddressList[index].companyName,
+                                  companyModel!.companyData!.name ?? 'Unknown Company',
                                   style: MTextStyles.medium(),
                                 ),
                               ),
-                              companyAddressList[index].isMainAddress ?
+                              companyModel!.companyData!.status != null && companyModel!.companyData!.status! == true ?
                               Container(
                                 decoration: BoxDecoration(
                                   color: PrimaryColorStyles.primarySurface(),
@@ -123,14 +127,14 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                             height: 10.0,
                           ),
                           Text(
-                            companyAddressList[index].phone,
+                            companyModel!.companyData!.phone ?? 'Unknown Phone',
                             style: STextStyles.regular(),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
-                            companyAddressList[index].address,
+                            companyModel!.companyData!.addresses![index].address ?? 'Unknown Address',
                             style: STextStyles.regular(),
                           ),
                         ],

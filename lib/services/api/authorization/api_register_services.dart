@@ -22,7 +22,7 @@ class APIRegisterServices {
     required this.password,
   });
 
-  Future<APIResponseResult> call() async {
+  Future<APIResponseResult> register() async {
     APIResponseResult result = APIResponseResult(apiResult: false);
 
     await APIOptions.init().then((dio) async {

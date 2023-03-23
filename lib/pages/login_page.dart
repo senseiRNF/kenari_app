@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                           email: emailController.text,
                           password: passwordController.text,
                           rememberMe: false,
-                        ).call().then((callResult) {
+                        ).login().then((callResult) {
                           if(callResult.apiResult == true) {
                             ReplaceToPage(context: context, target: const HomePage()).go();
                           } else {

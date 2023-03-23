@@ -28,6 +28,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
     initLoad();
   }
 
+  Future initLoad() async {
+    await LocalSharedPrefs().readKey('name').then((nameResult) async {
+      setState(() {
+        nameController.text = nameResult ?? '';
+      });
+
+      await LocalSharedPrefs().readKey('phone').then((phoneResult) async {
+        setState(() {
+          phoneController.text = phoneResult ?? '';
+        });
+
+        await LocalSharedPrefs().readKey('email').then((emailResult) async {
+          setState(() {
+            emailController.text = emailResult ?? '';
+          });
+
+          await LocalSharedPrefs().readKey('company_code').then((companyCodeResult) {
+            setState(() {
+              companyCodeController.text = companyCodeResult ?? '';
+            });
+          });
+        });
+      });
+    });
+  }
+
   Future<void> showImageSourceBottomDialog() async {
     await showModalBottomSheet(
       context: context,
@@ -231,26 +257,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Future<void> initLoad() async {
-    await LocalSharedPrefs().readKey('name').then((nameResult) async {
-      setState(() {
-        nameController.text = nameResult ?? '';
-      });
-
-      await LocalSharedPrefs().readKey('phone').then((phoneResult) async {
-        setState(() {
-          phoneController.text = phoneResult ?? '';
-        });
-
-        await LocalSharedPrefs().readKey('email').then((emailResult) async {
-          setState(() {
-            emailController.text = emailResult ?? '';
-          });
-        });
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -356,7 +362,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         TextField(
                           controller: companyCodeController,
                           decoration: InputDecoration(
-                            hintText: 'SFC_WM - 1234567890',
+                            hintText: 'Kode Perusahaan',
                             hintStyle: MTextStyles.regular(),
                           ),
                           textCapitalization: TextCapitalization.characters,
@@ -364,6 +370,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           onChanged: (_) {
 
                           },
+                          enabled: false,
                         ),
                         const SizedBox(
                           height: 25.0,

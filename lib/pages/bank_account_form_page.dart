@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/local/models/local_bank_account_data.dart';
+import 'package:kenari_app/services/api/authorization/api_bank_services.dart';
+import 'package:kenari_app/services/api/models/bank_model.dart';
+import 'package:kenari_app/services/api/models/list_bank_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class BankAccountFormPage extends StatefulWidget {
-  final LocalBankAccountData? editData;
+  final BankData? editData;
 
   const BankAccountFormPage({
     super.key,
@@ -17,11 +19,13 @@ class BankAccountFormPage extends StatefulWidget {
 }
 
 class _BankAccountFormPageState extends State<BankAccountFormPage> {
-  LocalBankAccountData? bankAccountData;
+  List<ListBankData> bankList = [];
 
   TextEditingController bankNameController = TextEditingController();
   TextEditingController accountNameController = TextEditingController();
   TextEditingController accountNumberController = TextEditingController();
+
+  String? bankId;
 
   @override
   void initState() {
@@ -32,12 +36,20 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
 
   void initLoad() async {
     setState(() {
-      bankAccountData = widget.editData;
+      if(widget.editData != null && widget.editData!.bank != null) {
+        bankNameController.text = widget.editData!.bank!.name ?? '';
+        accountNameController.text = widget.editData!.accountName ?? '';
+        accountNumberController.text = widget.editData!.accountNo ?? '';
 
-      if(bankAccountData != null) {
-        bankNameController.text = bankAccountData!.bankName;
-        accountNameController.text = bankAccountData!.accountName;
-        accountNumberController.text = bankAccountData!.accountNumber;
+        bankId = widget.editData!.bank!.sId;
+      }
+    });
+
+    await APIBankServices(context: context).getListBank().then((listResult) {
+      if(listResult != null && listResult.listBankData != null) {
+        setState(() {
+          bankList = listResult.listBankData!;
+        });
       }
     });
   }
@@ -101,22 +113,54 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        TextField(
-                          controller: bankNameController,
-                          decoration: InputDecoration(
-                            hintText: 'Pilih bank',
-                            hintStyle: MTextStyles.regular(),
-                            suffixIcon: const Icon(
-                              Icons.expand_more_outlined,
+                        Stack(
+                          children: [
+                            TextField(
+                              controller: bankNameController,
+                              decoration: InputDecoration(
+                                hintText: 'Pilih bank',
+                                hintStyle: MTextStyles.regular(),
+                                suffixIcon: const Icon(
+                                  Icons.expand_more_outlined,
+                                ),
+                              ),
+                              textCapitalization: TextCapitalization.characters,
+                              textInputAction: TextInputAction.next,
+                              enabled: false,
                             ),
-                          ),
-                          textCapitalization: TextCapitalization.characters,
-                          textInputAction: TextInputAction.next,
-                          onChanged: (_) {
-                            setState(() {
-
-                            });
-                          },
+                            DropdownButton(
+                              onChanged: (newValue) {
+                                if(newValue != null) {
+                                  setState(() {
+                                    bankNameController.text = newValue.name ?? '';
+                                    bankId = newValue.sId;
+                                  });
+                                }
+                              },
+                              isExpanded: true,
+                              icon: const Icon(
+                                Icons.expand_more,
+                                color: Colors.transparent,
+                              ),
+                              underline: const Material(),
+                              items: bankList.map<DropdownMenuItem<ListBankData>>((value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                                    child: Text(
+                                      value.name ?? 'Unknown Bank',
+                                      style: STextStyles.regular(),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
+                        const Divider(
+                          height: 1.0,
+                          color: Colors.black87,
                         ),
                         const SizedBox(
                           height: 25.0,

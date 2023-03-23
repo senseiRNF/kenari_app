@@ -85,7 +85,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                     phone: phoneController.text,
                     email: emailController.text,
                     password: passwordController.text,
-                  ).call().then((callResult) {
+                  ).register().then((callResult) {
                     if(callResult.apiResult == true) {
                       BackFromThisPage(
                         context: context,

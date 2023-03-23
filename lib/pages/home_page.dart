@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   int selectedCard = 0;
 
   String? name;
+  String? companyCode;
   String filterType = 'Tampilkan Semua';
 
   TextEditingController searchController = TextEditingController();
@@ -170,12 +171,18 @@ class _HomePageState extends State<HomePage> {
         name = nameResult;
       });
 
-      await APICategoryServices(context: context).call().then((result) {
-        if(result != null && result.categoryData != null) {
-          setState(() {
-            categoryList = result.categoryData!;
-          });
-        }
+      await LocalSharedPrefs().readKey('company_code').then((companyCodeResult) async {
+        setState(() {
+          companyCode = companyCodeResult;
+        });
+
+        await APICategoryServices(context: context).call().then((result) {
+          if(result != null && result.categoryData != null) {
+            setState(() {
+              categoryList = result.categoryData!;
+            });
+          }
+        });
       });
     });
   }
@@ -240,6 +247,7 @@ class _HomePageState extends State<HomePage> {
       case 3:
         return ProfileFragment(
           name: name,
+          companyCode: companyCode,
           onLogout: () async {
             await LocalSharedPrefs().removeAllKey().then((removeResult) {
               if(removeResult == true) {

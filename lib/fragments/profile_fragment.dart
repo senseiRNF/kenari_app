@@ -9,11 +9,13 @@ import 'package:kenari_app/styles/text_styles.dart';
 
 class ProfileFragment extends StatelessWidget {
   final String? name;
+  final String? companyCode;
   final Function onLogout;
 
   const ProfileFragment({
     super.key,
     required this.name,
+    required this.companyCode,
     required this.onLogout,
   });
 
@@ -145,7 +147,7 @@ class ProfileFragment extends StatelessWidget {
                               height: 5.0,
                             ),
                             Text(
-                              'SFC_WM - 1234567890',
+                              companyCode ?? 'Unknown Code',
                               style: XSTextStyles.regular(),
                               textAlign: TextAlign.center,
                             ),

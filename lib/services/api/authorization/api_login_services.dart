@@ -20,7 +20,7 @@ class APILoginServices {
     required this.rememberMe,
   });
 
-  Future<APIResponseResult> call() async {
+  Future<APIResponseResult> login() async {
     late APIResponseResult result;
 
     await APIOptions.init().then((dio) async {
@@ -43,8 +43,19 @@ class APILoginServices {
 
               if(loginModel.loginData!.user != null) {
                 LocalSharedPrefs().writeKey('email', loginModel.loginData!.user!.email);
-                LocalSharedPrefs().writeKey('id', loginModel.loginData!.user!.sId);
+                LocalSharedPrefs().writeKey('user_id', loginModel.loginData!.user!.sId);
                 LocalSharedPrefs().writeKey('name', loginModel.loginData!.user!.name);
+              }
+
+              if(loginModel.loginData!.member != null) {
+                LocalSharedPrefs().writeKey('member_id', loginModel.loginData!.member!.sId);
+                LocalSharedPrefs().writeKey('phone', loginModel.loginData!.member!.phoneNumber);
+
+                if(loginModel.loginData!.member!.company != null) {
+                  LocalSharedPrefs().writeKey('company_id', loginModel.loginData!.member!.company!.sId);
+                  LocalSharedPrefs().writeKey('company_name', loginModel.loginData!.member!.company!.name);
+                  LocalSharedPrefs().writeKey('company_code', loginModel.loginData!.member!.company!.code);
+                }
               }
             }
           }
