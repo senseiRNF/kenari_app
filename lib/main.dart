@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-<<<<<<< HEAD
 import 'package:kenari_app/pages/splash_page.dart';
-=======
-import 'package:kenari_app/miscellaneous/development_options.dart';
-// import 'package:kenari_app/pages/splash_page.dart';
->>>>>>> b59b3908cc4b165ef8e4803b20c19c3d8f378768
 import 'package:kenari_app/styles/color_styles.dart';
 
 void main() {

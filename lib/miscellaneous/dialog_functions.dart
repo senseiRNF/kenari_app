@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -252,7 +253,7 @@ class ErrorHandler {
       },
     ).then((_) {
       if(errCode != null && errCode == 401) {
-        RedirectToSplashPage(context: context).go();
+        RedirectToPage(context: context, target: const SplashPage()).go();
       }
     });
   }

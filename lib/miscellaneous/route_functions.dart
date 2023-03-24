@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kenari_app/pages/splash_page.dart';
 
 class MoveToPage {
   BuildContext context;
@@ -49,14 +48,16 @@ class BackFromThisPage {
   }
 }
 
-class RedirectToSplashPage {
+class RedirectToPage {
   BuildContext context;
+  Widget target;
 
-  RedirectToSplashPage({
+  RedirectToPage({
     required this.context,
+    required this.target,
   });
 
   void go() {
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext targetContext) => const SplashPage()), (route) => false);
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext targetContext) => target), (route) => false);
   }
 }

@@ -121,8 +121,72 @@ class APIBankServices {
     return result;
   }
 
-  Future<bool> updateBankData(LocalBankAccountData data) async {
+  Future<bool> updateBankData(String? bankAccountId, LocalBankAccountData data) async {
     bool result = false;
+
+    FormData formData = FormData.fromMap({
+      'bank_id': data.bankId,
+      'member_id': data.memberId,
+      'account_no': data.accountNumber,
+      'account_name': data.accountName,
+    });
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await APIOptions.init().then((dio) async {
+        LoadingDialog(context: context).show();
+
+        try {
+          await dio.patch(
+            '/bank-account/$bankAccountId',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ),
+            data: formData,
+          ).then((postResult) {
+            BackFromThisPage(context: context).go();
+
+            result = true;
+          });
+        } on DioError catch(dioErr) {
+          BackFromThisPage(context: context).go();
+
+          ErrorHandler(context: context, dioErr: dioErr).handle();
+        }
+      });
+    });
+
+    return result;
+  }
+
+  Future<bool> deleteBankData(String? bankAccountId) async {
+    bool result = false;
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await APIOptions.init().then((dio) async {
+        LoadingDialog(context: context).show();
+
+        try {
+          await dio.delete(
+            '/bank-account/$bankAccountId',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ),
+          ).then((postResult) {
+            BackFromThisPage(context: context).go();
+
+            result = true;
+          });
+        } on DioError catch(dioErr) {
+          BackFromThisPage(context: context).go();
+
+          ErrorHandler(context: context, dioErr: dioErr).handle();
+        }
+      });
+    });
 
     return result;
   }

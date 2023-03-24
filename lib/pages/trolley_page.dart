@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/checkout_page.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/services/local/models/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -352,7 +353,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-
+                      MoveToPage(context: context, target: CheckoutPage(productList: widget.productList)).go();
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),

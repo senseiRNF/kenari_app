@@ -6,6 +6,7 @@ import 'package:kenari_app/fragments/search_fragment.dart';
 import 'package:kenari_app/fragments/transaction_fragment.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/product_page.dart';
+import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/product/api_category_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
@@ -251,7 +252,7 @@ class _HomePageState extends State<HomePage> {
           onLogout: () async {
             await LocalSharedPrefs().removeAllKey().then((removeResult) {
               if(removeResult == true) {
-                RedirectToSplashPage(context: context).go();
+                RedirectToPage(context: context, target: const SplashPage()).go();
               }
             });
           },
@@ -867,11 +868,8 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ) :
                 const Material(),
-                const SizedBox(
-                  height: 25.0,
-                ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.all(25.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -973,9 +971,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(
-                  height: 25.0,
                 ),
               ],
             );

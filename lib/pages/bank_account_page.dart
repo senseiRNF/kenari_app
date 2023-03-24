@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/bank_account_form_page.dart';
-import 'package:kenari_app/services/api/authorization/api_bank_services.dart';
+import 'package:kenari_app/services/api/profile/api_bank_services.dart';
 import 'package:kenari_app/services/api/models/bank_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -113,6 +113,11 @@ class _BankAccountPageState extends State<BankAccountPage> {
                             MoveToPage(
                               context: context,
                               target: BankAccountFormPage(editData: bankModel!.bankData![index]),
+                              callback: (callback) {
+                                if(callback != null && callback == true) {
+                                  initLoad();
+                                }
+                              },
                             ).go();
                           },
                           child: Text(
@@ -137,6 +142,11 @@ class _BankAccountPageState extends State<BankAccountPage> {
                   MoveToPage(
                     context: context,
                     target: const BankAccountFormPage(),
+                    callback: (callback) {
+                      if(callback != null && callback == true) {
+                        initLoad();
+                      }
+                    },
                   ).go();
                 },
                 child: Padding(

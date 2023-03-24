@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/api/authorization/api_bank_services.dart';
+import 'package:kenari_app/services/api/profile/api_bank_services.dart';
 import 'package:kenari_app/services/api/models/bank_model.dart';
 import 'package:kenari_app/services/api/models/list_bank_model.dart';
+import 'package:kenari_app/services/local/local_shared_prefs.dart';
+import 'package:kenari_app/services/local/models/local_bank_account_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -220,8 +223,53 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-
+                    onPressed: () async {
+                      if(widget.editData == null) {
+                        await LocalSharedPrefs().readKey('member_id').then((memberId) async {
+                          await APIBankServices(context: context).createBankData(
+                            LocalBankAccountData(
+                              bankId: bankId ?? '',
+                              memberId: memberId ?? '',
+                              accountNumber: accountNumberController.text,
+                              accountName: accountNameController.text,
+                            ),
+                          ).then((createResult) {
+                            if(createResult == true) {
+                              OkDialog(
+                                context: context,
+                                message: 'Sukses menambahkan data rekening baru',
+                                okText: 'Oke',
+                                okFunction: () {
+                                  BackFromThisPage(context: context, callbackData: true).go();
+                                },
+                              ).show();
+                            }
+                          });
+                        });
+                      } else {
+                        await LocalSharedPrefs().readKey('member_id').then((memberId) async {
+                          await APIBankServices(context: context).updateBankData(
+                            widget.editData!.sId,
+                            LocalBankAccountData(
+                              bankId: bankId ?? '',
+                              memberId: memberId ?? '',
+                              accountNumber: accountNumberController.text,
+                              accountName: accountNameController.text,
+                            ),
+                          ).then((createResult) {
+                            if(createResult == true) {
+                              OkDialog(
+                                context: context,
+                                message: 'Sukses memperbaharui data rekening',
+                                okText: 'Oke',
+                                okFunction: () {
+                                  BackFromThisPage(context: context, callbackData: true).go();
+                                },
+                              ).show();
+                            }
+                          });
+                        });
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: bankNameController.text != '' && accountNameController.text != '' && accountNumberController.text != '' ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
@@ -242,7 +290,25 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-
+                          OptionDialog(
+                            context: context,
+                            message: 'Hapus data rekening, Anda yakin?',
+                            yesFunction: () async {
+                              await APIBankServices(context: context).deleteBankData(widget.editData!.sId).then((deleteResult) {
+                                if(deleteResult == true) {
+                                  OkDialog(
+                                    context: context,
+                                    message: 'Sukses menghapus data rekening',
+                                    okText: 'Oke',
+                                    okFunction: () {
+                                      BackFromThisPage(context: context, callbackData: true).go();
+                                    },
+                                  ).show();
+                                }
+                              });
+                            },
+                            noFunction: () {},
+                          ).show();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: PrimaryColorStyles.primarySurface(),

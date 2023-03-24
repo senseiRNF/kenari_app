@@ -16,10 +16,8 @@ class APIOptions {
       receiveTimeout: const Duration(milliseconds: 20000),
     );
 
-    (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+    (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
 
       return client;
     };
