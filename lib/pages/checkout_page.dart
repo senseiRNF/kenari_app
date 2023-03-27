@@ -40,407 +40,428 @@ class _CheckoutPageState extends State<CheckoutPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+            Container(
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      BackFromThisPage(context: context).go();
-                    },
-                    customBorder: const CircleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.chevron_left,
-                        size: 30.0,
-                        color: IconColorStyles.iconColor(),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            BackFromThisPage(context: context).go();
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.chevron_left,
+                              size: 30.0,
+                              color: IconColorStyles.iconColor(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Checkout',
+                            style: HeadingTextStyles.headingS(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Checkout',
-                      style: HeadingTextStyles.headingS(),
-                    ),
+                  Divider(
+                    height: 1.0,
+                    color: NeutralColorStyles.neutral05(),
                   ),
                 ],
               ),
-            ),
-            Divider(
-              thickness: 1.0,
-              color: NeutralColorStyles.neutral05(),
-            ),
-            const SizedBox(
-              height: 5.0,
             ),
             Expanded(
               child: ListView(
                 children: [
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Alamat Pengambilan',
-                          style: MTextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Alamat Pengambilan',
+                            style: MTextStyles.medium().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          'PT. Surya Fajar Capital.tbk (08123456789)',
-                          style: STextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
+                          const SizedBox(
+                            height: 10.0,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                          'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
-                          style: STextStyles.regular().copyWith(
-                            color: TextColorStyles.textPrimary(),
+                          Text(
+                            'PT. Surya Fajar Capital.tbk (08123456789)',
+                            style: STextStyles.medium().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
+                            style: STextStyles.regular().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 15.0,
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
                   ),
-                  Divider(
-                    thickness: 3.0,
-                    color: NeutralColorStyles.neutral03(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Detail Belanja',
-                          style: MTextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Detail Belanja',
+                            style: MTextStyles.medium().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Divider(
-                          color: BorderColorStyles.borderDivider(),
-                        ),
-                        ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: widget.productList.length,
-                          itemBuilder: (BuildContext listContext, int index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 5.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        widget.productList[index].imagePath[0] ?? '',
-                                        fit: BoxFit.cover,
-                                        width: 65.0,
-                                        height: 65.0,
-                                      ),
-                                      const SizedBox(
-                                        width: 15.0,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                                          children: [
-                                            Text(
-                                              widget.productList[index].name,
-                                              style: STextStyles.medium(),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Divider(
+                            color: BorderColorStyles.borderDivider(),
+                          ),
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: widget.productList.length,
+                            itemBuilder: (BuildContext listContext, int index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 65.0,
+                                          height: 65.0,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                widget.productList[index].imagePath[0] ?? '',
+                                              ),
+                                              fit: BoxFit.cover,
                                             ),
-                                            widget.productList[index].variant != null ?
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                                              children: [
-                                                const SizedBox(
-                                                  height: 10.0,
-                                                ),
-                                                Text(
-                                                  widget.productList[index].variant![0],
-                                                  style: XSTextStyles.regular(),
-                                                ),
-                                                const SizedBox(
-                                                  height: 5.0,
-                                                ),
-                                              ],
-                                            ) :
-                                            const SizedBox(
-                                              height: 25.0,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(widget.productList[index].normalPrice[0]).replaceAll(',', '.')}',
-                                                  style: MTextStyles.medium().copyWith(
-                                                    color: PrimaryColorStyles.primaryMain(),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 15.0,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Text(
+                                                widget.productList[index].name,
+                                                style: MTextStyles.medium(),
+                                              ),
+                                              widget.productList[index].variant != null ?
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 10.0,
                                                   ),
-                                                ),
-                                                Text(
-                                                  '4x',
-                                                  style: MTextStyles.regular(),
-                                                  textAlign: TextAlign.end,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                  Text(
+                                                    widget.productList[index].variant![0],
+                                                    style: STextStyles.regular(),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                ],
+                                              ) :
+                                              const SizedBox(
+                                                height: 25.0,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Rp ${NumberFormat('#,###', 'en_id').format(widget.productList[index].normalPrice[0]).replaceAll(',', '.')}',
+                                                    style: MTextStyles.medium().copyWith(
+                                                      color: PrimaryColorStyles.primaryMain(),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    '4x',
+                                                    style: MTextStyles.regular(),
+                                                    textAlign: TextAlign.end,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: NeutralColorStyles.neutral02(),
+                                        borderRadius: BorderRadius.circular(5.0),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            border: InputBorder.none,
+                                            hintText: 'Tambah catatan disini (optional)',
+                                            hintStyle: STextStyles.regular(),
+                                          ),
+                                          controller: searchController[index],
                                         ),
                                       ),
-                                    ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Metode Pembayaran',
+                            style: MTextStyles.medium().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Divider(
+                            color: BorderColorStyles.borderDivider(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 30.0,
+                                  child: Image.asset(
+                                    'assets/images/saldo_dipay_logo.png',
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                                isDipayActivated ?
+                                Text(
+                                  'Rp ${NumberFormat('#,###', 'en_id').format(5000000).replaceAll(',', '.')}',
+                                ) :
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      isDipayActivated = !isDipayActivated;
+                                    });
+                                  },
+                                  customBorder: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                      'Aktivasi',
+                                      style: MTextStyles.medium().copyWith(
+                                        color: PrimaryColorStyles.primaryMain(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+                            child: isDipayActivated ?
+                            Container(
+                              padding: const EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: InfoColorStyles.infoSurface(),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.info,
+                                    color: InfoColorStyles.infoMain(),
                                   ),
                                   const SizedBox(
-                                    height: 10.0,
+                                    width: 10.0,
                                   ),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: NeutralColorStyles.neutral02(),
-                                      isDense: true,
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      hintText: 'Tambah catatan disini (optional)',
-                                      hintStyle: STextStyles.regular(),
+                                  Text(
+                                    'Pastikan Saldo Dipay anda mencukupi.',
+                                    style: XSTextStyles.medium().copyWith(
+                                      color: InfoColorStyles.infoMain(),
                                     ),
-                                    controller: searchController[index],
                                   ),
                                 ],
                               ),
-                            );
-                          },
-                        ),
-                      ],
+                            ) :
+                            Container(
+                              padding: const EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: DangerColorStyles.dangerSurface(),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.info,
+                                    color: DangerColorStyles.dangerMain(),
+                                  ),
+                                  const SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Text(
+                                    'Lakukan aktivasi pada akun Dipay anda.',
+                                    style: XSTextStyles.medium().copyWith(
+                                      color: DangerColorStyles.dangerMain(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Divider(
-                    thickness: 3.0,
-                    color: NeutralColorStyles.neutral03(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Metode Pembayaran',
-                          style: MTextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Ringkasan Belanja',
+                            style: MTextStyles.medium().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Divider(
-                          color: BorderColorStyles.borderDivider(),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                          child: Row(
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Divider(
+                            color: BorderColorStyles.borderDivider(),
+                          ),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                height: 30.0,
-                                child: Image.asset(
-                                  'assets/images/saldo_dipay_logo.png',
-                                  fit: BoxFit.fitHeight,
-                                ),
-                              ),
-                              isDipayActivated ?
                               Text(
-                                'Rp ${NumberFormat('#,###', 'en_id').format(5000000).replaceAll(',', '.')}',
-                              ) :
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    isDipayActivated = !isDipayActivated;
-                                  });
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Text(
-                                    'Aktivasi',
-                                    style: MTextStyles.medium().copyWith(
-                                      color: PrimaryColorStyles.primaryMain(),
-                                    ),
-                                  ),
+                                'Total Harga (${widget.productList.length} Produk)',
+                                style: MTextStyles.regular(),
+                              ),
+                              Text(
+                                'Rp.1.225.000,-',
+                                style: MTextStyles.medium().copyWith(
+                                  color: TextColorStyles.textPrimary(),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15.0),
-                          child: isDipayActivated ?
-                          Container(
-                            padding: const EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              color: InfoColorStyles.infoSurface(),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.info,
-                                  color: InfoColorStyles.infoMain(),
-                                ),
-                                const SizedBox(
-                                  width: 10.0,
-                                ),
-                                Text(
-                                  'Pastikan Saldo Dipay anda mencukupi.',
-                                  style: XSTextStyles.medium().copyWith(
-                                    color: InfoColorStyles.infoMain(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ) :
-                          Container(
-                            padding: const EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              color: DangerColorStyles.dangerSurface(),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.info,
-                                  color: DangerColorStyles.dangerMain(),
-                                ),
-                                const SizedBox(
-                                  width: 10.0,
-                                ),
-                                Text(
-                                  'Lakukan aktivasi pada akun Dipay anda.',
-                                  style: XSTextStyles.medium().copyWith(
-                                    color: DangerColorStyles.dangerMain(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                  Divider(
-                    thickness: 3.0,
-                    color: NeutralColorStyles.neutral03(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Ringkasan Belanja',
-                          style: MTextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Divider(
-                          color: BorderColorStyles.borderDivider(),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Total Harga (${widget.productList.length} Produk)',
-                              style: MTextStyles.regular(),
-                            ),
-                            Text(
-                              'Rp.1.225.000,-',
-                              style: MTextStyles.medium().copyWith(
-                                color: TextColorStyles.textPrimary(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    thickness: 6.0,
-                    color: NeutralColorStyles.neutral03(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Total Harga',
-                          style: MTextStyles.regular(),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          'Rp.1.225.000,-',
-                          style: TextStyle(
-                            color: PrimaryColorStyles.primaryMain(),
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Total Harga',
+                            style: MTextStyles.regular(),
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            'Rp.1.225.000,-',
+                            style: TextStyle(
+                              color: PrimaryColorStyles.primaryMain(),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
+                    ElevatedButton(
+                      onPressed: () {
 
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-                      child: Text(
-                        'Bayar',
-                        style: LTextStyles.medium().copyWith(
-                          color: Colors.white,
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                        child: Text(
+                          'Bayar',
+                          style: LTextStyles.medium().copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

@@ -98,7 +98,7 @@ class Member {
   String? phoneNumber;
   String? email;
   String? password;
-  bool? status;
+  String? status;
   Company? company;
   String? user;
   String? createdAt;
@@ -158,9 +158,9 @@ class Company {
   String? name;
   String? code;
   String? totalMember;
-  bool? status;
+  String? status;
+  List<String>? members;
   List<String>? addresses;
-  List<CompanyMembers>? companyMembers;
   String? createdAt;
   String? updatedAt;
   int? iV;
@@ -171,8 +171,8 @@ class Company {
     this.code,
     this.totalMember,
     this.status,
+    this.members,
     this.addresses,
-    this.companyMembers,
     this.createdAt,
     this.updatedAt,
     this.iV,
@@ -184,13 +184,8 @@ class Company {
     code = json['code'];
     totalMember = json['total_member'];
     status = json['status'];
+    members = json['members'].cast<String>();
     addresses = json['addresses'].cast<String>();
-    if (json['members'] != null) {
-      companyMembers = <CompanyMembers>[];
-      json['members'].forEach((v) {
-        companyMembers!.add(CompanyMembers.fromJson(v));
-      });
-    }
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
@@ -203,69 +198,9 @@ class Company {
     data['code'] = code;
     data['total_member'] = totalMember;
     data['status'] = status;
+    data['members'] = members;
     data['addresses'] = addresses;
-    if (companyMembers != null) {
-      data['members'] = companyMembers!.map((v) => v.toJson()).toList();
-    }
     data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
-    return data;
-  }
-}
-
-class CompanyMembers {
-  String? name;
-  String? phoneNumber;
-  String? email;
-  String? password;
-  bool? status;
-  String? company;
-  String? user;
-  String? createdAt;
-  String? sId;
-  String? updatedAt;
-  int? iV;
-
-  CompanyMembers({
-    this.name,
-    this.phoneNumber,
-    this.email,
-    this.password,
-    this.status,
-    this.company,
-    this.user,
-    this.createdAt,
-    this.sId,
-    this.updatedAt,
-    this.iV,
-  });
-
-  CompanyMembers.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    phoneNumber = json['phone_number'];
-    email = json['email'];
-    password = json['password'];
-    status = json['status'];
-    company = json['company'];
-    user = json['user'];
-    createdAt = json['createdAt'];
-    sId = json['_id'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['phone_number'] = phoneNumber;
-    data['email'] = email;
-    data['password'] = password;
-    data['status'] = status;
-    data['company'] = company;
-    data['user'] = user;
-    data['createdAt'] = createdAt;
-    data['_id'] = sId;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
     return data;

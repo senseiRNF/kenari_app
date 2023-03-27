@@ -30,13 +30,13 @@ class APIRegisterServices {
 
       try {
         await dio.post(
-          '/auth/register',
+          '/auth/register-member',
           data: {
             'company_id': companyId,
             'name': name,
-            'phone': phone,
             'email': email,
             'password': password,
+            'phone_number': phone,
           },
         ).then((postResult) {
           BackFromThisPage(context: context).go();

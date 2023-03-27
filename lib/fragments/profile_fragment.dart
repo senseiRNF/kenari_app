@@ -10,12 +10,14 @@ import 'package:kenari_app/styles/text_styles.dart';
 class ProfileFragment extends StatelessWidget {
   final String? name;
   final String? companyCode;
+  final Function refreshPage;
   final Function onLogout;
 
   const ProfileFragment({
     super.key,
     required this.name,
     required this.companyCode,
+    required this.refreshPage,
     required this.onLogout,
   });
 
@@ -102,7 +104,15 @@ class ProfileFragment extends StatelessWidget {
                                         padding: const EdgeInsets.all(5.0),
                                         child: InkWell(
                                           onTap: () {
-                                            MoveToPage(context: context, target: const EditProfilePage()).go();
+                                            MoveToPage(
+                                              context: context,
+                                              target: const EditProfilePage(),
+                                              callback: (callback) {
+                                                if(callback != null && callback == true) {
+                                                  refreshPage();
+                                                }
+                                              },
+                                            ).go();
                                           },
                                           customBorder: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(5.0),

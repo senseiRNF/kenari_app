@@ -256,8 +256,8 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                               accountNumber: accountNumberController.text,
                               accountName: accountNameController.text,
                             ),
-                          ).then((createResult) {
-                            if(createResult == true) {
+                          ).then((updateResult) {
+                            if(updateResult == true) {
                               OkDialog(
                                 context: context,
                                 message: 'Sukses memperbaharui data rekening',

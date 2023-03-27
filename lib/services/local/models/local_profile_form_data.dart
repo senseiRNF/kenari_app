@@ -1,13 +1,13 @@
 class LocalProfileFormData {
-  String id;
-  String name;
-  String role;
-  String email;
+  String? companyId;
+  String? name;
+  String? email;
+  String? phone;
 
   LocalProfileFormData({
-    required this.id,
-    required this.name,
-    required this.role,
-    required this.email,
+    this.companyId,
+    this.name,
+    this.email,
+    this.phone,
   });
 }

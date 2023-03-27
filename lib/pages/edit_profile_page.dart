@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/services/api/profile/api_profile_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
+import 'package:kenari_app/services/local/models/local_profile_form_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -20,6 +23,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
+  String? companyId;
+  String? memberId;
 
   @override
   void initState() {
@@ -44,9 +50,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
             emailController.text = emailResult ?? '';
           });
 
-          await LocalSharedPrefs().readKey('company_code').then((companyCodeResult) {
+          await LocalSharedPrefs().readKey('company_code').then((companyCodeResult) async {
             setState(() {
               companyCodeController.text = companyCodeResult ?? '';
+            });
+
+            await LocalSharedPrefs().readKey('company_id').then((companyIdResult) async {
+              setState(() {
+                companyId = companyIdResult;
+              });
+
+              await LocalSharedPrefs().readKey('member_id').then((memberIdResult) {
+                setState(() {
+                  memberId = memberIdResult;
+                });
+              });
             });
           });
         });
@@ -264,40 +282,48 @@ class _EditProfilePageState extends State<EditProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+            Container(
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      BackFromThisPage(context: context).go();
-                    },
-                    customBorder: const CircleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.chevron_left,
-                        size: 30.0,
-                        color: IconColorStyles.iconColor(),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            BackFromThisPage(context: context).go();
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.chevron_left,
+                              size: 30.0,
+                              color: IconColorStyles.iconColor(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Edit Profile',
+                            style: HeadingTextStyles.headingS(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Edit Profile',
-                      style: HeadingTextStyles.headingS(),
-                    ),
+                  Divider(
+                    height: 1.0,
+                    color: NeutralColorStyles.neutral05(),
                   ),
                 ],
               ),
-            ),
-            Divider(
-              thickness: 1.0,
-              color: NeutralColorStyles.neutral05(),
             ),
             Expanded(
               child: ListView(
@@ -445,7 +471,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
                 onPressed: () {
-
+                  APIProfileServices(context: context).updateProfile(
+                    memberId,
+                    LocalProfileFormData(
+                      companyId: companyId,
+                      name: nameController.text,
+                      email: emailController.text,
+                      phone: phoneController.text,
+                    ),
+                  ).then((result) {
+                    if(result == true) {
+                      OkDialog(
+                        context: context,
+                        message: 'Sukses memperbaharui data',
+                        okText: 'Oke',
+                        okFunction: () {
+                          BackFromThisPage(context: context, callbackData: true).go();
+                        },
+                      ).show();
+                    }
+                  });
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),

@@ -119,7 +119,7 @@ class Member {
   String? phoneNumber;
   String? email;
   String? password;
-  bool? status;
+  String? status;
   String? company;
   String? user;
   String? createdAt;

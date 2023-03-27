@@ -59,121 +59,129 @@ class _TrolleyPageState extends State<TrolleyPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+            Container(
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      BackFromThisPage(context: context).go();
-                    },
-                    customBorder: const CircleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.chevron_left,
-                        size: 30.0,
-                        color: IconColorStyles.iconColor(),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            BackFromThisPage(context: context).go();
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.chevron_left,
+                              size: 30.0,
+                              color: IconColorStyles.iconColor(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Troli',
+                            style: HeadingTextStyles.headingS(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Troli',
-                      style: HeadingTextStyles.headingS(),
-                    ),
+                  Divider(
+                    height: 1.0,
+                    color: NeutralColorStyles.neutral05(),
                   ),
                 ],
               ),
-            ),
-            Divider(
-              thickness: 1.0,
-              color: NeutralColorStyles.neutral05(),
-            ),
-            const SizedBox(
-              height: 5.0,
             ),
             Expanded(
               child: productList.isNotEmpty ?
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: CheckboxListTile(
-                            onChanged: (newValue) {
-                              if(newValue != null) {
-                                setState(() {
-                                  isSelectedAll = newValue;
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: CheckboxListTile(
+                              onChanged: (newValue) {
+                                if(newValue != null) {
+                                  setState(() {
+                                    isSelectedAll = newValue;
 
-                                  for(int i = 0; i < productList.length; i++) {
-                                    productList[i].isSelected = newValue;
-                                  }
-                                });
-                              }
-                            },
-                            value: isSelectedAll,
-                            title: Text(
-                              'Pilih Semua Barang',
-                              style: STextStyles.regular(),
-                            ),
-                            dense: true,
-                            activeColor: Theme.of(context).primaryColor,
-                            controlAffinity: ListTileControlAffinity.leading,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: InkWell(
-                            onTap: () {
-                              OptionDialog(
-                                context: context,
-                                title: 'Hapus Semua Produk?',
-                                message: 'Semua produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
-                                yesFunction: () {
-                                  List<LocalTrolleyProduct> tempList = productList;
-
-                                  for(int i = tempList.length - 1; i >= 0; i--) {
-                                    if(tempList[i].isSelected == true) {
-                                      LocalTrolleyProduct tempTrolleyProduct = tempList[i];
-
-                                      setState(() {
-                                        productList.removeAt(i);
-                                        listKey.currentState!.removeItem(i, (context, animation) {
-                                          return ItemListWithAnimation(
-                                            product: tempTrolleyProduct,
-                                            animation: animation,
-                                            onChangedCheckbox: (_) {},
-                                            onReduceQty: () {},
-                                            onAddQty: () {},
-                                          );
-                                        }, duration: const Duration(milliseconds: 500));
-                                      });
+                                    for(int i = 0; i < productList.length; i++) {
+                                      productList[i].isSelected = newValue;
                                     }
-                                  }
-                                },
-                                noFunction: () {},
-                              ).show();
-                            },
-                            customBorder: const CircleBorder(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Icon(
-                                Icons.delete,
-                                color: IconColorStyles.iconColor(),
+                                  });
+                                }
+                              },
+                              value: isSelectedAll,
+                              title: Text(
+                                'Pilih Semua Barang',
+                                style: STextStyles.regular(),
+                              ),
+                              dense: true,
+                              activeColor: Theme.of(context).primaryColor,
+                              controlAffinity: ListTileControlAffinity.leading,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: InkWell(
+                              onTap: () {
+                                OptionDialog(
+                                  context: context,
+                                  title: 'Hapus Semua Produk?',
+                                  message: 'Semua produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
+                                  yesFunction: () {
+                                    List<LocalTrolleyProduct> tempList = productList;
+
+                                    for(int i = tempList.length - 1; i >= 0; i--) {
+                                      if(tempList[i].isSelected == true) {
+                                        LocalTrolleyProduct tempTrolleyProduct = tempList[i];
+
+                                        setState(() {
+                                          productList.removeAt(i);
+                                          listKey.currentState!.removeItem(i, (context, animation) {
+                                            return ItemListWithAnimation(
+                                              product: tempTrolleyProduct,
+                                              animation: animation,
+                                              onChangedCheckbox: (_) {},
+                                              onReduceQty: () {},
+                                              onAddQty: () {},
+                                            );
+                                          }, duration: const Duration(milliseconds: 500));
+                                        });
+                                      }
+                                    }
+                                  },
+                                  noFunction: () {},
+                                ).show();
+                              },
+                              customBorder: const CircleBorder(),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Icon(
+                                  Icons.delete,
+                                  color: IconColorStyles.iconColor(),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
@@ -324,62 +332,68 @@ class _TrolleyPageState extends State<TrolleyPage> {
               ),
             ),
             productList.isNotEmpty ?
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Total Harga',
-                          style: MTextStyles.regular(),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          'Rp.1.225.000,-',
-                          style: TextStyle(
-                            color: PrimaryColorStyles.primaryMain(),
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Total Harga',
+                            style: MTextStyles.regular(),
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            'Rp.1.225.000,-',
+                            style: TextStyle(
+                              color: PrimaryColorStyles.primaryMain(),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      MoveToPage(context: context, target: CheckoutPage(productList: widget.productList)).go();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-                      child: Text(
-                        'Checkout',
-                        style: LTextStyles.medium().copyWith(
-                          color: Colors.white,
+                    ElevatedButton(
+                      onPressed: () {
+                        MoveToPage(context: context, target: CheckoutPage(productList: widget.productList)).go();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                        child: Text(
+                          'Checkout',
+                          style: LTextStyles.medium().copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ) :
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  BackFromThisPage(context: context).go();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    'Belanja Sekarang',
-                    style: LTextStyles.medium().copyWith(
-                      color: Colors.white,
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    BackFromThisPage(context: context).go();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      'Belanja Sekarang',
+                      style: LTextStyles.medium().copyWith(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -417,131 +431,141 @@ class ItemListWithAnimation extends StatelessWidget {
   }
 
   Widget buildItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Checkbox(
-            value: product.isSelected,
-            onChanged: (selectProduct) {
-              if(selectProduct != null) {
-                onChangedCheckbox(selectProduct);
-              }
-            },
-            activeColor: PrimaryColorStyles.primaryMain(),
-          ),
-          const SizedBox(
-            width: 15.0,
-          ),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  product.productData.imagePath[0] ?? '',
-                  fit: BoxFit.cover,
-                  width: 65.0,
-                  height: 65.0,
-                ),
-                const SizedBox(
-                  width: 15.0,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        product.productData.name,
-                        style: STextStyles.medium(),
-                      ),
-                      product.productData.variant != null ?
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(
-                            height: 15.0,
-                          ),
-                          Text(
-                            product.productData.variant![0],
-                            style: XSTextStyles.regular(),
-                          ),
-                        ],
-                      ) :
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Rp ${NumberFormat('#,###', 'en_id').format(product.productData.normalPrice[0]).replaceAll(',', '.')}',
-                              style: STextStyles.regular().copyWith(
-                                color: PrimaryColorStyles.primaryMain(),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: product.qty == 1 ? NeutralColorStyles.neutral03() : BorderColorStyles.borderDivider(),
-                              ),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                onReduceQty();
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Icon(
-                                Icons.remove,
-                                color: product.qty == 1 ? NeutralColorStyles.neutral03() : IconColorStyles.iconColor(),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: SizedBox(
-                              width: 20.0,
-                              child: Text(
-                                '${product.qty}',
-                                style: MTextStyles.regular(),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderDivider(),
-                              ),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                onAddQty();
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                color: IconColorStyles.iconColor(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Checkbox(
+              value: product.isSelected,
+              onChanged: (selectProduct) {
+                if(selectProduct != null) {
+                  onChangedCheckbox(selectProduct);
+                }
+              },
+              activeColor: PrimaryColorStyles.primaryMain(),
             ),
-          ),
-        ],
+            const SizedBox(
+              width: 15.0,
+            ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 65.0,
+                    height: 65.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      image: DecorationImage(
+                        image: AssetImage(
+                          product.productData.imagePath[0] ?? '',
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15.0,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          product.productData.name,
+                          style: MTextStyles.medium(),
+                        ),
+                        product.productData.variant != null ?
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(
+                              height: 15.0,
+                            ),
+                            Text(
+                              product.productData.variant![0],
+                              style: STextStyles.regular(),
+                            ),
+                          ],
+                        ) :
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Rp ${NumberFormat('#,###', 'en_id').format(product.productData.normalPrice[0]).replaceAll(',', '.')}',
+                                style: MTextStyles.regular().copyWith(
+                                  color: PrimaryColorStyles.primaryMain(),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: product.qty == 1 ? NeutralColorStyles.neutral03() : BorderColorStyles.borderDivider(),
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  onReduceQty();
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                child: Icon(
+                                  Icons.remove,
+                                  color: product.qty == 1 ? NeutralColorStyles.neutral03() : IconColorStyles.iconColor(),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                              child: SizedBox(
+                                width: 20.0,
+                                child: Text(
+                                  '${product.qty}',
+                                  style: MTextStyles.regular(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: BorderColorStyles.borderDivider(),
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  onAddQty();
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                child: Icon(
+                                  Icons.add,
+                                  color: IconColorStyles.iconColor(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:kenari_app/fragments/profile_fragment.dart';
 import 'package:kenari_app/fragments/search_fragment.dart';
 import 'package:kenari_app/fragments/transaction_fragment.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/fee_page.dart';
 import 'package:kenari_app/pages/product_page.dart';
 import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
@@ -249,6 +250,9 @@ class _HomePageState extends State<HomePage> {
         return ProfileFragment(
           name: name,
           companyCode: companyCode,
+          refreshPage: () {
+            initLoad();
+          },
           onLogout: () async {
             await LocalSharedPrefs().removeAllKey().then((removeResult) {
               if(removeResult == true) {
@@ -326,61 +330,53 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: InkWell(
-                        onTap: () {
-
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 54.0,
-                              height: 54.0,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: BorderColorStyles.borderStrokes(),
-                                ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 54.0,
+                            height: 54.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                MoveToPage(context: context, target: const FeePage()).go();
+                              },
+                              customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
-                              child: InkWell(
-                                onTap: () {
-                                  showAllMenuBottomDialog();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_iuran.png',
-                                  ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Image.asset(
+                                  'assets/images/icon_iuran.png',
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 15.0,
+                          ),
+                          const SizedBox(
+                            width: 15.0,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'Iuran',
+                                  style: STextStyles.medium(),
+                                ),
+                                Text(
+                                  'Bayar Iuran wajib dan berjangka Perusahaan kamu disini',
+                                  style: XSTextStyles.regular(),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    'Iuran',
-                                    style: STextStyles.medium(),
-                                  ),
-                                  Text(
-                                    'Bayar Iuran wajib dan berjangka Perusahaan kamu disini',
-                                    style: XSTextStyles.regular(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(
@@ -388,61 +384,53 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: InkWell(
-                        onTap: () {
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 54.0,
+                            height: 54.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: InkWell(
+                              onTap: () {
 
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 54.0,
-                              height: 54.0,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: BorderColorStyles.borderStrokes(),
-                                ),
+                              },
+                              customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
-                              child: InkWell(
-                                onTap: () {
-                                  showAllMenuBottomDialog();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_pinjaman.png',
-                                  ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Image.asset(
+                                  'assets/images/icon_pinjaman.png',
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 15.0,
+                          ),
+                          const SizedBox(
+                            width: 15.0,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'Pinjaman',
+                                  style: STextStyles.medium(),
+                                ),
+                                Text(
+                                  'Dapatkan pinjaman uang untuk pengembangan usaha mu dan kebutuhan lainnya disini',
+                                  style: XSTextStyles.regular(),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    'Pinjaman',
-                                    style: STextStyles.medium(),
-                                  ),
-                                  Text(
-                                    'Dapatkan pinjaman uang untuk pengembangan usaha mu dan kebutuhan lainnya disini',
-                                    style: XSTextStyles.regular(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(
@@ -463,61 +451,53 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: InkWell(
-                        onTap: () {
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 54.0,
+                            height: 54.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: InkWell(
+                              onTap: () {
 
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 54.0,
-                              height: 54.0,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: BorderColorStyles.borderStrokes(),
-                                ),
+                              },
+                              customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
-                              child: InkWell(
-                                onTap: () {
-                                  showAllMenuBottomDialog();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_titip_jual.png',
-                                  ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Image.asset(
+                                  'assets/images/icon_titip_jual.png',
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 15.0,
+                          ),
+                          const SizedBox(
+                            width: 15.0,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'Titip Jual',
+                                  style: STextStyles.medium(),
+                                ),
+                                Text(
+                                  'Dapatkan penghasilan tambahan dengan Titip Jual barang apapun disini',
+                                  style: XSTextStyles.regular(),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    'Titip Jual',
-                                    style: STextStyles.medium(),
-                                  ),
-                                  Text(
-                                    'Dapatkan penghasilan tambahan dengan Titip Jual barang apapun disini',
-                                    style: XSTextStyles.regular(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(
@@ -552,7 +532,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: InkWell(
                               onTap: () {
-                                showAllMenuBottomDialog();
+
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
@@ -606,7 +586,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: InkWell(
                               onTap: () {
-                                showAllMenuBottomDialog();
+
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),

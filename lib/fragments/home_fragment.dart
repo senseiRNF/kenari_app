@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/fee_page.dart';
 import 'package:kenari_app/pages/notification_page.dart';
 import 'package:kenari_app/pages/product_list_banner_page.dart';
 import 'package:kenari_app/pages/product_list_page.dart';
@@ -422,7 +423,7 @@ class HomeFragment extends StatelessWidget {
                             ),
                             child: InkWell(
                               onTap: () {
-
+                                MoveToPage(context: context, target: const FeePage()).go();
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),

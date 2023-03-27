@@ -300,83 +300,90 @@ class _NotificationPageState extends State<NotificationPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+            Container(
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      BackFromThisPage(context: context).go();
-                    },
-                    customBorder: const CircleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.chevron_left,
-                        size: 30.0,
-                        color: IconColorStyles.iconColor(),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            BackFromThisPage(context: context).go();
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.chevron_left,
+                              size: 30.0,
+                              color: IconColorStyles.iconColor(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Notifikasi',
+                            style: HeadingTextStyles.headingS(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Notifikasi',
-                      style: HeadingTextStyles.headingS(),
-                    ),
+                  Divider(
+                    height: 1.0,
+                    color: NeutralColorStyles.neutral05(),
                   ),
                 ],
               ),
             ),
-            Divider(
-              thickness: 1.0,
-              color: NeutralColorStyles.neutral05(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: DefaultTabController(
-                initialIndex: 0,
-                length: 2,
-                child: TabBar(
-                  indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(
-                      width: 2.0,
-                      color: PrimaryColorStyles.primaryMain(),
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: DefaultTabController(
+                  initialIndex: 0,
+                  length: 2,
+                  child: TabBar(
+                    indicator: UnderlineTabIndicator(
+                      borderSide: BorderSide(
+                        width: 2.0,
+                        color: PrimaryColorStyles.primaryMain(),
+                      ),
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(5.0), topRight: Radius.circular(5.0)),
                     ),
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(5.0), topRight: Radius.circular(5.0)),
+                    onTap: (index) {
+                      setState(() {
+                        selectedTab = index;
+                      });
+                    },
+                    tabs: [
+                      Tab(
+                        child: Text(
+                          'Update',
+                          style: MTextStyles.medium().copyWith(
+                            color: selectedTab == 0 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          'Transaksi',
+                          style: MTextStyles.medium().copyWith(
+                            color: selectedTab == 1 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  onTap: (index) {
-                    setState(() {
-                      selectedTab = index;
-                    });
-                  },
-                  tabs: [
-                    Tab(
-                      child: Text(
-                        'Update',
-                        style: MTextStyles.medium().copyWith(
-                          color: selectedTab == 0 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                        ),
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'Transaksi',
-                        style: MTextStyles.medium().copyWith(
-                          color: selectedTab == 1 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ),
-            Divider(
-              height: 1.0,
-              color: BorderColorStyles.borderDivider(),
             ),
             Row(
               children: [
@@ -587,7 +594,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Divider(
-                      thickness: 1.0,
+                      height: 1.0,
                       color: BorderColorStyles.borderStrokes(),
                     ),
                   ) :
@@ -608,110 +615,54 @@ class _NotificationPageState extends State<NotificationPage> {
                     }
                   }
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
-                    child: selectedTab == 0 ?
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        showMonthHeading == true ?
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            index != 0 ?
-                            const SizedBox(
-                              height: 20.0,
-                            ) :
-                            const Material(),
-                            Text(
-                              DateFormat('MMMM yyyy').format(notificationList[index].date),
-                              style: XSTextStyles.medium(),
-                            ),
-                            const SizedBox(
-                              height: 20.0,
-                            ),
-                          ],
-                        ) :
-                        const Material(),
-                        Text(
-                          notificationList[index].title,
-                          style: MTextStyles.medium().copyWith(
-                            fontWeight: FontWeight.bold,
+                  return selectedTab == 0 ?
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      showMonthHeading == true ?
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          index != 0 ?
+                          const SizedBox(
+                            height: 20.0,
+                          ) :
+                          const SizedBox(
+                            height: 10.0,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          notificationList[index].subtitle ?? '',
-                          style: STextStyles.regular(),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
-                          style: STextStyles.regular(),
-                        ),
-                      ],
-                    ) :
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        showMonthHeading == true ?
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            index != 0 ?
-                            const SizedBox(
-                              height: 20.0,
-                            ) :
-                            const Material(),
-                            Text(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Text(
                               DateFormat('MMMM yyyy').format(notificationList[index].date),
                               style: XSTextStyles.medium(),
                             ),
-                            const SizedBox(
-                              height: 20.0,
-                            ),
-                          ],
-                        ) :
-                        const Material(),
-                        InkWell(
-                          onTap: () {
-                            MoveToPage(context: context, target: DetailNotificationTransactionPage(notificationData: notificationList[index])).go();
-                          },
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                        ],
+                      ) :
+                      const Material(),
+                      Container(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    notificationList[index].title,
-                                    style: MTextStyles.medium().copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  notificationList[index].total != null ?
-                                  Text(
-                                    "${notificationList[index].total! < 0 ? '-Rp ' : '+Rp '}${NumberFormat('#,###', 'en_id').format(notificationList[index].total!.abs()).replaceAll(',', '.')}",
-                                    style: MTextStyles.medium().copyWith(
-                                      color: notificationList[index].total! < 0 ? Colors.red : Colors.green,
-                                    ),
-                                  ) :
-                                  const Material(),
-                                ],
+                              Text(
+                                notificationList[index].title,
+                                style: MTextStyles.medium().copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               const SizedBox(
                                 height: 10.0,
                               ),
-                              notificationList[index].subtitle != null ?
                               Text(
-                                notificationList[index].subtitle!,
+                                notificationList[index].subtitle ?? '',
                                 style: STextStyles.regular(),
-                              ) :
-                              const Material(),
+                              ),
                               const SizedBox(
                                 height: 10.0,
                               ),
@@ -722,8 +673,88 @@ class _NotificationPageState extends State<NotificationPage> {
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ) :
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      showMonthHeading == true ?
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          index != 0 ?
+                          const SizedBox(
+                            height: 20.0,
+                          ) :
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Text(
+                              DateFormat('MMMM yyyy').format(notificationList[index].date),
+                              style: XSTextStyles.medium(),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                        ],
+                      ) :
+                      const Material(),
+                      InkWell(
+                        onTap: () {
+                          MoveToPage(context: context, target: DetailNotificationTransactionPage(notificationData: notificationList[index])).go();
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      notificationList[index].title,
+                                      style: MTextStyles.medium().copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    notificationList[index].total != null ?
+                                    Text(
+                                      "${notificationList[index].total! < 0 ? '-Rp ' : '+Rp '}${NumberFormat('#,###', 'en_id').format(notificationList[index].total!.abs()).replaceAll(',', '.')}",
+                                      style: MTextStyles.medium().copyWith(
+                                        color: notificationList[index].total! < 0 ? Colors.red : Colors.green,
+                                      ),
+                                    ) :
+                                    const Material(),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                notificationList[index].subtitle != null ?
+                                Text(
+                                  notificationList[index].subtitle!,
+                                  style: STextStyles.regular(),
+                                ) :
+                                const Material(),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
+                                  style: STextStyles.regular(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 },
               ) :
