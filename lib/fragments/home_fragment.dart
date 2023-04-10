@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/fee_page.dart';
+import 'package:kenari_app/pages/loan_page.dart';
 import 'package:kenari_app/pages/notification_page.dart';
 import 'package:kenari_app/pages/product_list_banner_page.dart';
 import 'package:kenari_app/pages/product_list_page.dart';
@@ -26,6 +27,8 @@ class HomeFragment extends StatelessWidget {
   final Function onShowAllMenuBottomDialog;
   final Function onShowProductBottomDialog;
   final Function onProductSelected;
+  final Function onCallbackFromFeePage;
+  final Function onCallbackFromLoanPage;
 
   const HomeFragment({
     super.key,
@@ -40,6 +43,8 @@ class HomeFragment extends StatelessWidget {
     required this.onShowAllMenuBottomDialog,
     required this.onShowProductBottomDialog,
     required this.onProductSelected,
+    required this.onCallbackFromFeePage,
+    required this.onCallbackFromLoanPage,
   });
 
   @override
@@ -178,8 +183,8 @@ class HomeFragment extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Material(
-            color: Colors.white,
+          child: Container(
+            color: BackgroundColorStyles.pageBackground(),
             child: ListView(
               children: [
                 CarouselSlider(
@@ -300,7 +305,7 @@ class HomeFragment extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.all(15.0),
                                   child: Image.asset(
-                                    'assets/images/indofund_logo.png',
+                                    'assets/images/indofund_logo_white.png',
                                     fit: BoxFit.fitWidth,
                                     width: 50.0,
                                   ),
@@ -416,6 +421,7 @@ class HomeFragment extends StatelessWidget {
                             width: 54.0,
                             height: 54.0,
                             decoration: BoxDecoration(
+                              color: Colors.white,
                               border: Border.all(
                                 color: BorderColorStyles.borderStrokes(),
                               ),
@@ -423,7 +429,15 @@ class HomeFragment extends StatelessWidget {
                             ),
                             child: InkWell(
                               onTap: () {
-                                MoveToPage(context: context, target: const FeePage()).go();
+                                MoveToPage(
+                                  context: context,
+                                  target: const FeePage(),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null && callbackResult == false) {
+                                      onCallbackFromFeePage();
+                                    }
+                                  },
+                                ).go();
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
@@ -453,6 +467,7 @@ class HomeFragment extends StatelessWidget {
                             width: 54.0,
                             height: 54.0,
                             decoration: BoxDecoration(
+                              color: Colors.white,
                               border: Border.all(
                                 color: BorderColorStyles.borderStrokes(),
                               ),
@@ -460,7 +475,15 @@ class HomeFragment extends StatelessWidget {
                             ),
                             child: InkWell(
                               onTap: () {
-
+                                MoveToPage(
+                                  context: context,
+                                  target: const LoanPage(),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null) {
+                                      onCallbackFromLoanPage(callbackResult);
+                                    }
+                                  },
+                                ).go();
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
@@ -490,6 +513,7 @@ class HomeFragment extends StatelessWidget {
                             width: 54.0,
                             height: 54.0,
                             decoration: BoxDecoration(
+                              color: Colors.white,
                               border: Border.all(
                                 color: BorderColorStyles.borderStrokes(),
                               ),
@@ -527,6 +551,7 @@ class HomeFragment extends StatelessWidget {
                             width: 54.0,
                             height: 54.0,
                             decoration: BoxDecoration(
+                              color: Colors.white,
                               border: Border.all(
                                 color: BorderColorStyles.borderStrokes(),
                               ),
@@ -833,137 +858,143 @@ class HomeFragment extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 30.0,
+                  height: 20.0,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                   child: Text(
                     'Produk Populer',
                     style: MTextStyles.medium(),
                   ),
                 ),
-                const SizedBox(
-                  height: 30.0,
-                ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: popularProductList.length,
-                  separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                      child: Divider(
-                        thickness: 0.5,
-                        color: BorderColorStyles.borderDivider(),
-                      ),
-                    );
-                  },
-                  itemBuilder: (BuildContext popularContext, int popularIndex) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            popularProductList[popularIndex].imagePath[0] ?? '',
-                            fit: BoxFit.cover,
-                            width: 110.0,
-                            height: 100.0,
-                          ),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 30.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: popularProductList.length,
+                          separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+                            return Divider(
+                              thickness: 0.5,
+                              color: BorderColorStyles.borderDivider(),
+                            );
+                          },
+                          itemBuilder: (BuildContext popularContext, int popularIndex) {
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  popularProductList[popularIndex].name,
-                                  style: STextStyles.medium(),
+                                Container(
+                                  width: 110.0,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                        popularProductList[popularIndex].imagePath[0] ?? '',
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(
-                                  height: 15.0,
+                                  width: 15.0,
                                 ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: BorderColorStyles.borderStrokes(),
-                                        ),
-                                        borderRadius: BorderRadius.circular(20.0),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        popularProductList[popularIndex].name,
+                                        style: STextStyles.medium(),
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                                        child: Text(
-                                          popularProductList[popularIndex].type,
-                                          style: XSTextStyles.regular(),
-                                        ),
+                                      const SizedBox(
+                                        height: 15.0,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Expanded(
-                                      child: popularProductList[popularIndex].discountPrice[0] != 0 ?
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      Row(
                                         children: [
-                                          const SizedBox(
-                                            height: 10.0,
-                                          ),
-                                          Text(
-                                            'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].discountPrice[0]).replaceAll(',', '.')}',
-                                            style: STextStyles.regular().copyWith(
-                                              color: PrimaryColorStyles.primaryMain(),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: BorderColorStyles.borderStrokes(),
+                                              ),
+                                              borderRadius: BorderRadius.circular(20.0),
                                             ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Text(
-                                            'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
-                                            style: STextStyles.regular().copyWith(
-                                              color: TextColorStyles.textDisabled(),
-                                              decoration: TextDecoration.lineThrough,
-                                            ),
-                                          ),
-                                        ],
-                                      ) :
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          const SizedBox(
-                                            height: 25.0,
-                                          ),
-                                          Text(
-                                            'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
-                                            style: STextStyles.regular().copyWith(
-                                              color: PrimaryColorStyles.primaryMain(),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                              child: Text(
+                                                popularProductList[popularIndex].type,
+                                                style: XSTextStyles.regular(),
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    Icon(
-                                      Icons.shopping_cart,
-                                      color: IconColorStyles.iconColor(),
-                                      size: 20.0,
-                                    ),
-                                  ],
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Expanded(
+                                            child: popularProductList[popularIndex].discountPrice[0] != 0 ?
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                const SizedBox(
+                                                  height: 10.0,
+                                                ),
+                                                Text(
+                                                  'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].discountPrice[0]).replaceAll(',', '.')}',
+                                                  style: STextStyles.regular().copyWith(
+                                                    color: PrimaryColorStyles.primaryMain(),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 5.0,
+                                                ),
+                                                Text(
+                                                  'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
+                                                  style: STextStyles.regular().copyWith(
+                                                    color: TextColorStyles.textDisabled(),
+                                                    decoration: TextDecoration.lineThrough,
+                                                  ),
+                                                ),
+                                              ],
+                                            ) :
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                const SizedBox(
+                                                  height: 25.0,
+                                                ),
+                                                Text(
+                                                  'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
+                                                  style: STextStyles.regular().copyWith(
+                                                    color: PrimaryColorStyles.primaryMain(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.shopping_cart,
+                                            color: IconColorStyles.iconColor(),
+                                            size: 20.0,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(
-                  height: 30.0,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),

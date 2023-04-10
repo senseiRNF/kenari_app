@@ -53,477 +53,491 @@ class _ProductPageState extends State<ProductPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      BackFromThisPage(context: context).go();
-                    },
-                    customBorder: const CircleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.chevron_left,
-                        size: 30.0,
-                        color: IconColorStyles.iconColor(),
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        BackFromThisPage(context: context).go();
+                      },
+                      customBorder: const CircleBorder(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Icon(
+                          Icons.chevron_left,
+                          size: 30.0,
+                          color: IconColorStyles.iconColor(),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: NeutralColorStyles.neutral02(),
-                        isDense: true,
-                        prefixIcon: const Icon(
-                          Icons.search,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        hintText: 'Cari sesuatu',
-                      ),
-                      controller: searchController,
+                    const SizedBox(
+                      width: 10.0,
                     ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      MoveToPage(
-                        context: context,
-                        target: TrolleyPage(
-                          productList: [
-                            LocalProductData(
-                              type: 'Sembako',
-                              name: 'Cabai Merah',
-                              variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-                              normalPrice: [25000, 45000, 65000],
-                              discountPrice: [0, 0, 0],
-                              stock: [50, 50, 50],
-                              imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
-                              newFlag: true,
-                              popularFlag: false,
-                              discountFlag: false,
-                            ),
-                            LocalProductData(
-                              type: 'Outfit',
-                              name: 'Kaos Terkini',
-                              normalPrice: [400000],
-                              discountPrice: [200000],
-                              stock: [50],
-                              imagePath: ['assets/images/example_images/kaos-terkini.png'],
-                              newFlag: false,
-                              popularFlag: true,
-                              discountFlag: true,
-                            ),
-                            LocalProductData(
-                              type: 'Outfit',
-                              name: 'Blue Jeans',
-                              normalPrice: [400000],
-                              discountPrice: [200000],
-                              stock: [50],
-                              imagePath: ['assets/images/example_images/blue-jeans.png'],
-                              newFlag: false,
-                              popularFlag: true,
-                              discountFlag: true,
-                            ),
-                            LocalProductData(
-                              type: 'Elektronik',
-                              name: 'Vape Electric',
-                              normalPrice: [400000],
-                              discountPrice: [0],
-                              stock: [50],
-                              imagePath: ['assets/images/example_images/vape-electric.png'],
-                              newFlag: false,
-                              popularFlag: true,
-                              discountFlag: false,
-                            ),
-                          ],
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: NeutralColorStyles.neutral02(),
+                          isDense: true,
+                          prefixIcon: const Icon(
+                            Icons.search,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          hintText: 'Cari sesuatu',
                         ),
-                      ).go();
-                    },
-                    customBorder: const CircleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                      child: Icon(
-                        Icons.shopping_cart,
-                        size: 20.0,
-                        color: IconColorStyles.iconColor(),
+                        controller: searchController,
                       ),
                     ),
-                  ),
-                ],
+                    InkWell(
+                      onTap: () {
+                        MoveToPage(
+                          context: context,
+                          target: TrolleyPage(
+                            productList: [
+                              LocalProductData(
+                                type: 'Sembako',
+                                name: 'Cabai Merah',
+                                variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
+                                normalPrice: [25000, 45000, 65000],
+                                discountPrice: [0, 0, 0],
+                                stock: [50, 50, 50],
+                                imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
+                                newFlag: true,
+                                popularFlag: false,
+                                discountFlag: false,
+                              ),
+                              LocalProductData(
+                                type: 'Outfit',
+                                name: 'Kaos Terkini',
+                                normalPrice: [400000],
+                                discountPrice: [200000],
+                                stock: [50],
+                                imagePath: ['assets/images/example_images/kaos-terkini.png'],
+                                newFlag: false,
+                                popularFlag: true,
+                                discountFlag: true,
+                              ),
+                              LocalProductData(
+                                type: 'Outfit',
+                                name: 'Blue Jeans',
+                                normalPrice: [400000],
+                                discountPrice: [200000],
+                                stock: [50],
+                                imagePath: ['assets/images/example_images/blue-jeans.png'],
+                                newFlag: false,
+                                popularFlag: true,
+                                discountFlag: true,
+                              ),
+                              LocalProductData(
+                                type: 'Elektronik',
+                                name: 'Vape Electric',
+                                normalPrice: [400000],
+                                discountPrice: [0],
+                                stock: [50],
+                                imagePath: ['assets/images/example_images/vape-electric.png'],
+                                newFlag: false,
+                                popularFlag: true,
+                                discountFlag: false,
+                              ),
+                            ],
+                          ),
+                        ).go();
+                      },
+                      customBorder: const CircleBorder(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                        child: Icon(
+                          Icons.shopping_cart,
+                          size: 20.0,
+                          color: IconColorStyles.iconColor(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10.0,
             ),
             Expanded(
               child: ListView(
                 children: [
-                  CarouselSlider(
-                    options: CarouselOptions(
-                      height: 300,
-                      enableInfiniteScroll: false,
-                      viewportFraction: 1.0,
-                      onPageChanged: (page, whyChanged) {
-                        setState(() {
-                          imageSelected = page + 1;
-                        });
-                      },
-                    ),
-                    items: widget.productData.imagePath.map((product) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              product ?? '',
-                            ),
-                            fit: BoxFit.fitHeight,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Center(
-                              child: Card(
-                                color: Colors.black38,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
-                                  child: Text(
-                                    '$imageSelected / ${widget.productData.imagePath.length}',
-                                    style: MTextStyles.medium().copyWith(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(
-                    height: 15.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Text(
-                      widget.productData.name,
-                      style: LTextStyles.medium(),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Text(
-                      price,
-                      style: LTextStyles.medium().copyWith(
-                        color: PrimaryColorStyles.primaryMain(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Divider(
-                      height: 1.0,
-                      color: BorderColorStyles.borderDivider(),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: BorderColorStyles.borderStrokes(),
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-
-                            },
-                            customBorder: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-                              child: Text(
-                                widget.productData.type,
-                                style: XSTextStyles.regular(),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  Container(
+                    color: Colors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
-                          'Detail Produk',
-                          style: STextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            height: 300,
+                            enableInfiniteScroll: false,
+                            viewportFraction: 1.0,
+                            onPageChanged: (page, whyChanged) {
+                              setState(() {
+                                imageSelected = page + 1;
+                              });
+                            },
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Min Pemesanan',
-                                  style: STextStyles.regular(),
+                          items: widget.productData.imagePath.map((product) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    product ?? '',
+                                  ),
+                                  fit: BoxFit.fitHeight,
                                 ),
                               ),
-                              Expanded(
-                                child: Text(
-                                  '1 Buah',
-                                  style: STextStyles.medium().copyWith(
-                                    color: TextColorStyles.textPrimary(),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Center(
+                                    child: Card(
+                                      color: Colors.black38,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
+                                        child: Text(
+                                          '$imageSelected / ${widget.productData.imagePath.length}',
+                                          style: MTextStyles.medium().copyWith(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Text(
+                            widget.productData.name,
+                            style: LTextStyles.medium(),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Text(
+                            price,
+                            style: LTextStyles.medium().copyWith(
+                              color: PrimaryColorStyles.primaryMain(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Divider(
+                            height: 1.0,
+                            color: BorderColorStyles.borderDivider(),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: BorderColorStyles.borderStrokes(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+
+                                  },
+                                  customBorder: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+                                    child: Text(
+                                      widget.productData.type,
+                                      style: XSTextStyles.regular(),
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Stok',
-                                style: STextStyles.regular(),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                '${widget.productData.stock[0]} Buah',
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                'Detail Produk',
                                 style: STextStyles.medium().copyWith(
                                   color: TextColorStyles.textPrimary(),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    child: widget.productData.variant != null ?
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Text(
-                            'Pilih Varian :',
-                            style: STextStyles.medium().copyWith(
-                              color: TextColorStyles.textPrimary(),
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: SizedBox(
-                            height: 30.0,
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: widget.productData.variant!.length,
-                              separatorBuilder: (BuildContext separatorContext, int index) {
-                                return const SizedBox(
-                                  width: 10.0,
-                                );
-                              },
-                              itemBuilder: (BuildContext gridContext, int itemIndex) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1.0,
-                                      color: BorderColorStyles.borderStrokes(),
-                                    ),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {
-                                      showProductBottomDialog(widget.productData);
-                                    },
-                                    customBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
                                       child: Text(
-                                        widget.productData.variant![itemIndex],
-                                        textAlign: TextAlign.center,
+                                        'Min Pemesanan',
+                                        style: STextStyles.regular(),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '1 Buah',
+                                        style: STextStyles.medium().copyWith(
+                                          color: TextColorStyles.textPrimary(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Stok',
+                                      style: STextStyles.regular(),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '${widget.productData.stock[0]} Buah',
+                                      style: STextStyles.medium().copyWith(
+                                        color: TextColorStyles.textPrimary(),
                                       ),
                                     ),
                                   ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ) : const
-                    Material(),
-                  ),
-                  Divider(
-                    thickness: 3.0,
-                    color: NeutralColorStyles.neutral03(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Alamat Pengambilan :',
-                          style: STextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          'PT. Surya Fajar Capital. tbk',
-                          style: STextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5.0),
-                          child: Text(
-                            '081234567890',
-                            style: STextStyles.regular().copyWith(
-                              color: NeutralColorStyles.neutral08(),
-                            ),
-                          ),
-                        ),
-                        Text(
-                          'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
-                          style: STextStyles.regular().copyWith(
-                            color: NeutralColorStyles.neutral06(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    thickness: 3.0,
-                    color: NeutralColorStyles.neutral03(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Deskripsi :',
-                          style: MTextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          description,
-                          maxLines: expandDesc ? null : 3,
-                          style: STextStyles.medium().copyWith(
-                            color: TextColorStyles.textPrimary(),
-                          ),
-                          overflow: TextOverflow.fade,
-                        ),
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  expandDesc = !expandDesc;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          child: widget.productData.variant != null ?
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                                 child: Text(
-                                  expandDesc ? 'Lihat lebih sedikit' : 'Lihat lebih banyak',
+                                  'Pilih Varian :',
                                   style: STextStyles.medium().copyWith(
-                                    color: PrimaryColorStyles.primaryMain(),
+                                    color: TextColorStyles.textPrimary(),
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                                child: SizedBox(
+                                  height: 30.0,
+                                  child: ListView.separated(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: widget.productData.variant!.length,
+                                    separatorBuilder: (BuildContext separatorContext, int index) {
+                                      return const SizedBox(
+                                        width: 10.0,
+                                      );
+                                    },
+                                    itemBuilder: (BuildContext gridContext, int itemIndex) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 1.0,
+                                            color: BorderColorStyles.borderStrokes(),
+                                          ),
+                                          borderRadius: BorderRadius.circular(5.0),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            showProductBottomDialog(widget.productData);
+                                          },
+                                          customBorder: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                            child: Text(
+                                              widget.productData.variant![itemIndex],
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ) : const
+                          Material(),
                         ),
                       ],
                     ),
                   ),
-                  Divider(
-                    thickness: 3.0,
-                    color: NeutralColorStyles.neutral03(),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Alamat Pengambilan :',
+                            style: STextStyles.medium().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            'PT. Surya Fajar Capital. tbk',
+                            style: STextStyles.medium().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            child: Text(
+                              '081234567890',
+                              style: STextStyles.regular().copyWith(
+                                color: NeutralColorStyles.neutral08(),
+                              ),
+                            ),
+                          ),
+                          Text(
+                            'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
+                            style: STextStyles.regular().copyWith(
+                              color: NeutralColorStyles.neutral06(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Deskripsi :',
+                            style: MTextStyles.medium().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            description,
+                            maxLines: expandDesc ? null : 3,
+                            style: STextStyles.medium().copyWith(
+                              color: TextColorStyles.textPrimary(),
+                            ),
+                            overflow: TextOverflow.fade,
+                          ),
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    expandDesc = !expandDesc;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                                  child: Text(
+                                    expandDesc ? 'Lihat lebih sedikit' : 'Lihat lebih banyak',
+                                    style: STextStyles.medium().copyWith(
+                                      color: PrimaryColorStyles.primaryMain(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5.0,
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  showProductBottomDialog(widget.productData);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: PrimaryColorStyles.primaryMain(),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(
-                        width: 5.0,
-                      ),
-                      Text(
-                        'Tambah ke Troli',
-                        style: LTextStyles.medium().copyWith(
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    showProductBottomDialog(widget.productData);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: PrimaryColorStyles.primaryMain(),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.shopping_cart,
                           color: Colors.white,
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          width: 5.0,
+                        ),
+                        Text(
+                          'Tambah ke Troli',
+                          style: LTextStyles.medium().copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -6,6 +6,7 @@ import 'package:kenari_app/fragments/search_fragment.dart';
 import 'package:kenari_app/fragments/transaction_fragment.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/fee_page.dart';
+import 'package:kenari_app/pages/loan_page.dart';
 import 'package:kenari_app/pages/product_page.dart';
 import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
@@ -25,6 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedMenu = 0;
   int selectedCard = 0;
+  int openMenuFromPage = 0;
 
   String? name;
   String? companyCode;
@@ -228,6 +230,26 @@ class _HomePageState extends State<HomePage> {
           onProductSelected: (LocalProductData product) {
             MoveToPage(context: context, target: ProductPage(productData: product)).go();
           },
+          onCallbackFromFeePage: () {
+            setState(() {
+              selectedMenu = 2;
+              openMenuFromPage = 0;
+            });
+          },
+          onCallbackFromLoanPage: (dynamic callback) {
+            if(callback != null) {
+              if(callback == true) {
+                setState(() {
+                  selectedMenu = 0;
+                });
+              } else {
+                setState(() {
+                  selectedMenu = 2;
+                  openMenuFromPage = 1;
+                });
+              }
+            }
+          },
         );
       case 1:
         return SearchFragment(
@@ -245,7 +267,27 @@ class _HomePageState extends State<HomePage> {
           },
         );
       case 2:
-        return const TransactionFragment();
+        return TransactionFragment(
+          openMenu: openMenuFromPage,
+          changeTab: (index) {
+            setState(() {
+              openMenuFromPage = index;
+            });
+          },
+          onCallbackFromLoanPage: (callback) {
+            if(callback != null && callback == true) {
+              if(callback == true) {
+                setState(() {
+                  selectedMenu = 0;
+                });
+              } else {
+                setState(() {
+                  selectedMenu = 2;
+                });
+              }
+            }
+          },
+        );
       case 3:
         return ProfileFragment(
           name: name,
@@ -344,7 +386,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: InkWell(
                               onTap: () {
-                                MoveToPage(context: context, target: const FeePage()).go();
+                                MoveToPage(
+                                  context: context,
+                                  target: const FeePage(),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null) {
+                                      BackFromThisPage(context: context, callbackData: [callbackResult, 0]).go();
+                                    }
+                                  },
+                                ).go();
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
@@ -398,7 +448,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: InkWell(
                               onTap: () {
-
+                                MoveToPage(
+                                  context: context,
+                                  target: const LoanPage(),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null) {
+                                      BackFromThisPage(context: context, callbackData: [callbackResult, 1]).go();
+                                    }
+                                  },
+                                ).go();
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
@@ -628,7 +686,14 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
-    );
+    ).then((result) {
+      if(result != null && result!.isNotEmpty && result![0] == false) {
+        setState(() {
+          selectedMenu = 2;
+          openMenuFromPage = result![1];
+        });
+      }
+    });
   }
 
   Future<void> showProductBottomDialog(LocalProductData product) async {

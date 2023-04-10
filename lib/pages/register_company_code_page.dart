@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/register_form_page.dart';
-import 'package:kenari_app/pages/success_register_page.dart';
+import 'package:kenari_app/pages/register_result_page.dart';
 import 'package:kenari_app/services/api/profile/api_company_services.dart';
 import 'package:kenari_app/services/local/models/register_form_result.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -142,7 +142,7 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
                         companyName: getResult.checkCompanyData!.name,
                       ), callback: (RegisterFormResult? callbackResult) {
                         if(callbackResult != null && callbackResult.registerResult == true && callbackResult.email != null) {
-                          ReplaceToPage(context: context, target: SuccessRegisterPage(email: callbackResult.email!)).go();
+                          ReplaceToPage(context: context, target: RegisterResultPage(email: callbackResult.email!)).go();
                         }
                       }).go();
                     } else {

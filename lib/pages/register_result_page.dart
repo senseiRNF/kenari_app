@@ -3,19 +3,19 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class SuccessRegisterPage extends StatefulWidget {
+class RegisterResultPage extends StatefulWidget {
   final String email;
 
-  const SuccessRegisterPage({
+  const RegisterResultPage({
     super.key,
     required this.email,
   });
 
   @override
-  State<SuccessRegisterPage> createState() => _SuccessRegisterPageState();
+  State<RegisterResultPage> createState() => _RegisterResultPageState();
 }
 
-class _SuccessRegisterPageState extends State<SuccessRegisterPage> {
+class _RegisterResultPageState extends State<RegisterResultPage> {
 
   @override
   Widget build(BuildContext context) {

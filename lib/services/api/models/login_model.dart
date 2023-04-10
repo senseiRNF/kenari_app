@@ -158,7 +158,7 @@ class Company {
   String? name;
   String? code;
   String? totalMember;
-  String? status;
+  bool? status;
   List<String>? members;
   List<String>? addresses;
   String? createdAt;

@@ -88,14 +88,18 @@ class OptionDialog {
   BuildContext context;
   String? title;
   String message;
+  String? yesText;
   Function yesFunction;
+  String? noText;
   Function noFunction;
 
   OptionDialog({
     required this.context,
     this.title,
     required this.message,
+    this.yesText,
     required this.yesFunction,
+    this.noText,
     required this.noFunction,
   });
 
@@ -122,7 +126,7 @@ class OptionDialog {
                 backgroundColor: Colors.white,
               ),
               child: Text(
-                'Tidak',
+                noText ?? 'Tidak',
                 style: TextStyle(
                   color: NeutralColorStyles.neutral09(),
                 ),
@@ -134,7 +138,9 @@ class OptionDialog {
 
                 yesFunction();
               },
-              child: const Text('Ya'),
+              child: Text(
+                yesText ?? 'Ya',
+              ),
             ),
           ],
         );

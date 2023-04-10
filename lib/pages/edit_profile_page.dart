@@ -467,36 +467,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  APIProfileServices(context: context).updateProfile(
-                    memberId,
-                    LocalProfileFormData(
-                      companyId: companyId,
-                      name: nameController.text,
-                      email: emailController.text,
-                      phone: phoneController.text,
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    APIProfileServices(context: context).updateProfile(
+                      memberId,
+                      LocalProfileFormData(
+                        companyId: companyId,
+                        name: nameController.text,
+                        email: emailController.text,
+                        phone: phoneController.text,
+                      ),
+                    ).then((result) {
+                      if(result == true) {
+                        OkDialog(
+                          context: context,
+                          message: 'Sukses memperbaharui data',
+                          okText: 'Oke',
+                          okFunction: () {
+                            BackFromThisPage(context: context, callbackData: true).go();
+                          },
+                        ).show();
+                      }
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Text(
+                      'Simpan',
+                      style: LTextStyles.medium(),
                     ),
-                  ).then((result) {
-                    if(result == true) {
-                      OkDialog(
-                        context: context,
-                        message: 'Sukses memperbaharui data',
-                        okText: 'Oke',
-                        okFunction: () {
-                          BackFromThisPage(context: context, callbackData: true).go();
-                        },
-                      ).show();
-                    }
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Text(
-                    'Simpan',
-                    style: LTextStyles.medium(),
                   ),
                 ),
               ),

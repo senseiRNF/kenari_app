@@ -50,7 +50,7 @@ class CompanyData {
     sId = json['_id'];
     name = json['name'];
     code = json['code'];
-    phone = json['phone_number'];
+    phone = json['phone'];
     totalMember = json['total_member'];
     status = json['status'];
     if (json['addresses'] != null) {
@@ -75,7 +75,7 @@ class CompanyData {
     data['_id'] = sId;
     data['name'] = name;
     data['code'] = code;
-    data['phone_number'] = phone;
+    data['phone'] = phone;
     data['total_member'] = totalMember;
     data['status'] = status;
     if (addresses != null) {

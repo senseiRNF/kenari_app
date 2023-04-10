@@ -38,43 +38,48 @@ class _BankAccountPageState extends State<BankAccountPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+            Container(
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      BackFromThisPage(context: context).go();
-                    },
-                    customBorder: const CircleBorder(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.chevron_left,
-                        size: 30.0,
-                        color: IconColorStyles.iconColor(),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            BackFromThisPage(context: context).go();
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.chevron_left,
+                              size: 30.0,
+                              color: IconColorStyles.iconColor(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Daftar Rekening',
+                            style: HeadingTextStyles.headingS(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: Text(
-                      'Daftar Rekening',
-                      style: HeadingTextStyles.headingS(),
-                    ),
+                  Divider(
+                    height: 1.0,
+                    color: NeutralColorStyles.neutral05(),
                   ),
                 ],
               ),
-            ),
-            Divider(
-              thickness: 1.0,
-              color: NeutralColorStyles.neutral05(),
-            ),
-            const SizedBox(
-              height: 5.0,
             ),
             Expanded(
               child: bankModel != null && bankModel!.bankData != null && bankModel!.bankData!.isNotEmpty ?
@@ -83,51 +88,57 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 itemBuilder: (BuildContext listContext, int index) {
                   return bankModel!.bankData![index].bank != null ?
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          bankModel!.bankData![index].bank!.name ?? 'Unknown Bank',
-                          style: MTextStyles.medium(),
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                          bankModel!.bankData![index].accountNo ?? 'Unknown Account Number',
-                          style: STextStyles.regular(),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          'a.n ${bankModel!.bankData![index].accountName ?? 'Unknown Name'}',
-                          style: STextStyles.regular(),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            MoveToPage(
-                              context: context,
-                              target: BankAccountFormPage(editData: bankModel!.bankData![index]),
-                              callback: (callback) {
-                                if(callback != null && callback == true) {
-                                  initLoad();
-                                }
-                              },
-                            ).go();
-                          },
-                          child: Text(
-                            'Ubah Rekening',
-                            style: MTextStyles.medium().copyWith(
-                              color: PrimaryColorStyles.primaryMain(),
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              bankModel!.bankData![index].bank!.name ?? 'Unknown Bank',
+                              style: MTextStyles.medium(),
                             ),
-                          ),
-                        )
-                      ],
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Text(
+                              bankModel!.bankData![index].accountNo ?? 'Unknown Account Number',
+                              style: STextStyles.regular(),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              'a.n ${bankModel!.bankData![index].accountName ?? 'Unknown Name'}',
+                              style: STextStyles.regular(),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                MoveToPage(
+                                  context: context,
+                                  target: BankAccountFormPage(editData: bankModel!.bankData![index]),
+                                  callback: (callback) {
+                                    if(callback != null && callback == true) {
+                                      initLoad();
+                                    }
+                                  },
+                                ).go();
+                              },
+                              child: Text(
+                                'Ubah Rekening',
+                                style: MTextStyles.medium().copyWith(
+                                  color: PrimaryColorStyles.primaryMain(),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ) :
                   const Material();
@@ -135,26 +146,29 @@ class _BankAccountPageState extends State<BankAccountPage> {
               ) :
               Stack(),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  MoveToPage(
-                    context: context,
-                    target: const BankAccountFormPage(),
-                    callback: (callback) {
-                      if(callback != null && callback == true) {
-                        initLoad();
-                      }
-                    },
-                  ).go();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    'Tambah Rekening',
-                    style: LTextStyles.medium().copyWith(
-                      color: Colors.white,
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    MoveToPage(
+                      context: context,
+                      target: const BankAccountFormPage(),
+                      callback: (callback) {
+                        if(callback != null && callback == true) {
+                          initLoad();
+                        }
+                      },
+                    ).go();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      'Tambah Rekening',
+                      style: LTextStyles.medium().copyWith(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
