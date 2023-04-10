@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/local/local_shared_prefs.dart';
+import 'package:kenari_app/services/api/fee/api_temporal_fee_services.dart';
+import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class DetailTermFeePage extends StatefulWidget {
-  final String title;
-  final String feeId;
-  final bool status;
+class DetailTemporalFeePage extends StatefulWidget {
+  final String temporalFeeId;
 
-  const DetailTermFeePage({
+  const DetailTemporalFeePage({
     super.key,
-    required this.title,
-    required this.feeId,
-    required this.status,
+    required this.temporalFeeId,
   });
 
   @override
-  State<DetailTermFeePage> createState() => _DetailTermFeePageState();
+  State<DetailTemporalFeePage> createState() => _DetailTemporalFeePageState();
 }
 
-class _DetailTermFeePageState extends State<DetailTermFeePage> {
-  String? name;
+class _DetailTemporalFeePageState extends State<DetailTemporalFeePage> {
+  TemporalFeeData? temporalFeeData;
 
   @override
   void initState() {
@@ -32,9 +29,9 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
   }
 
   Future loadData() async {
-    await LocalSharedPrefs().readKey('name').then((nameResult) {
+    await APITemporalFeeServices(context: context).callById(widget.temporalFeeId).then((callResult) {
       setState(() {
-        name = nameResult;
+        temporalFeeData = callResult;
       });
     });
   }
@@ -75,7 +72,7 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                         ),
                         Expanded(
                           child: Text(
-                            widget.title,
+                            'Daftar Iuran Saya',
                             style: HeadingTextStyles.headingS(),
                           ),
                         ),
@@ -105,7 +102,7 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                               color: TextColorStyles.textPrimary(),
                             ),
                           ),
-                          widget.status == true ?
+                          temporalFeeData != null && temporalFeeData!.statusPencairan != true ?
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 15.0),
                             color: InfoColorStyles.infoSurface(),
@@ -144,7 +141,7 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                                 style: MTextStyles.regular(),
                               ),
                               Text(
-                                'Rp 100.000',
+                                  temporalFeeData != null && temporalFeeData!.jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(temporalFeeData!.jumlahIuran!)).replaceAll(',', '.')}' : 'Rp 0',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -167,7 +164,7 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                                       color: Colors.green,
                                     ),
                                     Text(
-                                      'Rp 0',
+                                      temporalFeeData != null && temporalFeeData!.pertumbuhanSaldo != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(double.parse(temporalFeeData!.pertumbuhanSaldo!)).replaceAll(',', '.')}' : 'Rp 0',
                                       style: MTextStyles.medium(),
                                     ),
                                   ],
@@ -186,7 +183,7 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                                 style: MTextStyles.regular(),
                               ),
                               Text(
-                                '1 Bulan',
+                                temporalFeeData != null && temporalFeeData!.jangkaWaktu != null ? '${temporalFeeData!.jangkaWaktu} Bulan' : 'Unknown',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -202,7 +199,7 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                                 style: MTextStyles.regular(),
                               ),
                               Text(
-                                '5.75%',
+                                temporalFeeData != null &&  temporalFeeData!.imbalHasil != null ? '${temporalFeeData!.imbalHasil}%' : 'Unknown',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -218,7 +215,7 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                                 style: MTextStyles.regular(),
                               ),
                               Text(
-                                DateFormat('dd MMMM yyyy').format(DateTime.now()),
+                                temporalFeeData != null && temporalFeeData!.tanggalMulai != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(temporalFeeData!.tanggalMulai!)) : 'Unknown',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -234,7 +231,7 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                                 style: MTextStyles.regular(),
                               ),
                               Text(
-                                DateFormat('dd MMMM yyyy').format(DateTime.now().add(const Duration(days: 30))),
+                                temporalFeeData != null && temporalFeeData!.tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(temporalFeeData!.tanggalPencairan!)) : 'Unknown',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -256,7 +253,7 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          widget.status == false ?
+                          temporalFeeData != null && temporalFeeData!.statusPencairan != null && temporalFeeData!.statusPencairan != false ?
                           Container(
                             margin: const EdgeInsets.only(bottom: 15.0),
                             decoration: BoxDecoration(
@@ -316,11 +313,11 @@ class _DetailTermFeePageState extends State<DetailTermFeePage> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      '0123456789',
+                                      temporalFeeData != null && temporalFeeData!.member != null && temporalFeeData!.member!.phoneNumber != null ? temporalFeeData!.member!.phoneNumber! : 'Unknown',
                                       style: STextStyles.medium(),
                                     ),
                                     Text(
-                                      'a/n ${name ?? 'Unknown'}',
+                                      temporalFeeData != null && temporalFeeData!.member != null && temporalFeeData!.member!.name != null ? 'a/n ${temporalFeeData!.member!.name!}' : 'Unknown',
                                       style: STextStyles.medium(),
                                     ),
                                   ],

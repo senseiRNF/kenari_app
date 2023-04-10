@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/fee_payment_result_page.dart';
+import 'package:kenari_app/services/api/fee/api_temporal_fee_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
+import 'package:kenari_app/services/local/models/local_temporal_fee_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class TermFeeDepositPage extends StatefulWidget {
-  const TermFeeDepositPage({super.key});
+class TemporalFeeDepositPage extends StatefulWidget {
+  const TemporalFeeDepositPage({super.key});
 
   @override
-  State<TermFeeDepositPage> createState() => _TermFeeDepositPageState();
+  State<TemporalFeeDepositPage> createState() => _TemporalFeeDepositPageState();
 }
 
-class _TermFeeDepositPageState extends State<TermFeeDepositPage> {
+class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
   TextEditingController feeAmountController = TextEditingController();
 
   int? selectedTerm;
@@ -692,22 +695,39 @@ class _TermFeeDepositPageState extends State<TermFeeDepositPage> {
           ],
         );
       },
-    ).then((result) {
+    ).then((result) async {
       if(result != null && result == true) {
-        MoveToPage(
-          context: context,
-          target: FeePaymentResultPage(
-            transactionName: 'Iuran Berjangka 1',
-            transactionNumber: 'PAY0000000000001',
-            feeAmount: 'Rp ${NumberFormat('#,###').format(int.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
-            date: DateTime.now(),
-          ),
-          callback: (callbackResult) {
-            if(callbackResult != null) {
-              BackFromThisPage(context: context, callbackData: callbackResult).go();
+        await LocalSharedPrefs().readKey('member_id').then((memberId) async {
+          String yearlyReturnPercentage = '0';
+
+          for(int i = 0; i < termList.length; i++) {
+            if(selectedTerm != null && selectedTerm == termList[i].keys.elementAt(0)) {
+              yearlyReturnPercentage = termList[i].values.elementAt(0);
             }
-          },
-        ).go();
+          }
+
+          await APITemporalFeeServices(context: context).writeTransaction(LocalTemporalFeeData(memberId: memberId, amount: int.parse(feeAmountController.text), period: selectedTerm!, profit: double.parse(yearlyReturnPercentage), startDate: DateTime.now(), disbursementDate: DateTime.now().add(Duration(days: (30 * selectedTerm!))), paymentMethod: 'Dipay')).then((writeResult) {
+            if(writeResult.apiResult == true) {
+              MoveToPage(
+                context: context,
+                target: FeePaymentResultPage(
+                  status: writeResult.apiResult,
+                  transactionName: 'Iuran Berjangka',
+                  transactionNumber: 'PAY0000000000001',
+                  feeAmount: 'Rp ${NumberFormat('#,###').format(int.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
+                  date: DateTime.now(),
+                ),
+                callback: (callbackResult) {
+                  if(callbackResult != null) {
+                    BackFromThisPage(context: context, callbackData: callbackResult).go();
+                  }
+                },
+              ).go();
+            } else {
+              OkDialog(context: context, message: 'Gagal mengirim permintaan, silahkan coba lagi').show();
+            }
+          });
+        });
       }
     });
   }

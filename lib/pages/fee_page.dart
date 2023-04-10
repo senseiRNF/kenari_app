@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/fee_list_page.dart';
-import 'package:kenari_app/pages/term_fee_deposit_page.dart';
+import 'package:kenari_app/pages/temporal_fee_deposit_page.dart';
+import 'package:kenari_app/services/api/fee/api_total_fee_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -16,6 +18,9 @@ class FeePage extends StatefulWidget {
 class _FeePageState extends State<FeePage> {
   String? name;
   String? companyCode;
+
+  int mandatoryFeeAmount = 0;
+  int temporalFeeAmount = 0;
 
   @override
   void initState() {
@@ -33,6 +38,22 @@ class _FeePageState extends State<FeePage> {
       await LocalSharedPrefs().readKey('company_code').then((companyCodeResult) async {
         setState(() {
           companyCode = companyCodeResult;
+        });
+
+        await APITotalFeeServices(context: context).call().then((callResult) {
+          if(callResult != null && callResult.totalFeeData != null) {
+            if(callResult.totalFeeData!.totalIuranWajib != null) {
+              setState(() {
+                mandatoryFeeAmount = callResult.totalFeeData!.totalIuranWajib!;
+              });
+            }
+
+            if(callResult.totalFeeData!.totalIuranBerjangka != null) {
+              setState(() {
+                temporalFeeAmount = callResult.totalFeeData!.totalIuranBerjangka!;
+              });
+            }
+          }
         });
       });
     });
@@ -173,7 +194,7 @@ class _FeePageState extends State<FeePage> {
                                       height: 5.0,
                                     ),
                                     Text(
-                                      'Rp 0',
+                                      'Rp ${NumberFormat('#,###', 'en_id').format(mandatoryFeeAmount)}',
                                       style: STextStyles.medium().copyWith(
                                         color: TextColorStyles.textPrimary(),
                                       ),
@@ -198,7 +219,7 @@ class _FeePageState extends State<FeePage> {
                                       height: 5.0,
                                     ),
                                     Text(
-                                      'Rp 0',
+                                      'Rp ${NumberFormat('#,###', 'en_id').format(temporalFeeAmount)}',
                                       style: STextStyles.medium().copyWith(
                                         color: TextColorStyles.textPrimary(),
                                       ),
@@ -233,7 +254,7 @@ class _FeePageState extends State<FeePage> {
                           onTap: () {
                             MoveToPage(
                               context: context,
-                              target: const TermFeeDepositPage(),
+                              target: const TemporalFeeDepositPage(),
                               callback: (callbackResult) {
                                 if(callbackResult != null) {
                                   BackFromThisPage(context: context, callbackData: callbackResult).go();
@@ -311,12 +332,15 @@ class _FeePageState extends State<FeePage> {
                           onTap: () {
                             MoveToPage(
                               context: context,
-                              target: const FeeListPage(),
+                              target: FeeListPage(
+                                mandatoryFeeAmount: mandatoryFeeAmount,
+                                temporalFeeAmount: temporalFeeAmount,
+                              ),
                               callback: (callbackResult) {
                                 if(callbackResult != null && callbackResult == true) {
                                   MoveToPage(
                                     context: context,
-                                    target: const TermFeeDepositPage(),
+                                    target: const TemporalFeeDepositPage(),
                                     callback: (callbackResult) {
                                       if(callbackResult != null) {
                                         BackFromThisPage(context: context, callbackData: callbackResult).go();

@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/pages/detail_term_fee_page.dart';
+import 'package:kenari_app/pages/detail_temporal_fee_page.dart';
+import 'package:kenari_app/services/api/fee/api_temporal_fee_services.dart';
+import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class FeeListPage extends StatefulWidget {
-  const FeeListPage({super.key});
+  final int mandatoryFeeAmount;
+  final int temporalFeeAmount;
+
+  const FeeListPage({
+    super.key,
+    required this.mandatoryFeeAmount,
+    required this.temporalFeeAmount,
+  });
 
   @override
   State<FeeListPage> createState() => _FeeListPageState();
@@ -23,10 +32,7 @@ class _FeeListPageState extends State<FeeListPage> {
 
   bool isActiveStatus = true;
 
-  List<Map<bool, DateTime>> temporalFeeDummy = [
-    {true: DateTime.now()},
-    {false: DateTime.now().subtract(const Duration(days: 30))},
-  ];
+  List<TemporalFeeData> temporalFeeList = [];
 
   @override
   void initState() {
@@ -50,9 +56,31 @@ class _FeeListPageState extends State<FeeListPage> {
           setState(() {
             phoneNumber = phoneResult;
           });
+
+          await APITemporalFeeServices(context: context).callAll().then((callResult) {
+            if(callResult != null) {
+              setState(() {
+                temporalFeeList = callResult.temporalFeeData ?? [];
+              });
+            }
+          });
         });
       });
     });
+  }
+
+  List<TemporalFeeData> filteredData() {
+    List<TemporalFeeData> result = [];
+
+    if(temporalFeeList.isNotEmpty) {
+      for(int i = 0; i < temporalFeeList.length; i++) {
+        if(temporalFeeList[i].statusPencairan == !isActiveStatus) {
+          result.add(temporalFeeList[i]);
+        }
+      }
+    }
+
+    return result;
   }
 
   @override
@@ -418,7 +446,7 @@ class _FeeListPageState extends State<FeeListPage> {
                             height: 10.0,
                           ),
                           Text(
-                            'Rp 100.000',
+                            'Rp ${NumberFormat('#,###', 'en_id').format(widget.temporalFeeAmount).replaceAll(',', '.')}',
                             style: LTextStyles.medium().copyWith(
                               color: TextColorStyles.textPrimary(),
                             ),
@@ -508,14 +536,13 @@ class _FeeListPageState extends State<FeeListPage> {
                     ),
                   ),
                   Expanded(
-                    child: ListView.separated(
-                      itemCount: temporalFeeDummy.length,
+                    child: filteredData().isNotEmpty ?
+                    ListView.separated(
+                      itemCount: filteredData().length,
                       separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-                        bool isActive = isActiveStatus;
-
                         return Container(
                           color: Colors.white,
-                          child: temporalFeeDummy[separatorIndex].keys.elementAt(0) == isActive ?
+                          child: separatorIndex < filteredData().length - 1 ?
                           Divider(
                             height: 1.0,
                             indent: 25.0,
@@ -526,17 +553,14 @@ class _FeeListPageState extends State<FeeListPage> {
                         );
                       },
                       itemBuilder: (BuildContext listContext, int index) {
-                        bool isActive = isActiveStatus;
-
-                        return temporalFeeDummy[index].keys.elementAt(0) == isActive ?
-                        Column(
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             index == 0 ?
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                               child: Text(
-                                DateFormat('yyyy').format(DateTime.now()),
+                                filteredData()[index].tanggalMulai != null ? DateFormat('yyyy').format(DateTime.parse(filteredData()[index].tanggalMulai!)) : 'Unknown',
                                 style: XSTextStyles.regular(),
                               ),
                             ) :
@@ -547,14 +571,14 @@ class _FeeListPageState extends State<FeeListPage> {
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: () {
-                                    MoveToPage(
-                                      context: context,
-                                      target: DetailTermFeePage(
-                                        title: 'Detail Iuran Berjangka',
-                                        feeId: 'term_id',
-                                        status: temporalFeeDummy[index].keys.elementAt(0),
-                                      ),
-                                    ).go();
+                                    if(filteredData()[index].sId != null) {
+                                      MoveToPage(
+                                        context: context,
+                                        target: DetailTemporalFeePage(
+                                          temporalFeeId: filteredData()[index].sId!,
+                                        ),
+                                      ).go();
+                                    }
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -568,13 +592,13 @@ class _FeeListPageState extends State<FeeListPage> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                'Iuran Berjangka 1',
+                                                'Iuran Berjangka',
                                                 style: MTextStyles.medium().copyWith(
                                                   color: TextColorStyles.textPrimary(),
                                                 ),
                                               ),
                                               Text(
-                                                'Rp 100.000',
+                                                filteredData()[index].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredData()[index].jumlahIuran!)).replaceAll(',', '.')}' : 'Rp 0',
                                                 style: STextStyles.medium().copyWith(
                                                   color: TextColorStyles.textPrimary(),
                                                 ),
@@ -583,15 +607,25 @@ class _FeeListPageState extends State<FeeListPage> {
                                           ),
                                         ),
                                         Text(
-                                          '1 Bulan (5.75%)',
+                                          '${filteredData()[index].jangkaWaktu != null ? '${filteredData()[index].jangkaWaktu} Bulan' : 'Unknown'} (${filteredData()[index].imbalHasil != null ? '${filteredData()[index].imbalHasil}%' : 'Unknown'})',
                                           style: STextStyles.regular(),
                                         ),
                                         const SizedBox(
                                           height: 10.0,
                                         ),
-                                        Text(
-                                          DateFormat('dd MMMM yyyy, HH:mm').format(temporalFeeDummy[index].values.elementAt(0)),
-                                          style: STextStyles.regular(),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Tanggal Pencairan',
+                                              style: STextStyles.regular(),
+                                            ),
+                                            Text(
+                                              filteredData()[index].tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(filteredData()[index].tanggalPencairan!)) : 'Unknown',
+                                              style: STextStyles.medium(),
+                                            ),
+                                          ],
                                         ),
                                         const SizedBox(
                                           height: 10.0,
@@ -603,9 +637,14 @@ class _FeeListPageState extends State<FeeListPage> {
                               ),
                             ),
                           ],
-                        ) :
-                        const Material();
+                        );
                       },
+                    ) :
+                    Center(
+                      child: Text(
+                        'Tidak ditemukan data yang cocok...',
+                        style: MTextStyles.medium(),
+                      ),
                     ),
                   ),
                 ],

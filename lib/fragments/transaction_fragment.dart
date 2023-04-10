@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/detail_loan_page.dart';
-import 'package:kenari_app/pages/detail_mandatory_fee_page.dart';
-import 'package:kenari_app/pages/detail_term_fee_page.dart';
+import 'package:kenari_app/pages/detail_temporal_fee_page.dart';
+import 'package:kenari_app/services/api/fee/api_temporal_fee_services.dart';
+import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -31,11 +32,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   String? name;
   String? companyCode;
 
-  List<Map<bool, String>> feeTransactionList = [
-    {true: 'wajib'},
-    {true: 'berjangka'},
-    {false: 'berjangka'},
-  ];
+  List<TemporalFeeData> temporalFeeList = [];
 
   List<Map<bool, Map?>> loanTransactionList = [
     {
@@ -94,6 +91,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
     setState(() {
       selectedTab = widget.openMenu;
       tabController.animateTo(widget.openMenu);
+
+      if(widget.openMenu == 0) {
+        loadFeeData();
+      }
     });
 
     await LocalSharedPrefs().readKey('name').then((nameResult) async {
@@ -107,6 +108,32 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
         });
       });
     });
+  }
+
+  Future loadFeeData() async {
+    await APITemporalFeeServices(context: context).callAll().then((callResult) {
+      if(callResult != null) {
+        setState(() {
+          temporalFeeList = callResult.temporalFeeData ?? [];
+        });
+      }
+    });
+  }
+
+  List<TemporalFeeData> filteredFeeData() {
+    List<TemporalFeeData> result = [];
+
+    bool isActiveStatus = selectedStatus == 0 ? true : false;
+
+    if(temporalFeeList.isNotEmpty) {
+      for(int i = 0; i < temporalFeeList.length; i++) {
+        if(temporalFeeList[i].statusPencairan == !isActiveStatus) {
+          result.add(temporalFeeList[i]);
+        }
+      }
+    }
+
+    return result;
   }
 
   @override
@@ -136,6 +163,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       onTap: (index) {
                         setState(() {
                           selectedTab = index;
+
+                          if(index == 0) {
+                            loadFeeData();
+                          }
                         });
 
                         widget.changeTab(index);
@@ -259,23 +290,17 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   Widget activeList() {
     switch(selectedTab) {
       case 0:
-        return feeTransactionList.isNotEmpty ?
+        return filteredFeeData().isNotEmpty ?
         ListView.builder(
-          itemCount: feeTransactionList.length,
+          itemCount: filteredFeeData().length,
           itemBuilder: (BuildContext listContext, int index) {
-            bool convertStatus = selectedStatus == 0 ? true : false;
-
-            String type = feeTransactionList[index].values.elementAt(0) == 'wajib' ? 'Iuran Wajib' : 'Iuran Berjangka';
-            String amount = feeTransactionList[index].values.elementAt(0) == 'wajib' ? 'Rp 1.200.000' : 'Rp 100.000';
-
-            return feeTransactionList[index].keys.elementAt(0) == convertStatus ?
-            Column(
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                   child: Text(
-                    type,
+                    'Iuran Berjangka',
                     style: XSTextStyles.regular(),
                   ),
                 ),
@@ -285,11 +310,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
-                        if(feeTransactionList[index].values.elementAt(0) == 'wajib') {
-                          MoveToPage(context: context, target: const DetailMandatoryFeePage()).go();
-                        } else {
-                          MoveToPage(context: context, target: DetailTermFeePage(title: '$type $index', feeId: 'fee_id', status: convertStatus)).go();
-                        }
+                        // if(temporalFeeList[index].values.elementAt(0) == 'wajib') {
+                        //   MoveToPage(context: context, target: const DetailMandatoryFeePage()).go();
+                        // } else {
+                        //   MoveToPage(context: context, target: DetailTemporalFeePage(temporalFeeData: '$type $index', feeId: 'fee_id', status: convertStatus)).go();
+                        // }
+
+                        MoveToPage(context: context, target: DetailTemporalFeePage(temporalFeeId: filteredFeeData()[index].sId!)).go();
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
@@ -300,13 +327,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '$type $index',
+                                  'Iuran Berjangka',
                                   style: STextStyles.medium().copyWith(
                                     color: TextColorStyles.textPrimary(),
                                   ),
                                 ),
                                 Text(
-                                  amount,
+                                  filteredFeeData()[index].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index].jumlahIuran!))}' : 'Rp 0',
                                   style: STextStyles.medium().copyWith(
                                     color: TextColorStyles.textPrimary(),
                                   ),
@@ -334,8 +361,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                 ),
               ],
-            ) :
-            const Material();
+            );
           },
         ) :
         Stack(

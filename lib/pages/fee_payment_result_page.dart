@@ -5,6 +5,7 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class FeePaymentResultPage extends StatefulWidget {
+  final bool status;
   final String transactionName;
   final String? transactionNumber;
   final String? feeAmount;
@@ -12,6 +13,7 @@ class FeePaymentResultPage extends StatefulWidget {
 
   const FeePaymentResultPage({
     super.key,
+    required this.status,
     required this.transactionName,
     required this.transactionNumber,
     required this.feeAmount,
@@ -25,17 +27,12 @@ class FeePaymentResultPage extends StatefulWidget {
 class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
   late bool isSuccess;
 
-  List<bool> randomSuccess = [
-    true,
-    false,
-  ];
-
   @override
   void initState() {
     super.initState();
 
     setState(() {
-      isSuccess = (randomSuccess.toList()..shuffle()).first;
+      isSuccess = widget.status;
     });
   }
 

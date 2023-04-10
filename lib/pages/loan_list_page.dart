@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/detail_loan_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -228,7 +229,7 @@ class _LoanListPageState extends State<LoanListPage> {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () {
-                              BackFromThisPage(context: context, callbackData: loanTransactionList[index]).go();
+                              MoveToPage(context: context, target: DetailLoanPage(loanData: loanTransactionList[index])).go();
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0),
