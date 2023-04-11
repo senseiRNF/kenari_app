@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/pages/detail_loan_page.dart';
-import 'package:kenari_app/pages/detail_temporal_fee_page.dart';
-import 'package:kenari_app/services/api/fee/api_temporal_fee_services.dart';
-import 'package:kenari_app/services/api/loan/api_loan_services.dart';
+import 'package:kenari_app/pages/loan_detail_page.dart';
+import 'package:kenari_app/pages/temporal_fee_detail_page.dart';
+import 'package:kenari_app/services/api/fee_services/api_temporal_fee_services.dart';
+import 'package:kenari_app/services/api/loan_services/api_loan_services.dart';
 import 'package:kenari_app/services/api/models/loan_model.dart';
 import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
@@ -322,7 +322,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         //   MoveToPage(context: context, target: DetailTemporalFeePage(temporalFeeData: '$type $index', feeId: 'fee_id', status: convertStatus)).go();
                         // }
 
-                        MoveToPage(context: context, target: DetailTemporalFeePage(temporalFeeId: filteredFeeData()[index].sId!)).go();
+                        MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: filteredFeeData()[index].sId!)).go();
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
@@ -432,7 +432,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                     if(filterLoanData()[index].sId != null) {
                       MoveToPage(
                         context: context,
-                        target: DetailLoanPage(
+                        target: LoanDetailPage(
                           loanId: filterLoanData()[index].sId!,
                         ),
                         callback: (callback) {

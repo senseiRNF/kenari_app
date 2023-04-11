@@ -3,7 +3,7 @@ import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/register_form_page.dart';
 import 'package:kenari_app/pages/register_result_page.dart';
-import 'package:kenari_app/services/api/profile/api_company_services.dart';
+import 'package:kenari_app/services/api/profile_services/api_company_services.dart';
 import 'package:kenari_app/services/local/models/register_form_result.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';

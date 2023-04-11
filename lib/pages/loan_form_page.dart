@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/loan_result_page.dart';
-import 'package:kenari_app/services/api/loan/api_loan_services.dart';
+import 'package:kenari_app/services/api/loan_services/api_loan_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/services/local/models/local_loan_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';

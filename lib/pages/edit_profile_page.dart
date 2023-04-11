@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/api/profile/api_profile_services.dart';
+import 'package:kenari_app/services/api/profile_services/api_profile_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/services/local/models/local_profile_form_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';

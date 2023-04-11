@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/loan_payment_page.dart';
-import 'package:kenari_app/services/api/loan/api_loan_services.dart';
+import 'package:kenari_app/services/api/loan_services/api_loan_services.dart';
 import 'package:kenari_app/services/api/models/loan_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class DetailLoanPage extends StatefulWidget {
+class LoanDetailPage extends StatefulWidget {
   final String loanId;
 
-  const DetailLoanPage({
+  const LoanDetailPage({
     super.key,
     required this.loanId,
   });
 
   @override
-  State<DetailLoanPage> createState() => _DetailLoanPageState();
+  State<LoanDetailPage> createState() => _LoanDetailPageState();
 }
 
-class _DetailLoanPageState extends State<DetailLoanPage> {
+class _LoanDetailPageState extends State<LoanDetailPage> {
   String? name;
 
   DateTime? dueDate;

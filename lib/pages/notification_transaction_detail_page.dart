@@ -5,19 +5,19 @@ import 'package:kenari_app/services/local/models/local_notification_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class DetailNotificationTransactionPage extends StatefulWidget {
+class NotificationTransactionDetailPage extends StatefulWidget {
   final LocalNotificationData notificationData;
 
-  const DetailNotificationTransactionPage({
+  const NotificationTransactionDetailPage({
     super.key,
     required this.notificationData,
   });
 
   @override
-  State<DetailNotificationTransactionPage> createState() => _DetailNotificationTransactionPageState();
+  State<NotificationTransactionDetailPage> createState() => _NotificationTransactionDetailPageState();
 }
 
-class _DetailNotificationTransactionPageState extends State<DetailNotificationTransactionPage> {
+class _NotificationTransactionDetailPageState extends State<NotificationTransactionDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

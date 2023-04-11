@@ -9,6 +9,7 @@ import 'package:kenari_app/pages/loan_page.dart';
 import 'package:kenari_app/pages/notification_page.dart';
 import 'package:kenari_app/pages/product_list_banner_page.dart';
 import 'package:kenari_app/pages/product_list_page.dart';
+import 'package:kenari_app/pages/seller_page.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
@@ -29,6 +30,7 @@ class HomeFragment extends StatelessWidget {
   final Function onProductSelected;
   final Function onCallbackFromFeePage;
   final Function onCallbackFromLoanPage;
+  final Function onCallbackFromSellerPage;
 
   const HomeFragment({
     super.key,
@@ -45,6 +47,7 @@ class HomeFragment extends StatelessWidget {
     required this.onProductSelected,
     required this.onCallbackFromFeePage,
     required this.onCallbackFromLoanPage,
+    required this.onCallbackFromSellerPage,
   });
 
   @override
@@ -526,7 +529,15 @@ class HomeFragment extends StatelessWidget {
                             ),
                             child: InkWell(
                               onTap: () {
-
+                                MoveToPage(
+                                  context: context,
+                                  target: const SellerPage(),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null) {
+                                      onCallbackFromSellerPage(callbackResult);
+                                    }
+                                  },
+                                ).go();
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),

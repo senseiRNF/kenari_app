@@ -8,9 +8,10 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/fee_page.dart';
 import 'package:kenari_app/pages/loan_page.dart';
 import 'package:kenari_app/pages/product_page.dart';
+import 'package:kenari_app/pages/seller_page.dart';
 import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
-import 'package:kenari_app/services/api/product/api_category_services.dart';
+import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -250,6 +251,20 @@ class _HomePageState extends State<HomePage> {
               }
             }
           },
+          onCallbackFromSellerPage: (dynamic callback) {
+            if(callback != null) {
+              if(callback == true) {
+                setState(() {
+                  selectedMenu = 0;
+                });
+              } else {
+                setState(() {
+                  selectedMenu = 2;
+                  openMenuFromPage = 2;
+                });
+              }
+            }
+          },
         );
       case 1:
         return SearchFragment(
@@ -327,6 +342,88 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> showAllMenuBottomDialog() async {
+    List<Map> menuBottom = [
+      {
+        'title': 'Keuangan',
+        'data': [
+          {
+            'images': 'assets/images/icon_iuran.png',
+            'title': 'Iuran',
+            'description': 'Bayar Iuran wajib dan berjangka Perusahaan kamu disini',
+            'function': () {
+              MoveToPage(
+                context: context,
+                target: const FeePage(),
+                callback: (callbackResult) {
+                  if(callbackResult != null) {
+                    BackFromThisPage(context: context, callbackData: [callbackResult, 0]).go();
+                  }
+                },
+              ).go();
+            },
+          },
+          {
+            'images': 'assets/images/icon_pinjaman.png',
+            'title': 'Pinjaman',
+            'description': 'Dapatkan pinjaman uang untuk pengembangan usaha mu dan kebutuhan lainnya disini',
+            'function': () {
+              MoveToPage(
+                context: context,
+                target: const LoanPage(),
+                callback: (callbackResult) {
+                  if(callbackResult != null) {
+                    BackFromThisPage(context: context, callbackData: [callbackResult, 1]).go();
+                  }
+                },
+              ).go();
+            },
+          },
+        ],
+      },
+      {
+        'title': 'Jualan Produk',
+        'data': [
+          {
+            'images': 'assets/images/icon_titip_jual.png',
+            'title': 'Titip Jual',
+            'description': 'Dapatkan penghasilan tambahan dengan Titip Jual barang apapun disini',
+            'function': () {
+              MoveToPage(
+                context: context,
+                target: const SellerPage(),
+                callback: (callbackResult) {
+                  if(callbackResult != null) {
+                    BackFromThisPage(context: context, callbackData: [callbackResult, 2]).go();
+                  }
+                },
+              ).go();
+            },
+          },
+        ],
+      },
+      {
+        'title': 'Coming Soon',
+        'data': [
+          {
+            'images': 'assets/images/icon_reksadana.png',
+            'title': 'Reksadana',
+            'description': 'Sisihkan gaji untuk Investasi yang kekinian, nggak ribet, dan bisa dimulai dengan modal kecil.',
+            'function': () {
+
+            },
+          },
+          {
+            'images': 'assets/images/icon_ppob.png',
+            'title': 'PPOB',
+            'description': 'Memudahkanmu dalam membayarkan berbagai jenis tagihan bulanan.',
+            'function': () {
+
+            },
+          },
+        ],
+      },
+    ];
+
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -354,332 +451,98 @@ class _HomePageState extends State<HomePage> {
                 height: 25.0,
               ),
               Expanded(
-                child: ListView(
+                child: ListView.separated(
                   shrinkWrap: true,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Text(
-                        'Layanan Keuangan',
-                        style: STextStyles.medium().copyWith(
-                          fontWeight: FontWeight.bold,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: menuBottom.length,
+                  separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+                    return const SizedBox(
+                      height: 15.0,
+                    );
+                  },
+                  itemBuilder: (BuildContext listContext, int index) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Text(
+                            menuBottom[index]['title'],
+                            style: STextStyles.medium().copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
                         ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 54.0,
-                            height: 54.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                MoveToPage(
-                                  context: context,
-                                  target: const FeePage(),
-                                  callback: (callbackResult) {
-                                    if(callbackResult != null) {
-                                      BackFromThisPage(context: context, callbackData: [callbackResult, 0]).go();
-                                    }
-                                  },
-                                ).go();
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset(
-                                  'assets/images/icon_iuran.png',
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  'Iuran',
-                                  style: STextStyles.medium(),
-                                ),
-                                Text(
-                                  'Bayar Iuran wajib dan berjangka Perusahaan kamu disini',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 54.0,
-                            height: 54.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                MoveToPage(
-                                  context: context,
-                                  target: const LoanPage(),
-                                  callback: (callbackResult) {
-                                    if(callbackResult != null) {
-                                      BackFromThisPage(context: context, callbackData: [callbackResult, 1]).go();
-                                    }
-                                  },
-                                ).go();
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset(
-                                  'assets/images/icon_pinjaman.png',
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  'Pinjaman',
-                                  style: STextStyles.medium(),
-                                ),
-                                Text(
-                                  'Dapatkan pinjaman uang untuk pengembangan usaha mu dan kebutuhan lainnya disini',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Text(
-                        'Jualan Produk',
-                        style: STextStyles.medium().copyWith(
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(
+                          height: 15.0,
                         ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 54.0,
-                            height: 54.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset(
-                                  'assets/images/icon_titip_jual.png',
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: menuBottom[index]['data'].length,
+                          separatorBuilder: (BuildContext subSeparatorContext, int subSeparatorIndex) {
+                            return const SizedBox(
+                              height: 15.0,
+                            );
+                          },
+                          itemBuilder: (BuildContext subListContext, int subIndex) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                              child: InkWell(
+                                onTap: () {
+                                  menuBottom[index]['data'][subIndex]['function']();
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 54.0,
+                                      height: 54.0,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: BorderColorStyles.borderStrokes(),
+                                        ),
+                                        borderRadius: BorderRadius.circular(12.0),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Image.asset(
+                                          menuBottom[index]['data'][subIndex]['images'],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Text(
+                                            menuBottom[index]['data'][subIndex]['title'],
+                                            style: STextStyles.medium(),
+                                          ),
+                                          Text(
+                                            menuBottom[index]['data'][subIndex]['description'],
+                                            style: XSTextStyles.regular(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  'Titip Jual',
-                                  style: STextStyles.medium(),
-                                ),
-                                Text(
-                                  'Dapatkan penghasilan tambahan dengan Titip Jual barang apapun disini',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Text(
-                        'Coming Soon',
-                        style: STextStyles.medium().copyWith(
-                          fontWeight: FontWeight.bold,
+                            );
+                          },
                         ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 54.0,
-                            height: 54.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset(
-                                  'assets/images/icon_reksadana.png',
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  'Reksadana',
-                                  style: STextStyles.medium(),
-                                ),
-                                Text(
-                                  'Sisihkan gaji untuk Investasi yang kekinian, nggak ribet, dan bisa dimulai dengan modal kecil.',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 54.0,
-                            height: 54.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset(
-                                  'assets/images/icon_ppob.png',
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  'PPOB',
-                                  style: STextStyles.regular(),
-                                ),
-                                Text(
-                                  'Memudahkanmu dalam membayarkan berbagai jenis tagihan bulanan.',
-                                  style: XSTextStyles.regular(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                      ],
+                    );
+                  },
                 ),
               ),
             ],

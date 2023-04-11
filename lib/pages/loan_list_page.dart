@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/pages/detail_loan_page.dart';
-import 'package:kenari_app/services/api/loan/api_loan_services.dart';
+import 'package:kenari_app/pages/loan_detail_page.dart';
+import 'package:kenari_app/services/api/loan_services/api_loan_services.dart';
 import 'package:kenari_app/services/api/models/loan_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -263,7 +263,7 @@ class _LoanListPageState extends State<LoanListPage> {
                           child: InkWell(
                             onTap: () {
                               if(loanList[index].sId != null) {
-                                MoveToPage(context: context, target: DetailLoanPage(loanId: loanList[index].sId!)).go();
+                                MoveToPage(context: context, target: LoanDetailPage(loanId: loanList[index].sId!)).go();
                               }
                             },
                             child: Padding(

@@ -5,14 +5,14 @@ import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class DetailMandatoryFeePage extends StatefulWidget {
-  const DetailMandatoryFeePage({super.key});
+class MandatoryFeeDetailPage extends StatefulWidget {
+  const MandatoryFeeDetailPage({super.key});
 
   @override
-  State<DetailMandatoryFeePage> createState() => _DetailMandatoryFeePageState();
+  State<MandatoryFeeDetailPage> createState() => _MandatoryFeeDetailPageState();
 }
 
-class _DetailMandatoryFeePageState extends State<DetailMandatoryFeePage> {
+class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
   String? name;
   String? companyCode;
   String? phoneNumber;

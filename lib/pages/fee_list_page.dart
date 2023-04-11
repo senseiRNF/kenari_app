@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/pages/detail_temporal_fee_page.dart';
-import 'package:kenari_app/services/api/fee/api_temporal_fee_services.dart';
+import 'package:kenari_app/pages/temporal_fee_detail_page.dart';
+import 'package:kenari_app/services/api/fee_services/api_temporal_fee_services.dart';
 import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -574,7 +574,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                     if(filteredData()[index].sId != null) {
                                       MoveToPage(
                                         context: context,
-                                        target: DetailTemporalFeePage(
+                                        target: TemporalFeeDetailPage(
                                           temporalFeeId: filteredData()[index].sId!,
                                         ),
                                       ).go();

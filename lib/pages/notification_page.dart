@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/pages/detail_notification_transaction_page.dart';
+import 'package:kenari_app/pages/notification_transaction_detail_page.dart';
 import 'package:kenari_app/services/local/models/local_notification_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -705,7 +705,7 @@ class _NotificationPageState extends State<NotificationPage> {
                       const Material(),
                       InkWell(
                         onTap: () {
-                          MoveToPage(context: context, target: DetailNotificationTransactionPage(notificationData: notificationList[index])).go();
+                          MoveToPage(context: context, target: NotificationTransactionDetailPage(notificationData: notificationList[index])).go();
                         },
                         child: Container(
                           color: Colors.white,

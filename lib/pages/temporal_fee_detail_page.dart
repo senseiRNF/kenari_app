@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/api/fee/api_temporal_fee_services.dart';
+import 'package:kenari_app/services/api/fee_services/api_temporal_fee_services.dart';
 import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class DetailTemporalFeePage extends StatefulWidget {
+class TemporalFeeDetailPage extends StatefulWidget {
   final String temporalFeeId;
 
-  const DetailTemporalFeePage({
+  const TemporalFeeDetailPage({
     super.key,
     required this.temporalFeeId,
   });
 
   @override
-  State<DetailTemporalFeePage> createState() => _DetailTemporalFeePageState();
+  State<TemporalFeeDetailPage> createState() => _TemporalFeeDetailPageState();
 }
 
-class _DetailTemporalFeePageState extends State<DetailTemporalFeePage> {
+class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
   TemporalFeeData? temporalFeeData;
 
   @override

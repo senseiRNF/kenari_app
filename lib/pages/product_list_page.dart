@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
-import 'package:kenari_app/services/api/product/api_category_services.dart';
+import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';

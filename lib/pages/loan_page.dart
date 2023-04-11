@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/loan_form_page.dart';
 import 'package:kenari_app/pages/loan_list_page.dart';
-import 'package:kenari_app/services/api/loan/api_loan_services.dart';
+import 'package:kenari_app/services/api/loan_services/api_loan_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -498,297 +498,305 @@ class _LoanPageState extends State<LoanPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: BorderColorStyles.borderStrokes(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: BorderColorStyles.borderStrokes(),
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: IntrinsicHeight(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Text(
+                                          'Plafon',
+                                          style: XSTextStyles.regular(),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Text(
+                                          'Rp 10.000.000',
+                                          style: STextStyles.medium().copyWith(
+                                            color: TextColorStyles.textPrimary(),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const VerticalDivider(
+                                    thickness: 1.0,
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Text(
+                                          'Total Tagihan',
+                                          style: XSTextStyles.regular(),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Text(
+                                          'Rp ${NumberFormat('#,###', 'en_id').format(totalLoan).replaceAll(',', '.')}',
+                                          style: STextStyles.medium().copyWith(
+                                            color: TextColorStyles.textPrimary(),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: IntrinsicHeight(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: BorderColorStyles.borderStrokes(),
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: InkWell(
+                              onTap: () {
+                                MoveToPage(
+                                  context: context,
+                                  target: const LoanFormPage(),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null) {
+                                      BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                    }
+                                  },
+                                ).go();
+                              },
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      'Plafon',
-                                      style: XSTextStyles.regular(),
-                                      textAlign: TextAlign.center,
+                                    Container(
+                                      width: 30.0,
+                                      height: 30.0,
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                            'assets/images/icon_pengajuan_pinjaman.png',
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
                                     const SizedBox(
-                                      height: 5.0,
+                                      width: 15.0,
                                     ),
-                                    Text(
-                                      'Rp 10.000.000',
-                                      style: STextStyles.medium().copyWith(
-                                        color: TextColorStyles.textPrimary(),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Text(
+                                            'Ajukan Pendanaan',
+                                            style: MTextStyles.medium().copyWith(
+                                              color: TextColorStyles.textPrimary(),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Text(
+                                            'Aman dengan bunga kompetitif',
+                                            style: XSTextStyles.regular(),
+                                          ),
+                                        ],
                                       ),
-                                      textAlign: TextAlign.center,
+                                    ),
+                                    const Icon(
+                                      Icons.chevron_right,
                                     ),
                                   ],
                                 ),
                               ),
-                              const VerticalDivider(
-                                thickness: 1.0,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: BorderColorStyles.borderStrokes(),
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: InkWell(
+                              onTap: () {
+                                BackFromThisPage(context: context, callbackData: false).go();
+                              },
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      'Total Tagihan',
-                                      style: XSTextStyles.regular(),
-                                      textAlign: TextAlign.center,
+                                    Container(
+                                      width: 30.0,
+                                      height: 30.0,
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                            'assets/images/icon_riwayat_pinjaman.png',
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
                                     const SizedBox(
-                                      height: 5.0,
+                                      width: 15.0,
                                     ),
-                                    Text(
-                                      'Rp ${NumberFormat('#,###', 'en_id').format(totalLoan).replaceAll(',', '.')}',
-                                      style: STextStyles.medium().copyWith(
-                                        color: TextColorStyles.textPrimary(),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Text(
+                                            'Histori Pendanaan',
+                                            style: MTextStyles.medium().copyWith(
+                                              color: TextColorStyles.textPrimary(),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Text(
+                                            'Lihat daftar peminjaman Anda',
+                                            style: XSTextStyles.regular(),
+                                          ),
+                                        ],
                                       ),
-                                      textAlign: TextAlign.center,
+                                    ),
+                                    const Icon(
+                                      Icons.chevron_right,
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: BorderColorStyles.borderStrokes(),
+                        const SizedBox(
+                          height: 15.0,
                         ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: InkWell(
-                          onTap: () {
-                            MoveToPage(
-                              context: context,
-                              target: const LoanFormPage(),
-                              callback: (callbackResult) {
-                                if(callbackResult != null) {
-                                  BackFromThisPage(context: context, callbackData: callbackResult).go();
-                                }
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: BorderColorStyles.borderStrokes(),
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: InkWell(
+                              onTap: () {
+                                MoveToPage(
+                                  context: context,
+                                  target: const LoanListPage(),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null) {
+                                      BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                    }
+                                  },
+                                ).go();
                               },
-                            ).go();
-                          },
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 30.0,
-                                  height: 30.0,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                        'assets/images/icon_pengajuan_pinjaman.png',
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 15.0,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        'Ajukan Pendanaan',
-                                        style: MTextStyles.medium().copyWith(
-                                          color: TextColorStyles.textPrimary(),
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 30.0,
+                                      height: 30.0,
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                            'assets/images/icon_pembayaran_pinjaman.png',
+                                          ),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      const SizedBox(
-                                        height: 5.0,
+                                    ),
+                                    const SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Text(
+                                            'Pembayaran Pendanaan',
+                                            style: MTextStyles.medium().copyWith(
+                                              color: TextColorStyles.textPrimary(),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Text(
+                                            'Lihat total tagihan dan bayar disini!',
+                                            style: XSTextStyles.regular(),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        'Aman dengan bunga kompetitif',
-                                        style: XSTextStyles.regular(),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                    const Icon(
+                                      Icons.chevron_right,
+                                    ),
+                                  ],
                                 ),
-                                const Icon(
-                                  Icons.chevron_right,
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: BorderColorStyles.borderStrokes(),
+                        const SizedBox(
+                          height: 15.0,
                         ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context, callbackData: false).go();
-                          },
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 30.0,
-                                  height: 30.0,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                        'assets/images/icon_riwayat_pinjaman.png',
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 15.0,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        'Histori Pendanaan',
-                                        style: MTextStyles.medium().copyWith(
-                                          color: TextColorStyles.textPrimary(),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Text(
-                                        'Lihat daftar peminjaman Anda',
-                                        style: XSTextStyles.regular(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.chevron_right,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: BorderColorStyles.borderStrokes(),
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: InkWell(
-                          onTap: () {
-                            MoveToPage(
-                              context: context,
-                              target: const LoanListPage(),
-                              callback: (callbackResult) {
-                                if(callbackResult != null) {
-                                  BackFromThisPage(context: context, callbackData: callbackResult).go();
-                                }
-                              },
-                            ).go();
-                          },
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 30.0,
-                                  height: 30.0,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                        'assets/images/icon_pembayaran_pinjaman.png',
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 15.0,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        'Pembayaran Pendanaan',
-                                        style: MTextStyles.medium().copyWith(
-                                          color: TextColorStyles.textPrimary(),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Text(
-                                        'Lihat total tagihan dan bayar disini!',
-                                        style: XSTextStyles.regular(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.chevron_right,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
                   ),
                 ],
