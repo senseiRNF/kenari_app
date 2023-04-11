@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/loan_payment_result_page.dart';
+import 'package:kenari_app/services/api/models/loan_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class LoanPaymentPage extends StatefulWidget {
-  final Map loanData;
+  final LoanData loanData;
 
   const LoanPaymentPage({
     super.key,
@@ -18,7 +19,7 @@ class LoanPaymentPage extends StatefulWidget {
 }
 
 class _LoanPaymentPageState extends State<LoanPaymentPage> {
-  DateTime? dueDate;
+  late DateTime dueDate;
 
   late int dipayAmount;
 
@@ -33,13 +34,11 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
 
     setState(() {
       dipayAmount = (randomNumber.toList()..shuffle()).first;
-    });
 
-    if(widget.loanData.values.elementAt(0).values.toList().length > 2) {
-      setState(() {
-        dueDate = widget.loanData.values.elementAt(0).values.elementAt(2);
-      });
-    }
+      if(widget.loanData.jatuhTempo != null) {
+        dueDate = DateTime.parse(widget.loanData.jatuhTempo!);
+      }
+    });
   }
 
   @override
@@ -110,7 +109,7 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                               style: STextStyles.regular(),
                             ),
                             Text(
-                              DateFormat('dd MMM yyyy').format(widget.loanData.values.elementAt(0).values.elementAt(2)),
+                              DateFormat('dd MMM yyyy').format(dueDate),
                               style: STextStyles.medium(),
                             ),
                           ],
@@ -144,7 +143,7 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                               style: STextStyles.regular(),
                             ),
                             Text(
-                              dueDate != null && DateTime.now().isAfter(dueDate!) == true ? 'Rp 100.000' : 'Rp 0',
+                              DateTime.now().isAfter(dueDate) == true ? 'Rp 100.000' : 'Rp 0',
                               style: STextStyles.medium(),
                             ),
                           ],
@@ -165,7 +164,7 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                               style: STextStyles.regular(),
                             ),
                             Text(
-                              dueDate != null && DateTime.now().isAfter(dueDate!) == true ? 'Rp 1.218.594' : 'Rp Rp 1.118.594',
+                              DateTime.now().isAfter(dueDate) == true ? 'Rp 1.218.594' : 'Rp Rp 1.118.594',
                               style: STextStyles.medium(),
                             ),
                           ],

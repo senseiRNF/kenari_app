@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/loan_payment_page.dart';
+import 'package:kenari_app/services/api/loan/api_loan_services.dart';
+import 'package:kenari_app/services/api/models/loan_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class DetailLoanPage extends StatefulWidget {
-  final Map? loanData;
+  final String loanId;
 
   const DetailLoanPage({
     super.key,
-    required this.loanData,
+    required this.loanId,
   });
 
   @override
@@ -23,25 +25,31 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
 
   DateTime? dueDate;
 
+  LoanData? loanData;
+
   @override
   void initState() {
     super.initState();
 
     loadData();
-
-    if(widget.loanData != null) {
-      if(widget.loanData!.values.elementAt(0).values.toList().length > 2) {
-        setState(() {
-          dueDate = widget.loanData!.values.elementAt(0).values.elementAt(2);
-        });
-      }
-    }
   }
 
   Future loadData() async {
-    await LocalSharedPrefs().readKey('name').then((nameResult) {
+    await LocalSharedPrefs().readKey('name').then((nameResult) async {
       setState(() {
         name = nameResult;
+      });
+
+      await APILoanServices(context: context).callById(widget.loanId).then((callResult) {
+        setState(() {
+          loanData = callResult;
+        });
+
+        if(loanData != null && loanData!.jatuhTempo != null) {
+          setState(() {
+            dueDate = DateTime.parse(loanData!.jatuhTempo!);
+          });
+        }
       });
     });
   }
@@ -82,7 +90,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                         ),
                         Expanded(
                           child: Text(
-                            widget.loanData != null && widget.loanData!.keys.elementAt(0) == true ? 'Detail Tagihan' : 'Detail Transaksi Pendanaan',
+                            'Detail Transaksi Pendanaan',
                             style: HeadingTextStyles.headingS(),
                           ),
                         ),
@@ -119,7 +127,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
-                            'Rp 1.118.594',
+                            loanData != null && loanData!.bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
                             style: LTextStyles.medium(),
                           ),
                         ),
@@ -209,7 +217,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                'Rp 3.000.000',
+                                loanData != null && loanData!.jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : 'Unknown',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -226,7 +234,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                'Rp 30.000',
+                                loanData != null && loanData!.biayaAdminAmount != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.biayaAdminAmount!)).replaceAll(',', '.')}" : 'Unknown',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -243,7 +251,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                '${widget.loanData!.values.elementAt(0).values.elementAt(1)} Bulan',
+                                loanData != null && loanData!.jangkaWaktu != null ? '${loanData!.jangkaWaktu} Bulan' : 'Unknown',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -260,7 +268,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                'Rp 2.970.000',
+                                loanData != null && loanData!.jumlahPinjamanDiterima != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.jumlahPinjamanDiterima!)).replaceAll(',', '.')}" : 'Unknown',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -277,7 +285,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                'Rp 1.118.594',
+                                loanData != null && loanData!.bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -310,7 +318,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                   const SizedBox(
                     height: 15.0,
                   ),
-                  widget.loanData != null && widget.loanData!.keys.elementAt(0) == false ?
+                  loanData != null && loanData!.status == true ?
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -375,20 +383,16 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                           ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: widget.loanData != null ? widget.loanData!.values.elementAt(0).values.elementAt(1) : 0,
+                            itemCount: loanData != null && loanData!.peminjamanDetails != null ? loanData!.peminjamanDetails!.length : 0,
                             separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-                              return separatorIndex < widget.loanData!.values.elementAt(0).values.elementAt(1) ?
+                              return separatorIndex < loanData!.peminjamanDetails!.length ?
                               const SizedBox(
                                 height: 15.0,
                               ) :
                               const Material();
                             },
                             itemBuilder: (BuildContext listContext, int index) {
-                              bool paidOff = false;
-
-                              if(widget.loanData!.values.elementAt(0).values.elementAt(0) > index) {
-                                paidOff = true;
-                              }
+                              bool paidOff = loanData!.peminjamanDetails![index].status ?? false;
 
                               return Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -421,36 +425,34 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
-                                        paidOff == true ?
-                                        '${index + 1}/${widget.loanData!.values.elementAt(0).values.elementAt(1)} Paid' :
-                                        '${index + 1}/${widget.loanData!.values.elementAt(0).values.elementAt(1)} To Pay',
+                                        '${index + 1}/${loanData!.peminjamanDetails!.length} ${paidOff == true ? 'Paid' : 'To Pay'}',
                                         style: XSTextStyles.regular().copyWith(
                                           color: paidOff == true ? Colors.white : XSTextStyles.regular().color,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        paidOff == true ?
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 15.0),
-                                          child: Text(
-                                            DateFormat('dd MMM yyyy').format(dueDate!.subtract(Duration(days: ((widget.loanData!.values.elementAt(0).values.elementAt(1) - index) * 30)))),
-                                            style: XSTextStyles.regular(),
-                                          ),
-                                        ) :
-                                        const Material(),
-                                        Text(
-                                          'Rp 1.118.594',
-                                          style: STextStyles.medium(),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  // Expanded(
+                                  //   child: Row(
+                                  //     mainAxisAlignment: MainAxisAlignment.end,
+                                  //     crossAxisAlignment: CrossAxisAlignment.center,
+                                  //     children: [
+                                  //       paidOff == true ?
+                                  //       Padding(
+                                  //         padding: const EdgeInsets.only(right: 15.0),
+                                  //         child: Text(
+                                  //           DateFormat('dd MMM yyyy').format(),
+                                  //           style: XSTextStyles.regular(),
+                                  //         ),
+                                  //       ) :
+                                  //       const Material(),
+                                  //       Text(
+                                  //         'Rp 1.118.594',
+                                  //         style: STextStyles.medium(),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 ],
                               );
                             },
@@ -462,7 +464,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                 ],
               ),
             ),
-            widget.loanData != null && widget.loanData!.keys.elementAt(0) == true ?
+            loanData != null && loanData!.status == false ?
             Container(
               color: Colors.white,
               child: Padding(
@@ -471,7 +473,7 @@ class _DetailLoanPageState extends State<DetailLoanPage> {
                   onPressed: () {
                     MoveToPage(
                       context: context,
-                      target: LoanPaymentPage(loanData: widget.loanData!),
+                      target: LoanPaymentPage(loanData: loanData!),
                       callback: (callback) {
                         if(callback != null) {
                           BackFromThisPage(context: context, callbackData: callback).go();

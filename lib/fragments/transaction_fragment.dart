@@ -4,6 +4,8 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/detail_loan_page.dart';
 import 'package:kenari_app/pages/detail_temporal_fee_page.dart';
 import 'package:kenari_app/services/api/fee/api_temporal_fee_services.dart';
+import 'package:kenari_app/services/api/loan/api_loan_services.dart';
+import 'package:kenari_app/services/api/models/loan_model.dart';
 import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -34,47 +36,11 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
 
   List<TemporalFeeData> temporalFeeList = [];
 
-  List<Map<bool, Map?>> loanTransactionList = [
-    {
-      true: {
-        'month_paid_off': 2,
-        'max_month': 3,
-        'tempo': DateTime(2023, DateTime.now().month + 1, 29),
-      },
-    },
-    {
-      true: {
-        'month_paid_off': 4,
-        'max_month': 12,
-        'tempo': DateTime(2023, DateTime.now().month - 1, 31),
-      },
-    },
-    {
-      false: {
-        'month_paid_off': 6,
-        'max_month': 6,
-        'tempo': DateTime(2023, DateTime.now().month, DateTime.now().day),
-      },
-    },
-  ];
+  List<LoanData> loanList = [];
 
   List<bool> orderTransactionList = [];
 
   late TabController tabController;
-
-  List<Map<bool, Map?>> filterLoanTransactionList() {
-    List<Map<bool, Map?>> result = [];
-
-    bool convertStatus = selectedStatus == 0 ? true : false;
-
-    for(int i = 0; i < loanTransactionList.length; i++) {
-      if(loanTransactionList[i].keys.elementAt(0) == convertStatus) {
-        result.add(loanTransactionList[i]);
-      }
-    }
-
-    return result;
-  }
 
   @override
   void initState() {
@@ -94,6 +60,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
 
       if(widget.openMenu == 0) {
         loadFeeData();
+      }
+
+      if(widget.openMenu == 1) {
+        loadLoanData();
       }
     });
 
@@ -118,6 +88,32 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
         });
       }
     });
+  }
+
+  Future loadLoanData() async {
+    await APILoanServices(context: context).callAll().then((callResult) {
+      if(callResult != null) {
+        setState(() {
+          loanList = callResult.loanData ?? [];
+        });
+      }
+    });
+  }
+
+  List<LoanData> filterLoanData() {
+    List<LoanData> result = [];
+
+    bool isActiveStatus = selectedStatus == 0 ? true : false;
+
+    if(loanList.isNotEmpty) {
+      for(int i = 0; i < loanList.length; i++) {
+        if(loanList[i].status == !isActiveStatus) {
+          result.add(loanList[i]);
+        }
+      }
+    }
+
+    return result;
   }
 
   List<TemporalFeeData> filteredFeeData() {
@@ -164,8 +160,18 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         setState(() {
                           selectedTab = index;
 
-                          if(index == 0) {
-                            loadFeeData();
+                          switch(selectedTab) {
+                            case 0:
+                              loadFeeData();
+                              break;
+                            case 1:
+                              loadLoanData();
+                              break;
+                            case 2:
+                              break;
+                            default:
+                              loadFeeData();
+                              break;
                           }
                         });
 
@@ -404,9 +410,9 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ],
         );
       case 1:
-        return loanTransactionList.isNotEmpty ?
+        return filterLoanData().isNotEmpty ?
         ListView.separated(
-          itemCount: filterLoanTransactionList().length,
+          itemCount: filterLoanData().length,
           separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -417,32 +423,23 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
             );
           },
           itemBuilder: (BuildContext listContext, int index) {
-            String? periode;
-            DateTime? dueDate;
-
-            if(filterLoanTransactionList()[index].values.elementAt(0) != null) {
-              periode = '${filterLoanTransactionList()[index].values.elementAt(0)!.values.elementAt(0)}/${filterLoanTransactionList()[index].values.elementAt(0)!.values.elementAt(1)}';
-
-              if(filterLoanTransactionList()[index].values.elementAt(0)!.values.length > 2) {
-                dueDate = filterLoanTransactionList()[index].values.elementAt(0)!.values.elementAt(2);
-              }
-            }
-
             return Container(
               color: Colors.white,
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    MoveToPage(
-                      context: context,
-                      target: DetailLoanPage(
-                        loanData: filterLoanTransactionList()[index],
-                      ),
-                      callback: (callback) {
-                        widget.onCallbackFromLoanPage(callback);
-                      },
-                    ).go();
+                    if(filterLoanData()[index].sId != null) {
+                      MoveToPage(
+                        context: context,
+                        target: DetailLoanPage(
+                          loanId: filterLoanData()[index].sId!,
+                        ),
+                        callback: (callback) {
+                          widget.onCallbackFromLoanPage(callback);
+                        },
+                      ).go();
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
@@ -453,13 +450,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Pendanaan ${index + 1}',
+                              'Pendanaan',
                               style: STextStyles.medium().copyWith(
                                 color: TextColorStyles.textPrimary(),
                               ),
                             ),
                             Text(
-                              'Rp 3.000.000',
+                              filterLoanData()[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filterLoanData()[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : 'Unknown',
                               style: STextStyles.medium().copyWith(
                                 color: TextColorStyles.textPrimary(),
                               ),
@@ -474,10 +471,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '${periode ?? 'Unknown'} Periode',
+                              filterLoanData()[index].jangkaWaktu != null ? '${filterLoanData()[index].jangkaWaktu} Bulan' : 'Unknown',
                               style: STextStyles.regular(),
                             ),
-                            filterLoanTransactionList()[index].keys.elementAt(0) == true ?
+                            filterLoanData()[index].status == false ?
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                               decoration: BoxDecoration(
@@ -512,28 +509,30 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             ),
                           ],
                         ),
-                        filterLoanTransactionList()[index].keys.elementAt(0) == true ?
+                        filterLoanData()[index].status == false ?
                         Padding(
                           padding: const EdgeInsets.only(top: 20.0),
-                          child: Row(
+                          child: filterLoanData()[index].jatuhTempo != null ?
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              DateTime.now().isBefore(dueDate!) || DateTime.now().isAtSameMomentAs(dueDate) == true ?
+                              DateTime.now().isBefore(DateTime.parse(filterLoanData()[index].jatuhTempo!)) || DateTime.now().isAtSameMomentAs(DateTime.parse(filterLoanData()[index].jatuhTempo!)) == true ?
                               Text(
-                                'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(dueDate)}',
+                                'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
                                 style: XSTextStyles.medium().copyWith(
                                   color: DangerColorStyles.dangerMain(),
                                 ),
                               ) :
                               Text(
-                                'Terlambat ${DateFormat('dd MMM yyyy').format(dueDate)}',
+                                'Terlambat ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
                                 style: XSTextStyles.medium().copyWith(
                                   color: DangerColorStyles.dangerMain(),
                                 ),
                               ),
                             ],
-                          ),
+                          ) :
+                          const Material(),
                         ) :
                         const Material(),
                       ],

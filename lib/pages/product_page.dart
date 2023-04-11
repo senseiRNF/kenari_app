@@ -148,6 +148,11 @@ class _ProductPageState extends State<ProductPage> {
                               ),
                             ],
                           ),
+                          callback: (callbackResult) {
+                            if(callbackResult != null) {
+
+                            }
+                          },
                         ).go();
                       },
                       customBorder: const CircleBorder(),

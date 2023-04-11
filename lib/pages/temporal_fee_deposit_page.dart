@@ -74,6 +74,24 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
     });
   }
 
+  double countFinalAmount() {
+    double result = 0.0;
+
+    if(selectedTerm != null) {
+      double term = 0.0;
+
+      for(int i = 0; i < termList.length; i++) {
+        if(termList[i].keys.elementAt(0) == selectedTerm) {
+          term = double.parse(termList[i].values.elementAt(0));
+        }
+      }
+
+      result = (double.parse(feeAmountController.text != '' ? feeAmountController.text : '0') * selectedTerm!) + ((double.parse(feeAmountController.text != '' ? feeAmountController.text : '0') * selectedTerm!) * (term / 100));
+    }
+
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -395,7 +413,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                           onChanged: (newData) {
                             setState(() {
                               if(newData != '') {
-                                if(int.parse(newData) % 100000 != 0) {
+                                if(double.parse(newData) % 100000 != 0) {
                                   setState(() {
                                     showUnmatchedAmountFee = true;
                                   });
@@ -404,7 +422,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                                     showUnmatchedAmountFee = false;
                                   });
 
-                                  if(dipayAmount < int.parse(newData)) {
+                                  if(dipayAmount < double.parse(newData)) {
                                     setState(() {
                                       showInsufficientAmountBalance = true;
                                     });
@@ -442,7 +460,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                           height: 10.0,
                         ),
                         Text(
-                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
+                          selectedTerm != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(countFinalAmount()).replaceAll(',', '.')}' : 'Rp 0',
                           style: MTextStyles.medium().copyWith(
                             color: TextColorStyles.textPrimary(),
                           ),
@@ -534,7 +552,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                     style: STextStyles.regular(),
                   ),
                   Text(
-                    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
+                    'Rp ${NumberFormat('#,###', 'en_id').format(double.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
                     style: STextStyles.medium().copyWith(
                       color: TextColorStyles.textPrimary(),
                     ),
@@ -628,7 +646,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                     style: STextStyles.regular(),
                   ),
                   Text(
-                    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
+                    'Rp ${NumberFormat('#,###', 'en_id').format(double.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
                     style: STextStyles.medium().copyWith(
                       color: TextColorStyles.textPrimary(),
                     ),
@@ -714,7 +732,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                   status: writeResult.apiResult,
                   transactionName: 'Iuran Berjangka',
                   transactionNumber: 'PAY0000000000001',
-                  feeAmount: 'Rp ${NumberFormat('#,###').format(int.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
+                  feeAmount: 'Rp ${NumberFormat('#,###').format(double.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
                   date: DateTime.now(),
                 ),
                 callback: (callbackResult) {

@@ -363,7 +363,15 @@ class _TrolleyPageState extends State<TrolleyPage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        MoveToPage(context: context, target: CheckoutPage(productList: widget.productList)).go();
+                        MoveToPage(
+                          context: context,
+                          target: CheckoutPage(productList: widget.productList),
+                          callback: (callbackResult) {
+                            if(callbackResult != null) {
+                              BackFromThisPage(context: context, callbackData: callbackResult).go();
+                            }
+                          }
+                        ).go();
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),

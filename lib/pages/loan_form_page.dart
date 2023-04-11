@@ -3,7 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/loan_result_page.dart';
+import 'package:kenari_app/services/api/loan/api_loan_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
+import 'package:kenari_app/services/local/models/local_loan_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -500,16 +502,26 @@ class _LoanFormPageState extends State<LoanFormPage> {
                             title: 'Pengajuan Pendanaan',
                             message: 'Apakah anda yakin untuk melanjutkan pengajuan pendanaan?',
                             yesText: 'Ya, Ajukan',
-                            yesFunction: () {
-                              MoveToPage(
-                                context: context,
-                                target: const LoanResultPage(),
-                                callback: (callbackResult) {
-                                  if(callbackResult != null) {
-                                    BackFromThisPage(context: context, callbackData: callbackResult).go();
+                            yesFunction: () async {
+                              await LocalSharedPrefs().readKey('member_id').then((memberId) async {
+                                await APILoanServices(context: context).writeTransaction(
+                                  LocalLoanData(memberId: memberId, submissionAmount: (loanAmount * 1000000), adminFeePercentage: 3, monthlyInterestPercentage: 3.95, period: selectedTerm!),
+                                ).then((writeResult) {
+                                  if(writeResult.apiResult == true) {
+                                    MoveToPage(
+                                      context: context,
+                                      target: const LoanResultPage(),
+                                      callback: (callbackResult) {
+                                        if(callbackResult != null) {
+                                          BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                        }
+                                      },
+                                    ).go();
+                                  } else {
+                                    OkDialog(context: context, message: 'Gagal mengirim permintaan, silahkan coba lagi').show();
                                   }
-                                },
-                              ).go();
+                                });
+                              });
                             },
                             noFunction: () {},
                           ).show();

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/loan_form_page.dart';
 import 'package:kenari_app/pages/loan_list_page.dart';
+import 'package:kenari_app/services/api/loan/api_loan_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -19,6 +21,35 @@ class _LoanPageState extends State<LoanPage> {
   bool isDipayKYC = false;
   bool isIndofundActivated = false;
   bool isIndofundKYC = false;
+
+  double totalLoan = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadData();
+  }
+
+  Future loadData() async {
+    await APILoanServices(context: context).callAll().then((callResult) {
+      if(callResult != null) {
+        double tempTotalLoan = 0;
+
+        if(callResult.loanData != null && callResult.loanData!.isNotEmpty) {
+          for(int i = 0; i < callResult.loanData!.length; i++) {
+            if(callResult.loanData![i].status != null && callResult.loanData![i].status == false && callResult.loanData![i].bayarBulanan != null) {
+              tempTotalLoan = tempTotalLoan + double.parse(callResult.loanData![i].bayarBulanan!);
+            }
+          }
+
+          setState(() {
+            totalLoan = tempTotalLoan;
+          });
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -519,7 +550,7 @@ class _LoanPageState extends State<LoanPage> {
                                       height: 5.0,
                                     ),
                                     Text(
-                                      'Rp 0',
+                                      'Rp ${NumberFormat('#,###', 'en_id').format(totalLoan).replaceAll(',', '.')}',
                                       style: STextStyles.medium().copyWith(
                                         color: TextColorStyles.textPrimary(),
                                       ),

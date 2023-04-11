@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/detail_loan_page.dart';
+import 'package:kenari_app/services/api/loan/api_loan_services.dart';
+import 'package:kenari_app/services/api/models/loan_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -15,29 +17,54 @@ class LoanListPage extends StatefulWidget {
 class _LoanListPageState extends State<LoanListPage> {
   bool isNotPaidOff = true;
 
-  List<Map<bool, Map?>> loanTransactionList = [
-    {
-      true: {
-        'month_paid_off': 2,
-        'max_month': 3,
-        'tempo': DateTime(2023, DateTime.now().month + 1, 29),
-      },
-    },
-    {
-      true: {
-        'month_paid_off': 4,
-        'max_month': 12,
-        'tempo': DateTime(2023, DateTime.now().month - 1, 31),
-      },
-    },
-    {
-      false: {
-        'month_paid_off': 6,
-        'max_month': 6,
-        'tempo': DateTime(2023, DateTime.now().month, DateTime.now().day),
-      },
-    },
-  ];
+  double totalLoan = 0.0;
+
+  List<LoanData> loanList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    
+    loadData();
+  }
+
+  Future loadData() async {
+    await APILoanServices(context: context).callAll().then((callResult) {
+      if(callResult != null) {
+        setState(() {
+          loanList = callResult.loanData ?? [];
+        });
+
+        double tempTotalLoan = 0;
+
+        if(loanList.isNotEmpty) {
+          for(int i = 0; i < loanList.length; i++) {
+            if(loanList[i].status != null && loanList[i].status == false && loanList[i].bayarBulanan != null) {
+              tempTotalLoan = tempTotalLoan + double.parse(loanList[i].bayarBulanan!);
+            }
+          }
+
+          setState(() {
+            totalLoan = tempTotalLoan;
+          });
+        }
+      }
+    });
+  }
+
+  List<LoanData> filteredData() {
+    List<LoanData> result = [];
+
+    if(loanList.isNotEmpty) {
+      for(int i = 0; i < loanList.length; i++) {
+        if(loanList[i].status == !isNotPaidOff) {
+          result.add(loanList[i]);
+        }
+      }
+    }
+
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +130,7 @@ class _LoanListPageState extends State<LoanListPage> {
                     height: 10.0,
                   ),
                   Text(
-                    'Rp 1.487.094',
+                    'Rp ${NumberFormat('#,###', 'en_id').format(totalLoan).replaceAll(',', '.')}',
                     style: LTextStyles.medium(),
                   ),
                 ],
@@ -190,14 +217,13 @@ class _LoanListPageState extends State<LoanListPage> {
               ),
             ),
             Expanded(
-              child: ListView.separated(
-                itemCount: loanTransactionList.length,
+              child: filteredData().isNotEmpty ?
+              ListView.separated(
+                itemCount: filteredData().length,
                 separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-                  bool isActive = isNotPaidOff;
-
                   return Container(
                     color: Colors.white,
-                    child: loanTransactionList[separatorIndex].keys.elementAt(0) == isActive ?
+                    child: filteredData()[separatorIndex].status != null && filteredData()[separatorIndex].status == false ?
                     Divider(
                       height: 1.0,
                       indent: 25.0,
@@ -208,13 +234,20 @@ class _LoanListPageState extends State<LoanListPage> {
                   );
                 },
                 itemBuilder: (BuildContext listContext, int index) {
-                  bool isActive = isNotPaidOff;
+                  int countPaid = 0;
 
-                  return loanTransactionList[index].keys.elementAt(0) == isActive ?
-                  Column(
+                  if(filteredData()[index].peminjamanDetails != null) {
+                    for(int i = 0; i < filteredData()[index].peminjamanDetails!.length; i++) {
+                      if(filteredData()[index].peminjamanDetails![i].status == true) {
+                        countPaid = countPaid + 1;
+                      }
+                    }
+                  }
+
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      index == 0 ?
+                      index == 0 || index > 0 && filteredData()[index].createdAt != null && DateFormat('yyyy').format(DateTime.parse(filteredData()[index].createdAt!)) != DateFormat('yyyy').format(DateTime.parse(filteredData()[index - 1].createdAt!)) ?
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                         child: Text(
@@ -229,7 +262,9 @@ class _LoanListPageState extends State<LoanListPage> {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () {
-                              MoveToPage(context: context, target: DetailLoanPage(loanData: loanTransactionList[index])).go();
+                              if(loanList[index].sId != null) {
+                                MoveToPage(context: context, target: DetailLoanPage(loanId: loanList[index].sId!)).go();
+                              }
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -243,13 +278,13 @@ class _LoanListPageState extends State<LoanListPage> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          'Pendanaan ${index + 1}',
+                                          'Pendanaan',
                                           style: MTextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
                                           ),
                                         ),
                                         Text(
-                                          'Rp 1.118.594',
+                                          filteredData()[index].bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(filteredData()[index].bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
                                           style: STextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
                                           ),
@@ -258,28 +293,28 @@ class _LoanListPageState extends State<LoanListPage> {
                                     ),
                                   ),
                                   Text(
-                                    isNotPaidOff == true ? '2/3 Telah dibayar' : '3/3 Telah dibayar',
+                                    '$countPaid/${filteredData()[index].jangkaWaktu} Telah dibayar',
                                     style: STextStyles.regular(),
                                   ),
                                   const SizedBox(
                                     height: 10.0,
                                   ),
-                                   isNotPaidOff == true ?
-                                   Column(
-                                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                                     children: [
-                                       Text(
-                                         "Jatuh tempo ${DateFormat('dd MMM yyyy').format(loanTransactionList[index].values.elementAt(0)!.values.elementAt(2))}",
-                                         style: STextStyles.regular().copyWith(
-                                           color: DangerColorStyles.dangerMain(),
-                                         ),
-                                       ),
-                                       const SizedBox(
-                                         height: 10.0,
-                                       ),
-                                     ],
-                                   ) :
-                                   const Material(),
+                                  isNotPaidOff == true ?
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        filteredData()[index].jatuhTempo != null ? "Jatuh tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredData()[index].jatuhTempo!))}" : 'Unknown',
+                                        style: STextStyles.regular().copyWith(
+                                          color: DangerColorStyles.dangerMain(),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                    ],
+                                  ) :
+                                  const Material(),
                                 ],
                               ),
                             ),
@@ -287,9 +322,14 @@ class _LoanListPageState extends State<LoanListPage> {
                         ),
                       ),
                     ],
-                  ) :
-                  const Material();
+                  );
                 },
+              ) :
+              Center(
+                child: Text(
+                  'Tidak ditemukan data yang cocok...',
+                  style: MTextStyles.medium(),
+                ),
               ),
             ),
           ],

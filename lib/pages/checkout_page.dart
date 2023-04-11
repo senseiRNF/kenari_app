@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/transaction_result_page.dart';
 import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -448,7 +449,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-
+                        if(isDipayActivated == true) {
+                          MoveToPage(
+                            context: context,
+                            target: const TransactionResultPage(isSuccess: true),
+                            callback: (callbackResult) {
+                              if(callbackResult != null) {
+                                BackFromThisPage(context: context, callbackData: callbackResult).go();
+                              }
+                            },
+                          ).go();
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
