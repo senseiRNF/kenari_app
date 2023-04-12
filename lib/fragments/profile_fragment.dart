@@ -3,6 +3,7 @@ import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/bank_account_page.dart';
 import 'package:kenari_app/pages/company_address_page.dart';
+import 'package:kenari_app/pages/dipay_activation_page.dart';
 import 'package:kenari_app/pages/edit_profile_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -188,7 +189,7 @@ class ProfileFragment extends StatelessWidget {
                                       ),
                                       InkWell(
                                         onTap: () {
-
+                                          MoveToPage(context: context, target: const DipayActivationPage()).go();
                                         },
                                         customBorder: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(5.0),
