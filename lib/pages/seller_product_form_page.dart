@@ -25,6 +25,8 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
 
   String? category;
 
+  Map variant = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -304,23 +306,42 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                         ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Checkbox(
-                              value: isUnlimitedStock,
-                              activeColor: Theme.of(context).primaryColor,
-                              onChanged: (newValue) {
-                                if(newValue != null) {
-                                  setState(() {
-                                    isUnlimitedStock = newValue;
-                                  });
-                                }
-                              },
+                            SizedBox(
+                              width: 20.0,
+                              height: 20.0,
+                              child: Checkbox(
+                                value: isUnlimitedStock,
+                                activeColor: Theme.of(context).primaryColor,
+                                onChanged: (newValue) {
+                                  if(newValue != null) {
+                                    setState(() {
+                                      isUnlimitedStock = newValue;
+                                    });
+                                  }
+                                },
+                              ),
                             ),
-                            Text(
-                              'Stok selalu ada',
-                              style: MTextStyles.medium(),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    isUnlimitedStock = !isUnlimitedStock;
+                                  });
+                                },
+                                child: Text(
+                                  'Stok selalu ada',
+                                  style: MTextStyles.medium(),
+                                ),
+                              ),
                             ),
                           ],
                         ),
