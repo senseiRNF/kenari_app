@@ -98,7 +98,27 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            showUpdateAllSelectedVariantBottomDialog();
+                            showUpdateAllSelectedVariantBottomDialog().then((variantResult) {
+                              if(variantList.isNotEmpty) {
+                                showUpdateAllPriceAndStockVariantBottomDialog(variantResult).then((priceAndStockResult) {
+                                  for(int i = 0; i < priceAndStockResult['variant'].length; i++) {
+                                    for(int x = 0; x < savedVariant['subvariant'].length; x++) {
+                                      if(priceAndStockResult['variant'][i]['selected'] == true && priceAndStockResult['variant'][i]['variant'] == savedVariant['subvariant'][x]) {
+                                        setState(() {
+                                          savedVariant['price'][x] = priceAndStockResult['price'];
+                                          savedVariant['price_controller'][x].text = priceAndStockResult['price'];
+                                          savedVariant['stock'][x] = priceAndStockResult['stock'];
+                                          savedVariant['stock_controller'][x].text = priceAndStockResult['stock'];
+                                          savedVariant['is_always_available'][x] = priceAndStockResult['is_always_available'];
+                                        });
+
+                                        break;
+                                      }
+                                    }
+                                  }
+                                });
+                              }
+                            });
                           },
                           child: Text(
                             'Ubah Sekaligus',
@@ -466,11 +486,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     if(savedVariant.isNotEmpty) {
-                      print(savedVariant['variant']);
-                      print(savedVariant['subvariant']);
-                      print(savedVariant['price']);
-                      print(savedVariant['stock']);
-                      print(savedVariant['is_always_available']);
+                      BackFromThisPage(context: context, callbackData: savedVariant).go();
                     } else {
                       if(selectedSubVariant.isNotEmpty) {
                         Map data = {
@@ -929,7 +945,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
     return subvariant;
   }
 
-  Future<void> showUpdateAllSelectedVariantBottomDialog() async {
+  Future<List> showUpdateAllSelectedVariantBottomDialog() async {
+    List variantResult = [];
     List updatedVariantList = [
       {
         'variant': 'Semua',
@@ -1081,13 +1098,15 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
       },
     ).then((result) {
       if(result != null && result.isNotEmpty) {
-        showUpdateAllPriceAndStockVariantBottomDialog(result);
+        variantResult = result;
       }
     });
+
+    return variantResult;
   }
 
-  Future<List> showUpdateAllPriceAndStockVariantBottomDialog(List selectedVariant) async {
-    List resultVariantList = [];
+  Future<Map> showUpdateAllPriceAndStockVariantBottomDialog(List selectedVariant) async {
+    Map resultVariantList = {};
 
     TextEditingController priceController = TextEditingController();
     TextEditingController stockController = TextEditingController();
@@ -1271,7 +1290,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
       },
     ).then((result) {
       if(result != null) {
-        print(result);
+        resultVariantList = result;
       }
     });
 

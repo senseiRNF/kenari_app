@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/company_address_selection_page.dart';
+import 'package:kenari_app/pages/seller_product_result_page.dart';
 import 'package:kenari_app/pages/variant_selection_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class SellerProductFormPage extends StatefulWidget {
-  const SellerProductFormPage({super.key});
+  final Map? updateData;
+
+  const SellerProductFormPage({
+    super.key,
+    this.updateData,
+  });
 
   @override
   State<SellerProductFormPage> createState() => _SellerProductFormPageState();
@@ -17,15 +25,22 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
   TextEditingController productDescriptionController = TextEditingController();
   TextEditingController productPriceController = TextEditingController();
   TextEditingController productStockController = TextEditingController();
+  TextEditingController preOrderDurationController = TextEditingController(text: '1');
 
   List productImg = [];
+  List durationList = [
+    'Hari',
+    'Minggu',
+  ];
 
   bool isUnlimitedStock = false;
   bool isPreOrder = false;
 
   String? category;
+  String durationSelected = 'Hari';
 
   Map variant = {};
+  Map companyData = {};
 
   @override
   Widget build(BuildContext context) {
@@ -380,6 +395,108 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         const SizedBox(
                           height: 10.0,
                         ),
+                        isPreOrder == true ?
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    'Durasi',
+                                    style: STextStyles.medium(),
+                                  ),
+                                  SizedBox(
+                                    height: 60.0,
+                                    child: Stack(
+                                      alignment: AlignmentDirectional.center,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                durationSelected,
+                                                style: MTextStyles.regular(),
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.expand_more,
+                                              color: IconColorStyles.iconColor(),
+                                            ),
+                                          ],
+                                        ),
+                                        DropdownButton(
+                                          onChanged: (newValue) {
+                                            if(newValue != null) {
+                                              setState(() {
+                                                durationSelected = newValue;
+                                              });
+                                            }
+                                          },
+                                          borderRadius: BorderRadius.circular(10.0),
+                                          isExpanded: true,
+                                          icon: const Icon(
+                                            Icons.expand_more,
+                                            color: Colors.transparent,
+                                          ),
+                                          underline: const Material(),
+                                          items: durationList.map<DropdownMenuItem<String>>((value) {
+                                            return DropdownMenuItem(
+                                              value: value,
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                                                child: Text(
+                                                  value,
+                                                  style: STextStyles.regular(),
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Divider(
+                                    height: 1.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    'Jumlah',
+                                    style: STextStyles.medium(),
+                                  ),
+                                  SizedBox(
+                                    height: 60.0,
+                                    child: TextField(
+                                      controller: preOrderDurationController,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Masukkan jumlah durasi',
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                    ),
+                                  ),
+                                  const Divider(
+                                    height: 1.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ) :
                         Text(
                           'Aktifkan PreOrder jika kamu butuh waktu menyediakan stok lebih lama.',
                           style: STextStyles.regular(),
@@ -407,7 +524,17 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                MoveToPage(context: context, target: const VariantSelectionPage()).go();
+                                MoveToPage(
+                                  context: context,
+                                  target: const VariantSelectionPage(),
+                                  callback: (callbackData) {
+                                    if(callbackData != null) {
+                                      setState(() {
+                                        variant = callbackData;
+                                      });
+                                    }
+                                  },
+                                ).go();
                               },
                               child: Text(
                                 'Tambah Varian',
@@ -421,6 +548,23 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         const SizedBox(
                           height: 10.0,
                         ),
+                        variant.isNotEmpty ?
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              '${variant['variant']} (${variant['subvariant'].length} Varian)',
+                              style: STextStyles.medium(),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              'Tambahkan varian warna, ukuran, atau tipe lainnya agar pembeli mudah memilih.',
+                              style: STextStyles.regular(),
+                            ),
+                          ],
+                        ) :
                         Text(
                           'Tambahkan varian warna, ukuran, atau tipe lainnya agar pembeli mudah memilih.',
                           style: STextStyles.regular(),
@@ -447,7 +591,19 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                MoveToPage(
+                                  context: context,
+                                  target: const CompanyAddressSelectionPage(),
+                                  callback: (callbackData) {
+                                    if(callbackData != null) {
+                                      setState(() {
+                                        companyData = callbackData;
+                                      });
+                                    }
+                                  },
+                                ).go();
+                              },
                               child: Text(
                                 'Pilih Alamat',
                                 style: MTextStyles.medium().copyWith(
@@ -460,6 +616,30 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         const SizedBox(
                           height: 10.0,
                         ),
+                        companyData.isNotEmpty ?
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              companyData['company_data'].name ?? 'Unknown Company',
+                              style: MTextStyles.medium(),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              companyData['company_data'].phone ?? 'Unknown Phone',
+                              style: STextStyles.regular(),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              companyData['selected'] ?? 'Unknown Address',
+                              style: STextStyles.regular(),
+                            ),
+                          ],
+                        ) :
                         Text(
                           'Pilih Alamat Pengambilan dimana pembeli akan mengambil pesanannya.',
                           style: STextStyles.regular(),
@@ -479,7 +659,27 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
                   onPressed: () {
+                    OptionDialog(
+                      context: context,
+                      title: 'Titip Produk',
+                      message: 'Pastikan semua detail Produk yang akan di submit sudah sesuai',
+                      yesText: 'Lanjutkan',
+                      yesFunction: () {
+                        MoveToPage(
+                          context: context,
+                          target: const SellerProductResultPage(isSuccess: true),
+                          callback: (callbackData) {
+                            if(callbackData != null) {
+                              BackFromThisPage(context: context, callbackData: callbackData).go();
+                            }
+                          },
+                        ).go();
+                      },
+                      noText: 'Batal',
+                      noFunction: () {
 
+                      },
+                    ).show();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: productNameController.text != '' && productPriceController.text != '' ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
