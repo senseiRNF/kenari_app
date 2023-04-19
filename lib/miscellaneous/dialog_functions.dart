@@ -12,6 +12,7 @@ class OkDialog {
   String? okText;
   Function? okFunction;
   bool? showIcon;
+  bool? hideButton;
 
   OkDialog({
     required this.context,
@@ -20,6 +21,7 @@ class OkDialog {
     this.okText,
     this.okFunction,
     this.showIcon,
+    this.hideButton,
   });
 
   void show() {
@@ -61,10 +63,11 @@ class OkDialog {
               Text(
                 message,
                 style: MTextStyles.regular(),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
-          actions: [
+          actions: hideButton == null || hideButton == false ? [
             ElevatedButton(
               onPressed: () {
                 BackFromThisPage(context: context).go();
@@ -73,7 +76,8 @@ class OkDialog {
                 okText ?? 'Mengerti',
               ),
             ),
-          ],
+          ] :
+          [],
         );
       },
     ).then((_) {
@@ -114,6 +118,7 @@ class OptionDialog {
           ),
           content: Text(
             message,
+            textAlign: TextAlign.center,
           ),
           actions: [
             ElevatedButton(

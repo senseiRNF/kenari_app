@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/company_address_selection_page.dart';
@@ -43,6 +44,27 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
   Map companyData = {};
 
   @override
+  void initState() {
+    super.initState();
+
+    if(widget.updateData != null && widget.updateData!.isNotEmpty) {
+      setState(() {
+        productNameController.text = widget.updateData!['title'];
+        productDescriptionController.text = widget.updateData!['description'];
+
+        List priceTempList = widget.updateData!['price'];
+
+        priceTempList.sort();
+
+        int minPrice = priceTempList[0];
+        int maxPrice = priceTempList[priceTempList.length - 1];
+
+        productPriceController.text = 'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}';
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -78,7 +100,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         ),
                         Expanded(
                           child: Text(
-                            'Titip Produk',
+                            widget.updateData != null ? 'Ubah Detail' : 'Titip Produk',
                             style: HeadingTextStyles.headingS(),
                           ),
                         ),
@@ -659,27 +681,29 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    OptionDialog(
-                      context: context,
-                      title: 'Titip Produk',
-                      message: 'Pastikan semua detail Produk yang akan di submit sudah sesuai',
-                      yesText: 'Lanjutkan',
-                      yesFunction: () {
-                        MoveToPage(
-                          context: context,
-                          target: const SellerProductResultPage(isSuccess: true),
-                          callback: (callbackData) {
-                            if(callbackData != null) {
-                              BackFromThisPage(context: context, callbackData: callbackData).go();
-                            }
-                          },
-                        ).go();
-                      },
-                      noText: 'Batal',
-                      noFunction: () {
+                    if(widget.updateData == null) {
+                      OptionDialog(
+                        context: context,
+                        title: 'Titip Produk',
+                        message: 'Pastikan semua detail Produk yang akan di submit sudah sesuai',
+                        yesText: 'Lanjutkan',
+                        yesFunction: () {
+                          MoveToPage(
+                            context: context,
+                            target: const SellerProductResultPage(isSuccess: true),
+                            callback: (callbackData) {
+                              if(callbackData != null) {
+                                BackFromThisPage(context: context, callbackData: callbackData).go();
+                              }
+                            },
+                          ).go();
+                        },
+                        noText: 'Batal',
+                        noFunction: () {
 
-                      },
-                    ).show();
+                        },
+                      ).show();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: productNameController.text != '' && productPriceController.text != '' ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
@@ -687,7 +711,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
-                      'Ajukan Penitipan',
+                      widget.updateData != null ? 'Simpan Perubahan' : 'Ajukan Penitipan',
                       style: LTextStyles.medium().copyWith(
                         color: productNameController.text != '' && productPriceController.text != '' ? LTextStyles.regular().color : Colors.black54,
                       ),

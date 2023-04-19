@@ -163,7 +163,14 @@ class SellerPage extends StatelessWidget {
                                   target: const SellerProductAdjustmentFormPage(),
                                   callback: (callbackResult) {
                                     if(callbackResult != null) {
-                                      BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                      if(callbackResult['status'] == true && callbackResult['data'].isNotEmpty) {
+                                        MoveToPage(
+                                          context: context,
+                                          target: SellerProductFormPage(
+                                            updateData: callbackResult['data'],
+                                          ),
+                                        ).go();
+                                      }
                                     }
                                   },
                                 ).go();

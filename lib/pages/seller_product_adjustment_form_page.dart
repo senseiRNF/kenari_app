@@ -138,12 +138,23 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                   ),
                   Padding(
                     padding: const EdgeInsets.all(25.0),
-                    child: Text(
-                      'Yuk titip semua produk yang ingin kamu jual dengan Kenari!',
-                      style: MTextStyles.medium().copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Kamu Belum Menitipkan Produk',
+                          style: HeadingTextStyles.headingS(),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          'Yuk titip semua produk yang ingin kamu jual dengan Kenari!',
+                          style: MTextStyles.medium(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -179,14 +190,18 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         context: context,
                         target: const SellerProductDetailPage(),
                         callback: (callbackResult) {
-                          if(callbackResult != null && callbackResult == false) {
-                            List tempList = activeList;
+                          if(callbackResult != null) {
+                            if(callbackResult['status'] == false) {
+                              List tempList = activeList;
 
-                            setState(() {
-                              completedList = tempList;
+                              setState(() {
+                                completedList = tempList;
 
-                              activeList = [];
-                            });
+                                activeList = [];
+                              });
+                            } else {
+                              BackFromThisPage(context: context, callbackData: callbackResult).go();
+                            }
                           }
                         }
                       ).go();
@@ -266,12 +281,22 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                   ),
                   Padding(
                     padding: const EdgeInsets.all(25.0),
-                    child: Text(
-                      'Yuk titip semua produk yang ingin kamu jual dengan Kenari!',
-                      style: MTextStyles.medium().copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Kamu Belum Menitipkan Produk',
+                          style: HeadingTextStyles.headingS(),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          'Yuk titip semua produk yang ingin kamu jual dengan Kenari!',
+                          style: MTextStyles.medium(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -378,12 +403,23 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                   ),
                   Padding(
                     padding: const EdgeInsets.all(25.0),
-                    child: Text(
-                      'Yuk titip semua produk yang ingin kamu jual dengan Kenari!',
-                      style: MTextStyles.medium().copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Kamu Belum Menitipkan Produk',
+                          style: HeadingTextStyles.headingS(),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          'Yuk titip semua produk yang ingin kamu jual dengan Kenari!',
+                          style: MTextStyles.medium(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                 ],

@@ -315,7 +315,13 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-
+                        BackFromThisPage(
+                          context: context,
+                          callbackData: {
+                            'status': true,
+                            'data': productData,
+                          },
+                        ).go();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PrimaryColorStyles.primaryMain(),
@@ -335,7 +341,13 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                           title: 'Batalkan Titip Jual',
                           message: 'Produk ini akan dihapus secara permanen dan Anda tidak dapat mengaksesnya kembali. Lanjutkan?',
                           yesFunction: () {
-                            BackFromThisPage(context: context, callbackData: false).go();
+                            BackFromThisPage(
+                              context: context,
+                              callbackData: {
+                                'status': false,
+                                'data': '',
+                              },
+                            ).go();
                           },
                           noFunction: () {
 
