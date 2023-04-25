@@ -1,16 +1,14 @@
-import 'dart:math';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
-import 'package:kenari_app/services/local/models/local_product_data.dart';
+import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class ProductPage extends StatefulWidget {
-  final LocalProductData productData;
+  final ProductData productData;
 
   const ProductPage({
     super.key,
@@ -28,19 +26,21 @@ class _ProductPageState extends State<ProductPage> {
 
   int imageSelected = 1;
 
-  String description = 'Cabai atau cabe merah atau lombok (bahasa Jawa) adalah buah dan tumbuhan anggota genus Capsicum. Buahnya dapat digolongkan sebagai sayuran maupun bumbu, tergantung bagaimana digunakan. Sebagai bumbu, buah cabai yang pedas sangat populer di Asia Tenggara sebagai penguat rasa makanan. Bagi seni masakan Padang, cabai bahkan dianggap sebagai "bahan makanan pokok" kesepuluh (alih-alih sembilan). Sangat sulit bagi masakan Padang dibuat tanpa cabai.';
-
   bool expandDesc = false;
 
   @override
   void initState() {
     super.initState();
 
-    if(widget.productData.normalPrice.length == 1) {
-      price = 'Rp ${NumberFormat('#,###', 'en_id').format(widget.productData.normalPrice[0]).replaceAll(',', '.')}';
+    if(widget.productData.varians == null || widget.productData.varians!.isEmpty) {
+      price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(widget.productData.price != null ? widget.productData.price! : '0')).replaceAll(',', '.')}';
     } else {
-      int lowest = widget.productData.normalPrice.reduce(min);
-      int highest = widget.productData.normalPrice.reduce(max);
+      List sortedVariantPrice = widget.productData.varians!;
+
+      sortedVariantPrice.sort();
+
+      int lowest = sortedVariantPrice[0] ?? 0;
+      int highest = sortedVariantPrice[sortedVariantPrice.length - 1] ?? 0;
 
       price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
     }
@@ -99,53 +99,9 @@ class _ProductPageState extends State<ProductPage> {
                       onTap: () {
                         MoveToPage(
                           context: context,
-                          target: TrolleyPage(
+                          target: const TrolleyPage(
                             productList: [
-                              LocalProductData(
-                                type: 'Sembako',
-                                name: 'Cabai Merah',
-                                variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-                                normalPrice: [25000, 45000, 65000],
-                                discountPrice: [0, 0, 0],
-                                stock: [50, 50, 50],
-                                imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
-                                newFlag: true,
-                                popularFlag: false,
-                                discountFlag: false,
-                              ),
-                              LocalProductData(
-                                type: 'Outfit',
-                                name: 'Kaos Terkini',
-                                normalPrice: [400000],
-                                discountPrice: [200000],
-                                stock: [50],
-                                imagePath: ['assets/images/example_images/kaos-terkini.png'],
-                                newFlag: false,
-                                popularFlag: true,
-                                discountFlag: true,
-                              ),
-                              LocalProductData(
-                                type: 'Outfit',
-                                name: 'Blue Jeans',
-                                normalPrice: [400000],
-                                discountPrice: [200000],
-                                stock: [50],
-                                imagePath: ['assets/images/example_images/blue-jeans.png'],
-                                newFlag: false,
-                                popularFlag: true,
-                                discountFlag: true,
-                              ),
-                              LocalProductData(
-                                type: 'Elektronik',
-                                name: 'Vape Electric',
-                                normalPrice: [400000],
-                                discountPrice: [0],
-                                stock: [50],
-                                imagePath: ['assets/images/example_images/vape-electric.png'],
-                                newFlag: false,
-                                popularFlag: true,
-                                discountFlag: false,
-                              ),
+
                             ],
                           ),
                           callback: (callbackResult) {
@@ -177,6 +133,7 @@ class _ProductPageState extends State<ProductPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        widget.productData.images != null ?
                         CarouselSlider(
                           options: CarouselOptions(
                             height: 300,
@@ -188,12 +145,12 @@ class _ProductPageState extends State<ProductPage> {
                               });
                             },
                           ),
-                          items: widget.productData.imagePath.map((product) {
+                          items: widget.productData.images!.map((product) {
                             return Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: AssetImage(
-                                    product ?? '',
+                                  image: NetworkImage(
+                                    product.url ?? '',
                                   ),
                                   fit: BoxFit.fitHeight,
                                 ),
@@ -208,7 +165,7 @@ class _ProductPageState extends State<ProductPage> {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
                                         child: Text(
-                                          '$imageSelected / ${widget.productData.imagePath.length}',
+                                          '$imageSelected / ${widget.productData.images!.length}',
                                           style: MTextStyles.medium().copyWith(
                                             color: Colors.white,
                                           ),
@@ -220,14 +177,15 @@ class _ProductPageState extends State<ProductPage> {
                               ),
                             );
                           }).toList(),
-                        ),
+                        ) :
+                        const Material(),
                         const SizedBox(
                           height: 15.0,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Text(
-                            widget.productData.name,
+                            widget.productData.name ?? 'Unknown Product',
                             style: LTextStyles.medium(),
                           ),
                         ),
@@ -277,7 +235,7 @@ class _ProductPageState extends State<ProductPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                                     child: Text(
-                                      widget.productData.type,
+                                      widget.productData.productCategory != null && widget.productData.productCategory!.name != null ? widget.productData.productCategory!.name! : 'Unknown Product',
                                       style: XSTextStyles.regular(),
                                     ),
                                   ),
@@ -331,7 +289,8 @@ class _ProductPageState extends State<ProductPage> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      '${widget.productData.stock[0]} Buah',
+                                      widget.productData.isStockAlwaysAvailable != null && widget.productData.isStockAlwaysAvailable! == true ? 'Stok selalu tersedia' :
+                                      '${widget.productData.stock != null && widget.productData.stock != '' ? widget.productData.stock! : '0'} Buah',
                                       style: STextStyles.medium().copyWith(
                                         color: TextColorStyles.textPrimary(),
                                       ),
@@ -344,7 +303,7 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
-                          child: widget.productData.variant != null ?
+                          child: widget.productData.varians != null && widget.productData.varians!.isNotEmpty ?
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -368,7 +327,7 @@ class _ProductPageState extends State<ProductPage> {
                                   child: ListView.separated(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: widget.productData.variant!.length,
+                                    itemCount: widget.productData.varians!.length,
                                     separatorBuilder: (BuildContext separatorContext, int index) {
                                       return const SizedBox(
                                         width: 10.0,
@@ -393,7 +352,7 @@ class _ProductPageState extends State<ProductPage> {
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                             child: Text(
-                                              widget.productData.variant![itemIndex],
+                                              widget.productData.varians![itemIndex].name1 ?? 'Unknown Variant',
                                               textAlign: TextAlign.center,
                                             ),
                                           ),
@@ -474,7 +433,7 @@ class _ProductPageState extends State<ProductPage> {
                             height: 10.0,
                           ),
                           Text(
-                            description,
+                            widget.productData.description ?? '',
                             maxLines: expandDesc ? null : 3,
                             style: STextStyles.medium().copyWith(
                               color: TextColorStyles.textPrimary(),
@@ -553,7 +512,7 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  Future<void> showProductBottomDialog(LocalProductData product) async {
+  Future<void> showProductBottomDialog(ProductData product) async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -565,14 +524,14 @@ class _ProductPageState extends State<ProductPage> {
       builder: (BuildContext modalBottomContext) {
         int index = 0;
         int qty = 1;
-        int stock = product.stock[index];
+        int stock = product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
 
-        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.normalPrice[index]).replaceAll(',', '.')}';
-        String imagePath = product.imagePath[index] ?? '';
+        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+        String imagePath = product.images != null && product.images![index].url != null ? product.images![index].url! : '';
         String? variant;
 
-        if(product.variant != null) {
-          variant = product.variant![index];
+        if(product.varians != null) {
+          variant = product.varians![index].name1 ?? 'Unknown Variant';
         }
 
         return StatefulBuilder(
@@ -595,7 +554,7 @@ class _ProductPageState extends State<ProductPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Text(
-                    product.variant != null ? 'Varian Produk' : 'Tambah Troli',
+                    product.varians != null ? 'Varian Produk' : 'Tambah Troli',
                     style: LTextStyles.medium().copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -632,7 +591,7 @@ class _ProductPageState extends State<ProductPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              product.name,
+                              product.name ?? 'Unknown Product',
                               style: MTextStyles.medium().copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -652,7 +611,7 @@ class _ProductPageState extends State<ProductPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
-                                      variant!,
+                                      variant,
                                       style: XSTextStyles.medium(),
                                     ),
                                   ),
@@ -684,7 +643,7 @@ class _ProductPageState extends State<ProductPage> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    product.type == 'Sembako' ? 'Selalu ada' : stock.toString(),
+                                    product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 'Selalu ada' : stock.toString(),
                                     style: STextStyles.medium(),
                                   ),
                                 ),
@@ -699,7 +658,7 @@ class _ProductPageState extends State<ProductPage> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                product.variant != null ?
+                product.varians != null ?
                 Column (
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -723,7 +682,7 @@ class _ProductPageState extends State<ProductPage> {
                         child: ListView.separated(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount: product.variant!.length,
+                          itemCount: product.varians!.length,
                           separatorBuilder: (BuildContext separatorContext, int index) {
                             return const SizedBox(
                               width: 10.0,
@@ -742,12 +701,11 @@ class _ProductPageState extends State<ProductPage> {
                                 onTap: () {
                                   stateSetter(() {
                                     index = itemIndex;
-                                    variant = product.variant![itemIndex];
 
-                                    if(product.discountPrice[index] != 0) {
-                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.discountPrice[index]).replaceAll(',', '.')}';
+                                    if(product.promoPrice != null && product.promoPrice != '') {
+                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice!)).replaceAll(',', '.')}';
                                     } else {
-                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.normalPrice[index]).replaceAll(',', '.')}';
+                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.price ?? '0').replaceAll(',', '.')}';
                                     }
                                   });
                                 },
@@ -757,7 +715,7 @@ class _ProductPageState extends State<ProductPage> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                   child: Text(
-                                    product.variant![itemIndex],
+                                    product.varians![itemIndex].name1 ?? 'Unknown Variant',
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -809,13 +767,13 @@ class _ProductPageState extends State<ProductPage> {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: product.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
+                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
                           ),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: InkWell(
                           onTap: () {
-                            if(product.type != 'Sembako') {
+                            if(product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false) {
                               if(qty < stock) {
                                 stateSetter(() {
                                   qty = qty + 1;
@@ -832,7 +790,7 @@ class _ProductPageState extends State<ProductPage> {
                           ),
                           child: Icon(
                             Icons.add,
-                            color: product.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
+                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
                           ),
                         ),
                       ),

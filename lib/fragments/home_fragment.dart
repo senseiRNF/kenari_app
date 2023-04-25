@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,17 +10,17 @@ import 'package:kenari_app/pages/product_list_page.dart';
 import 'package:kenari_app/pages/seller_page.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
-import 'package:kenari_app/services/local/models/local_product_data.dart';
+import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class HomeFragment extends StatelessWidget {
   final int selectedCard;
   final List<String> filterList;
-  final List<LocalProductData> productList;
-  final List<LocalProductData> newProductList;
-  final List<LocalProductData> popularProductList;
-  final List<LocalProductData> discountProductList;
+  final List<ProductData> productList;
+  final List<ProductData> newProductList;
+  final List<ProductData> popularProductList;
+  final List<ProductData> discountProductList;
   final List<CategoryData> categoryList;
   final Function onChangeSelectedPage;
   final Function onShowAllMenuBottomDialog;
@@ -100,53 +98,9 @@ class HomeFragment extends StatelessWidget {
                     onTap: () {
                       MoveToPage(
                         context: context,
-                        target: TrolleyPage(
+                        target: const TrolleyPage(
                           productList: [
-                            LocalProductData(
-                              type: 'Sembako',
-                              name: 'Cabai Merah',
-                              variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-                              normalPrice: [25000, 45000, 65000],
-                              discountPrice: [0, 0, 0],
-                              stock: [50, 50, 50],
-                              imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
-                              newFlag: true,
-                              popularFlag: false,
-                              discountFlag: false,
-                            ),
-                            LocalProductData(
-                              type: 'Outfit',
-                              name: 'Kaos Terkini',
-                              normalPrice: [400000],
-                              discountPrice: [200000],
-                              stock: [50],
-                              imagePath: ['assets/images/example_images/kaos-terkini.png'],
-                              newFlag: false,
-                              popularFlag: true,
-                              discountFlag: true,
-                            ),
-                            LocalProductData(
-                              type: 'Outfit',
-                              name: 'Blue Jeans',
-                              normalPrice: [400000],
-                              discountPrice: [200000],
-                              stock: [50],
-                              imagePath: ['assets/images/example_images/blue-jeans.png'],
-                              newFlag: false,
-                              popularFlag: true,
-                              discountFlag: true,
-                            ),
-                            LocalProductData(
-                              type: 'Elektronik',
-                              name: 'Vape Electric',
-                              normalPrice: [400000],
-                              discountPrice: [0],
-                              stock: [50],
-                              imagePath: ['assets/images/example_images/vape-electric.png'],
-                              newFlag: false,
-                              popularFlag: true,
-                              discountFlag: false,
-                            ),
+
                           ],
                         ),
                         callback: (callbackResult) {
@@ -645,11 +599,15 @@ class HomeFragment extends StatelessWidget {
                           itemBuilder: (BuildContext listContext, int index) {
                             String price = '';
 
-                            if(newProductList[index].normalPrice.length == 1) {
-                              price = 'Rp ${NumberFormat('#,###', 'en_id').format(newProductList[index].normalPrice[0]).replaceAll(',', '.')}';
+                            if(newProductList[index].varians == null || newProductList[index].varians!.isEmpty) {
+                              price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].price ?? '0')).replaceAll(',', '.')}';
                             } else {
-                              int lowest = newProductList[index].normalPrice.reduce(min);
-                              int highest = newProductList[index].normalPrice.reduce(max);
+                              List sortedVariantPrice = newProductList[index].varians!;
+
+                              sortedVariantPrice.sort();
+
+                              int lowest = sortedVariantPrice[0] ?? 0;
+                              int highest = sortedVariantPrice[sortedVariantPrice.length - 1] ?? 0;
 
                               price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
                             }
@@ -674,8 +632,8 @@ class HomeFragment extends StatelessWidget {
                                           child: Container(
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
-                                                image: AssetImage(
-                                                  newProductList[index].imagePath[0] != null ? newProductList[index].imagePath[0]! : '',
+                                                image: NetworkImage(
+                                                  newProductList[index].images != null && newProductList[index].images![0].url != null ? newProductList[index].images![0].url! : '',
                                                 ),
                                                 fit: BoxFit.cover,
                                               ),
@@ -693,7 +651,7 @@ class HomeFragment extends StatelessWidget {
                                               Padding(
                                                 padding: const EdgeInsets.all(10.0),
                                                 child: Text(
-                                                  newProductList[index].type,
+                                                  newProductList[index].productCategory != null && newProductList[index].productCategory!.name != null ? newProductList[index].productCategory!.name! : 'Unknow Category',
                                                   style: XSTextStyles.regular(),
                                                 ),
                                               ),
@@ -701,7 +659,7 @@ class HomeFragment extends StatelessWidget {
                                                 child: Padding(
                                                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                   child: Text(
-                                                    newProductList[index].name,
+                                                    newProductList[index].name ?? 'Unknown Product',
                                                     style: STextStyles.medium(),
                                                   ),
                                                 ),
@@ -900,7 +858,7 @@ class HomeFragment extends StatelessWidget {
                               color: BorderColorStyles.borderDivider(),
                             );
                           },
-                          itemBuilder: (BuildContext popularContext, int popularIndex) {
+                          itemBuilder: (BuildContext popularContext, int index) {
                             return Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -910,8 +868,8 @@ class HomeFragment extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5.0),
                                     image: DecorationImage(
-                                      image: AssetImage(
-                                        popularProductList[popularIndex].imagePath[0] ?? '',
+                                      image: NetworkImage(
+                                        popularProductList[index].images != null && popularProductList[index].images![0].url != null ? popularProductList[index].images![0].url! : '',
                                       ),
                                       fit: BoxFit.cover,
                                     ),
@@ -925,7 +883,7 @@ class HomeFragment extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Text(
-                                        popularProductList[popularIndex].name,
+                                        popularProductList[index].name ?? 'Unknown Product',
                                         style: STextStyles.medium(),
                                       ),
                                       const SizedBox(
@@ -943,7 +901,7 @@ class HomeFragment extends StatelessWidget {
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                               child: Text(
-                                                popularProductList[popularIndex].type,
+                                                popularProductList[index].productCategory != null && popularProductList[index].productCategory!.name != null ? popularProductList[index].productCategory!.name! : 'Unknown Category',
                                                 style: XSTextStyles.regular(),
                                               ),
                                             ),
@@ -954,7 +912,7 @@ class HomeFragment extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
                                           Expanded(
-                                            child: popularProductList[popularIndex].discountPrice[0] != 0 ?
+                                            child: popularProductList[index].promoPrice != null ?
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.stretch,
                                               children: [
@@ -962,7 +920,7 @@ class HomeFragment extends StatelessWidget {
                                                   height: 10.0,
                                                 ),
                                                 Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].discountPrice[0]).replaceAll(',', '.')}',
+                                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
                                                   style: STextStyles.regular().copyWith(
                                                     color: PrimaryColorStyles.primaryMain(),
                                                   ),
@@ -971,7 +929,7 @@ class HomeFragment extends StatelessWidget {
                                                   height: 5.0,
                                                 ),
                                                 Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
+                                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].price ?? '0')).replaceAll(',', '.')}',
                                                   style: STextStyles.regular().copyWith(
                                                     color: TextColorStyles.textDisabled(),
                                                     decoration: TextDecoration.lineThrough,
@@ -986,7 +944,7 @@ class HomeFragment extends StatelessWidget {
                                                   height: 25.0,
                                                 ),
                                                 Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(popularProductList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
+                                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].price ?? '0')).replaceAll(',', '.')}',
                                                   style: STextStyles.regular().copyWith(
                                                     color: PrimaryColorStyles.primaryMain(),
                                                   ),
@@ -1055,8 +1013,8 @@ class HomeFragment extends StatelessWidget {
                             String normalPrice = '';
                             String discountPrice = '';
 
-                            normalPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(discountProductList[index].normalPrice[0]).replaceAll(',', '.')}';
-                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(discountProductList[index].normalPrice[0]).replaceAll(',', '.')}';
+                            normalPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].price ?? '0')).replaceAll(',', '.')}';
+                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
 
                             return Padding(
                               padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 5.0) : index == discountProductList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0) : const EdgeInsets.symmetric(horizontal: 5.0),
@@ -1073,8 +1031,8 @@ class HomeFragment extends StatelessWidget {
                                         child: Container(
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
-                                              image: AssetImage(
-                                                discountProductList[index].imagePath[0] != null ? discountProductList[index].imagePath[0]! : '',
+                                              image: NetworkImage(
+                                                discountProductList[index].images != null && discountProductList[index].images![0].url != null ? discountProductList[index].images![0].url! : '',
                                               ),
                                               fit: BoxFit.cover,
                                             ),
@@ -1092,7 +1050,7 @@ class HomeFragment extends StatelessWidget {
                                             Padding(
                                               padding: const EdgeInsets.all(10.0),
                                               child: Text(
-                                                discountProductList[index].type,
+                                                discountProductList[index].productCategory != null && discountProductList[index].productCategory!.name != null ? discountProductList[index].productCategory!.name! : 'Unknown Category',
                                                 style: XSTextStyles.regular(),
                                               ),
                                             ),
@@ -1100,7 +1058,7 @@ class HomeFragment extends StatelessWidget {
                                               child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                 child: Text(
-                                                  discountProductList[index].name,
+                                                  discountProductList[index].name ?? 'Unknown Product',
                                                   style: STextStyles.medium(),
                                                 ),
                                               ),

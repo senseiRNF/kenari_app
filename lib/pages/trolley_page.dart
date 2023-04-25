@@ -4,13 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/checkout_page.dart';
-import 'package:kenari_app/services/local/models/local_product_data.dart';
+import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/services/local/models/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class TrolleyPage extends StatefulWidget {
-  final List<LocalProductData> productList;
+  final List<ProductData> productList;
 
   const TrolleyPage({
     super.key,
@@ -469,7 +469,7 @@ class ItemListWithAnimation extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5.0),
                       image: DecorationImage(
                         image: AssetImage(
-                          product.productData.imagePath[0] ?? '',
+                          product.productData.images != null && product.productData.images![0].url != null ? product.productData.images![0].url! : '',
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -483,10 +483,10 @@ class ItemListWithAnimation extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          product.productData.name,
+                          product.productData.name ?? 'Unknown Product',
                           style: MTextStyles.medium(),
                         ),
-                        product.productData.variant != null ?
+                        product.productData.varians != null ?
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -494,7 +494,7 @@ class ItemListWithAnimation extends StatelessWidget {
                               height: 15.0,
                             ),
                             Text(
-                              product.productData.variant![0],
+                              product.productData.varians![0].name1 ?? 'Unknown Variant',
                               style: STextStyles.regular(),
                             ),
                           ],
@@ -507,7 +507,7 @@ class ItemListWithAnimation extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                'Rp ${NumberFormat('#,###', 'en_id').format(product.productData.normalPrice[0]).replaceAll(',', '.')}',
+                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.productData.price ?? '0')).replaceAll(',', '.')}',
                                 style: MTextStyles.regular().copyWith(
                                   color: PrimaryColorStyles.primaryMain(),
                                 ),

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/transaction_result_page.dart';
-import 'package:kenari_app/services/local/models/local_product_data.dart';
+import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class CheckoutPage extends StatefulWidget {
-  final List<LocalProductData> productList;
+  final List<ProductData> productList;
   
   const CheckoutPage({
     super.key,
@@ -164,7 +164,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             borderRadius: BorderRadius.circular(5.0),
                                             image: DecorationImage(
                                               image: AssetImage(
-                                                widget.productList[index].imagePath[0] ?? '',
+                                                widget.productList[index].images != null && widget.productList[index].images![0].url != null ? widget.productList[index].images![0].url! : '',
                                               ),
                                               fit: BoxFit.cover,
                                             ),
@@ -178,10 +178,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             crossAxisAlignment: CrossAxisAlignment.stretch,
                                             children: [
                                               Text(
-                                                widget.productList[index].name,
+                                                widget.productList[index].name ?? 'Unknown Product',
                                                 style: MTextStyles.medium(),
                                               ),
-                                              widget.productList[index].variant != null ?
+                                              widget.productList[index].varians != null ?
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                                 children: [
@@ -189,7 +189,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                     height: 10.0,
                                                   ),
                                                   Text(
-                                                    widget.productList[index].variant![0],
+                                                    widget.productList[index].varians![0].name1 ?? 'Unknown Variant',
                                                     style: STextStyles.regular(),
                                                   ),
                                                   const SizedBox(
@@ -204,7 +204,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Rp ${NumberFormat('#,###', 'en_id').format(widget.productList[index].normalPrice[0]).replaceAll(',', '.')}',
+                                                    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(widget.productList[index].price ?? '0')).replaceAll(',', '.')}',
                                                     style: MTextStyles.medium().copyWith(
                                                       color: PrimaryColorStyles.primaryMain(),
                                                     ),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
-import 'package:kenari_app/services/local/models/local_product_data.dart';
+import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class SearchFragment extends StatelessWidget {
   final TextEditingController searchController;
-  final List<LocalProductData> productList;
+  final List<ProductData> productList;
   final List<CategoryData> categoryList;
   final List filterList;
   final String? filterType;
@@ -208,14 +208,14 @@ class SearchFragment extends StatelessWidget {
                           ),
                         );
                       },
-                      itemBuilder: (BuildContext popularContext, int popularIndex) {
+                      itemBuilder: (BuildContext popularContext, int index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Image.asset(
-                                productList[popularIndex].imagePath[0] ?? '',
+                              Image.network(
+                                productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : '',
                                 fit: BoxFit.cover,
                                 width: 110.0,
                                 height: 100.0,
@@ -228,7 +228,7 @@ class SearchFragment extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      productList[popularIndex].name,
+                                      productList[index].name ?? 'Unknown Product',
                                       style: STextStyles.medium(),
                                     ),
                                     const SizedBox(
@@ -246,7 +246,7 @@ class SearchFragment extends StatelessWidget {
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                             child: Text(
-                                              productList[popularIndex].type,
+                                              productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : 'Unknown Category',
                                               style: XSTextStyles.regular(),
                                             ),
                                           ),
@@ -257,7 +257,7 @@ class SearchFragment extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
                                         Expanded(
-                                          child: productList[popularIndex].discountPrice[0] != 0 ?
+                                          child: productList[index].promoPrice != null && productList[index].promoPrice != '0' ?
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.stretch,
                                             children: [
@@ -265,7 +265,7 @@ class SearchFragment extends StatelessWidget {
                                                 height: 10.0,
                                               ),
                                               Text(
-                                                'Rp ${NumberFormat('#,###', 'en_id').format(productList[popularIndex].discountPrice[0]).replaceAll(',', '.')}',
+                                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
                                                 style: STextStyles.regular().copyWith(
                                                   color: PrimaryColorStyles.primaryMain(),
                                                 ),
@@ -274,7 +274,7 @@ class SearchFragment extends StatelessWidget {
                                                 height: 5.0,
                                               ),
                                               Text(
-                                                'Rp ${NumberFormat('#,###', 'en_id').format(productList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
+                                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
                                                 style: STextStyles.regular().copyWith(
                                                   color: TextColorStyles.textDisabled(),
                                                   decoration: TextDecoration.lineThrough,
@@ -289,7 +289,7 @@ class SearchFragment extends StatelessWidget {
                                                 height: 25.0,
                                               ),
                                               Text(
-                                                'Rp ${NumberFormat('#,###', 'en_id').format(productList[popularIndex].normalPrice[0]).replaceAll(',', '.')}',
+                                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
                                                 style: STextStyles.regular().copyWith(
                                                   color: PrimaryColorStyles.primaryMain(),
                                                 ),

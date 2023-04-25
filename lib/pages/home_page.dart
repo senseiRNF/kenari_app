@@ -11,9 +11,9 @@ import 'package:kenari_app/pages/product_page.dart';
 import 'package:kenari_app/pages/seller_page.dart';
 import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
+import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
-import 'package:kenari_app/services/local/models/local_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -35,122 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   TextEditingController searchController = TextEditingController();
 
-  List<LocalProductData> productList = [
-    LocalProductData(
-      type: 'Sembako',
-      name: 'Cabai Merah',
-      variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-      normalPrice: [25000, 45000, 65000],
-      discountPrice: [0, 0, 0],
-      stock: [50, 50, 50],
-      imagePath: ['assets/images/example_images/cabai-rawit-merah.png'],
-      newFlag: true,
-      popularFlag: false,
-      discountFlag: false,
-    ),
-    LocalProductData(
-      type: 'Makanan',
-      name: 'Keripik Kentang',
-      normalPrice: [55000],
-      discountPrice: [0],
-      stock: [50],
-      imagePath: ['assets/images/example_images/keripik-kentang.png'],
-      newFlag: true,
-      popularFlag: false,
-      discountFlag: false,
-    ),
-    LocalProductData(
-      type: 'Buah-buahan',
-      name: 'Jambu Air',
-      variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-      normalPrice: [25000, 45000, 65000],
-      discountPrice: [0, 0, 0],
-      stock: [50, 50, 50],
-      imagePath: ['assets/images/example_images/jambu-air.png'],
-      newFlag: true,
-      popularFlag: false,
-      discountFlag: false,
-    ),
-    LocalProductData(
-      type: 'Makanan',
-      name: 'Paket sayuran untuk masak',
-      normalPrice: [400000],
-      discountPrice: [200000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/paket-sayuran.png'],
-      newFlag: false,
-      popularFlag: true,
-      discountFlag: true,
-    ),
-    LocalProductData(
-      type: 'Outfit',
-      name: 'Kaos Terkini',
-      normalPrice: [400000],
-      discountPrice: [200000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/kaos-terkini.png'],
-      newFlag: false,
-      popularFlag: true,
-      discountFlag: true,
-    ),
-    LocalProductData(
-      type: 'Outfit',
-      name: 'Blue Jeans',
-      normalPrice: [400000],
-      discountPrice: [200000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/blue-jeans.png'],
-      newFlag: false,
-      popularFlag: true,
-      discountFlag: true,
-    ),
-    LocalProductData(
-      type: 'Elektronik',
-      name: 'Vape Electric',
-      normalPrice: [400000],
-      discountPrice: [0],
-      stock: [50],
-      imagePath: ['assets/images/example_images/vape-electric.png'],
-      newFlag: false,
-      popularFlag: true,
-      discountFlag: false,
-    ),
-    LocalProductData(
-      type: 'Makanan',
-      name: 'Cookies',
-      variant: ['1/4 Kg', '1/2 Kg', '1 Kg'],
-      normalPrice: [20000, 30000, 50000],
-      discountPrice: [15000, 25000, 45000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/cookies.png'],
-      newFlag: false,
-      popularFlag: false,
-      discountFlag: true,
-    ),
-    LocalProductData(
-      type: 'Makanan',
-      name: 'Strawberry Cake',
-      normalPrice: [50000],
-      discountPrice: [46000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/strawberry-cupcakes.png'],
-      newFlag: false,
-      popularFlag: false,
-      discountFlag: true,
-    ),
-    LocalProductData(
-      type: 'Buah-buahan',
-      name: 'Jambu Air',
-      variant: ['1/4 Kg'],
-      normalPrice: [25000],
-      discountPrice: [20000],
-      stock: [50],
-      imagePath: ['assets/images/example_images/jambu-air.png'],
-      newFlag: false,
-      popularFlag: false,
-      discountFlag: true,
-    ),
-  ];
+  List<ProductData> productList = [];
 
   List<CategoryData> categoryList = [];
 
@@ -195,16 +80,16 @@ class _HomePageState extends State<HomePage> {
   Widget activeFragment() {
     switch(selectedMenu) {
       case 0:
-        List<LocalProductData> newProductList = [];
-        List<LocalProductData> popularProductList = [];
-        List<LocalProductData> discountProductList = [];
+        List<ProductData> newProductList = [];
+        List<ProductData> popularProductList = [];
+        List<ProductData> discountProductList = [];
 
         for(int i = 0; i < productList.length; i++) {
-          if(productList[i].newFlag == true) {
+          if(productList[i].status == true) {
             newProductList.add(productList[i]);
-          } else if(productList[i].popularFlag == true) {
+          } else if(productList[i].isRecomendation == true) {
             popularProductList.add(productList[i]);
-          } else if(productList[i].discountFlag == true) {
+          } else if(productList[i].isPromo == true) {
             discountProductList.add(productList[i]);
           }
         }
@@ -225,10 +110,10 @@ class _HomePageState extends State<HomePage> {
           onShowAllMenuBottomDialog: () {
             showAllMenuBottomDialog();
           },
-          onShowProductBottomDialog: (LocalProductData product) {
+          onShowProductBottomDialog: (ProductData product) {
             showProductBottomDialog(product);
           },
-          onProductSelected: (LocalProductData product) {
+          onProductSelected: (ProductData product) {
             MoveToPage(context: context, target: ProductPage(productData: product)).go();
           },
           onCallbackFromFeePage: () {
@@ -559,7 +444,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> showProductBottomDialog(LocalProductData product) async {
+  Future<void> showProductBottomDialog(ProductData product) async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -571,14 +456,14 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext modalBottomContext) {
         int index = 0;
         int qty = 1;
-        int stock = product.stock[index];
+        int stock = product.stock != null && product.stock != '' ? int.parse(product.stock!) : 0;
 
-        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.normalPrice[index]).replaceAll(',', '.')}';
-        String imagePath = product.imagePath[index] ?? '';
+        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+        String imagePath = product.images != null && product.images![0].url != null ? product.images![0].url! : '';
         String? variant;
 
-        if(product.variant != null) {
-          variant = product.variant![index];
+        if(product.varians != null) {
+          variant = product.varians![index].name1 ?? 'Unknown Variant';
         }
 
         return StatefulBuilder(
@@ -601,7 +486,7 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Text(
-                    product.variant != null ? 'Varian Produk' : 'Tambah Troli',
+                    product.varians != null ? 'Varian Produk' : 'Tambah Troli',
                     style: LTextStyles.medium().copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -638,7 +523,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              product.name,
+                              product.name ?? 'Unknown Product',
                               style: MTextStyles.medium().copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -690,7 +575,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    product.type == 'Sembako' ? 'Selalu ada' : stock.toString(),
+                                    product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 'Selalu ada' : stock.toString(),
                                     style: STextStyles.medium(),
                                   ),
                                 ),
@@ -705,7 +590,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                product.variant != null ?
+                product.varians != null ?
                 Column (
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -729,7 +614,7 @@ class _HomePageState extends State<HomePage> {
                         child: ListView.separated(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount: product.variant!.length,
+                          itemCount: product.varians!.length,
                           separatorBuilder: (BuildContext separatorContext, int index) {
                             return const SizedBox(
                               width: 10.0,
@@ -748,12 +633,12 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () {
                                   stateSetter(() {
                                     index = itemIndex;
-                                    variant = product.variant![itemIndex];
+                                    variant = product.varians![itemIndex].name1 ?? 'Unknown Variant';
 
-                                    if(product.discountPrice[index] != 0) {
-                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.discountPrice[index]).replaceAll(',', '.')}';
+                                    if(product.promoPrice != null && product.promoPrice != '') {
+                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
                                     } else {
-                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.normalPrice[index]).replaceAll(',', '.')}';
+                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
                                     }
                                   });
                                 },
@@ -763,7 +648,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                   child: Text(
-                                    product.variant![itemIndex],
+                                    product.varians![itemIndex].name1 ?? 'Unknown Variant',
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -815,13 +700,13 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: product.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
+                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
                           ),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: InkWell(
                           onTap: () {
-                            if(product.type != 'Sembako') {
+                            if(product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false) {
                               if(qty < stock) {
                                 stateSetter(() {
                                   qty = qty + 1;
@@ -838,7 +723,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Icon(
                             Icons.add,
-                            color: product.type != 'Sembako' ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
+                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
                           ),
                         ),
                       ),

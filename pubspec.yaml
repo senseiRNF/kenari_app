@@ -36,7 +36,7 @@ dependencies:
   shared_preferences: ^2.0.17
   dio: ^5.0.3
   carousel_slider: ^4.2.1
-  flutter_slidable: ^2.0.0
+  flutter_slidable: ^3.0.0
 
 
 dev_dependencies:

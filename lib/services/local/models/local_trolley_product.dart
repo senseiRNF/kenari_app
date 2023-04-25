@@ -1,8 +1,8 @@
-import 'package:kenari_app/services/local/models/local_product_data.dart';
+import 'package:kenari_app/services/api/models/product_model.dart';
 
 class LocalTrolleyProduct {
   bool isSelected;
-  LocalProductData productData;
+  ProductData productData;
   int qty;
 
   LocalTrolleyProduct({

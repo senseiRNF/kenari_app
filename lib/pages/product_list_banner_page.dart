@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/local/models/local_product_data.dart';
+import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class ProductListBannerPage extends StatefulWidget {
   final String bannerType;
-  final List<LocalProductData> productList;
+  final List<ProductData> productList;
   final List<String> filterList;
 
   const ProductListBannerPage({
@@ -26,7 +26,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
 
   TextEditingController searchController = TextEditingController();
 
-  List<LocalProductData> productList = [];
+  List<ProductData> productList = [];
 
   List<String> filterList = [];
 
@@ -34,7 +34,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
   void initState() {
     super.initState();
 
-    List<LocalProductData> tempProductList = [];
+    List<ProductData> tempProductList = [];
 
     if(widget.bannerType == 'discount') {
       setState(() {
@@ -42,7 +42,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
       });
 
       for(int i = 0; i < widget.productList.length; i++) {
-        if(widget.productList[i].discountFlag == true) {
+        if(widget.productList[i].isPromo == true) {
           tempProductList.add(widget.productList[i]);
         }
       }
@@ -52,7 +52,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
       });
 
       for(int i = 0; i < widget.productList.length; i++) {
-        if(widget.productList[i].type == 'Outfit') {
+        if(widget.productList[i].productCategory != null && widget.productList[i].productCategory!.name != null && widget.productList[i].productCategory!.name! == 'Outfit') {
           tempProductList.add(widget.productList[i]);
         }
       }
@@ -239,7 +239,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image.asset(
-                          productList[index].imagePath[0] ?? '',
+                          productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : '',
                           fit: BoxFit.cover,
                           width: 110.0,
                           height: 100.0,
@@ -252,7 +252,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                productList[index].name,
+                                productList[index].name ?? 'Unknown Product',
                                 style: STextStyles.medium(),
                               ),
                               const SizedBox(
@@ -270,7 +270,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                       child: Text(
-                                        productList[index].type,
+                                        productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : '',
                                         style: XSTextStyles.regular(),
                                       ),
                                     ),
@@ -281,7 +281,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Expanded(
-                                    child: productList[index].discountPrice[0] != 0 ?
+                                    child: productList[index].promoPrice != null && productList[index].promoPrice != '' ?
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
@@ -289,7 +289,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                           height: 10.0,
                                         ),
                                         Text(
-                                          'Rp ${NumberFormat('#,###', 'en_id').format(productList[index].discountPrice[0]).replaceAll(',', '.')}',
+                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
                                           style: STextStyles.regular().copyWith(
                                             color: PrimaryColorStyles.primaryMain(),
                                           ),
@@ -298,7 +298,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                           height: 5.0,
                                         ),
                                         Text(
-                                          'Rp ${NumberFormat('#,###', 'en_id').format(productList[index].normalPrice[0]).replaceAll(',', '.')}',
+                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
                                           style: STextStyles.regular().copyWith(
                                             color: TextColorStyles.textDisabled(),
                                             decoration: TextDecoration.lineThrough,
@@ -313,7 +313,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                           height: 25.0,
                                         ),
                                         Text(
-                                          'Rp ${NumberFormat('#,###', 'en_id').format(productList[index].normalPrice[0]).replaceAll(',', '.')}',
+                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
                                           style: STextStyles.regular().copyWith(
                                             color: PrimaryColorStyles.primaryMain(),
                                           ),
