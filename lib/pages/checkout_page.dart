@@ -341,8 +341,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   ),
                                   Text(
                                     'Pastikan Saldo Dipay anda mencukupi.',
-                                    style: TextThemeXS.medium().copyWith(
+                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                       color: InfoColorStyles.infoMain(),
+                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ],
@@ -366,8 +367,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   ),
                                   Text(
                                     'Lakukan aktivasi pada akun Dipay anda.',
-                                    style: TextThemeXS.medium().copyWith(
+                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                       color: DangerColorStyles.dangerMain(),
+                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ],

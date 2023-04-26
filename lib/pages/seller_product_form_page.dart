@@ -142,8 +142,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               Expanded(
                                 child: Text(
                                   'Silahkan mengisi informasi dibawah ini untuk menitip jualkan barang.',
-                                  style: TextThemeXS.medium().copyWith(
+                                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                     color: WarningColorStyles.warningMain(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ),
@@ -215,7 +216,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                       ),
                                       Text(
                                         index == 0 ? 'Tambah\nFoto/Video' : 'Dummy Image',
-                                        style: TextThemeXS.regular().copyWith(
+                                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                           color: PrimaryColorStyles.primaryMain(),
                                         ),
                                         textAlign: TextAlign.center,

@@ -129,7 +129,7 @@ class SellerPage extends StatelessWidget {
                                           ),
                                           Text(
                                             'Jual produkmu di aplikasi Kenari',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),
@@ -215,7 +215,7 @@ class SellerPage extends StatelessWidget {
                                           ),
                                           Text(
                                             'Lihat detail dan atur produk',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),
@@ -294,7 +294,7 @@ class SellerPage extends StatelessWidget {
                                           ),
                                           Text(
                                             'Pantau penjualan produkmu',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),

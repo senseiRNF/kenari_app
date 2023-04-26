@@ -225,8 +225,9 @@ class HomeFragment extends StatelessWidget {
                                           ),
                                           Text(
                                             'Aktivasi Akun',
-                                            style: TextThemeXS.medium().copyWith(
+                                            style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                               color: Colors.white,
+                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -313,8 +314,9 @@ class HomeFragment extends StatelessWidget {
                                           ),
                                           Text(
                                             'Aktivasi Akun',
-                                            style: TextThemeXS.medium().copyWith(
+                                            style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                               color: Colors.white,
+                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -666,7 +668,7 @@ class HomeFragment extends StatelessWidget {
                                                 padding: const EdgeInsets.all(10.0),
                                                 child: Text(
                                                   newProductList[index].productCategory != null && newProductList[index].productCategory!.name != null ? newProductList[index].productCategory!.name! : 'Unknow Category',
-                                                  style: TextThemeXS.regular(),
+                                                  style: Theme.of(context).textTheme.labelSmall!,
                                                 ),
                                               ),
                                               Expanded(
@@ -688,8 +690,9 @@ class HomeFragment extends StatelessWidget {
                                                     Expanded(
                                                       child: Text(
                                                         price,
-                                                        style: TextThemeXS.medium().copyWith(
+                                                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                                           color: PrimaryColorStyles.primaryMain(),
+                                                          fontWeight: FontBodyWeight.medium(),
                                                         ),
                                                       ),
                                                     ),
@@ -924,7 +927,7 @@ class HomeFragment extends StatelessWidget {
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                               child: Text(
                                                 popularProductList[index].productCategory != null && popularProductList[index].productCategory!.name != null ? popularProductList[index].productCategory!.name! : 'Unknown Category',
-                                                style: TextThemeXS.regular(),
+                                                style: Theme.of(context).textTheme.labelSmall!,
                                               ),
                                             ),
                                           ),
@@ -1076,7 +1079,7 @@ class HomeFragment extends StatelessWidget {
                                               padding: const EdgeInsets.all(10.0),
                                               child: Text(
                                                 discountProductList[index].productCategory != null && discountProductList[index].productCategory!.name != null ? discountProductList[index].productCategory!.name! : 'Unknown Category',
-                                                style: TextThemeXS.regular(),
+                                                style: Theme.of(context).textTheme.labelSmall!,
                                               ),
                                             ),
                                             Expanded(
@@ -1097,8 +1100,9 @@ class HomeFragment extends StatelessWidget {
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                               child: Text(
                                                 discountPrice,
-                                                style: TextThemeXS.medium().copyWith(
+                                                style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                                   color: PrimaryColorStyles.primaryMain(),
+                                                  fontWeight: FontBodyWeight.medium(),
                                                 ),
                                               ),
                                             ),
@@ -1110,9 +1114,10 @@ class HomeFragment extends StatelessWidget {
                                                   Expanded(
                                                     child: Text(
                                                       normalPrice,
-                                                      style: TextThemeXS.medium().copyWith(
-                                                        color: TextColorStyles.textDisabled(),
+                                                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                                         decoration: TextDecoration.lineThrough,
+                                                        color: TextColorStyles.textDisabled(),
+                                                        fontWeight: FontBodyWeight.medium(),
                                                       ),
                                                     ),
                                                   ),

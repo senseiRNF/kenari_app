@@ -636,7 +636,9 @@ class _NotificationPageState extends State<NotificationPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Text(
                               DateFormat('MMMM yyyy').format(notificationList[index].date),
-                              style: TextThemeXS.medium(),
+                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -696,7 +698,9 @@ class _NotificationPageState extends State<NotificationPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Text(
                               DateFormat('MMMM yyyy').format(notificationList[index].date),
-                              style: TextThemeXS.medium(),
+                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                           ),
                           const SizedBox(

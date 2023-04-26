@@ -218,7 +218,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                     ),
                                     Text(
                                       companyCode ?? 'Unknown Company',
-                                      style: TextThemeXS.regular(),
+                                      style: Theme.of(context).textTheme.labelSmall!,
                                     ),
                                   ],
                                 ),
@@ -235,7 +235,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                   children: [
                                     Text(
                                       'Saldo Iuran Wajib',
-                                      style: TextThemeXS.regular(),
+                                      style: Theme.of(context).textTheme.labelSmall!,
                                     ),
                                     const SizedBox(
                                       height: 5.0,
@@ -282,8 +282,9 @@ class _FeeListPageState extends State<FeeListPage> {
                                 Expanded(
                                   child: Text(
                                     'Selama aktif menjadi karyawan, Saldo Iuran Wajib tidak dapat di tarik',
-                                    style: TextThemeXS.medium().copyWith(
+                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                       color: WarningColorStyles.warningMain(),
+                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ),
@@ -395,7 +396,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                 index == 0 ?
                                 Text(
                                   DateFormat('yyyy').format(DateTime.now()),
-                                  style: TextThemeXS.regular(),
+                                  style: Theme.of(context).textTheme.labelSmall!,
                                 ) :
                                 const Material(),
                                 Padding(
@@ -498,8 +499,9 @@ class _FeeListPageState extends State<FeeListPage> {
                                       child: Center(
                                         child: Text(
                                           'Aktif',
-                                          style: TextThemeXS.medium().copyWith(
+                                          style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                             color: isActiveStatus == true ? TextColorStyles.textPrimary() : null,
+                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                       ),
@@ -530,8 +532,9 @@ class _FeeListPageState extends State<FeeListPage> {
                                       child: Center(
                                         child: Text(
                                           'Selesai',
-                                          style: TextThemeXS.medium().copyWith(
+                                          style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                             color: isActiveStatus == false ? TextColorStyles.textPrimary() : null,
+                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                       ),
@@ -571,7 +574,7 @@ class _FeeListPageState extends State<FeeListPage> {
                               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                               child: Text(
                                 filteredData()[index].tanggalMulai != null ? DateFormat('yyyy').format(DateTime.parse(filteredData()[index].tanggalMulai!)) : 'Unknown',
-                                style: TextThemeXS.regular(),
+                                style: Theme.of(context).textTheme.labelSmall!,
                               ),
                             ) :
                             const Material(),

@@ -93,7 +93,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         Expanded(
                           child: Text(
                             'Apabila ada varian yang memiliki Harga & Stok sama, kamu bisa mengubahnya secara sekaligus bersamaan.',
-                            style: TextThemeXS.regular(),
+                            style: Theme.of(context).textTheme.labelSmall!,
                           ),
                         ),
                         TextButton(

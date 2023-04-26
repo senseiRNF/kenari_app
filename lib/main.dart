@@ -84,6 +84,12 @@ class KenariApp extends StatelessWidget {
             fontFamily: 'Inter',
             fontWeight: FontWeight.w400,
           ),
+          labelSmall: TextStyle(
+            color: TextColorStyles.textPrimary(),
+            fontSize: 10.0,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
+          )
         ),
       ),
       routes: {

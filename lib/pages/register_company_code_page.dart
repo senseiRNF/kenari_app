@@ -71,7 +71,9 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
                     ),
                     Text(
                       'Silahkan masukkan kode perusahaan Anda untuk mendaftar akun',
-                      style: Theme.of(context).textTheme.bodyMedium!,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: TextColorStyles.textSecondary(),
+                      ),
                     ),
                     const SizedBox(
                       height: 10.0,
@@ -92,8 +94,9 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
                                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                 child: Text(
                                   'Kode perusahaan didapatkan melalui pengelola perusahaan',
-                                  style: TextThemeXS.medium().copyWith(
+                                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                     color: InfoColorStyles.infoMain(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ),
@@ -115,7 +118,9 @@ class _RegisterCompanyCodePageState extends State<RegisterCompanyCodePage> {
                       controller: companyCodeController,
                       decoration: InputDecoration(
                         hintText: 'Contoh: KPSFC',
-                        hintStyle: Theme.of(context).textTheme.bodyMedium!,
+                        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: TextColorStyles.textSecondary(),
+                        ),
                       ),
                       textCapitalization: TextCapitalization.characters,
                       textInputAction: TextInputAction.done,

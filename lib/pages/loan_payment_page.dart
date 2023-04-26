@@ -258,8 +258,9 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                               Expanded(
                                 child: Text(
                                   'Saldo Dipay Anda tidak cukup, silahkan isi ulang saldo Dipay Anda',
-                                  style: TextThemeXS.medium().copyWith(
+                                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                     color: DangerColorStyles.dangerMain(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ),

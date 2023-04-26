@@ -124,8 +124,9 @@ class ProfileFragment extends StatelessWidget {
                                               children: [
                                                 Text(
                                                   'Edit Profile',
-                                                  style: TextThemeXS.medium().copyWith(
+                                                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                                     color: Colors.white,
+                                                    fontWeight: FontBodyWeight.medium(),
                                                   ),
                                                 ),
                                                 const SizedBox(
@@ -159,7 +160,7 @@ class ProfileFragment extends StatelessWidget {
                             ),
                             Text(
                               companyCode ?? 'Unknown Code',
-                              style: TextThemeXS.regular(),
+                              style: Theme.of(context).textTheme.labelSmall!,
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(

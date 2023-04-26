@@ -171,8 +171,9 @@ class _LoanListPageState extends State<LoanListPage> {
                                 child: Center(
                                   child: Text(
                                     'Belum Di bayar',
-                                    style: TextThemeXS.medium().copyWith(
+                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                       color: isNotPaidOff == true ? TextColorStyles.textPrimary() : null,
+                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ),
@@ -203,8 +204,9 @@ class _LoanListPageState extends State<LoanListPage> {
                                 child: Center(
                                   child: Text(
                                     'Berhasil di bayar',
-                                    style: TextThemeXS.medium().copyWith(
+                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                       color: isNotPaidOff == false ? TextColorStyles.textPrimary() : null,
+                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ),
@@ -254,7 +256,7 @@ class _LoanListPageState extends State<LoanListPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                         child: Text(
                           DateFormat('yyyy').format(DateTime.now()),
-                          style: TextThemeXS.regular(),
+                          style: Theme.of(context).textTheme.labelSmall!,
                         ),
                       ) :
                       const Material(),

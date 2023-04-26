@@ -275,7 +275,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                       child: Text(
                                         productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : '',
-                                        style: TextThemeXS.regular(),
+                                        style: Theme.of(context).textTheme.labelSmall!,
                                       ),
                                     ),
                                   ),

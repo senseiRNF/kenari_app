@@ -102,8 +102,9 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                         ),
                         Text(
                           'Transaksi Sukses',
-                          style: TextThemeXS.medium().copyWith(
+                          style: Theme.of(context).textTheme.labelSmall!.copyWith(
                             color: Colors.green,
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ],

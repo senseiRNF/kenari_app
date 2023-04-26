@@ -121,8 +121,9 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                       child: Text(
                                         'Pencairan saldo\n\nSaat tanggal pencairan telah jatuh tempo, maka saldo otomatis akan tercairkan pada akun Dipay',
-                                        style: TextThemeXS.medium().copyWith(
+                                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                           color: InfoColorStyles.infoMain(),
+                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                     ),
@@ -286,8 +287,9 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                   ),
                                   Text(
                                     'Pencairan Sukses',
-                                    style: TextThemeXS.medium().copyWith(
+                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                       color: SuccessColorStyles.successMain(),
+                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ],

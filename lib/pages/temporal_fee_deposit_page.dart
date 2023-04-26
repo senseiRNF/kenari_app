@@ -186,7 +186,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                                         children: [
                                           Text(
                                             'Nama',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                           const SizedBox(
                                             height: 5.0,
@@ -224,7 +224,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                                         children: [
                                           Text(
                                             'Saldo Dipay',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                           const SizedBox(
                                             height: 5.0,
@@ -276,8 +276,9 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                               Expanded(
                                 child: Text(
                                   'Saldo Dipay Anda tidak cukup, silahkan isi ulang saldo Dipay Anda',
-                                  style: TextThemeXS.medium().copyWith(
+                                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                     color: DangerColorStyles.dangerMain(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ),
@@ -313,8 +314,9 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                               ),
                               Text(
                                 'Lakukan aktivasi pada akun Dipay anda.',
-                                style: TextThemeXS.medium().copyWith(
+                                style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                   color: DangerColorStyles.dangerMain(),
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                             ],

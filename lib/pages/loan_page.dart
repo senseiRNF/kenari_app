@@ -214,7 +214,7 @@ class _LoanPageState extends State<LoanPage> {
                                             ),
                                             Text(
                                               'Login ke akun Dipay. Registrasi diperlukan jika belum memiliki akun.',
-                                              style: TextThemeXS.regular(),
+                                              style: Theme.of(context).textTheme.labelSmall!,
                                             ),
                                           ],
                                         ),
@@ -282,7 +282,7 @@ class _LoanPageState extends State<LoanPage> {
                                             ),
                                             Text(
                                               'Upgrade akun Dipay menjadi Premium',
-                                              style: TextThemeXS.regular(),
+                                              style: Theme.of(context).textTheme.labelSmall!,
                                             ),
                                           ],
                                         ),
@@ -388,7 +388,7 @@ class _LoanPageState extends State<LoanPage> {
                                             ),
                                             Text(
                                               'Login ke akun Indofund. Registrasi diperlukan jika belum memiliki akun.',
-                                              style: TextThemeXS.regular(),
+                                              style: Theme.of(context).textTheme.labelSmall!,
                                             ),
                                           ],
                                         ),
@@ -456,7 +456,7 @@ class _LoanPageState extends State<LoanPage> {
                                             ),
                                             Text(
                                               'Lakukan KYC pada akun Indofund',
-                                              style: TextThemeXS.regular(),
+                                              style: Theme.of(context).textTheme.labelSmall!,
                                             ),
                                           ],
                                         ),
@@ -525,7 +525,7 @@ class _LoanPageState extends State<LoanPage> {
                                       children: [
                                         Text(
                                           'Plafon',
-                                          style: TextThemeXS.regular(),
+                                          style: Theme.of(context).textTheme.labelSmall!,
                                           textAlign: TextAlign.center,
                                         ),
                                         const SizedBox(
@@ -551,7 +551,7 @@ class _LoanPageState extends State<LoanPage> {
                                       children: [
                                         Text(
                                           'Total Tagihan',
-                                          style: TextThemeXS.regular(),
+                                          style: Theme.of(context).textTheme.labelSmall!,
                                           textAlign: TextAlign.center,
                                         ),
                                         const SizedBox(
@@ -638,7 +638,7 @@ class _LoanPageState extends State<LoanPage> {
                                           ),
                                           Text(
                                             'Aman dengan bunga kompetitif',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),
@@ -709,7 +709,7 @@ class _LoanPageState extends State<LoanPage> {
                                           ),
                                           Text(
                                             'Lihat daftar peminjaman Anda',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),
@@ -788,7 +788,7 @@ class _LoanPageState extends State<LoanPage> {
                                           ),
                                           Text(
                                             'Lihat total tagihan dan bayar disini!',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),

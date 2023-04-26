@@ -315,7 +315,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                   child: Text(
                     'Iuran Berjangka',
-                    style: TextThemeXS.regular(),
+                    style: Theme.of(context).textTheme.labelSmall!,
                   ),
                 ),
                 Container(
@@ -361,14 +361,14 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             ),
                             Text(
                               companyCode ?? 'Unknown Company',
-                              style: TextThemeXS.regular(),
+                              style: Theme.of(context).textTheme.labelSmall!,
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
                               'a.n ${name ?? 'Unknown User'}',
-                              style: TextThemeXS.regular(),
+                              style: Theme.of(context).textTheme.labelSmall!,
                             ),
                           ],
                         ),
@@ -534,14 +534,16 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               DateTime.now().isBefore(DateTime.parse(filterLoanData()[index].jatuhTempo!)) || DateTime.now().isAtSameMomentAs(DateTime.parse(filterLoanData()[index].jatuhTempo!)) == true ?
                               Text(
                                 'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
-                                style: TextThemeXS.medium().copyWith(
+                                style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                   color: DangerColorStyles.dangerMain(),
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ) :
                               Text(
                                 'Terlambat ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
-                                style: TextThemeXS.medium().copyWith(
+                                style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                   color: DangerColorStyles.dangerMain(),
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                             ],
@@ -611,7 +613,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                   child: Text(
                     'Unknown Order',
-                    style: TextThemeXS.regular(),
+                    style: Theme.of(context).textTheme.labelSmall!,
                   ),
                 ),
                 Container(
@@ -651,14 +653,14 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             ),
                             Text(
                               companyCode ?? 'Unknown Company',
-                              style: TextThemeXS.regular(),
+                              style: Theme.of(context).textTheme.labelSmall!,
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
                               'a.n ${name ?? 'Unknown User'}',
-                              style: TextThemeXS.regular(),
+                              style: Theme.of(context).textTheme.labelSmall!,
                             ),
                           ],
                         ),

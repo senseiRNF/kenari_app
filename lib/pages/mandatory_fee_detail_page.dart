@@ -132,7 +132,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                     ),
                                     Text(
                                       companyCode ?? 'Unknown Company',
-                                      style: TextThemeXS.regular(),
+                                      style: Theme.of(context).textTheme.labelSmall!,
                                     ),
                                   ],
                                 ),
@@ -149,7 +149,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                   children: [
                                     Text(
                                       'Saldo Iuran Wajib',
-                                      style: TextThemeXS.regular(),
+                                      style: Theme.of(context).textTheme.labelSmall!,
                                     ),
                                     const SizedBox(
                                       height: 5.0,
@@ -196,8 +196,9 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                 Expanded(
                                   child: Text(
                                     'Selama aktif menjadi karyawan, Saldo Iuran Wajib tidak dapat di tarik',
-                                    style: TextThemeXS.medium().copyWith(
+                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                       color: WarningColorStyles.warningMain(),
+                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ),
@@ -309,7 +310,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                 index == 0 ?
                                 Text(
                                   DateFormat('yyyy').format(DateTime.now()),
-                                  style: TextThemeXS.regular(),
+                                  style: Theme.of(context).textTheme.labelSmall!,
                                 ) :
                                 const Material(),
                                 Padding(

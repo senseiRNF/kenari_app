@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
-import 'package:kenari_app/styles/text_styles.dart';
 
 class OkDialog {
   BuildContext context;
@@ -36,7 +35,7 @@ class OkDialog {
               title != null ?
               Text(
                 title!,
-                style: Theme.of(context).textTheme.labelSmall,
+                style: Theme.of(context).textTheme.headlineSmall,
               ) :
               const Material(),
               showIcon != null ?
@@ -62,7 +61,9 @@ class OkDialog {
               const Material(),
               Text(
                 message,
-                style: Theme.of(context).textTheme.bodyMedium!,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: TextColorStyles.textSecondary(),
+                ),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -114,10 +115,13 @@ class OptionDialog {
         return AlertDialog(
           title: Text(
             title ?? 'Perhatian',
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
           content: Text(
             message,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: TextColorStyles.textSecondary(),
+            ),
             textAlign: TextAlign.center,
           ),
           actions: [
@@ -174,15 +178,18 @@ class LoadingDialog {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: const [
-                Center(
+              children: [
+                const Center(
                   child: CircularProgressIndicator(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30.0,
                 ),
                 Text(
                   'Sedang memuat, mohon tunggu...',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: TextColorStyles.textSecondary(),
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -248,6 +255,9 @@ class ErrorHandler {
               ),
               Text(
                 '(${errCode ?? '-'}) $errMessage',
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: TextColorStyles.textSecondary(),
+                ),
                 textAlign: TextAlign.center,
               ),
             ],

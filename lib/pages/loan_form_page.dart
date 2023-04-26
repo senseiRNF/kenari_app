@@ -503,13 +503,13 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         ),
                         Text(
                           'Saya telah membaca dan menyetujui ',
-                          style: TextThemeXS.regular(),
+                          style: Theme.of(context).textTheme.labelSmall!,
                           textAlign: TextAlign.justify,
                         ),
                         Expanded(
                           child: Text(
                             '"Perjanjian pendanaan"',
-                            style: TextThemeXS.regular().copyWith(
+                            style: Theme.of(context).textTheme.labelSmall!.copyWith(
                               color: PrimaryColorStyles.primaryMain(),
                             ),
                           ),

@@ -158,7 +158,7 @@ class _FeePageState extends State<FeePage> {
                                       ),
                                       Text(
                                         companyCode ?? 'Unknown Code',
-                                        style: TextThemeXS.regular(),
+                                        style: Theme.of(context).textTheme.labelSmall!,
                                       ),
                                     ],
                                   ),
@@ -190,7 +190,7 @@ class _FeePageState extends State<FeePage> {
                                       children: [
                                         Text(
                                           'Saldo Iuran Wajib',
-                                          style: TextThemeXS.regular(),
+                                          style: Theme.of(context).textTheme.labelSmall!,
                                           textAlign: TextAlign.center,
                                         ),
                                         const SizedBox(
@@ -216,7 +216,7 @@ class _FeePageState extends State<FeePage> {
                                       children: [
                                         Text(
                                           'Saldo Iuran Berjangka',
-                                          style: TextThemeXS.regular(),
+                                          style: Theme.of(context).textTheme.labelSmall!,
                                           textAlign: TextAlign.center,
                                         ),
                                         const SizedBox(
@@ -303,7 +303,7 @@ class _FeePageState extends State<FeePage> {
                                           ),
                                           Text(
                                             'Setoran Iuran Berjangka',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),
@@ -393,7 +393,7 @@ class _FeePageState extends State<FeePage> {
                                           ),
                                           Text(
                                             'Lihat daftar detail Iuran wajib & berjangka',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),
@@ -464,7 +464,7 @@ class _FeePageState extends State<FeePage> {
                                           ),
                                           Text(
                                             'Riwayat Transaksi Iuran',
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),

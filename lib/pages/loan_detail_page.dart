@@ -173,8 +173,9 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                               Expanded(
                                 child: Text(
                                   'Tagihan bertambah karena ada biaya keterlambatan pembayaran. Mohon selesaikan pembayaran.',
-                                  style: TextThemeXS.medium().copyWith(
+                                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                     color: DangerColorStyles.dangerMain(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ),
@@ -448,8 +449,8 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
                                         '${index + 1}/${loanData!.peminjamanDetails!.length} ${paidOff == true ? 'Paid' : 'To Pay'}',
-                                        style: TextThemeXS.regular().copyWith(
-                                          color: paidOff == true ? Colors.white : TextThemeXS.regular().color,
+                                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                          color: paidOff == true ? Colors.white : Theme.of(context).textTheme.labelSmall!.color,
                                         ),
                                       ),
                                     ),

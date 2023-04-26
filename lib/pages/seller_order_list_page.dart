@@ -336,7 +336,7 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                           ),
                                           Text(
                                             loadData()[newOrderIndex]['variant'],
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                           const SizedBox(
                                             height: 10.0,

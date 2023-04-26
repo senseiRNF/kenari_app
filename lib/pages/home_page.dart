@@ -427,7 +427,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           Text(
                                             menuBottom[index]['data'][subIndex]['description'],
-                                            style: TextThemeXS.regular(),
+                                            style: Theme.of(context).textTheme.labelSmall!,
                                           ),
                                         ],
                                       ),
@@ -557,7 +557,9 @@ class _HomePageState extends State<HomePage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
                                       variant!,
-                                      style: TextThemeXS.medium(),
+                                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                        fontWeight: FontBodyWeight.medium(),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -832,7 +834,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Beranda',
-                              style: TextThemeXS.regular().copyWith(
+                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                 color: selectedMenu == 0 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),
@@ -867,7 +869,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Pencarian',
-                              style: TextThemeXS.regular().copyWith(
+                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                 color: selectedMenu == 1 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),
@@ -907,7 +909,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Transaksi',
-                              style: TextThemeXS.regular().copyWith(
+                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                 color: selectedMenu == 2 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),
@@ -942,7 +944,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Profile',
-                              style: TextThemeXS.regular().copyWith(
+                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
                                 color: selectedMenu == 3 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),

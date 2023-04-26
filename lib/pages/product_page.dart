@@ -240,7 +240,7 @@ class _ProductPageState extends State<ProductPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                                     child: Text(
                                       widget.productData.productCategory != null && widget.productData.productCategory!.name != null ? widget.productData.productCategory!.name! : 'Unknown Product',
-                                      style: TextThemeXS.regular(),
+                                      style: Theme.of(context).textTheme.labelSmall!,
                                     ),
                                   ),
                                 ),
@@ -626,7 +626,9 @@ class _ProductPageState extends State<ProductPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
                                       variant,
-                                      style: TextThemeXS.medium(),
+                                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                        fontWeight: FontBodyWeight.medium(),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -881,8 +883,9 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                   Text(
                     'Produk berhasil ditambahkan ke Troli.',
-                    style: TextThemeXS.medium().copyWith(
+                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
                       color: SuccessColorStyles.successMain(),
+                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ],

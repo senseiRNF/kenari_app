@@ -67,8 +67,9 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     Expanded(
                       child: Text(
                         'Konfirmasi pesanan paling lama 2 Hari, atau pesanan akan otomatis dibatalkan oleh sistem.',
-                        style: TextThemeXS.medium().copyWith(
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
                           color: WarningColorStyles.warningMain(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -142,8 +143,9 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     Expanded(
                       child: Text(
                         'Segera siapkan produk paling lama 2 Hari, atau pesanan akan otomatis dibatalkan oleh sistem.',
-                        style: TextThemeXS.medium().copyWith(
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
                           color: WarningColorStyles.warningMain(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -191,8 +193,9 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     Expanded(
                       child: Text(
                         'Apabila dalam 2 hari pembeli tidak mengonfirmasi telah mengambil pesanan, maka pesanan otomatis Selesai.',
-                        style: TextThemeXS.medium().copyWith(
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
                           color: InfoColorStyles.infoMain(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -259,8 +262,9 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     Expanded(
                       child: Text(
                         'Anda membatalkan pesanan.',
-                        style: TextThemeXS.medium().copyWith(
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
                           color: DangerColorStyles.dangerMain(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -627,7 +631,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                                     ),
                                     Text(
                                       orderData['variant'],
-                                      style: TextThemeXS.regular(),
+                                      style: Theme.of(context).textTheme.labelSmall!,
                                     ),
                                     const SizedBox(
                                       height: 10.0,

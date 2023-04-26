@@ -46,7 +46,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Text(
                     'Solusi digitalisasi perusahaan Indonesia',
-                    style: Theme.of(context).textTheme.bodyMedium!,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: TextColorStyles.textSecondary(),
+                    ),
                   ),
                   const SizedBox(
                     height: 30.0,
@@ -61,7 +63,9 @@ class _LoginPageState extends State<LoginPage> {
                     controller: emailController,
                     decoration: InputDecoration(
                       hintText: 'Masukkan Email',
-                      hintStyle: Theme.of(context).textTheme.bodyMedium!,
+                      hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: TextColorStyles.textDisabled(),
+                      ),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
@@ -88,7 +92,9 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: obscurePassword,
                     decoration: InputDecoration(
                       hintText: 'Masukkan Password',
-                      hintStyle: Theme.of(context).textTheme.bodyMedium!,
+                      hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: TextColorStyles.textDisabled(),
+                      ),
                       suffixIcon: InkWell(
                         onTap: () {
                           setState(() {
@@ -128,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           'Lupa password?',
                           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: PrimaryColorStyles.primaryMain(),
                             fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
@@ -191,7 +198,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Text(
                     'Belum memiliki akun?',
-                    style: Theme.of(context).textTheme.bodySmall!,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: TextColorStyles.textDisabled(),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(

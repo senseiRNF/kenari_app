@@ -18,7 +18,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   bool showErrorHint = false;
 
   void checkEmail() {
-    if(emailController.text != 'razy.firdana@intidata.net') {
+    if(emailController.text != '') {
       setState(() {
         showErrorHint = true;
       });
@@ -101,7 +101,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     ),
                     Text(
                       'Silahkan masukkan alamat email terdaftar untuk menerima email pengaturan ulang kata sandi',
-                      style: Theme.of(context).textTheme.bodySmall!,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: TextColorStyles.textSecondary(),
+                      ),
                     ),
                     const SizedBox(
                       height: 25.0,
@@ -117,7 +119,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       controller: emailController,
                       decoration: InputDecoration(
                         hintText: 'Masukkan alamat email',
-                        hintStyle: Theme.of(context).textTheme.bodyMedium!,
+                        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: TextColorStyles.textDisabled(),
+                        ),
                         errorText: showErrorHint ? 'Email tidak terdaftar' : null,
                       ),
                       keyboardType: TextInputType.emailAddress,

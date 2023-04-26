@@ -108,7 +108,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     ),
                     Text(
                       'Password baru anda harus berbeda dari password yang telah digunakan sebelumnya.',
-                      style: Theme.of(context).textTheme.bodyMedium!,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: TextColorStyles.textSecondary(),
+                      ),
                     ),
                     const SizedBox(
                       height: 25.0,
@@ -124,7 +126,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       obscureText: obscurePassword,
                       decoration: InputDecoration(
                         hintText: 'Masukkan password',
-                        hintStyle: Theme.of(context).textTheme.bodyMedium!,
+                        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: TextColorStyles.textDisabled(),
+                        ),
                         suffixIcon: InkWell(
                           onTap: () {
                             setState(() {
@@ -167,7 +171,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       obscureText: obscureConfPassword,
                       decoration: InputDecoration(
                         hintText: 'Ketik ulang password',
-                        hintStyle: Theme.of(context).textTheme.bodyMedium!,
+                        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: TextColorStyles.textDisabled(),
+                        ),
                         suffixIcon: InkWell(
                           onTap: () {
                             setState(() {

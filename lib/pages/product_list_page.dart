@@ -364,7 +364,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                               child: Text(
                                                 productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : 'Unknown Category',
-                                                style: TextThemeXS.regular(),
+                                                style: Theme.of(context).textTheme.labelSmall!,
                                               ),
                                             ),
                                           ),
