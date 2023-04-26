@@ -86,8 +86,9 @@ class HomeFragment extends StatelessWidget {
                 Expanded(
                   child: Text(
                     'Selamat datang di\nKenari!',
-                    style: MTextStyles.medium().copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: Colors.white,
+                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ),
@@ -195,8 +196,9 @@ class HomeFragment extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                                 child: Text(
                                   'Aktivasi akun Dipay untuk segala\nmacam transaksi di Kenari',
-                                  style: STextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: Colors.white,
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ),
@@ -223,7 +225,7 @@ class HomeFragment extends StatelessWidget {
                                           ),
                                           Text(
                                             'Aktivasi Akun',
-                                            style: XSTextStyles.medium().copyWith(
+                                            style: TextThemeXS.medium().copyWith(
                                               color: Colors.white,
                                             ),
                                           ),
@@ -282,8 +284,9 @@ class HomeFragment extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                                 child: Text(
                                   'Aktivasi akun Indofund untuk\nkemudahan fitur pinjaman di Kenari',
-                                  style: STextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: Colors.white,
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ),
@@ -310,7 +313,7 @@ class HomeFragment extends StatelessWidget {
                                           ),
                                           Text(
                                             'Aktivasi Akun',
-                                            style: XSTextStyles.medium().copyWith(
+                                            style: TextThemeXS.medium().copyWith(
                                               color: Colors.white,
                                             ),
                                           ),
@@ -417,7 +420,9 @@ class HomeFragment extends StatelessWidget {
                           ),
                           Text(
                             'Iuran',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                         ],
                       ),
@@ -463,7 +468,9 @@ class HomeFragment extends StatelessWidget {
                           ),
                           Text(
                             'Pinjaman',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                         ],
                       ),
@@ -509,7 +516,9 @@ class HomeFragment extends StatelessWidget {
                           ),
                           Text(
                             'Titip Jual',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                         ],
                       ),
@@ -547,7 +556,9 @@ class HomeFragment extends StatelessWidget {
                           ),
                           Text(
                             'Semua',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                         ],
                       ),
@@ -564,7 +575,9 @@ class HomeFragment extends StatelessWidget {
                     children: [
                       Text(
                         'Produk Terbaru',
-                        style: MTextStyles.medium(),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontBodyWeight.medium(),
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
@@ -576,8 +589,9 @@ class HomeFragment extends StatelessWidget {
                         },
                         child: Text(
                           'Lihat semua',
-                          style: MTextStyles.medium().copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: PrimaryColorStyles.primaryMain(),
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -604,10 +618,10 @@ class HomeFragment extends StatelessWidget {
                             } else {
                               List sortedVariantPrice = newProductList[index].varians!;
 
-                              sortedVariantPrice.sort();
+                              sortedVariantPrice.sort((a, b) => a.price.compareTo(b.price));
 
-                              int lowest = sortedVariantPrice[0] ?? 0;
-                              int highest = sortedVariantPrice[sortedVariantPrice.length - 1] ?? 0;
+                              int lowest = int.parse(sortedVariantPrice[0].price != null || sortedVariantPrice[0].price != '' ? sortedVariantPrice[0].price : '0');
+                              int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].price != null || sortedVariantPrice[sortedVariantPrice.length - 1].price != '' ? sortedVariantPrice[sortedVariantPrice.length - 1].price : '0');
 
                               price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
                             }
@@ -652,7 +666,7 @@ class HomeFragment extends StatelessWidget {
                                                 padding: const EdgeInsets.all(10.0),
                                                 child: Text(
                                                   newProductList[index].productCategory != null && newProductList[index].productCategory!.name != null ? newProductList[index].productCategory!.name! : 'Unknow Category',
-                                                  style: XSTextStyles.regular(),
+                                                  style: TextThemeXS.regular(),
                                                 ),
                                               ),
                                               Expanded(
@@ -660,7 +674,9 @@ class HomeFragment extends StatelessWidget {
                                                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                   child: Text(
                                                     newProductList[index].name ?? 'Unknown Product',
-                                                    style: STextStyles.medium(),
+                                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                                      fontWeight: FontBodyWeight.medium(),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -672,7 +688,7 @@ class HomeFragment extends StatelessWidget {
                                                     Expanded(
                                                       child: Text(
                                                         price,
-                                                        style: XSTextStyles.medium().copyWith(
+                                                        style: TextThemeXS.medium().copyWith(
                                                           color: PrimaryColorStyles.primaryMain(),
                                                         ),
                                                       ),
@@ -777,7 +793,9 @@ class HomeFragment extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Text(
                     'Kategori Produk',
-                    style: MTextStyles.medium(),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontBodyWeight.medium(),
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -818,7 +836,7 @@ class HomeFragment extends StatelessWidget {
                                       padding: const EdgeInsets.all(10.0),
                                       child: Text(
                                         categoryList[categoryIndex].name ?? 'Unknown Category',
-                                        style: MTextStyles.regular(),
+                                        style: Theme.of(context).textTheme.bodyMedium!,
                                       ),
                                     ),
                                   ),
@@ -838,7 +856,9 @@ class HomeFragment extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                   child: Text(
                     'Produk Populer',
-                    style: MTextStyles.medium(),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontBodyWeight.medium(),
+                    ),
                   ),
                 ),
                 Container(
@@ -884,7 +904,9 @@ class HomeFragment extends StatelessWidget {
                                     children: [
                                       Text(
                                         popularProductList[index].name ?? 'Unknown Product',
-                                        style: STextStyles.medium(),
+                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          fontWeight: FontBodyWeight.medium(),
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 15.0,
@@ -902,7 +924,7 @@ class HomeFragment extends StatelessWidget {
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                               child: Text(
                                                 popularProductList[index].productCategory != null && popularProductList[index].productCategory!.name != null ? popularProductList[index].productCategory!.name! : 'Unknown Category',
-                                                style: XSTextStyles.regular(),
+                                                style: TextThemeXS.regular(),
                                               ),
                                             ),
                                           ),
@@ -921,7 +943,7 @@ class HomeFragment extends StatelessWidget {
                                                 ),
                                                 Text(
                                                   'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
+                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                                     color: PrimaryColorStyles.primaryMain(),
                                                   ),
                                                 ),
@@ -930,7 +952,7 @@ class HomeFragment extends StatelessWidget {
                                                 ),
                                                 Text(
                                                   'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
+                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                                     color: TextColorStyles.textDisabled(),
                                                     decoration: TextDecoration.lineThrough,
                                                   ),
@@ -945,7 +967,7 @@ class HomeFragment extends StatelessWidget {
                                                 ),
                                                 Text(
                                                   'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
+                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                                     color: PrimaryColorStyles.primaryMain(),
                                                   ),
                                                 ),
@@ -977,7 +999,9 @@ class HomeFragment extends StatelessWidget {
                     children: [
                       Text(
                         'Diskon',
-                        style: MTextStyles.medium(),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontBodyWeight.medium(),
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
@@ -989,8 +1013,9 @@ class HomeFragment extends StatelessWidget {
                         },
                         child: Text(
                           'Lihat semua',
-                          style: MTextStyles.medium().copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: PrimaryColorStyles.primaryMain(),
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -1051,7 +1076,7 @@ class HomeFragment extends StatelessWidget {
                                               padding: const EdgeInsets.all(10.0),
                                               child: Text(
                                                 discountProductList[index].productCategory != null && discountProductList[index].productCategory!.name != null ? discountProductList[index].productCategory!.name! : 'Unknown Category',
-                                                style: XSTextStyles.regular(),
+                                                style: TextThemeXS.regular(),
                                               ),
                                             ),
                                             Expanded(
@@ -1059,7 +1084,9 @@ class HomeFragment extends StatelessWidget {
                                                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                 child: Text(
                                                   discountProductList[index].name ?? 'Unknown Product',
-                                                  style: STextStyles.medium(),
+                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                                    fontWeight: FontBodyWeight.medium(),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -1070,7 +1097,7 @@ class HomeFragment extends StatelessWidget {
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                               child: Text(
                                                 discountPrice,
-                                                style: XSTextStyles.medium().copyWith(
+                                                style: TextThemeXS.medium().copyWith(
                                                   color: PrimaryColorStyles.primaryMain(),
                                                 ),
                                               ),
@@ -1083,7 +1110,7 @@ class HomeFragment extends StatelessWidget {
                                                   Expanded(
                                                     child: Text(
                                                       normalPrice,
-                                                      style: XSTextStyles.medium().copyWith(
+                                                      style: TextThemeXS.medium().copyWith(
                                                         color: TextColorStyles.textDisabled(),
                                                         decoration: TextDecoration.lineThrough,
                                                       ),

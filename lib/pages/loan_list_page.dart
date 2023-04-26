@@ -103,7 +103,7 @@ class _LoanListPageState extends State<LoanListPage> {
                         Expanded(
                           child: Text(
                             'Pembayaran Pendanaan',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -124,14 +124,16 @@ class _LoanListPageState extends State<LoanListPage> {
                 children: [
                   Text(
                     'Total Tagihan',
-                    style: STextStyles.regular(),
+                    style: Theme.of(context).textTheme.bodySmall!,
                   ),
                   const SizedBox(
                     height: 10.0,
                   ),
                   Text(
                     'Rp ${NumberFormat('#,###', 'en_id').format(totalLoan).replaceAll(',', '.')}',
-                    style: LTextStyles.medium(),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontBodyWeight.medium(),
+                    ),
                   ),
                 ],
               ),
@@ -169,7 +171,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                 child: Center(
                                   child: Text(
                                     'Belum Di bayar',
-                                    style: XSTextStyles.medium().copyWith(
+                                    style: TextThemeXS.medium().copyWith(
                                       color: isNotPaidOff == true ? TextColorStyles.textPrimary() : null,
                                     ),
                                   ),
@@ -201,7 +203,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                 child: Center(
                                   child: Text(
                                     'Berhasil di bayar',
-                                    style: XSTextStyles.medium().copyWith(
+                                    style: TextThemeXS.medium().copyWith(
                                       color: isNotPaidOff == false ? TextColorStyles.textPrimary() : null,
                                     ),
                                   ),
@@ -252,7 +254,7 @@ class _LoanListPageState extends State<LoanListPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                         child: Text(
                           DateFormat('yyyy').format(DateTime.now()),
-                          style: XSTextStyles.regular(),
+                          style: TextThemeXS.regular(),
                         ),
                       ) :
                       const Material(),
@@ -279,14 +281,16 @@ class _LoanListPageState extends State<LoanListPage> {
                                       children: [
                                         Text(
                                           'Pendanaan',
-                                          style: MTextStyles.medium().copyWith(
+                                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                             color: TextColorStyles.textPrimary(),
+                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                         Text(
                                           filteredData()[index].bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(filteredData()[index].bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
-                                          style: STextStyles.medium().copyWith(
+                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                             color: TextColorStyles.textPrimary(),
+                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                       ],
@@ -294,7 +298,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                   ),
                                   Text(
                                     '$countPaid/${filteredData()[index].jangkaWaktu} Telah dibayar',
-                                    style: STextStyles.regular(),
+                                    style: Theme.of(context).textTheme.bodySmall!,
                                   ),
                                   const SizedBox(
                                     height: 10.0,
@@ -305,7 +309,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                     children: [
                                       Text(
                                         filteredData()[index].jatuhTempo != null ? "Jatuh tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredData()[index].jatuhTempo!))}" : 'Unknown',
-                                        style: STextStyles.regular().copyWith(
+                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                           color: DangerColorStyles.dangerMain(),
                                         ),
                                       ),
@@ -328,7 +332,9 @@ class _LoanListPageState extends State<LoanListPage> {
               Center(
                 child: Text(
                   'Tidak ditemukan data yang cocok...',
-                  style: MTextStyles.medium(),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontBodyWeight.medium(),
+                  ),
                 ),
               ),
             ),

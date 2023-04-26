@@ -46,7 +46,7 @@ class SellerPage extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Titip Jual',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -119,8 +119,9 @@ class SellerPage extends StatelessWidget {
                                         children: [
                                           Text(
                                             'Titip Produk',
-                                            style: MTextStyles.medium().copyWith(
+                                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                               color: TextColorStyles.textPrimary(),
+                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -128,7 +129,7 @@ class SellerPage extends StatelessWidget {
                                           ),
                                           Text(
                                             'Jual produkmu di aplikasi Kenari',
-                                            style: XSTextStyles.regular(),
+                                            style: TextThemeXS.regular(),
                                           ),
                                         ],
                                       ),
@@ -204,8 +205,9 @@ class SellerPage extends StatelessWidget {
                                         children: [
                                           Text(
                                             'Atur Produk',
-                                            style: MTextStyles.medium().copyWith(
+                                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                               color: TextColorStyles.textPrimary(),
+                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -213,7 +215,7 @@ class SellerPage extends StatelessWidget {
                                           ),
                                           Text(
                                             'Lihat detail dan atur produk',
-                                            style: XSTextStyles.regular(),
+                                            style: TextThemeXS.regular(),
                                           ),
                                         ],
                                       ),
@@ -282,8 +284,9 @@ class SellerPage extends StatelessWidget {
                                         children: [
                                           Text(
                                             'Penjualan',
-                                            style: MTextStyles.medium().copyWith(
+                                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                               color: TextColorStyles.textPrimary(),
+                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -291,7 +294,7 @@ class SellerPage extends StatelessWidget {
                                           ),
                                           Text(
                                             'Pantau penjualan produkmu',
-                                            style: XSTextStyles.regular(),
+                                            style: TextThemeXS.regular(),
                                           ),
                                         ],
                                       ),

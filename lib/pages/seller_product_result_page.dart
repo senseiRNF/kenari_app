@@ -37,7 +37,7 @@ class SellerProductResultPage extends StatelessWidget {
                       ),
                       Text(
                         'Pengajuan Penitipan Diproses',
-                        style: HeadingTextStyles.headingS(),
+                        style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -47,7 +47,7 @@ class SellerProductResultPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Text(
                           'Harap segera kirimkan produk yang Anda titipkan ke warehouse sesuai dengan stok yang akan dititipkan',
-                          style: MTextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -75,7 +75,7 @@ class SellerProductResultPage extends StatelessWidget {
                       ),
                       Text(
                         'Pengajuan Penitipan Gagal',
-                        style: HeadingTextStyles.headingS(),
+                        style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -85,7 +85,7 @@ class SellerProductResultPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Text(
                           'Mohon maaf pengajuan penitipan anda mengalami kendala, Silahkan lakukan pengajuan ulang.',
-                          style: MTextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -112,8 +112,9 @@ class SellerProductResultPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           'Cek status Penitipan',
-                          style: LTextStyles.medium().copyWith(
-                            color: LTextStyles.regular().color,
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -129,8 +130,9 @@ class SellerProductResultPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           'Kembali ke Beranda',
-                          style: LTextStyles.medium().copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: PrimaryColorStyles.primaryMain(),
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),

@@ -101,7 +101,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         Expanded(
                           child: Text(
                             widget.updateData != null ? 'Ubah Detail' : 'Titip Produk',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -142,7 +142,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               Expanded(
                                 child: Text(
                                   'Silahkan mengisi informasi dibawah ini untuk menitip jualkan barang.',
-                                  style: XSTextStyles.medium().copyWith(
+                                  style: TextThemeXS.medium().copyWith(
                                     color: WarningColorStyles.warningMain(),
                                   ),
                                 ),
@@ -155,7 +155,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         ),
                         Text(
                           'Gallery Produk',
-                          style: MTextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                         ),
                         const SizedBox(
                           height: 10.0,
@@ -213,7 +215,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                       ),
                                       Text(
                                         index == 0 ? 'Tambah\nFoto/Video' : 'Dummy Image',
-                                        style: XSTextStyles.regular().copyWith(
+                                        style: TextThemeXS.regular().copyWith(
                                           color: PrimaryColorStyles.primaryMain(),
                                         ),
                                         textAlign: TextAlign.center,
@@ -239,7 +241,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                       children: [
                         Text(
                           'Nama Produk',
-                          style: STextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                         ),
                         TextField(
                           controller: productNameController,
@@ -254,7 +258,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         ),
                         Text(
                           'Deskripsi Produk',
-                          style: STextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                         ),
                         TextField(
                           controller: productDescriptionController,
@@ -270,7 +276,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         ),
                         Text(
                           'Kategori',
-                          style: STextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                         ),
                         const SizedBox(
                           height: 5.0,
@@ -289,7 +297,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                   Expanded(
                                     child: Text(
                                       category ?? 'Pilih Kategori',
-                                      style: MTextStyles.regular(),
+                                      style: Theme.of(context).textTheme.bodyMedium!,
                                     ),
                                   ),
                                   Icon(
@@ -311,7 +319,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         ),
                         Text(
                           'Harga Produk',
-                          style: STextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                         ),
                         TextField(
                           controller: productPriceController,
@@ -331,7 +341,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         ),
                         Text(
                           'Stok Produk',
-                          style: STextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                         ),
                         TextField(
                           controller: productStockController,
@@ -376,7 +388,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                 },
                                 child: Text(
                                   'Stok selalu ada',
-                                  style: MTextStyles.medium(),
+                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontBodyWeight.medium(),
+                                  ),
                                 ),
                               ),
                             ),
@@ -400,7 +414,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                             Expanded(
                               child: Text(
                                 'Aktifkan PreOrder',
-                                style: MTextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                             ),
                             Switch(
@@ -427,7 +443,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                 children: [
                                   Text(
                                     'Durasi',
-                                    style: STextStyles.medium(),
+                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontBodyWeight.medium(),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 60.0,
@@ -439,7 +457,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                             Expanded(
                                               child: Text(
                                                 durationSelected,
-                                                style: MTextStyles.regular(),
+                                                style: Theme.of(context).textTheme.bodyMedium!,
                                               ),
                                             ),
                                             Icon(
@@ -470,7 +488,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                                                 child: Text(
                                                   value,
-                                                  style: STextStyles.regular(),
+                                                  style: Theme.of(context).textTheme.bodySmall!,
                                                 ),
                                               ),
                                             );
@@ -495,7 +513,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                 children: [
                                   Text(
                                     'Jumlah',
-                                    style: STextStyles.medium(),
+                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontBodyWeight.medium(),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 60.0,
@@ -521,7 +541,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         ) :
                         Text(
                           'Aktifkan PreOrder jika kamu butuh waktu menyediakan stok lebih lama.',
-                          style: STextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodySmall!,
                         ),
                       ],
                     ),
@@ -541,7 +561,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                             Expanded(
                               child: Text(
                                 'Varian Produk',
-                                style: MTextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                             ),
                             TextButton(
@@ -560,8 +582,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               },
                               child: Text(
                                 'Tambah Varian',
-                                style: MTextStyles.medium().copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   color: PrimaryColorStyles.primaryMain(),
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                             ),
@@ -576,20 +599,22 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                           children: [
                             Text(
                               '${variant['variant']} (${variant['subvariant'].length} Varian)',
-                              style: STextStyles.medium(),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
                               'Tambahkan varian warna, ukuran, atau tipe lainnya agar pembeli mudah memilih.',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                           ],
                         ) :
                         Text(
                           'Tambahkan varian warna, ukuran, atau tipe lainnya agar pembeli mudah memilih.',
-                          style: STextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodySmall!,
                         ),
                       ],
                     ),
@@ -609,7 +634,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                             Expanded(
                               child: Text(
                                 'Alamat Pengambilan',
-                                style: MTextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                             ),
                             TextButton(
@@ -628,8 +655,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               },
                               child: Text(
                                 'Pilih Alamat',
-                                style: MTextStyles.medium().copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   color: PrimaryColorStyles.primaryMain(),
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                             ),
@@ -644,27 +672,29 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                           children: [
                             Text(
                               companyData['company_data'].name ?? 'Unknown Company',
-                              style: MTextStyles.medium(),
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
                               companyData['company_data'].phone ?? 'Unknown Phone',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
                               companyData['selected'] ?? 'Unknown Address',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                           ],
                         ) :
                         Text(
                           'Pilih Alamat Pengambilan dimana pembeli akan mengambil pesanannya.',
-                          style: STextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodySmall!,
                         ),
                       ],
                     ),
@@ -712,8 +742,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       widget.updateData != null ? 'Simpan Perubahan' : 'Ajukan Penitipan',
-                      style: LTextStyles.medium().copyWith(
-                        color: productNameController.text != '' && productPriceController.text != '' ? LTextStyles.regular().color : Colors.black54,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: productNameController.text != '' && productPriceController.text != '' ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
+                        fontWeight: FontBodyWeight.medium(),
                       ),
                     ),
                   ),

@@ -78,7 +78,7 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                         Expanded(
                           child: Text(
                             'Payment Summary',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -106,11 +106,13 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                           children: [
                             Text(
                               'Jatuh Tempo',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                             Text(
                               DateFormat('dd MMM yyyy').format(dueDate),
-                              style: STextStyles.medium(),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                           ],
                         ),
@@ -123,11 +125,13 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                           children: [
                             Text(
                               'Pembayaran',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                             Text(
                               'Rp 1.118.594',
-                              style: STextStyles.medium(),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                           ],
                         ),
@@ -140,11 +144,13 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                           children: [
                             Text(
                               'Denda Keterlambatan',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                             Text(
                               DateTime.now().isAfter(dueDate) == true ? 'Rp 100.000' : 'Rp 0',
-                              style: STextStyles.medium(),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                           ],
                         ),
@@ -161,11 +167,13 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                           children: [
                             Text(
                               'Total',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                             Text(
                               DateTime.now().isAfter(dueDate) == true ? 'Rp 1.218.594' : 'Rp Rp 1.118.594',
-                              style: STextStyles.medium(),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                           ],
                         ),
@@ -187,11 +195,13 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                           children: [
                             Text(
                               'Metode Pembayaran',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                             Text(
                               'Saldo Dipay',
-                              style: STextStyles.medium(),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                           ],
                         ),
@@ -214,14 +224,16 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                                   ),
                                   Text(
                                     'Dipay',
-                                    style: MTextStyles.regular(),
+                                    style: Theme.of(context).textTheme.bodyMedium!,
                                   ),
                                 ],
                               ),
                             ),
                             Text(
                               "Rp ${NumberFormat('#,###', 'en_id').format(dipayAmount).replaceAll(',', '.')}",
-                              style: STextStyles.medium(),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                           ],
                         ),
@@ -246,7 +258,7 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                               Expanded(
                                 child: Text(
                                   'Saldo Dipay Anda tidak cukup, silahkan isi ulang saldo Dipay Anda',
-                                  style: XSTextStyles.medium().copyWith(
+                                  style: TextThemeXS.medium().copyWith(
                                     color: DangerColorStyles.dangerMain(),
                                   ),
                                 ),
@@ -284,8 +296,9 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Konfirmasi',
-                      style: LTextStyles.medium().copyWith(
-                        color: dipayAmount < 1000000 ? Colors.black54 : LTextStyles.regular().color,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: dipayAmount < 1000000 ? Colors.black54 : Theme.of(context).textTheme.bodyLarge!.color,
+                        fontWeight: FontBodyWeight.medium(),
                       ),
                     ),
                   ),

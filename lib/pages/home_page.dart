@@ -13,6 +13,7 @@ import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
+import 'package:kenari_app/services/api/product_services/api_product_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -66,12 +67,20 @@ class _HomePageState extends State<HomePage> {
           companyCode = companyCodeResult;
         });
 
-        await APICategoryServices(context: context).call().then((result) {
-          if(result != null && result.categoryData != null) {
+        await APICategoryServices(context: context).call().then((categoryResult) async {
+          if(categoryResult != null && categoryResult.categoryData != null) {
             setState(() {
-              categoryList = result.categoryData!;
+              categoryList = categoryResult.categoryData!;
             });
           }
+
+          await APIProductServices(context: context).call().then((productResult) {
+            if(productResult != null && productResult.productData != null) {
+              setState(() {
+                productList = productResult.productData!;
+              });
+            }
+          });
         });
       });
     });
@@ -210,7 +219,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Text(
               'Terjadi kesalahan....',
-              style: HeadingTextStyles.headingM(),
+              style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(
@@ -218,7 +227,9 @@ class _HomePageState extends State<HomePage> {
             ),
             Text(
               'Silahkan muat ulang aplikasi, apabila kesalahan terus terjadi, mohon untuk segera menghubungi administrator.',
-              style: LTextStyles.medium(),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                fontWeight: FontBodyWeight.medium(),
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -353,8 +364,8 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Text(
                             menuBottom[index]['title'],
-                            style: STextStyles.medium().copyWith(
-                              fontWeight: FontWeight.bold,
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                             textAlign: TextAlign.start,
                           ),
@@ -410,11 +421,13 @@ class _HomePageState extends State<HomePage> {
                                         children: [
                                           Text(
                                             menuBottom[index]['data'][subIndex]['title'],
-                                            style: STextStyles.medium(),
+                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                              fontWeight: FontBodyWeight.medium(),
+                                            ),
                                           ),
                                           Text(
                                             menuBottom[index]['data'][subIndex]['description'],
-                                            style: XSTextStyles.regular(),
+                                            style: TextThemeXS.regular(),
                                           ),
                                         ],
                                       ),
@@ -487,8 +500,8 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Text(
                     product.varians != null ? 'Varian Produk' : 'Tambah Troli',
-                    style: LTextStyles.medium().copyWith(
-                      fontWeight: FontWeight.bold,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontBodyWeight.medium(),
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -524,8 +537,8 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               product.name ?? 'Unknown Product',
-                              style: MTextStyles.medium().copyWith(
-                                fontWeight: FontWeight.bold,
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                             variant != null ?
@@ -544,7 +557,7 @@ class _HomePageState extends State<HomePage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
                                       variant!,
-                                      style: XSTextStyles.medium(),
+                                      style: TextThemeXS.medium(),
                                     ),
                                   ),
                                 ),
@@ -556,8 +569,9 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               price,
-                              style: LTextStyles.medium().copyWith(
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                             const SizedBox(
@@ -568,7 +582,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text(
                                   'Stok:',
-                                  style: STextStyles.regular(),
+                                  style: Theme.of(context).textTheme.bodySmall!,
                                 ),
                                 const SizedBox(
                                   width: 5.0,
@@ -576,7 +590,9 @@ class _HomePageState extends State<HomePage> {
                                 Expanded(
                                   child: Text(
                                     product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 'Selalu ada' : stock.toString(),
-                                    style: STextStyles.medium(),
+                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontBodyWeight.medium(),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -598,8 +614,8 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: Text(
                         'Pilih Varian :',
-                        style: STextStyles.medium().copyWith(
-                          fontWeight: FontWeight.bold,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                         textAlign: TextAlign.start,
                       ),
@@ -694,7 +710,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           '$qty',
-                          style: HeadingTextStyles.headingS(),
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                       Container(
@@ -753,8 +769,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Text(
                                   'Tambah ke Troli',
-                                  style: LTextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     color: Colors.white,
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ],
@@ -815,7 +832,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Beranda',
-                              style: XSTextStyles.regular().copyWith(
+                              style: TextThemeXS.regular().copyWith(
                                 color: selectedMenu == 0 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),
@@ -850,7 +867,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Pencarian',
-                              style: XSTextStyles.regular().copyWith(
+                              style: TextThemeXS.regular().copyWith(
                                 color: selectedMenu == 1 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),
@@ -890,7 +907,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Transaksi',
-                              style: XSTextStyles.regular().copyWith(
+                              style: TextThemeXS.regular().copyWith(
                                 color: selectedMenu == 2 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),
@@ -925,7 +942,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Profile',
-                              style: XSTextStyles.regular().copyWith(
+                              style: TextThemeXS.regular().copyWith(
                                 color: selectedMenu == 3 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),

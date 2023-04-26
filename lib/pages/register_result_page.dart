@@ -40,7 +40,7 @@ class _RegisterResultPageState extends State<RegisterResultPage> {
                     ),
                     Text(
                       'Terima kasih telah mendaftar!',
-                      style: HeadingTextStyles.headingS(),
+                      style: Theme.of(context).textTheme.headlineSmall,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -48,7 +48,7 @@ class _RegisterResultPageState extends State<RegisterResultPage> {
                     ),
                     Text(
                       'Kami akan memverifikasi akun Anda, Silahkan hubungi pihak kantor Anda jika akun anda belum terverifikasi',
-                      style: MTextStyles.regular(),
+                      style: Theme.of(context).textTheme.bodyMedium!,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -66,7 +66,9 @@ class _RegisterResultPageState extends State<RegisterResultPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
                           widget.email,
-                          style: MTextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -88,9 +90,9 @@ class _RegisterResultPageState extends State<RegisterResultPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                   child: Text(
                     'Mengerti',
-                    style: LTextStyles.medium().copyWith(
-                      color: LTextStyles.regular().color,
-                      fontWeight: FontWeight.w500,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ),

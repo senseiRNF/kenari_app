@@ -36,7 +36,7 @@ class OkDialog {
               title != null ?
               Text(
                 title!,
-                style: HeadingTextStyles.headingS(),
+                style: Theme.of(context).textTheme.labelSmall,
               ) :
               const Material(),
               showIcon != null ?
@@ -62,7 +62,7 @@ class OkDialog {
               const Material(),
               Text(
                 message,
-                style: MTextStyles.regular(),
+                style: Theme.of(context).textTheme.bodyMedium!,
                 textAlign: TextAlign.center,
               ),
             ],
@@ -114,7 +114,7 @@ class OptionDialog {
         return AlertDialog(
           title: Text(
             title ?? 'Perhatian',
-            style: HeadingTextStyles.headingS(),
+            style: Theme.of(context).textTheme.labelSmall,
           ),
           content: Text(
             message,

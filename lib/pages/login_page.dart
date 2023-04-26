@@ -39,29 +39,29 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Text(
                     'Kenari',
-                    style: HeadingTextStyles.headingS(),
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(
                     height: 5.0,
                   ),
                   Text(
                     'Solusi digitalisasi perusahaan Indonesia',
-                    style: MTextStyles.regular(),
+                    style: Theme.of(context).textTheme.bodyMedium!,
                   ),
                   const SizedBox(
                     height: 30.0,
                   ),
                   Text(
                     'Email',
-                    style: STextStyles.medium().copyWith(
-                      fontWeight: FontWeight.bold,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                   TextField(
                     controller: emailController,
                     decoration: InputDecoration(
                       hintText: 'Masukkan Email',
-                      hintStyle: MTextStyles.regular(),
+                      hintStyle: Theme.of(context).textTheme.bodyMedium!,
                     ),
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
@@ -78,9 +78,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Text(
                     'Password',
-                    style: STextStyles.medium().copyWith(
-                      color: showErrorHint ? DangerColorStyles.dangerMain() : STextStyles.medium().color,
-                      fontWeight: FontWeight.bold,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: showErrorHint ? DangerColorStyles.dangerMain() : Theme.of(context).textTheme.bodySmall!.color,
+                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                   TextField(
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: obscurePassword,
                     decoration: InputDecoration(
                       hintText: 'Masukkan Password',
-                      hintStyle: MTextStyles.regular(),
+                      hintStyle: Theme.of(context).textTheme.bodyMedium!,
                       suffixIcon: InkWell(
                         onTap: () {
                           setState(() {
@@ -127,7 +127,9 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: Text(
                           'Lupa password?',
-                          style: MTextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                         ),
                       ),
                     ],
@@ -177,9 +179,9 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                       child: Text(
                         'Masuk',
-                        style: LTextStyles.medium().copyWith(
-                          color: emailController.text != '' && passwordController.text != '' ? LTextStyles.regular().color : Colors.black54,
-                          fontWeight: FontWeight.w500,
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: emailController.text != '' && passwordController.text != '' ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -189,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Text(
                     'Belum memiliki akun?',
-                    style: STextStyles.regular(),
+                    style: Theme.of(context).textTheme.bodySmall!,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -206,8 +208,9 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                       child: Text(
                         'Daftar',
-                        style: LTextStyles.medium().copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: PrimaryColorStyles.primaryMain(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),

@@ -181,24 +181,27 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         Tab(
                           child: Text(
                             'Iuran',
-                            style: MTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: selectedTab == 0 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
                         Tab(
                           child: Text(
                             'Pendanaan',
-                            style: MTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: selectedTab == 1 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
                         Tab(
                           child: Text(
                             'Pesanan',
-                            style: MTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: selectedTab == 2 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
@@ -240,7 +243,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           padding: const EdgeInsets.all(5.0),
                           child: Text(
                             'Aktif',
-                            style: selectedStatus == 0 ? STextStyles.medium() : STextStyles.regular(),
+                            style: selectedStatus == 0 ? Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ) :
+                            Theme.of(context).textTheme.bodySmall!,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -274,7 +280,9 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           padding: const EdgeInsets.all(5.0),
                           child: Text(
                             'Selesai',
-                            style: selectedStatus == 1 ? STextStyles.medium() : STextStyles.regular(),
+                            style: selectedStatus == 1 ? Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ) : Theme.of(context).textTheme.bodySmall!,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -307,7 +315,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                   child: Text(
                     'Iuran Berjangka',
-                    style: XSTextStyles.regular(),
+                    style: TextThemeXS.regular(),
                   ),
                 ),
                 Container(
@@ -334,14 +342,16 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               children: [
                                 Text(
                                   'Iuran Berjangka',
-                                  style: STextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: TextColorStyles.textPrimary(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                                 Text(
                                   filteredFeeData()[index].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index].jumlahIuran!))}' : 'Rp 0',
-                                  style: STextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: TextColorStyles.textPrimary(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ],
@@ -351,14 +361,14 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             ),
                             Text(
                               companyCode ?? 'Unknown Company',
-                              style: XSTextStyles.regular(),
+                              style: TextThemeXS.regular(),
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
                               'a.n ${name ?? 'Unknown User'}',
-                              style: XSTextStyles.regular(),
+                              style: TextThemeXS.regular(),
                             ),
                           ],
                         ),
@@ -387,7 +397,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Belum Ada Transaksi',
-                    style: HeadingTextStyles.headingS(),
+                    style: Theme.of(context).textTheme.labelSmall,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -395,7 +405,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Yuk mulai transaksi Iuranmu\nmelalui aplikasi Kenari!',
-                    style: MTextStyles.regular(),
+                    style: Theme.of(context).textTheme.bodyMedium!,
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -451,14 +461,16 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           children: [
                             Text(
                               'Pendanaan',
-                              style: STextStyles.medium().copyWith(
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                 color: TextColorStyles.textPrimary(),
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                             Text(
                               filterLoanData()[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filterLoanData()[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : 'Unknown',
-                              style: STextStyles.medium().copyWith(
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                 color: TextColorStyles.textPrimary(),
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                           ],
@@ -472,7 +484,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           children: [
                             Text(
                               filterLoanData()[index].jangkaWaktu != null ? '${filterLoanData()[index].jangkaWaktu} Bulan' : 'Unknown',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                             filterLoanData()[index].status == false ?
                             Container(
@@ -486,8 +498,9 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               ),
                               child: Text(
                                 'Pendanaan Berjalan',
-                                style: STextStyles.medium().copyWith(
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                   color: WarningColorStyles.warningMain(),
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                             ) :
@@ -502,8 +515,9 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               ),
                               child: Text(
                                 'Selesai',
-                                style: STextStyles.medium().copyWith(
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                   color: SuccessColorStyles.successMain(),
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                             ),
@@ -520,13 +534,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               DateTime.now().isBefore(DateTime.parse(filterLoanData()[index].jatuhTempo!)) || DateTime.now().isAtSameMomentAs(DateTime.parse(filterLoanData()[index].jatuhTempo!)) == true ?
                               Text(
                                 'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
-                                style: XSTextStyles.medium().copyWith(
+                                style: TextThemeXS.medium().copyWith(
                                   color: DangerColorStyles.dangerMain(),
                                 ),
                               ) :
                               Text(
                                 'Terlambat ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
-                                style: XSTextStyles.medium().copyWith(
+                                style: TextThemeXS.medium().copyWith(
                                   color: DangerColorStyles.dangerMain(),
                                 ),
                               ),
@@ -560,7 +574,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Belum Ada Transaksi',
-                    style: HeadingTextStyles.headingS(),
+                    style: Theme.of(context).textTheme.labelSmall,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -568,7 +582,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Yuk mulai transaksi Iuranmu\nmelalui aplikasi Kenari!',
-                    style: MTextStyles.regular(),
+                    style: Theme.of(context).textTheme.bodyMedium!,
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -597,7 +611,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                   child: Text(
                     'Unknown Order',
-                    style: XSTextStyles.regular(),
+                    style: TextThemeXS.regular(),
                   ),
                 ),
                 Container(
@@ -618,14 +632,16 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               children: [
                                 Text(
                                   'Unknown',
-                                  style: STextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: TextColorStyles.textPrimary(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                                 Text(
                                   'Unknown Amount',
-                                  style: STextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: TextColorStyles.textPrimary(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ],
@@ -635,14 +651,14 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             ),
                             Text(
                               companyCode ?? 'Unknown Company',
-                              style: XSTextStyles.regular(),
+                              style: TextThemeXS.regular(),
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
                               'a.n ${name ?? 'Unknown User'}',
-                              style: XSTextStyles.regular(),
+                              style: TextThemeXS.regular(),
                             ),
                           ],
                         ),
@@ -672,7 +688,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Belum Ada Transaksi',
-                    style: HeadingTextStyles.headingS(),
+                    style: Theme.of(context).textTheme.labelSmall,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -680,7 +696,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Yuk mulai transaksi Iuranmu\nmelalui aplikasi Kenari!',
-                    style: MTextStyles.regular(),
+                    style: Theme.of(context).textTheme.bodyMedium!,
                     textAlign: TextAlign.center,
                   ),
                 ],

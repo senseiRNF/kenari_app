@@ -121,7 +121,7 @@ class _ProductListPageState extends State<ProductListPage> {
                         Expanded(
                           child: Text(
                             title,
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -152,7 +152,7 @@ class _ProductListPageState extends State<ProductListPage> {
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: searchHint,
-                                hintStyle: MTextStyles.regular(),
+                                hintStyle: Theme.of(context).textTheme.bodyMedium!,
                               ),
                               textCapitalization: TextCapitalization.words,
                               textInputAction: TextInputAction.done,
@@ -175,7 +175,9 @@ class _ProductListPageState extends State<ProductListPage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Text(
                 'Kategori',
-                style: STextStyles.medium(),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  fontWeight: FontBodyWeight.medium(),
+                ),
               ),
             ),
             Padding(
@@ -218,7 +220,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                       padding: const EdgeInsets.all(10.0),
                                       child: Text(
                                         categoryList[categoryIndex].name ?? 'Unknown Category',
-                                        style: MTextStyles.regular(),
+                                        style: Theme.of(context).textTheme.bodyMedium!,
                                       ),
                                     ),
                                   ),
@@ -256,12 +258,14 @@ class _ProductListPageState extends State<ProductListPage> {
                                 children: [
                                   Text(
                                     'Filter : ',
-                                    style: STextStyles.medium(),
+                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontBodyWeight.medium(),
+                                    ),
                                   ),
                                   Expanded(
                                     child: Text(
                                       filterType,
-                                      style: STextStyles.regular(),
+                                      style: Theme.of(context).textTheme.bodySmall!,
                                     ),
                                   ),
                                   Icon(
@@ -293,7 +297,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                                     child: Text(
                                       value,
-                                      style: STextStyles.regular(),
+                                      style: Theme.of(context).textTheme.bodySmall!,
                                     ),
                                   ),
                                 );
@@ -325,7 +329,7 @@ class _ProductListPageState extends State<ProductListPage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Image.asset(
+                                Image.network(
                                   productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : '',
                                   fit: BoxFit.cover,
                                   width: 110.0,
@@ -340,7 +344,9 @@ class _ProductListPageState extends State<ProductListPage> {
                                     children: [
                                       Text(
                                         productList[index].name ?? 'Unknown Product',
-                                        style: STextStyles.medium(),
+                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          fontWeight: FontBodyWeight.medium(),
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 15.0,
@@ -358,7 +364,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                               child: Text(
                                                 productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : 'Unknown Category',
-                                                style: XSTextStyles.regular(),
+                                                style: TextThemeXS.regular(),
                                               ),
                                             ),
                                           ),
@@ -377,7 +383,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                 ),
                                                 Text(
                                                   'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
+                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                                     color: PrimaryColorStyles.primaryMain(),
                                                   ),
                                                 ),
@@ -386,7 +392,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                 ),
                                                 Text(
                                                   'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
+                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                                     color: TextColorStyles.textDisabled(),
                                                     decoration: TextDecoration.lineThrough,
                                                   ),
@@ -401,7 +407,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                 ),
                                                 Text(
                                                   'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
+                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                                     color: PrimaryColorStyles.primaryMain(),
                                                   ),
                                                 ),
@@ -429,7 +435,7 @@ class _ProductListPageState extends State<ProductListPage> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 80.0),
-                            child: Image.asset(
+                            child: Image.network(
                               'assets/images/icon_empty.png',
                             ),
                           ),
@@ -437,8 +443,8 @@ class _ProductListPageState extends State<ProductListPage> {
                             padding: const EdgeInsets.all(25.0),
                             child: Text(
                               'Oops! Produk yang kamu cari di halaman ini tidak dapat ditemukan',
-                              style: MTextStyles.medium().copyWith(
-                                fontWeight: FontWeight.bold,
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                               textAlign: TextAlign.center,
                             ),

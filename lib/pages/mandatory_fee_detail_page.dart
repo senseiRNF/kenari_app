@@ -83,7 +83,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                         Expanded(
                           child: Text(
                             'Detail Iuran Wajib',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -122,8 +122,9 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                   children: [
                                     Text(
                                       name ?? 'Unknown User',
-                                      style: STextStyles.medium().copyWith(
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                         color: TextColorStyles.textPrimary(),
+                                        fontWeight: FontBodyWeight.medium(),
                                       ),
                                     ),
                                     const SizedBox(
@@ -131,7 +132,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                     ),
                                     Text(
                                       companyCode ?? 'Unknown Company',
-                                      style: XSTextStyles.regular(),
+                                      style: TextThemeXS.regular(),
                                     ),
                                   ],
                                 ),
@@ -148,15 +149,16 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                   children: [
                                     Text(
                                       'Saldo Iuran Wajib',
-                                      style: XSTextStyles.regular(),
+                                      style: TextThemeXS.regular(),
                                     ),
                                     const SizedBox(
                                       height: 5.0,
                                     ),
                                     Text(
                                       'Rp 1.200.000',
-                                      style: STextStyles.medium().copyWith(
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                         color: TextColorStyles.textPrimary(),
+                                        fontWeight: FontBodyWeight.medium(),
                                       ),
                                     ),
                                   ],
@@ -194,7 +196,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                 Expanded(
                                   child: Text(
                                     'Selama aktif menjadi karyawan, Saldo Iuran Wajib tidak dapat di tarik',
-                                    style: XSTextStyles.medium().copyWith(
+                                    style: TextThemeXS.medium().copyWith(
                                       color: WarningColorStyles.warningMain(),
                                     ),
                                   ),
@@ -207,8 +209,9 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Text(
                             'Penagihan Autodebet',
-                            style: LTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
@@ -245,8 +248,9 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                       ),
                                       Text(
                                         'Dipay',
-                                        style: MTextStyles.medium().copyWith(
+                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                           color: TextColorStyles.textPrimary(),
+                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                       Expanded(
@@ -255,8 +259,9 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                           children: [
                                             Text(
                                               phoneNumber ?? 'Unknown Phone',
-                                              style: STextStyles.medium().copyWith(
+                                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                                 color: TextColorStyles.textPrimary(),
+                                                fontWeight: FontBodyWeight.medium(),
                                               ),
                                             ),
                                           ],
@@ -270,7 +275,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                   ),
                                   Text(
                                     'Pembayaran Autodebet untuk Penagihan Iuran Wajib setiap bulannya langsung terpotong dari saldo Dipay.',
-                                    style: STextStyles.regular(),
+                                    style: Theme.of(context).textTheme.bodySmall!,
                                   ),
                                 ],
                               ),
@@ -304,7 +309,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                 index == 0 ?
                                 Text(
                                   DateFormat('yyyy').format(DateTime.now()),
-                                  style: XSTextStyles.regular(),
+                                  style: TextThemeXS.regular(),
                                 ) :
                                 const Material(),
                                 Padding(
@@ -315,14 +320,16 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                     children: [
                                       Text(
                                         'Autodebet Iuran',
-                                        style: MTextStyles.medium().copyWith(
+                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                           color: TextColorStyles.textPrimary(),
+                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                       Text(
                                         'Rp 100.000',
-                                        style: MTextStyles.medium().copyWith(
+                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                           color: SuccessColorStyles.successMain(),
+                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                     ],
@@ -330,7 +337,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                 ),
                                 Text(
                                   DateFormat('dd MMMM yyyy, HH:mm').format(DateTime.now()),
-                                  style: STextStyles.regular(),
+                                  style: Theme.of(context).textTheme.bodySmall!,
                                 ),
                                 const SizedBox(
                                   height: 10.0,
@@ -357,8 +364,9 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'Tarik Saldo',
-                            style: LTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: Colors.black54,
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),

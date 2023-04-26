@@ -155,7 +155,7 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                         Expanded(
                           child: Text(
                             'Penjualan',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -192,40 +192,45 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                     Tab(
                       child: Text(
                         'Semua',
-                        style: MTextStyles.medium().copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: selectedTab == 0 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
                     Tab(
                       child: Text(
                         'Pesanan Baru',
-                        style: MTextStyles.medium().copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: selectedTab == 1 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
                     Tab(
                       child: Text(
                         'Siap Diambil',
-                        style: MTextStyles.medium().copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: selectedTab == 2 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
                     Tab(
                       child: Text(
                         'Selesai',
-                        style: MTextStyles.medium().copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: selectedTab == 3 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
                     Tab(
                       child: Text(
                         'Dibatalkan',
-                        style: MTextStyles.medium().copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: selectedTab == 4 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -273,7 +278,9 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                   children: [
                                     Text(
                                       loadData()[newOrderIndex]['order_no'],
-                                      style: STextStyles.medium(),
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                        fontWeight: FontBodyWeight.medium(),
+                                      ),
                                     ),
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
@@ -286,8 +293,9 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                       ),
                                       child: Text(
                                         loadData()[newOrderIndex]['status'],
-                                        style: STextStyles.medium().copyWith(
+                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                           color: checkStatusColor(loadData()[newOrderIndex]['status'])['main'],
+                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                     ),
@@ -321,14 +329,14 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                         children: [
                                           Text(
                                             loadData()[newOrderIndex]['title'],
-                                            style: MTextStyles.regular(),
+                                            style: Theme.of(context).textTheme.bodyMedium!,
                                           ),
                                           const SizedBox(
                                             height: 5.0,
                                           ),
                                           Text(
                                             loadData()[newOrderIndex]['variant'],
-                                            style: XSTextStyles.regular(),
+                                            style: TextThemeXS.regular(),
                                           ),
                                           const SizedBox(
                                             height: 10.0,
@@ -338,11 +346,13 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                             children: [
                                               Text(
                                                 'Rp ${NumberFormat('#,###', 'en_id').format(loadData()[newOrderIndex]['price']).replaceAll(',', '.')}',
-                                                style: MTextStyles.medium(),
+                                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                                  fontWeight: FontBodyWeight.medium(),
+                                                ),
                                               ),
                                               Text(
                                                 'x${loadData()[newOrderIndex]['qty']}',
-                                                style: MTextStyles.regular(),
+                                                style: Theme.of(context).textTheme.bodyMedium!,
                                               ),
                                             ],
                                           ),
@@ -365,12 +375,13 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                     children: [
                                       Text(
                                         'Batas Respon',
-                                        style: STextStyles.regular(),
+                                        style: Theme.of(context).textTheme.bodySmall!,
                                       ),
                                       Text(
                                         '${loadData()[newOrderIndex]['respond_limit']} Hari',
-                                        style: STextStyles.medium().copyWith(
+                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                           color: InfoColorStyles.infoMain(),
+                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                     ],
@@ -389,11 +400,13 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                   children: [
                                     Text(
                                       '1 Produk',
-                                      style: MTextStyles.regular(),
+                                      style: Theme.of(context).textTheme.bodyMedium!,
                                     ),
                                     Text(
                                       'Rp ${NumberFormat('#,###', 'en_id').format(loadData()[newOrderIndex]['price'] * loadData()[newOrderIndex]['qty']).replaceAll(',', '.')}',
-                                      style: MTextStyles.medium(),
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                        fontWeight: FontBodyWeight.medium(),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -423,7 +436,7 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                             children: [
                               Text(
                                 'Belum Ada Pesanan',
-                                style: HeadingTextStyles.headingS(),
+                                style: Theme.of(context).textTheme.headlineSmall,
                                 textAlign: TextAlign.center,
                               ),
                               const SizedBox(
@@ -431,7 +444,9 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                               ),
                               Text(
                                 'Yuk mulai tingkatin penjualanmu!',
-                                style: MTextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ],

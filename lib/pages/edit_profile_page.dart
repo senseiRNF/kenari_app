@@ -101,8 +101,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Text(
                 'Ganti foto profil',
-                style: STextStyles.medium().copyWith(
-                  fontWeight: FontWeight.bold,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  fontWeight: FontBodyWeight.medium(),
                 ),
                 textAlign: TextAlign.start,
               ),
@@ -153,7 +153,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Expanded(
                       child: Text(
                         'Pilih dari Galeri',
-                        style: STextStyles.medium(),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontWeight: FontBodyWeight.medium(),
+                        ),
                       ),
                     ),
                   ],
@@ -206,7 +208,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Expanded(
                       child: Text(
                         'Ambil Foto',
-                        style: STextStyles.medium(),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontWeight: FontBodyWeight.medium(),
+                        ),
                       ),
                     ),
                   ],
@@ -259,7 +263,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Expanded(
                       child: Text(
                         'Hapus Foto',
-                        style: STextStyles.medium(),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontWeight: FontBodyWeight.medium(),
+                        ),
                       ),
                     ),
                   ],
@@ -312,7 +318,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         Expanded(
                           child: Text(
                             'Edit Profile',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -362,8 +368,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             padding: const EdgeInsets.all(10.0),
                             child: Text(
                               'Ganti Foto Profil',
-                              style: MTextStyles.medium().copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                           ),
@@ -381,15 +388,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       children: [
                         Text(
                           'Kode Perusahaan',
-                          style: STextStyles.medium().copyWith(
-                            fontWeight: FontWeight.bold,
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         TextField(
                           controller: companyCodeController,
                           decoration: InputDecoration(
                             hintText: 'Kode Perusahaan',
-                            hintStyle: MTextStyles.regular(),
+                            hintStyle: Theme.of(context).textTheme.bodyMedium!,
                           ),
                           textCapitalization: TextCapitalization.characters,
                           textInputAction: TextInputAction.next,
@@ -403,15 +410,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         Text(
                           'Nama',
-                          style: STextStyles.medium().copyWith(
-                            fontWeight: FontWeight.bold,
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         TextField(
                           controller: nameController,
                           decoration: InputDecoration(
                             hintText: 'Nama User',
-                            hintStyle: MTextStyles.regular(),
+                            hintStyle: Theme.of(context).textTheme.bodyMedium!,
                           ),
                           textCapitalization: TextCapitalization.words,
                           textInputAction: TextInputAction.next,
@@ -424,15 +431,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         Text(
                           'Nomor Handphone',
-                          style: STextStyles.medium().copyWith(
-                            fontWeight: FontWeight.bold,
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         TextField(
                           controller: phoneController,
                           decoration: InputDecoration(
                             hintText: 'Nomor Handphone User',
-                            hintStyle: MTextStyles.regular(),
+                            hintStyle: Theme.of(context).textTheme.bodyMedium!,
                           ),
                           textCapitalization: TextCapitalization.words,
                           textInputAction: TextInputAction.next,
@@ -445,15 +452,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         Text(
                           'Email',
-                          style: STextStyles.medium().copyWith(
-                            fontWeight: FontWeight.bold,
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         TextField(
                           controller: emailController,
                           decoration: InputDecoration(
                             hintText: 'Email User',
-                            hintStyle: MTextStyles.regular(),
+                            hintStyle: Theme.of(context).textTheme.bodyMedium!,
                           ),
                           textCapitalization: TextCapitalization.words,
                           textInputAction: TextInputAction.next,
@@ -498,7 +505,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Simpan',
-                      style: LTextStyles.medium(),
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontBodyWeight.medium(),
+                      ),
                     ),
                   ),
                 ),

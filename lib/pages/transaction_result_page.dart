@@ -37,7 +37,7 @@ class TransactionResultPage extends StatelessWidget {
                       ),
                       Text(
                         'Pembayaran Berhasil',
-                        style: HeadingTextStyles.headingS(),
+                        style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -47,7 +47,7 @@ class TransactionResultPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Text(
                           'Terimakasih! pesanan anda sedang menunggu konfirmasi, tunggu hingga pesanan anda diterima penjual. silahkan lihat status pesanan atau kembali lanjut berbelanja.',
-                          style: MTextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -75,7 +75,7 @@ class TransactionResultPage extends StatelessWidget {
                       ),
                       Text(
                         'Pembayaran Gagal',
-                        style: HeadingTextStyles.headingS(),
+                        style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -85,7 +85,7 @@ class TransactionResultPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Text(
                           'Mohon maaf pembayaran anda mengalami kendala, Silahkan lakukan pembayaran ulang.',
-                          style: MTextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -112,8 +112,9 @@ class TransactionResultPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           'Cek Pesananan',
-                          style: LTextStyles.medium().copyWith(
-                            color: LTextStyles.regular().color,
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -129,8 +130,9 @@ class TransactionResultPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           'Kembali ke Beranda',
-                          style: LTextStyles.medium().copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: PrimaryColorStyles.primaryMain(),
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),

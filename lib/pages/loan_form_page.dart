@@ -82,7 +82,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         Expanded(
                           child: Text(
                             'Ajukan Pendanaan',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -107,7 +107,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         children: [
                           Text(
                             'Periode Pendanaan',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 15.0,
@@ -149,11 +151,11 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                       child: Text(
                                         '${termList[index]} Bulan',
                                         style: selectedTerm == termList[index] ?
-                                        STextStyles.medium().copyWith(
+                                        Theme.of(context).textTheme.bodySmall!.copyWith(
                                           color: TextColorStyles.textPrimary(),
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontBodyWeight.medium(),
                                         ) :
-                                        STextStyles.regular(),
+                                        Theme.of(context).textTheme.bodySmall!,
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -167,14 +169,18 @@ class _LoanFormPageState extends State<LoanFormPage> {
                           ),
                           Text(
                             'Pengajuan Pendanaan',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
                                 'Rp ',
-                                style: MTextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                               const SizedBox(
                                 width: 10.0,
@@ -182,7 +188,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                               Expanded(
                                 child: Text(
                                   NumberFormat('#,###', 'en_id').format(loanAmount * 1000000).replaceAll(',', '.'),
-                                  style: HeadingTextStyles.headingL(),
+                                  style: Theme.of(context).textTheme.headlineLarge,
                                 ),
                               ),
                             ],
@@ -225,7 +231,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                             children: [
                               Text(
                                 'Jumlah yang diajukan',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               const SizedBox(
                                 width: 10.0,
@@ -236,7 +242,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                   children: [
                                     Text(
                                       "Rp ${NumberFormat('#,###', 'en_id').format(loanAmount * 1000000).replaceAll(',', '.')}",
-                                      style: STextStyles.medium(),
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                        fontWeight: FontBodyWeight.medium(),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -255,7 +263,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                             children: [
                               Text(
                                 'Biaya Admin (3%)',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               const SizedBox(
                                 width: 10.0,
@@ -266,7 +274,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                   children: [
                                     Text(
                                       "Rp ${NumberFormat('#,###', 'en_id').format((loanAmount * 1000000) * 0.03).replaceAll(',', '.')}",
-                                      style: STextStyles.medium(),
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                        fontWeight: FontBodyWeight.medium(),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -285,7 +295,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                             children: [
                               Text(
                                 'Jumlah yang diterima',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               const SizedBox(
                                 width: 10.0,
@@ -296,7 +306,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                   children: [
                                     Text(
                                       "Rp ${NumberFormat('#,###', 'en_id').format((loanAmount * 1000000) - ((loanAmount * 1000000) * 0.03)).replaceAll(',', '.')}",
-                                      style: STextStyles.medium(),
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                        fontWeight: FontBodyWeight.medium(),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -325,7 +337,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                   children: [
                                     Text(
                                       'Pembayaran Pendanaan Bulanan',
-                                      style: STextStyles.regular(),
+                                      style: Theme.of(context).textTheme.bodySmall!,
                                     ),
                                     const SizedBox(
                                       width: 10.0,
@@ -336,7 +348,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                         children: [
                                           Text(
                                             "Rp ${NumberFormat('#,###', 'en_id').format(((loanAmount * 1000000) / (selectedTerm ?? 1)) + (loanAmount * 1000000) * 0.0395).replaceAll(',', '.')}",
-                                            style: STextStyles.medium(),
+                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                              fontWeight: FontBodyWeight.medium(),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -363,7 +377,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                   children: [
                                     Text(
                                       'Pokok',
-                                      style: STextStyles.regular(),
+                                      style: Theme.of(context).textTheme.bodySmall!,
                                     ),
                                     const SizedBox(
                                       width: 10.0,
@@ -374,7 +388,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                         children: [
                                           Text(
                                             "Rp ${NumberFormat('#,###', 'en_id').format((loanAmount * 1000000) / (selectedTerm ?? 1)).replaceAll(',', '.')}",
-                                            style: STextStyles.medium(),
+                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                              fontWeight: FontBodyWeight.medium(),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -389,7 +405,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                   children: [
                                     Text(
                                       'Biaya cicilan (3.95% / Bulan)',
-                                      style: STextStyles.regular(),
+                                      style: Theme.of(context).textTheme.bodySmall!,
                                     ),
                                     const SizedBox(
                                       width: 10.0,
@@ -400,7 +416,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                         children: [
                                           Text(
                                             "Rp ${NumberFormat('#,###', 'en_id').format((loanAmount * 1000000) * 0.0395).replaceAll(',', '.')}",
-                                            style: STextStyles.medium(),
+                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                              fontWeight: FontBodyWeight.medium(),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -427,7 +445,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         children: [
                           Text(
                             'Akun Dipay',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 15.0,
@@ -447,7 +467,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                               Expanded(
                                 child: Text(
                                   name ?? 'Unknown User',
-                                  style: STextStyles.medium(),
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontBodyWeight.medium(),
+                                  ),
                                 ),
                               ),
                             ],
@@ -481,13 +503,13 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         ),
                         Text(
                           'Saya telah membaca dan menyetujui ',
-                          style: XSTextStyles.regular(),
+                          style: TextThemeXS.regular(),
                           textAlign: TextAlign.justify,
                         ),
                         Expanded(
                           child: Text(
                             '"Perjanjian pendanaan"',
-                            style: XSTextStyles.regular().copyWith(
+                            style: TextThemeXS.regular().copyWith(
                               color: PrimaryColorStyles.primaryMain(),
                             ),
                           ),
@@ -534,8 +556,9 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           'Ajukan',
-                          style: LTextStyles.medium().copyWith(
-                            color: selectedTerm != null && loanAmount != 0.0 && isAgreed == true ? LTextStyles.regular().color : Colors.black54,
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: selectedTerm != null && loanAmount != 0.0 && isAgreed == true ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),

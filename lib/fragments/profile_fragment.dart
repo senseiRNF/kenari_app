@@ -124,7 +124,7 @@ class ProfileFragment extends StatelessWidget {
                                               children: [
                                                 Text(
                                                   'Edit Profile',
-                                                  style: XSTextStyles.medium().copyWith(
+                                                  style: TextThemeXS.medium().copyWith(
                                                     color: Colors.white,
                                                   ),
                                                 ),
@@ -151,7 +151,7 @@ class ProfileFragment extends StatelessWidget {
                             ),
                             Text(
                               name ?? 'Unknown User',
-                              style: MTextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodyMedium!,
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(
@@ -159,7 +159,7 @@ class ProfileFragment extends StatelessWidget {
                             ),
                             Text(
                               companyCode ?? 'Unknown Code',
-                              style: XSTextStyles.regular(),
+                              style: TextThemeXS.regular(),
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(
@@ -198,8 +198,9 @@ class ProfileFragment extends StatelessWidget {
                                           padding: const EdgeInsets.all(5.0),
                                           child: Text(
                                             'Aktivasi Dipay',
-                                            style: STextStyles.medium().copyWith(
+                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                               color: Colors.blue,
+                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                         ),
@@ -233,7 +234,7 @@ class ProfileFragment extends StatelessWidget {
                                             children: [
                                               Text(
                                                 'Iuran Wajib',
-                                                style: STextStyles.regular(),
+                                                style: Theme.of(context).textTheme.bodySmall!,
                                                 textAlign: TextAlign.center,
                                               ),
                                               const SizedBox(
@@ -241,7 +242,9 @@ class ProfileFragment extends StatelessWidget {
                                               ),
                                               Text(
                                                 'Rp 0',
-                                                style: STextStyles.medium(),
+                                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                                  fontWeight: FontBodyWeight.medium(),
+                                                ),
                                                 textAlign: TextAlign.center,
                                               ),
                                             ],
@@ -257,7 +260,7 @@ class ProfileFragment extends StatelessWidget {
                                             children: [
                                               Text(
                                                 'Iuran Berjangka',
-                                                style: STextStyles.regular(),
+                                                style: Theme.of(context).textTheme.bodySmall!,
                                                 textAlign: TextAlign.center,
                                               ),
                                               const SizedBox(
@@ -265,7 +268,9 @@ class ProfileFragment extends StatelessWidget {
                                               ),
                                               Text(
                                                 'Rp 0',
-                                                style: STextStyles.medium(),
+                                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                                  fontWeight: FontBodyWeight.medium(),
+                                                ),
                                                 textAlign: TextAlign.center,
                                               ),
                                             ],
@@ -320,7 +325,7 @@ class ProfileFragment extends StatelessWidget {
                                       Expanded(
                                         child: Text(
                                           'Ubah Kata Sandi',
-                                          style: MTextStyles.regular(),
+                                          style: Theme.of(context).textTheme.bodyMedium!,
                                         ),
                                       ),
                                       Icon(
@@ -356,7 +361,7 @@ class ProfileFragment extends StatelessWidget {
                                       Expanded(
                                         child: Text(
                                           'Daftar Alamat',
-                                          style: MTextStyles.regular(),
+                                          style: Theme.of(context).textTheme.bodyMedium!,
                                         ),
                                       ),
                                       Icon(
@@ -392,7 +397,7 @@ class ProfileFragment extends StatelessWidget {
                                       Expanded(
                                         child: Text(
                                           'Daftar Rekening',
-                                          style: MTextStyles.regular(),
+                                          style: Theme.of(context).textTheme.bodyMedium!,
                                         ),
                                       ),
                                       Icon(
@@ -441,7 +446,7 @@ class ProfileFragment extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     'Keluar',
-                                    style: MTextStyles.regular().copyWith(
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                       color: Colors.red,
                                     ),
                                   ),

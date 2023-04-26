@@ -91,7 +91,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                         Expanded(
                           child: Text(
                             'Detail Transaksi Pendanaan',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -122,13 +122,15 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                       children: [
                         Text(
                           'Tagihan',
-                          style: STextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodySmall!,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             loanData != null && loanData!.bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
-                            style: LTextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                         ),
                         dueDate != null ?
@@ -136,12 +138,15 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                           children: [
                             Text(
                               DateTime.now().isAfter(dueDate!) == true ? 'Terlambat ' : 'Jatuh Tempo ',
-                              style: STextStyles.medium(),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
+                              ),
                             ),
                             Text(
                               DateFormat('dd MMM yyyy').format(dueDate!),
-                              style: STextStyles.medium().copyWith(
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                 color: DangerColorStyles.dangerMain(),
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                           ],
@@ -168,7 +173,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                               Expanded(
                                 child: Text(
                                   'Tagihan bertambah karena ada biaya keterlambatan pembayaran. Mohon selesaikan pembayaran.',
-                                  style: XSTextStyles.medium().copyWith(
+                                  style: TextThemeXS.medium().copyWith(
                                     color: DangerColorStyles.dangerMain(),
                                   ),
                                 ),
@@ -197,11 +202,13 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                             children: [
                               Text(
                                 'Kode Pinjaman',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               Text(
                                 'Pinjaman',
-                                style: STextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                             ],
                           ),
@@ -214,11 +221,13 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                             children: [
                               Text(
                                 'Jumlah yang diajukan',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               Text(
                                 loanData != null && loanData!.jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : 'Unknown',
-                                style: STextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                             ],
                           ),
@@ -231,11 +240,13 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                             children: [
                               Text(
                                 'Biaya admin',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               Text(
                                 loanData != null && loanData!.biayaAdminAmount != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.biayaAdminAmount!)).replaceAll(',', '.')}" : 'Unknown',
-                                style: STextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                             ],
                           ),
@@ -248,11 +259,13 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                             children: [
                               Text(
                                 'Periode',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               Text(
                                 loanData != null && loanData!.jangkaWaktu != null ? '${loanData!.jangkaWaktu} Bulan' : 'Unknown',
-                                style: STextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                             ],
                           ),
@@ -265,11 +278,13 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                             children: [
                               Text(
                                 'Jumlah yang diterima',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               Text(
                                 loanData != null && loanData!.jumlahPinjamanDiterima != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.jumlahPinjamanDiterima!)).replaceAll(',', '.')}" : 'Unknown',
-                                style: STextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                             ],
                           ),
@@ -282,11 +297,13 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                             children: [
                               Text(
                                 'Pembayaran Pinjaman Bulanan',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               Text(
                                 loanData != null && loanData!.bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
-                                style: STextStyles.medium(),
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
+                                ),
                               ),
                             ],
                           ),
@@ -299,12 +316,13 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                               children: [
                                 Text(
                                   'Denda Keterlambatan',
-                                  style: STextStyles.regular(),
+                                  style: Theme.of(context).textTheme.bodySmall!,
                                 ),
                                 Text(
                                   'Rp 100.000',
-                                  style: STextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: DangerColorStyles.dangerMain(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ],
@@ -332,7 +350,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                             children: [
                               Text(
                                 'Di transfer ke',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               Expanded(
                                 child: Row(
@@ -350,7 +368,9 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                     ),
                                     Text(
                                       name ?? 'Unknown User',
-                                      style: STextStyles.medium(),
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                        fontWeight: FontBodyWeight.medium(),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -375,7 +395,9 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                         children: [
                           Text(
                             'Jadwal Pembayaran',
-                            style: MTextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           Divider(
                             color: NeutralColorStyles.neutral03(),
@@ -426,8 +448,8 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
                                         '${index + 1}/${loanData!.peminjamanDetails!.length} ${paidOff == true ? 'Paid' : 'To Pay'}',
-                                        style: XSTextStyles.regular().copyWith(
-                                          color: paidOff == true ? Colors.white : XSTextStyles.regular().color,
+                                        style: TextThemeXS.regular().copyWith(
+                                          color: paidOff == true ? Colors.white : TextThemeXS.regular().color,
                                         ),
                                       ),
                                     ),
@@ -448,7 +470,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                   //       const Material(),
                                   //       Text(
                                   //         'Rp 1.118.594',
-                                  //         style: STextStyles.medium(),
+                                  //         style: Theme.of(context).textTheme.bodySmall!.medium(),
                                   //       ),
                                   //     ],
                                   //   ),
@@ -488,8 +510,9 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Bayar Tagihan',
-                      style: LTextStyles.medium().copyWith(
-                        color: LTextStyles.regular().color,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                        fontWeight: FontBodyWeight.medium(),
                       ),
                     ),
                   ),

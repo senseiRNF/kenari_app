@@ -37,10 +37,10 @@ class _ProductPageState extends State<ProductPage> {
     } else {
       List sortedVariantPrice = widget.productData.varians!;
 
-      sortedVariantPrice.sort();
+      sortedVariantPrice.sort((a, b) => a.price.compareTo(b.price));
 
-      int lowest = sortedVariantPrice[0] ?? 0;
-      int highest = sortedVariantPrice[sortedVariantPrice.length - 1] ?? 0;
+      int lowest = int.parse(sortedVariantPrice[0].price != null && sortedVariantPrice[0].price != '' ? sortedVariantPrice[0].price : '0');
+      int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].price != null && sortedVariantPrice[sortedVariantPrice.length - 1].price != '' ? sortedVariantPrice[sortedVariantPrice.length - 1].price : '0');
 
       price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
     }
@@ -166,8 +166,9 @@ class _ProductPageState extends State<ProductPage> {
                                         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
                                         child: Text(
                                           '$imageSelected / ${widget.productData.images!.length}',
-                                          style: MTextStyles.medium().copyWith(
+                                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                             color: Colors.white,
+                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                       ),
@@ -186,7 +187,9 @@ class _ProductPageState extends State<ProductPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Text(
                             widget.productData.name ?? 'Unknown Product',
-                            style: LTextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -196,8 +199,9 @@ class _ProductPageState extends State<ProductPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Text(
                             price,
-                            style: LTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: PrimaryColorStyles.primaryMain(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
@@ -236,7 +240,7 @@ class _ProductPageState extends State<ProductPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                                     child: Text(
                                       widget.productData.productCategory != null && widget.productData.productCategory!.name != null ? widget.productData.productCategory!.name! : 'Unknown Product',
-                                      style: XSTextStyles.regular(),
+                                      style: TextThemeXS.regular(),
                                     ),
                                   ),
                                 ),
@@ -254,8 +258,9 @@ class _ProductPageState extends State<ProductPage> {
                             children: [
                               Text(
                                 'Detail Produk',
-                                style: STextStyles.medium().copyWith(
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                   color: TextColorStyles.textPrimary(),
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                               Padding(
@@ -265,14 +270,15 @@ class _ProductPageState extends State<ProductPage> {
                                     Expanded(
                                       child: Text(
                                         'Min Pemesanan',
-                                        style: STextStyles.regular(),
+                                        style: Theme.of(context).textTheme.bodySmall!,
                                       ),
                                     ),
                                     Expanded(
                                       child: Text(
                                         '1 Buah',
-                                        style: STextStyles.medium().copyWith(
+                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                           color: TextColorStyles.textPrimary(),
+                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                     ),
@@ -284,15 +290,16 @@ class _ProductPageState extends State<ProductPage> {
                                   Expanded(
                                     child: Text(
                                       'Stok',
-                                      style: STextStyles.regular(),
+                                      style: Theme.of(context).textTheme.bodySmall!,
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
                                       widget.productData.isStockAlwaysAvailable != null && widget.productData.isStockAlwaysAvailable! == true ? 'Stok selalu tersedia' :
                                       '${widget.productData.stock != null && widget.productData.stock != '' ? widget.productData.stock! : '0'} Buah',
-                                      style: STextStyles.medium().copyWith(
+                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                         color: TextColorStyles.textPrimary(),
+                                        fontWeight: FontBodyWeight.medium(),
                                       ),
                                     ),
                                   ),
@@ -311,8 +318,9 @@ class _ProductPageState extends State<ProductPage> {
                                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                                 child: Text(
                                   'Pilih Varian :',
-                                  style: STextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: TextColorStyles.textPrimary(),
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                   textAlign: TextAlign.start,
                                 ),
@@ -381,8 +389,9 @@ class _ProductPageState extends State<ProductPage> {
                         children: [
                           Text(
                             'Alamat Pengambilan :',
-                            style: STextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodySmall!..copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -390,22 +399,23 @@ class _ProductPageState extends State<ProductPage> {
                           ),
                           Text(
                             'PT. Surya Fajar Capital. tbk',
-                            style: STextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5.0),
                             child: Text(
                               '081234567890',
-                              style: STextStyles.regular().copyWith(
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                 color: NeutralColorStyles.neutral08(),
                               ),
                             ),
                           ),
                           Text(
                             'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
-                            style: STextStyles.regular().copyWith(
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               color: NeutralColorStyles.neutral06(),
                             ),
                           ),
@@ -425,8 +435,9 @@ class _ProductPageState extends State<ProductPage> {
                         children: [
                           Text(
                             'Deskripsi :',
-                            style: MTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -435,8 +446,9 @@ class _ProductPageState extends State<ProductPage> {
                           Text(
                             widget.productData.description ?? '',
                             maxLines: expandDesc ? null : 3,
-                            style: STextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                             overflow: TextOverflow.fade,
                           ),
@@ -452,8 +464,9 @@ class _ProductPageState extends State<ProductPage> {
                                   padding: const EdgeInsets.symmetric(vertical: 5.0),
                                   child: Text(
                                     expandDesc ? 'Lihat lebih sedikit' : 'Lihat lebih banyak',
-                                    style: STextStyles.medium().copyWith(
+                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                       color: PrimaryColorStyles.primaryMain(),
+                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ),
@@ -496,8 +509,9 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         Text(
                           'Tambah ke Troli',
-                          style: LTextStyles.medium().copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Colors.white,
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ],
@@ -555,8 +569,8 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Text(
                     product.varians != null ? 'Varian Produk' : 'Tambah Troli',
-                    style: LTextStyles.medium().copyWith(
-                      fontWeight: FontWeight.bold,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontBodyWeight.medium(),
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -592,8 +606,8 @@ class _ProductPageState extends State<ProductPage> {
                           children: [
                             Text(
                               product.name ?? 'Unknown Product',
-                              style: MTextStyles.medium().copyWith(
-                                fontWeight: FontWeight.bold,
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                             variant != null ?
@@ -612,7 +626,7 @@ class _ProductPageState extends State<ProductPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
                                       variant,
-                                      style: XSTextStyles.medium(),
+                                      style: TextThemeXS.medium(),
                                     ),
                                   ),
                                 ),
@@ -624,8 +638,9 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                             Text(
                               price,
-                              style: LTextStyles.medium().copyWith(
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                             const SizedBox(
@@ -636,7 +651,7 @@ class _ProductPageState extends State<ProductPage> {
                               children: [
                                 Text(
                                   'Stok:',
-                                  style: STextStyles.regular(),
+                                  style: Theme.of(context).textTheme.bodySmall!,
                                 ),
                                 const SizedBox(
                                   width: 5.0,
@@ -644,7 +659,9 @@ class _ProductPageState extends State<ProductPage> {
                                 Expanded(
                                   child: Text(
                                     product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 'Selalu ada' : stock.toString(),
-                                    style: STextStyles.medium(),
+                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontBodyWeight.medium(),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -666,8 +683,8 @@ class _ProductPageState extends State<ProductPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: Text(
                         'Pilih Varian :',
-                        style: STextStyles.medium().copyWith(
-                          fontWeight: FontWeight.bold,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontWeight: FontBodyWeight.medium(),
                         ),
                         textAlign: TextAlign.start,
                       ),
@@ -761,7 +778,7 @@ class _ProductPageState extends State<ProductPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           '$qty',
-                          style: HeadingTextStyles.headingS(),
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                       Container(
@@ -822,8 +839,9 @@ class _ProductPageState extends State<ProductPage> {
                                 ),
                                 Text(
                                   'Tambah ke Troli',
-                                  style: LTextStyles.medium().copyWith(
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     color: Colors.white,
+                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ],
@@ -863,7 +881,7 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                   Text(
                     'Produk berhasil ditambahkan ke Troli.',
-                    style: XSTextStyles.medium().copyWith(
+                    style: TextThemeXS.medium().copyWith(
                       color: SuccessColorStyles.successMain(),
                     ),
                   ),

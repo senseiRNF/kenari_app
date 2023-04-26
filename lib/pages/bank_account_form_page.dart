@@ -94,7 +94,7 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                         Expanded(
                           child: Text(
                             widget.editData != null ? 'Ubah Rekening' : 'Tambah Rekening',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -117,8 +117,8 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                       children: [
                         Text(
                           'Pilih Jenis Bank',
-                          style: STextStyles.medium().copyWith(
-                            fontWeight: FontWeight.bold,
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         Stack(
@@ -127,7 +127,7 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                               controller: bankNameController,
                               decoration: InputDecoration(
                                 hintText: 'Pilih bank',
-                                hintStyle: MTextStyles.regular(),
+                                hintStyle: Theme.of(context).textTheme.bodyMedium!,
                                 suffixIcon: const Icon(
                                   Icons.expand_more_outlined,
                                 ),
@@ -158,7 +158,7 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                                     child: Text(
                                       value.name ?? 'Unknown Bank',
-                                      style: STextStyles.regular(),
+                                      style: Theme.of(context).textTheme.bodySmall!,
                                     ),
                                   ),
                                 );
@@ -175,15 +175,15 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                         ),
                         Text(
                           'Nama Pemilik Rekening',
-                          style: STextStyles.medium().copyWith(
-                            fontWeight: FontWeight.bold,
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         TextField(
                           controller: accountNameController,
                           decoration: InputDecoration(
                             hintText: 'Silahkan isi nama pemilik',
-                            hintStyle: MTextStyles.regular(),
+                            hintStyle: Theme.of(context).textTheme.bodyMedium!,
                           ),
                           textCapitalization: TextCapitalization.characters,
                           textInputAction: TextInputAction.next,
@@ -198,15 +198,15 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                         ),
                         Text(
                           'Nomor Rekening',
-                          style: STextStyles.medium().copyWith(
-                            fontWeight: FontWeight.bold,
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         TextField(
                           controller: accountNumberController,
                           decoration: InputDecoration(
                             hintText: 'Silahkan isi nomor rekening',
-                            hintStyle: MTextStyles.regular(),
+                            hintStyle: Theme.of(context).textTheme.bodyMedium!,
                           ),
                           textCapitalization: TextCapitalization.characters,
                           textInputAction: TextInputAction.next,
@@ -285,8 +285,9 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           'Simpan',
-                          style: LTextStyles.medium().copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: bankNameController.text != '' && accountNameController.text != '' && accountNumberController.text != '' ? Colors.white : NeutralColorStyles.neutral06(),
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -324,8 +325,9 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Text(
                               'Hapus Rekening',
-                              style: LTextStyles.medium().copyWith(
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                           ),

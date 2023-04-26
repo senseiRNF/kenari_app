@@ -77,7 +77,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         Expanded(
                           child: Text(
                             'Lupa Password',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -101,23 +101,23 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     ),
                     Text(
                       'Silahkan masukkan alamat email terdaftar untuk menerima email pengaturan ulang kata sandi',
-                      style: STextStyles.regular(),
+                      style: Theme.of(context).textTheme.bodySmall!,
                     ),
                     const SizedBox(
                       height: 25.0,
                     ),
                     Text(
                       'Email',
-                      style: STextStyles.medium().copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: showErrorHint ? DangerColorStyles.dangerMain() : STextStyles.medium().color,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: showErrorHint ? DangerColorStyles.dangerMain() : Theme.of(context).textTheme.bodySmall!.color,
+                        fontWeight: FontBodyWeight.medium(),
                       ),
                     ),
                     TextField(
                       controller: emailController,
                       decoration: InputDecoration(
                         hintText: 'Masukkan alamat email',
-                        hintStyle: MTextStyles.regular(),
+                        hintStyle: Theme.of(context).textTheme.bodyMedium!,
                         errorText: showErrorHint ? 'Email tidak terdaftar' : null,
                       ),
                       keyboardType: TextInputType.emailAddress,
@@ -149,9 +149,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                   child: Text(
                     'Lanjutkan',
-                    style: LTextStyles.medium().copyWith(
-                      color: emailController.text != '' ? LTextStyles.regular().color : Colors.black54,
-                      fontWeight: FontWeight.w500,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: emailController.text != '' ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
+                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ),

@@ -89,7 +89,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                         Expanded(
                           child: Text(
                             'Troli',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -130,7 +130,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                               value: isSelectedAll,
                               title: Text(
                                 'Pilih Semua Barang',
-                                style: STextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodySmall!,
                               ),
                               dense: true,
                               activeColor: Theme.of(context).primaryColor,
@@ -156,6 +156,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                           productList.removeAt(i);
                                           listKey.currentState!.removeItem(i, (context, animation) {
                                             return ItemListWithAnimation(
+                                              context: context,
                                               product: tempTrolleyProduct,
                                               animation: animation,
                                               onChangedCheckbox: (_) {},
@@ -208,6 +209,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                         productList.removeAt(index);
                                         listKey.currentState!.removeItem(index, (context, animation) {
                                           return ItemListWithAnimation(
+                                            context: context,
                                             product: tempList,
                                             animation: animation,
                                             onChangedCheckbox: (selectProduct) {
@@ -252,6 +254,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                             ],
                           ),
                           child: ItemListWithAnimation(
+                            context: context,
                             product: productList[index],
                             animation: animation,
                             onChangedCheckbox: (selectProduct) {
@@ -306,7 +309,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                       ),
                       Text(
                         'Belum Ada Produk di Troli',
-                        style: HeadingTextStyles.headingS(),
+                        style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -316,7 +319,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 30.0),
                         child: Text(
                           'Yuk eksplor semua produk yang ada di\nKenari, tambah ke Troli & Checkout\nProdukmu!',
-                          style: MTextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -345,7 +348,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                         children: [
                           Text(
                             'Total Harga',
-                            style: MTextStyles.regular(),
+                            style: Theme.of(context).textTheme.bodyMedium!,
                           ),
                           const SizedBox(
                             height: 10.0,
@@ -377,8 +380,9 @@ class _TrolleyPageState extends State<TrolleyPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                         child: Text(
                           'Checkout',
-                          style: LTextStyles.medium().copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Colors.white,
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -399,8 +403,9 @@ class _TrolleyPageState extends State<TrolleyPage> {
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
                       'Belanja Sekarang',
-                      style: LTextStyles.medium().copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
+                        fontWeight: FontBodyWeight.medium(),
                       ),
                     ),
                   ),
@@ -415,6 +420,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
 }
 
 class ItemListWithAnimation extends StatelessWidget {
+  final BuildContext context;
   final LocalTrolleyProduct product;
   final Animation<double> animation;
   final Function onChangedCheckbox;
@@ -423,6 +429,7 @@ class ItemListWithAnimation extends StatelessWidget {
 
   const ItemListWithAnimation({
     super.key,
+    required this.context,
     required this.product,
     required this.animation,
     required this.onChangedCheckbox,
@@ -484,7 +491,9 @@ class ItemListWithAnimation extends StatelessWidget {
                       children: [
                         Text(
                           product.productData.name ?? 'Unknown Product',
-                          style: MTextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                         ),
                         product.productData.varians != null ?
                         Column(
@@ -495,7 +504,7 @@ class ItemListWithAnimation extends StatelessWidget {
                             ),
                             Text(
                               product.productData.varians![0].name1 ?? 'Unknown Variant',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                           ],
                         ) :
@@ -508,7 +517,7 @@ class ItemListWithAnimation extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.productData.price ?? '0')).replaceAll(',', '.')}',
-                                style: MTextStyles.regular().copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   color: PrimaryColorStyles.primaryMain(),
                                 ),
                               ),
@@ -539,7 +548,7 @@ class ItemListWithAnimation extends StatelessWidget {
                                 width: 20.0,
                                 child: Text(
                                   '${product.qty}',
-                                  style: MTextStyles.regular(),
+                                  style: Theme.of(context).textTheme.bodyMedium!,
                                   textAlign: TextAlign.center,
                                 ),
                               ),

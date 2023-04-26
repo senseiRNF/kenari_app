@@ -70,7 +70,7 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                         ),
                         Text(
                           'Pembayaran Berhasil',
-                          style: HeadingTextStyles.headingS(),
+                          style: Theme.of(context).textTheme.headlineSmall,
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -78,7 +78,7 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                         ),
                         Text(
                           'Terima Kasih,',
-                          style: MTextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                           textAlign: TextAlign.center,
                         ),
                         Row(
@@ -86,26 +86,26 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                           children: [
                             Text(
                               'Pembayaranmu untuk ',
-                              style: MTextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodyMedium!,
                               textAlign: TextAlign.center,
                             ),
                             Text(
                               widget.transactionName,
-                              style: MTextStyles.medium().copyWith(
-                                fontWeight: FontWeight.bold,
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontBodyWeight.medium(),
                               ),
                               textAlign: TextAlign.center,
                             ),
                             Text(
                               ' telah',
-                              style: MTextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodyMedium!,
                               textAlign: TextAlign.center,
                             ),
                           ],
                         ),
                         Text(
                           'selesai.',
-                          style: MTextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -131,7 +131,7 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                         ),
                         Text(
                           'Pembayaran Gagal',
-                          style: HeadingTextStyles.headingS(),
+                          style: Theme.of(context).textTheme.headlineSmall,
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -139,7 +139,7 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                         ),
                         Text(
                           'Mohon maaf pembayaran anda mengalami kendala, Silahkan lakukan pembayaran ulang.',
-                          style: MTextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -158,7 +158,7 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                     ),
                     Text(
                       'Jumlah Pembayaran',
-                      style: MTextStyles.regular(),
+                      style: Theme.of(context).textTheme.bodyMedium!,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -166,7 +166,7 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                     ),
                     Text(
                       widget.feeAmount ?? 'Rp 0',
-                      style: MTextStyles.regular(),
+                      style: Theme.of(context).textTheme.bodyMedium!,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -188,13 +188,13 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                         children: [
                           Text(
                             'No. Referensi',
-                            style: STextStyles.regular(),
+                            style: Theme.of(context).textTheme.bodySmall!,
                             textAlign: TextAlign.center,
                           ),
                           Text(
                             widget.transactionNumber ?? '',
-                            style: STextStyles.medium().copyWith(
-                              fontWeight: FontWeight.bold,
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -211,7 +211,7 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                         children: [
                           Text(
                             'Waktu dan Tanggal',
-                            style: STextStyles.regular(),
+                            style: Theme.of(context).textTheme.bodySmall!,
                             textAlign: TextAlign.center,
                           ),
                           Row(
@@ -220,8 +220,8 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                             children: [
                               Text(
                                 DateFormat('dd MMMM yyyy').format(widget.date),
-                                style: STextStyles.medium().copyWith(
-                                  fontWeight: FontWeight.bold,
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -236,8 +236,8 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                               ),
                               Text(
                                 DateFormat('HH:mm').format(widget.date),
-                                style: STextStyles.medium().copyWith(
-                                  fontWeight: FontWeight.bold,
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -267,8 +267,9 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'Kembali ke Beranda',
-                            style: LTextStyles.medium().copyWith(
-                              color: LTextStyles.regular().color,
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              color: Theme.of(context).textTheme.bodyLarge!.color,
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
@@ -284,8 +285,9 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'Lihat Riwayat Transaksi',
-                            style: LTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: PrimaryColorStyles.primaryMain(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),

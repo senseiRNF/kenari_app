@@ -45,7 +45,7 @@ class _LoanResultPageState extends State<LoanResultPage> {
                         ),
                         Text(
                           'Peminjaman Berhasil!',
-                          style: HeadingTextStyles.headingS(),
+                          style: Theme.of(context).textTheme.headlineSmall,
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -53,7 +53,7 @@ class _LoanResultPageState extends State<LoanResultPage> {
                         ),
                         Text(
                           'Selamat, Pengajuan Pendanaan anda telah Berhasil!',
-                          style: MTextStyles.regular(),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -79,8 +79,9 @@ class _LoanResultPageState extends State<LoanResultPage> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'Kembali ke Beranda',
-                            style: LTextStyles.medium().copyWith(
-                              color: LTextStyles.regular().color,
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              color: Theme.of(context).textTheme.bodyLarge!.color,
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
@@ -96,8 +97,9 @@ class _LoanResultPageState extends State<LoanResultPage> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'Lihat Status Pendanaan',
-                            style: LTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: PrimaryColorStyles.primaryMain(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),

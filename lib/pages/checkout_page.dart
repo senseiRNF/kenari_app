@@ -71,7 +71,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         Expanded(
                           child: Text(
                             'Checkout',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -96,8 +96,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         children: [
                           Text(
                             'Alamat Pengambilan',
-                            style: MTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -105,8 +106,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                           Text(
                             'PT. Surya Fajar Capital.tbk (08123456789)',
-                            style: STextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -114,7 +116,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                           Text(
                             'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
-                            style: STextStyles.regular().copyWith(
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               color: TextColorStyles.textPrimary(),
                             ),
                           ),
@@ -134,8 +136,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         children: [
                           Text(
                             'Detail Belanja',
-                            style: MTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -179,7 +182,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             children: [
                                               Text(
                                                 widget.productList[index].name ?? 'Unknown Product',
-                                                style: MTextStyles.medium(),
+                                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                                  fontWeight: FontBodyWeight.medium(),
+                                                ),
                                               ),
                                               widget.productList[index].varians != null ?
                                               Column(
@@ -190,7 +195,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                   ),
                                                   Text(
                                                     widget.productList[index].varians![0].name1 ?? 'Unknown Variant',
-                                                    style: STextStyles.regular(),
+                                                    style: Theme.of(context).textTheme.bodySmall!,
                                                   ),
                                                   const SizedBox(
                                                     height: 5.0,
@@ -205,13 +210,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                 children: [
                                                   Text(
                                                     'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(widget.productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                    style: MTextStyles.medium().copyWith(
+                                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                                       color: PrimaryColorStyles.primaryMain(),
+                                                      fontWeight: FontBodyWeight.medium(),
                                                     ),
                                                   ),
                                                   Text(
                                                     '4x',
-                                                    style: MTextStyles.regular(),
+                                                    style: Theme.of(context).textTheme.bodyMedium!,
                                                     textAlign: TextAlign.end,
                                                   ),
                                                 ],
@@ -236,7 +242,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             isDense: true,
                                             border: InputBorder.none,
                                             hintText: 'Tambah catatan disini (optional)',
-                                            hintStyle: STextStyles.regular(),
+                                            hintStyle: Theme.of(context).textTheme.bodySmall!,
                                           ),
                                           controller: searchController[index],
                                         ),
@@ -263,8 +269,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         children: [
                           Text(
                             'Metode Pembayaran',
-                            style: MTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -303,8 +310,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
                                       'Aktivasi',
-                                      style: MTextStyles.medium().copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                         color: PrimaryColorStyles.primaryMain(),
+                                        fontWeight: FontBodyWeight.medium(),
                                       ),
                                     ),
                                   ),
@@ -333,7 +341,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   ),
                                   Text(
                                     'Pastikan Saldo Dipay anda mencukupi.',
-                                    style: XSTextStyles.medium().copyWith(
+                                    style: TextThemeXS.medium().copyWith(
                                       color: InfoColorStyles.infoMain(),
                                     ),
                                   ),
@@ -358,7 +366,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   ),
                                   Text(
                                     'Lakukan aktivasi pada akun Dipay anda.',
-                                    style: XSTextStyles.medium().copyWith(
+                                    style: TextThemeXS.medium().copyWith(
                                       color: DangerColorStyles.dangerMain(),
                                     ),
                                   ),
@@ -382,8 +390,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         children: [
                           Text(
                             'Ringkasan Belanja',
-                            style: MTextStyles.medium().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: TextColorStyles.textPrimary(),
+                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -398,12 +407,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             children: [
                               Text(
                                 'Total Harga (${widget.productList.length} Produk)',
-                                style: MTextStyles.regular(),
+                                style: Theme.of(context).textTheme.bodyMedium!,
                               ),
                               Text(
                                 'Rp.1.225.000,-',
-                                style: MTextStyles.medium().copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   color: TextColorStyles.textPrimary(),
+                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                             ],
@@ -431,7 +441,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         children: [
                           Text(
                             'Total Harga',
-                            style: MTextStyles.regular(),
+                            style: Theme.of(context).textTheme.bodyMedium!,
                           ),
                           const SizedBox(
                             height: 10.0,
@@ -465,8 +475,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                         child: Text(
                           'Bayar',
-                          style: LTextStyles.medium().copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Colors.white,
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),

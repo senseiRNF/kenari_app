@@ -70,7 +70,7 @@ class _CompanyAddressSelectionPageState extends State<CompanyAddressSelectionPag
                         Expanded(
                           child: Text(
                             'Pilih Alamat',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -103,7 +103,9 @@ class _CompanyAddressSelectionPageState extends State<CompanyAddressSelectionPag
                                 Expanded(
                                   child: Text(
                                     companyModel!.companyData!.name ?? 'Unknown Company',
-                                    style: MTextStyles.medium(),
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                      fontWeight: FontBodyWeight.medium(),
+                                    ),
                                   ),
                                 ),
                                 // companyModel!.companyData!.status != null && companyModel!.companyData!.status! == true ?
@@ -119,7 +121,7 @@ class _CompanyAddressSelectionPageState extends State<CompanyAddressSelectionPag
                                 //     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
                                 //     child: Text(
                                 //       'Utama',
-                                //       style: STextStyles.medium().copyWith(
+                                //       style: Theme.of(context).textTheme.bodySmall!.medium().copyWith(
                                 //         color: PrimaryColorStyles.primaryMain(),
                                 //       ),
                                 //     ),
@@ -133,14 +135,14 @@ class _CompanyAddressSelectionPageState extends State<CompanyAddressSelectionPag
                             ),
                             Text(
                               companyModel!.companyData!.phone ?? 'Unknown Phone',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
                               companyModel!.companyData!.addresses![index].address ?? 'Unknown Address',
-                              style: STextStyles.regular(),
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
                             const SizedBox(
                               height: 15.0,
@@ -159,7 +161,9 @@ class _CompanyAddressSelectionPageState extends State<CompanyAddressSelectionPag
                                 padding: const EdgeInsets.symmetric(vertical: 5.0),
                                 child: Text(
                                   'Pilih',
-                                  style: MTextStyles.medium(),
+                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontBodyWeight.medium(),
+                                  ),
                                 ),
                               ),
                             ),

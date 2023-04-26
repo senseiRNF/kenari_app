@@ -100,7 +100,7 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                         Expanded(
                           child: Text(
                             'Atur Produk',
-                            style: HeadingTextStyles.headingS(),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                         ),
                       ],
@@ -125,7 +125,9 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                         children: [
                           Text(
                             'Gallery Produk',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 10.0,
@@ -185,14 +187,16 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                         children: [
                           Text(
                             'Nama Produk',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
                             productData['title'],
-                            style: MTextStyles.regular().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: TextColorStyles.textPrimary(),
                             ),
                           ),
@@ -201,14 +205,16 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                           ),
                           Text(
                             'Deskripsi Produk',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
                             productData['description'],
-                            style: MTextStyles.regular().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: TextColorStyles.textPrimary(),
                             ),
                           ),
@@ -217,14 +223,16 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                           ),
                           Text(
                             'Harga Produk',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
                             'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp ${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}',
-                            style: MTextStyles.regular().copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: TextColorStyles.textPrimary(),
                             ),
                           ),
@@ -233,14 +241,18 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                           ),
                           Text(
                             'Stok & Varian',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
                             productData['variant_stock']['variant'],
-                            style: LTextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 5.0,
@@ -261,11 +273,13 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                                 children: [
                                   Text(
                                     productData['variant_stock']['subvariant'][subvariantIndex]['name'],
-                                    style: MTextStyles.regular(),
+                                    style: Theme.of(context).textTheme.bodyMedium!,
                                   ),
                                   Text(
                                     productData['variant_stock']['subvariant'][subvariantIndex]['is_always_available'] == true ? 'Stok Selalu Ada' : "${productData['variant_stock']['subvariant'][subvariantIndex]['stock']}",
-                                    style: MTextStyles.medium(),
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                      fontWeight: FontBodyWeight.medium(),
+                                    ),
                                   ),
                                 ],
                               );
@@ -276,28 +290,32 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                           ),
                           Text(
                             'Alamat Pengambilan',
-                            style: STextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
                             productData['company']['name'],
-                            style: MTextStyles.medium(),
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontBodyWeight.medium(),
+                            ),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
                             productData['company']['phone'],
-                            style: MTextStyles.regular(),
+                            style: Theme.of(context).textTheme.bodyMedium!,
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
                             productData['company']['address'],
-                            style: MTextStyles.regular(),
+                            style: Theme.of(context).textTheme.bodyMedium!,
                           ),
                         ],
                       ),
@@ -330,7 +348,9 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           'Ubah detail produk',
-                          style: LTextStyles.medium(),
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontBodyWeight.medium(),
+                          ),
                         ),
                       ),
                     ),
@@ -361,8 +381,9 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           'Batalkan Penitipan',
-                          style: LTextStyles.medium().copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: PrimaryColorStyles.primaryMain(),
+                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
