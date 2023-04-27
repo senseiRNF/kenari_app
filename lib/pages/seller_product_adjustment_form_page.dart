@@ -88,25 +88,22 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                               children: [
                                 Text(
                                   waitingList[waitingIndex]['title'],
-                                  style: Theme.of(context).textTheme.bodyMedium!,
+                                  style: MTextStyles.regular(),
                                 ),
                                 const SizedBox(
                                   height: 5.0,
                                 ),
                                 Text(
                                   'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp ${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}',
-                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontBodyWeight.medium(),
-                                  ),
+                                  style: MTextStyles.medium(),
                                 ),
                                 const SizedBox(
                                   height: 10.0,
                                 ),
                                 Text(
                                   'Segera kirim produk ke koperasi',
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  style: STextStyles.medium().copyWith(
                                     color: const Color(0xffff9500),
-                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ],
@@ -146,7 +143,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                       children: [
                         Text(
                           'Kamu Belum Menitipkan Produk',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: HeadingTextStyles.headingS(),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -154,9 +151,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         ),
                         Text(
                           'Yuk titip semua produk yang ingin kamu jual dengan Kenari!',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: MTextStyles.medium(),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -238,23 +233,21 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                               children: [
                                 Text(
                                   activeList[waitingIndex]['title'],
-                                  style: Theme.of(context).textTheme.bodyMedium!,
+                                  style: MTextStyles.regular(),
                                 ),
                                 const SizedBox(
                                   height: 5.0,
                                 ),
                                 Text(
                                   'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp ${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}',
-                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontBodyWeight.medium(),
-                                  ),
+                                  style: MTextStyles.medium(),
                                 ),
                                 const SizedBox(
                                   height: 10.0,
                                 ),
                                 Text(
                                   'Stok: Tersedia',
-                                  style: Theme.of(context).textTheme.bodyMedium!,
+                                  style: MTextStyles.regular(),
                                 ),
                               ],
                             ),
@@ -292,7 +285,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                       children: [
                         Text(
                           'Kamu Belum Menitipkan Produk',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: HeadingTextStyles.headingS(),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -300,9 +293,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         ),
                         Text(
                           'Yuk titip semua produk yang ingin kamu jual dengan Kenari!',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: MTextStyles.medium(),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -364,23 +355,21 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                               children: [
                                 Text(
                                   completedList[waitingIndex]['title'],
-                                  style: Theme.of(context).textTheme.bodyMedium!,
+                                  style: MTextStyles.regular(),
                                 ),
                                 const SizedBox(
                                   height: 5.0,
                                 ),
                                 Text(
                                   'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp ${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}',
-                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontBodyWeight.medium(),
-                                  ),
+                                  style: MTextStyles.medium(),
                                 ),
                                 const SizedBox(
                                   height: 10.0,
                                 ),
                                 Text(
                                   'Stok: Habis',
-                                  style: Theme.of(context).textTheme.bodyMedium!,
+                                  style: MTextStyles.regular(),
                                 ),
                               ],
                             ),
@@ -419,7 +408,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                       children: [
                         Text(
                           'Kamu Belum Menitipkan Produk',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: HeadingTextStyles.headingS(),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -427,9 +416,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         ),
                         Text(
                           'Yuk titip semua produk yang ingin kamu jual dengan Kenari!',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: MTextStyles.medium(),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -483,7 +470,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         Expanded(
                           child: Text(
                             'Atur Produk',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -520,27 +507,24 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                       Tab(
                         child: Text(
                           'Menunggu',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: MTextStyles.medium().copyWith(
                             color: selectedTab == 0 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
                       Tab(
                         child: Text(
                           'Aktif',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: MTextStyles.medium().copyWith(
                             color: selectedTab == 1 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
                       Tab(
                         child: Text(
                           'Selesai',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: MTextStyles.medium().copyWith(
                             color: selectedTab == 2 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),

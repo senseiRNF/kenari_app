@@ -50,7 +50,7 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                   Expanded(
                     child: Text(
                       'Detail Transaksi',
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: HeadingTextStyles.headingS(),
                     ),
                   ),
                 ],
@@ -74,13 +74,11 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                       children: [
                         Text(
                           'Rincian Transaksi',
-                          style: Theme.of(context).textTheme.bodySmall!,
+                          style: STextStyles.regular(),
                         ),
                         Text(
                           widget.notificationData.title,
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: STextStyles.medium(),
                         ),
                       ],
                     ),
@@ -102,9 +100,8 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                         ),
                         Text(
                           'Transaksi Sukses',
-                          style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                          style: XSTextStyles.medium().copyWith(
                             color: Colors.green,
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ],
@@ -120,7 +117,7 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                       children: [
                         Text(
                           widget.notificationData.title.contains('Iuran Wajib') ? 'Autodebet' : widget.notificationData.title.contains('Penjualan') || widget.notificationData.title.contains('Pinjaman') && widget.notificationData.total != null && widget.notificationData.total! > 0 ? 'Metode Pencairan' : 'Metode Pembayaran',
-                          style: Theme.of(context).textTheme.bodySmall!,
+                          style: STextStyles.regular(),
                         ),
                         Expanded(
                           child: Row(
@@ -137,9 +134,7 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                               ),
                               Text(
                                 '08123456789',
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: STextStyles.medium(),
                               ),
                             ],
                           ),
@@ -158,13 +153,11 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                       children: [
                         Text(
                           'No. Referensi',
-                          style: Theme.of(context).textTheme.bodySmall!,
+                          style: STextStyles.regular(),
                         ),
                         Text(
                           'PAY000000242',
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: STextStyles.medium(),
                         ),
                       ],
                     ),
@@ -180,13 +173,11 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                       children: [
                         Text(
                           'Waktu dan Tanggal',
-                          style: Theme.of(context).textTheme.bodySmall!,
+                          style: STextStyles.regular(),
                         ),
                         Text(
                           DateFormat('dd MMMM yyyy,\nHH:mm').format(widget.notificationData.date),
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: STextStyles.medium(),
                           textAlign: TextAlign.end,
                         ),
                       ],
@@ -213,13 +204,11 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                       children: [
                         Text(
                           'Jumlah',
-                          style: Theme.of(context).textTheme.bodySmall!,
+                          style: STextStyles.regular(),
                         ),
                         Text(
                           "Rp ${NumberFormat('#,###', 'en_id').format(widget.notificationData.total!.abs()).replaceAll(',', '.')}",
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: STextStyles.medium(),
                           textAlign: TextAlign.end,
                         ),
                       ],

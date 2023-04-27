@@ -62,7 +62,7 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                         ),
                         Text(
                           'Pembayaran Berhasil',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: HeadingTextStyles.headingS(),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -70,7 +70,7 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                         ),
                         Text(
                           'Terimakasih, pembayaran cicilan Pendanaan 1 telah berhasil.',
-                          style: Theme.of(context).textTheme.bodyMedium!,
+                          style: MTextStyles.regular(),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -96,7 +96,7 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                         ),
                         Text(
                           'Pembayaran Gagal',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: HeadingTextStyles.headingS(),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -104,7 +104,7 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                         ),
                         Text(
                           'Mohon maaf pembayaran anda mengalami kendala, Silahkan lakukan pembayaran ulang.',
-                          style: Theme.of(context).textTheme.bodyMedium!,
+                          style: MTextStyles.regular(),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -123,7 +123,7 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                     ),
                     Text(
                       'Jumlah Pembayaran',
-                      style: Theme.of(context).textTheme.bodyMedium!,
+                      style: MTextStyles.regular(),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -131,7 +131,7 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                     ),
                     Text(
                       'Rp 1.118.594',
-                      style: Theme.of(context).textTheme.bodyMedium!,
+                      style: MTextStyles.regular(),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -153,13 +153,13 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                         children: [
                           Text(
                             'No. Referensi',
-                            style: Theme.of(context).textTheme.bodySmall!,
+                            style: STextStyles.regular(),
                             textAlign: TextAlign.center,
                           ),
                           Text(
                             'PAY000000242',
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
+                            style: STextStyles.medium().copyWith(
+                              fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -176,7 +176,7 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                         children: [
                           Text(
                             'Waktu dan Tanggal',
-                            style: Theme.of(context).textTheme.bodySmall!,
+                            style: STextStyles.regular(),
                             textAlign: TextAlign.center,
                           ),
                           Row(
@@ -185,8 +185,8 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                             children: [
                               Text(
                                 DateFormat('dd MMMM yyyy').format(DateTime.now()),
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
+                                style: STextStyles.medium().copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -201,8 +201,8 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                               ),
                               Text(
                                 DateFormat('HH:mm').format(DateTime.now()),
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
+                                style: STextStyles.medium().copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -221,13 +221,13 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                         children: [
                           Text(
                             'Periode',
-                            style: Theme.of(context).textTheme.bodySmall!,
+                            style: STextStyles.regular(),
                             textAlign: TextAlign.center,
                           ),
                           Text(
                             '3/3',
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
+                            style: STextStyles.medium().copyWith(
+                              fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -255,9 +255,8 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'Kembali ke Beranda',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: Theme.of(context).textTheme.bodyLarge!.color,
-                              fontWeight: FontBodyWeight.medium(),
+                            style: LTextStyles.medium().copyWith(
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -273,9 +272,8 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'Lihat Riwayat Transaksi',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            style: LTextStyles.medium().copyWith(
                               color: PrimaryColorStyles.primaryMain(),
-                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),

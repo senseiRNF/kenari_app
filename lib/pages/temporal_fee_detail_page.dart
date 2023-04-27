@@ -73,7 +73,7 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                         Expanded(
                           child: Text(
                             'Daftar Iuran Saya',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -98,9 +98,8 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                         children: [
                           Text(
                             'Iuran Berjangka 1',
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            style: STextStyles.medium().copyWith(
                               color: TextColorStyles.textPrimary(),
-                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           temporalFeeData != null && temporalFeeData!.statusPencairan != true ?
@@ -121,9 +120,8 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                       child: Text(
                                         'Pencairan saldo\n\nSaat tanggal pencairan telah jatuh tempo, maka saldo otomatis akan tercairkan pada akun Dipay',
-                                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                        style: XSTextStyles.medium().copyWith(
                                           color: InfoColorStyles.infoMain(),
-                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                     ),
@@ -140,13 +138,11 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                             children: [
                               Text(
                                 'Saldo saat ini',
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                               Text(
                                   temporalFeeData != null && temporalFeeData!.jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(temporalFeeData!.jumlahIuran!)).replaceAll(',', '.')}' : 'Rp 0',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: MTextStyles.medium(),
                               ),
                             ],
                           ),
@@ -157,7 +153,7 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                             children: [
                               Text(
                                 'Pertumbuhan saldo',
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                               Expanded(
                                 child: Row(
@@ -169,9 +165,7 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                     ),
                                     Text(
                                       temporalFeeData != null && temporalFeeData!.pertumbuhanSaldo != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(double.parse(temporalFeeData!.pertumbuhanSaldo!)).replaceAll(',', '.')}' : 'Rp 0',
-                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                        fontWeight: FontBodyWeight.medium(),
-                                      ),
+                                      style: MTextStyles.medium(),
                                     ),
                                   ],
                                 ),
@@ -186,13 +180,11 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                             children: [
                               Text(
                                 'Jangka waktu',
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                               Text(
                                 temporalFeeData != null && temporalFeeData!.jangkaWaktu != null ? '${temporalFeeData!.jangkaWaktu} Bulan' : 'Unknown',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: MTextStyles.medium(),
                               ),
                             ],
                           ),
@@ -204,13 +196,11 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                             children: [
                               Text(
                                 'Imbal hasil pertahun',
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                               Text(
                                 temporalFeeData != null &&  temporalFeeData!.imbalHasil != null ? '${temporalFeeData!.imbalHasil}%' : 'Unknown',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: MTextStyles.medium(),
                               ),
                             ],
                           ),
@@ -222,13 +212,11 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                             children: [
                               Text(
                                 'Tanggal mulai',
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                               Text(
                                 temporalFeeData != null && temporalFeeData!.tanggalMulai != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(temporalFeeData!.tanggalMulai!)) : 'Unknown',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: MTextStyles.medium(),
                               ),
                             ],
                           ),
@@ -240,13 +228,11 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                             children: [
                               Text(
                                 'Tanggal pencairan',
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                               Text(
                                 temporalFeeData != null && temporalFeeData!.tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(temporalFeeData!.tanggalPencairan!)) : 'Unknown',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: MTextStyles.medium(),
                               ),
                             ],
                           ),
@@ -287,9 +273,8 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                   ),
                                   Text(
                                     'Pencairan Sukses',
-                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                    style: XSTextStyles.medium().copyWith(
                                       color: SuccessColorStyles.successMain(),
-                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ],
@@ -299,9 +284,8 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                           const Material(),
                           Text(
                             'Pencairan Saldo',
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            style: STextStyles.medium().copyWith(
                               color: TextColorStyles.textPrimary(),
-                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -322,9 +306,7 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                               ),
                               Text(
                                 'Dipay',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: MTextStyles.medium(),
                               ),
                               Expanded(
                                 child: Column(
@@ -332,15 +314,11 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                   children: [
                                     Text(
                                       temporalFeeData != null && temporalFeeData!.member != null && temporalFeeData!.member!.phoneNumber != null ? temporalFeeData!.member!.phoneNumber! : 'Unknown',
-                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                        fontWeight: FontBodyWeight.medium(),
-                                      ),
+                                      style: STextStyles.medium(),
                                     ),
                                     Text(
                                       temporalFeeData != null && temporalFeeData!.member != null && temporalFeeData!.member!.name != null ? 'a/n ${temporalFeeData!.member!.name!}' : 'Unknown',
-                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                        fontWeight: FontBodyWeight.medium(),
-                                      ),
+                                      style: STextStyles.medium(),
                                     ),
                                   ],
                                 ),

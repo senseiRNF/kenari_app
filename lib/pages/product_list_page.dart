@@ -1,21 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
+import 'package:kenari_app/services/api/product_services/api_product_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class ProductListPage extends StatefulWidget {
   final String? filterType;
-  final List<ProductData> productList;
   final List<String> filterList;
 
   const ProductListPage({
     super.key,
     this.filterType,
-    required this.productList,
     required this.filterList,
   });
 
@@ -40,16 +40,24 @@ class _ProductListPageState extends State<ProductListPage> {
   void initState() {
     super.initState();
 
-    initLoad();
+    loadData();
   }
 
-  Future<void> initLoad() async {
-    await APICategoryServices(context: context).call().then((result) {
+  Future<void> loadData() async {
+    await APICategoryServices(context: context).call().then((result) async {
       if(result != null && result.categoryData != null) {
         setState(() {
           categoryList = result.categoryData!;
         });
       }
+
+      await APIProductServices(context: context).call().then((productResult) {
+        if(productResult != null && productResult.productData != null) {
+          setState(() {
+            productList = productResult.productData!;
+          });
+        }
+      });
     });
 
     if(widget.filterType != null) {
@@ -76,7 +84,6 @@ class _ProductListPageState extends State<ProductListPage> {
 
     setState(() {
       filterList = widget.filterList;
-      productList = widget.productList;
     });
   }
 
@@ -121,7 +128,7 @@ class _ProductListPageState extends State<ProductListPage> {
                         Expanded(
                           child: Text(
                             title,
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -152,7 +159,7 @@ class _ProductListPageState extends State<ProductListPage> {
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: searchHint,
-                                hintStyle: Theme.of(context).textTheme.bodyMedium!,
+                                hintStyle: MTextStyles.regular(),
                               ),
                               textCapitalization: TextCapitalization.words,
                               textInputAction: TextInputAction.done,
@@ -175,9 +182,7 @@ class _ProductListPageState extends State<ProductListPage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Text(
                 'Kategori',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  fontWeight: FontBodyWeight.medium(),
-                ),
+                style: STextStyles.medium(),
               ),
             ),
             Padding(
@@ -220,7 +225,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                       padding: const EdgeInsets.all(10.0),
                                       child: Text(
                                         categoryList[categoryIndex].name ?? 'Unknown Category',
-                                        style: Theme.of(context).textTheme.bodyMedium!,
+                                        style: MTextStyles.regular(),
                                       ),
                                     ),
                                   ),
@@ -258,14 +263,12 @@ class _ProductListPageState extends State<ProductListPage> {
                                 children: [
                                   Text(
                                     'Filter : ',
-                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      fontWeight: FontBodyWeight.medium(),
-                                    ),
+                                    style: STextStyles.medium(),
                                   ),
                                   Expanded(
                                     child: Text(
                                       filterType,
-                                      style: Theme.of(context).textTheme.bodySmall!,
+                                      style: STextStyles.regular(),
                                     ),
                                   ),
                                   Icon(
@@ -297,7 +300,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                                     child: Text(
                                       value,
-                                      style: Theme.of(context).textTheme.bodySmall!,
+                                      style: STextStyles.regular(),
                                     ),
                                   ),
                                 );
@@ -329,11 +332,28 @@ class _ProductListPageState extends State<ProductListPage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Image.network(
-                                  productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : '',
+                                CachedNetworkImage(
+                                  imageUrl: productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : '',
                                   fit: BoxFit.cover,
                                   width: 110.0,
                                   height: 100.0,
+                                  errorWidget: (errContext, url, error) {
+                                    return Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Icon(
+                                          Icons.broken_image_outlined,
+                                          color: IconColorStyles.iconColor(),
+                                        ),
+                                        Text(
+                                          'Unable to load image',
+                                          style: XSTextStyles.medium(),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
                                 const SizedBox(
                                   width: 15.0,
@@ -344,9 +364,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                     children: [
                                       Text(
                                         productList[index].name ?? 'Unknown Product',
-                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                          fontWeight: FontBodyWeight.medium(),
-                                        ),
+                                        style: STextStyles.medium(),
                                       ),
                                       const SizedBox(
                                         height: 15.0,
@@ -364,7 +382,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                               child: Text(
                                                 productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : 'Unknown Category',
-                                                style: Theme.of(context).textTheme.labelSmall!,
+                                                style: XSTextStyles.regular(),
                                               ),
                                             ),
                                           ),
@@ -383,7 +401,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                 ),
                                                 Text(
                                                   'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
-                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                                  style: STextStyles.regular().copyWith(
                                                     color: PrimaryColorStyles.primaryMain(),
                                                   ),
                                                 ),
@@ -392,7 +410,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                 ),
                                                 Text(
                                                   'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                                  style: STextStyles.regular().copyWith(
                                                     color: TextColorStyles.textDisabled(),
                                                     decoration: TextDecoration.lineThrough,
                                                   ),
@@ -407,7 +425,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                 ),
                                                 Text(
                                                   'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                                  style: STextStyles.regular().copyWith(
                                                     color: PrimaryColorStyles.primaryMain(),
                                                   ),
                                                 ),
@@ -435,7 +453,7 @@ class _ProductListPageState extends State<ProductListPage> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 80.0),
-                            child: Image.network(
+                            child: Image.asset(
                               'assets/images/icon_empty.png',
                             ),
                           ),
@@ -443,8 +461,8 @@ class _ProductListPageState extends State<ProductListPage> {
                             padding: const EdgeInsets.all(25.0),
                             child: Text(
                               'Oops! Produk yang kamu cari di halaman ini tidak dapat ditemukan',
-                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                fontWeight: FontBodyWeight.medium(),
+                              style: MTextStyles.medium().copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.center,
                             ),

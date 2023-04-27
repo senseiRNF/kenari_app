@@ -40,9 +40,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
             children: [
               Text(
                 'Konfirmasi Pesanan',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                style: STextStyles.medium().copyWith(
                   color: WarningColorStyles.warningMain(),
-                  fontWeight: FontBodyWeight.medium(),
                 ),
               ),
               const SizedBox(
@@ -67,9 +66,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     Expanded(
                       child: Text(
                         'Konfirmasi pesanan paling lama 2 Hari, atau pesanan akan otomatis dibatalkan oleh sistem.',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        style: XSTextStyles.medium().copyWith(
                           color: WarningColorStyles.warningMain(),
-                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -90,13 +88,12 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                   children: [
                     Text(
                       'Batas Respon',
-                      style: Theme.of(context).textTheme.bodySmall!,
+                      style: STextStyles.regular(),
                     ),
                     Text(
                       '${orderData['respond_limit']} Hari',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      style: STextStyles.medium().copyWith(
                         color: InfoColorStyles.infoMain(),
-                        fontWeight: FontBodyWeight.medium(),
                       ),
                     ),
                   ],
@@ -116,9 +113,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
             children: [
               Text(
                 'Segera Siapkan Pesanan',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                style: STextStyles.medium().copyWith(
                   color: WarningColorStyles.warningMain(),
-                  fontWeight: FontBodyWeight.medium(),
                 ),
               ),
               const SizedBox(
@@ -143,9 +139,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     Expanded(
                       child: Text(
                         'Segera siapkan produk paling lama 2 Hari, atau pesanan akan otomatis dibatalkan oleh sistem.',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        style: XSTextStyles.medium().copyWith(
                           color: WarningColorStyles.warningMain(),
-                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -166,9 +161,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
             children: [
               Text(
                 'Siap diambil Pembeli',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                style: STextStyles.medium().copyWith(
                   color: InfoColorStyles.infoMain(),
-                  fontWeight: FontBodyWeight.medium(),
                 ),
               ),
               const SizedBox(
@@ -193,9 +187,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     Expanded(
                       child: Text(
                         'Apabila dalam 2 hari pembeli tidak mengonfirmasi telah mengambil pesanan, maka pesanan otomatis Selesai.',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        style: XSTextStyles.medium().copyWith(
                           color: InfoColorStyles.infoMain(),
-                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -216,9 +209,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
             children: [
               Text(
                 'Selesai',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                style: STextStyles.medium().copyWith(
                   color: SuccessColorStyles.successMain(),
-                  fontWeight: FontBodyWeight.medium(),
                 ),
               ),
             ],
@@ -235,9 +227,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
             children: [
               Text(
                 'Pesanan Dibatalkan',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                style: STextStyles.medium().copyWith(
                   color: DangerColorStyles.dangerMain(),
-                  fontWeight: FontBodyWeight.medium(),
                 ),
               ),
               const SizedBox(
@@ -262,9 +253,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     Expanded(
                       child: Text(
                         'Anda membatalkan pesanan.',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        style: XSTextStyles.medium().copyWith(
                           color: DangerColorStyles.dangerMain(),
-                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ),
@@ -316,8 +306,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   'Terima Pesanan',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontWeight: FontBodyWeight.medium(),
+                  style: LTextStyles.medium().copyWith(
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -352,9 +342,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   'Batalkan Pesanan',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  style: LTextStyles.medium().copyWith(
                     color: PrimaryColorStyles.primaryMain(),
-                    fontWeight: FontBodyWeight.medium(),
                   ),
                 ),
               ),
@@ -399,8 +388,8 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   'Pesanan Siap',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontWeight: FontBodyWeight.medium(),
+                  style: LTextStyles.medium().copyWith(
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -450,7 +439,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                         Expanded(
                           child: Text(
                             'Detail Pesanan',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -483,13 +472,11 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                             children: [
                               Text(
                                 'Nomor Pesanan',
-                                style: Theme.of(context).textTheme.bodySmall!,
+                                style: STextStyles.regular(),
                               ),
                               Text(
                                 orderData['order_no'],
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: STextStyles.medium(),
                               ),
                             ],
                           ),
@@ -502,13 +489,11 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                             children: [
                               Text(
                                 'Waktu Pemesanan',
-                                style: Theme.of(context).textTheme.bodySmall!,
+                                style: STextStyles.regular(),
                               ),
                               Text(
                                 DateFormat('dd-MM-yyyy HH:mm').format(orderData['order_date']),
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: STextStyles.medium(),
                               ),
                             ],
                           ),
@@ -521,13 +506,11 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                             children: [
                               Text(
                                 'Waktu Pembayaran',
-                                style: Theme.of(context).textTheme.bodySmall!,
+                                style: STextStyles.regular(),
                               ),
                               Text(
                                 DateFormat('dd-MM-yyyy HH:mm').format(orderData['payment_date']),
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: STextStyles.medium(),
                               ),
                             ],
                           ),
@@ -547,34 +530,28 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                         children: [
                           Text(
                             'Alamat Pengambilan',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ),
+                            style: MTextStyles.medium(),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
                             orderData['company']['name'],
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ),
+                            style: STextStyles.medium(),
                           ),
                           const SizedBox(
                             height: 5.0,
                           ),
                           Text(
                             orderData['company']['phone'],
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ),
+                            style: STextStyles.medium(),
                           ),
                           const SizedBox(
                             height: 5.0,
                           ),
                           Text(
                             orderData['company']['address'],
-                            style: Theme.of(context).textTheme.bodySmall!,
+                            style: STextStyles.regular(),
                           ),
                         ],
                       ),
@@ -592,9 +569,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                         children: [
                           Text(
                             'Detail Produk',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ),
+                            style: MTextStyles.medium(),
                           ),
                           const SizedBox(
                             height: 10.0,
@@ -624,14 +599,14 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                                   children: [
                                     Text(
                                       orderData['title'],
-                                      style: Theme.of(context).textTheme.bodyMedium!,
+                                      style: MTextStyles.regular(),
                                     ),
                                     const SizedBox(
                                       height: 5.0,
                                     ),
                                     Text(
                                       orderData['variant'],
-                                      style: Theme.of(context).textTheme.labelSmall!,
+                                      style: XSTextStyles.regular(),
                                     ),
                                     const SizedBox(
                                       height: 10.0,
@@ -641,13 +616,11 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                                       children: [
                                         Text(
                                           'Rp ${NumberFormat('#,###', 'en_id').format(orderData['price']).replaceAll(',', '.')}',
-                                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                            fontWeight: FontBodyWeight.medium(),
-                                          ),
+                                          style: MTextStyles.medium(),
                                         ),
                                         Text(
                                           'x${orderData['qty']}',
-                                          style: Theme.of(context).textTheme.bodyMedium!,
+                                          style: MTextStyles.regular(),
                                         ),
                                       ],
                                     ),
@@ -672,9 +645,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                         children: [
                           Text(
                             'Metode Pembayaran',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ),
+                            style: MTextStyles.medium(),
                           ),
                           const SizedBox(
                             height: 10.0,
@@ -695,9 +666,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                               Expanded(
                                 child: Text(
                                   'Dipay',
-                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontBodyWeight.medium(),
-                                  ),
+                                  style: MTextStyles.medium(),
                                 ),
                               ),
                             ],
@@ -718,9 +687,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                         children: [
                           Text(
                             'Rincian Pembayaran',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ),
+                            style: MTextStyles.medium(),
                           ),
                           const SizedBox(
                             height: 10.0,
@@ -730,12 +697,12 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                             children: [
                               Text(
                                 "${orderData['title']} ${orderData['variant']} (${orderData['qty']}x)",
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                               Text(
                                 'Rp ${NumberFormat('#,###', 'en_id').format(orderData['price'] * orderData['qty']).replaceAll(',', '.')}',
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
+                                style: STextStyles.medium().copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
@@ -752,12 +719,12 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                             children: [
                               Text(
                                 "Total Penjualan",
-                                style: Theme.of(context).textTheme.bodySmall!,
+                                style: STextStyles.regular(),
                               ),
                               Text(
                                 'Rp ${NumberFormat('#,###', 'en_id').format(orderData['price'] * orderData['qty']).replaceAll(',', '.')}',
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
+                                style: STextStyles.medium().copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],

@@ -84,7 +84,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         Expanded(
                           child: Text(
                             'Reset Password',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -108,17 +108,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     ),
                     Text(
                       'Password baru anda harus berbeda dari password yang telah digunakan sebelumnya.',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: TextColorStyles.textSecondary(),
-                      ),
+                      style: MTextStyles.regular(),
                     ),
                     const SizedBox(
                       height: 25.0,
                     ),
                     Text(
                       'Password Baru',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
+                      style: STextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     TextField(
@@ -126,9 +124,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       obscureText: obscurePassword,
                       decoration: InputDecoration(
                         hintText: 'Masukkan password',
-                        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: TextColorStyles.textDisabled(),
-                        ),
+                        hintStyle: MTextStyles.regular(),
                         suffixIcon: InkWell(
                           onTap: () {
                             setState(() {
@@ -162,8 +158,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     ),
                     Text(
                       'Konfirmasi Password',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
+                      style: STextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     TextField(
@@ -171,9 +167,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       obscureText: obscureConfPassword,
                       decoration: InputDecoration(
                         hintText: 'Ketik ulang password',
-                        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: TextColorStyles.textDisabled(),
-                        ),
+                        hintStyle: MTextStyles.regular(),
                         suffixIcon: InkWell(
                           onTap: () {
                             setState(() {
@@ -219,9 +213,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                   child: Text(
                     'Reset Password',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: passwordController.text != '' && confirmPasswordController.text != '' ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
-                      fontWeight: FontBodyWeight.medium(),
+                    style: LTextStyles.medium().copyWith(
+                      color: passwordController.text != '' && confirmPasswordController.text != '' ? Colors.white : Colors.black54,
                     ),
                   ),
                 ),

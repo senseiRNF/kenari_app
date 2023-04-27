@@ -18,7 +18,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   bool showErrorHint = false;
 
   void checkEmail() {
-    if(emailController.text != '') {
+    if(emailController.text == '') {
       setState(() {
         showErrorHint = true;
       });
@@ -77,7 +77,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         Expanded(
                           child: Text(
                             'Lupa Password',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -101,25 +101,23 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     ),
                     Text(
                       'Silahkan masukkan alamat email terdaftar untuk menerima email pengaturan ulang kata sandi',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: TextColorStyles.textSecondary(),
-                      ),
+                      style: STextStyles.regular(),
                     ),
                     const SizedBox(
                       height: 25.0,
                     ),
                     Text(
                       'Email',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: showErrorHint ? DangerColorStyles.dangerMain() : Theme.of(context).textTheme.bodySmall!.color,
-                        fontWeight: FontBodyWeight.medium(),
+                      style: STextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: showErrorHint ? DangerColorStyles.dangerMain() : STextStyles.medium().color,
                       ),
                     ),
                     TextField(
                       controller: emailController,
                       decoration: InputDecoration(
                         hintText: 'Masukkan alamat email',
-                        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        hintStyle: MTextStyles.regular().copyWith(
                           color: TextColorStyles.textDisabled(),
                         ),
                         errorText: showErrorHint ? 'Email tidak terdaftar' : null,
@@ -153,9 +151,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                   child: Text(
                     'Lanjutkan',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: emailController.text != '' ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
-                      fontWeight: FontBodyWeight.medium(),
+                    style: LTextStyles.medium().copyWith(
+                      color: emailController.text != '' ? Colors.white : Colors.black54,
                     ),
                   ),
                 ),

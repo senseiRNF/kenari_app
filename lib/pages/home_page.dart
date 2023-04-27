@@ -53,10 +53,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    initLoad();
+    loadData();
   }
 
-  Future<void> initLoad() async {
+  Future loadData() async {
     await LocalSharedPrefs().readKey('name').then((nameResult) async {
       setState(() {
         name = nameResult;
@@ -96,9 +96,13 @@ class _HomePageState extends State<HomePage> {
         for(int i = 0; i < productList.length; i++) {
           if(productList[i].status == true) {
             newProductList.add(productList[i]);
-          } else if(productList[i].isRecomendation == true) {
+          }
+
+          if(productList[i].isRecomendation == true) {
             popularProductList.add(productList[i]);
-          } else if(productList[i].isPromo == true) {
+          }
+
+          if(productList[i].isPromo == true) {
             discountProductList.add(productList[i]);
           }
         }
@@ -123,7 +127,7 @@ class _HomePageState extends State<HomePage> {
             showProductBottomDialog(product);
           },
           onProductSelected: (ProductData product) {
-            MoveToPage(context: context, target: ProductPage(productData: product)).go();
+            MoveToPage(context: context, target: ProductPage(productId: product.sId!)).go();
           },
           onCallbackFromFeePage: () {
             setState(() {
@@ -159,6 +163,9 @@ class _HomePageState extends State<HomePage> {
               }
             }
           },
+          onRefreshPage: () {
+            loadData();
+          },
         );
       case 1:
         return SearchFragment(
@@ -173,6 +180,9 @@ class _HomePageState extends State<HomePage> {
                 filterType = selectedFilter;
               });
             }
+          },
+          onRefreshPage: () {
+            loadData();
           },
         );
       case 2:
@@ -202,7 +212,7 @@ class _HomePageState extends State<HomePage> {
           name: name,
           companyCode: companyCode,
           refreshPage: () {
-            initLoad();
+            loadData();
           },
           onLogout: () async {
             await LocalSharedPrefs().removeAllKey().then((removeResult) {
@@ -219,7 +229,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Text(
               'Terjadi kesalahan....',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: HeadingTextStyles.headingM(),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
@@ -227,9 +237,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Text(
               'Silahkan muat ulang aplikasi, apabila kesalahan terus terjadi, mohon untuk segera menghubungi administrator.',
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontWeight: FontBodyWeight.medium(),
-              ),
+              style: LTextStyles.medium(),
               textAlign: TextAlign.center,
             ),
           ],
@@ -364,8 +372,8 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Text(
                             menuBottom[index]['title'],
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
+                            style: STextStyles.medium().copyWith(
+                              fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.start,
                           ),
@@ -421,13 +429,11 @@ class _HomePageState extends State<HomePage> {
                                         children: [
                                           Text(
                                             menuBottom[index]['data'][subIndex]['title'],
-                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                              fontWeight: FontBodyWeight.medium(),
-                                            ),
+                                            style: STextStyles.medium(),
                                           ),
                                           Text(
                                             menuBottom[index]['data'][subIndex]['description'],
-                                            style: Theme.of(context).textTheme.labelSmall!,
+                                            style: XSTextStyles.regular(),
                                           ),
                                         ],
                                       ),
@@ -500,8 +506,8 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Text(
                     product.varians != null ? 'Varian Produk' : 'Tambah Troli',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontBodyWeight.medium(),
+                    style: LTextStyles.medium().copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -537,8 +543,8 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               product.name ?? 'Unknown Product',
-                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                fontWeight: FontBodyWeight.medium(),
+                              style: MTextStyles.medium().copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             variant != null ?
@@ -557,9 +563,7 @@ class _HomePageState extends State<HomePage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
                                       variant!,
-                                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                        fontWeight: FontBodyWeight.medium(),
-                                      ),
+                                      style: XSTextStyles.medium(),
                                     ),
                                   ),
                                 ),
@@ -571,9 +575,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               price,
-                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              style: LTextStyles.medium().copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
-                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                             const SizedBox(
@@ -584,7 +587,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text(
                                   'Stok:',
-                                  style: Theme.of(context).textTheme.bodySmall!,
+                                  style: STextStyles.regular(),
                                 ),
                                 const SizedBox(
                                   width: 5.0,
@@ -592,9 +595,7 @@ class _HomePageState extends State<HomePage> {
                                 Expanded(
                                   child: Text(
                                     product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 'Selalu ada' : stock.toString(),
-                                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      fontWeight: FontBodyWeight.medium(),
-                                    ),
+                                    style: STextStyles.medium(),
                                   ),
                                 ),
                               ],
@@ -616,8 +617,8 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: Text(
                         'Pilih Varian :',
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          fontWeight: FontBodyWeight.medium(),
+                        style: STextStyles.medium().copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.start,
                       ),
@@ -712,7 +713,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           '$qty',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: HeadingTextStyles.headingS(),
                         ),
                       ),
                       Container(
@@ -771,9 +772,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Text(
                                   'Tambah ke Troli',
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  style: LTextStyles.medium().copyWith(
                                     color: Colors.white,
-                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ],
@@ -834,7 +834,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Beranda',
-                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                              style: XSTextStyles.regular().copyWith(
                                 color: selectedMenu == 0 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),
@@ -869,7 +869,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Pencarian',
-                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                              style: XSTextStyles.regular().copyWith(
                                 color: selectedMenu == 1 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),
@@ -909,7 +909,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Transaksi',
-                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                              style: XSTextStyles.regular().copyWith(
                                 color: selectedMenu == 2 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),
@@ -944,7 +944,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Profile',
-                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                              style: XSTextStyles.regular().copyWith(
                                 color: selectedMenu == 3 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
                               ),
                             ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
@@ -166,14 +167,12 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                         children: [
                           Text(
                             'Filter : ',
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ),
+                            style: STextStyles.medium(),
                           ),
                           Expanded(
                             child: Text(
                               filterType,
-                              style: Theme.of(context).textTheme.bodySmall!,
+                              style: STextStyles.regular(),
                             ),
                           ),
                           Icon(
@@ -205,7 +204,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                             child: Text(
                               value,
-                              style: Theme.of(context).textTheme.bodySmall!,
+                              style: STextStyles.regular(),
                             ),
                           ),
                         );
@@ -240,11 +239,28 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : '',
+                        CachedNetworkImage(
+                          imageUrl: productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : '',
                           fit: BoxFit.cover,
                           width: 110.0,
                           height: 100.0,
+                          errorWidget: (errContext, url, error) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Icon(
+                                  Icons.broken_image_outlined,
+                                  color: IconColorStyles.iconColor(),
+                                ),
+                                Text(
+                                  'Unable to load image',
+                                  style: XSTextStyles.medium(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            );
+                          },
                         ),
                         const SizedBox(
                           width: 15.0,
@@ -255,9 +271,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                             children: [
                               Text(
                                 productList[index].name ?? 'Unknown Product',
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: STextStyles.medium(),
                               ),
                               const SizedBox(
                                 height: 15.0,
@@ -275,7 +289,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                       child: Text(
                                         productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : '',
-                                        style: Theme.of(context).textTheme.labelSmall!,
+                                        style: XSTextStyles.regular(),
                                       ),
                                     ),
                                   ),
@@ -294,7 +308,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                         ),
                                         Text(
                                           'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
-                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          style: STextStyles.regular().copyWith(
                                             color: PrimaryColorStyles.primaryMain(),
                                           ),
                                         ),
@@ -303,7 +317,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                         ),
                                         Text(
                                           'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          style: STextStyles.regular().copyWith(
                                             color: TextColorStyles.textDisabled(),
                                             decoration: TextDecoration.lineThrough,
                                           ),
@@ -318,7 +332,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                         ),
                                         Text(
                                           'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          style: STextStyles.regular().copyWith(
                                             color: PrimaryColorStyles.primaryMain(),
                                           ),
                                         ),
@@ -354,8 +368,8 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                     padding: const EdgeInsets.all(25.0),
                     child: Text(
                       'Oops! Produk yang kamu cari di halaman ini tidak dapat ditemukan',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
+                      style: MTextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
                     ),

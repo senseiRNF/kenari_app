@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
-  Future checkAuth() async {
+  Future<void> checkAuth() async {
     await LocalSharedPrefs().readKey('token').then((tokenResult) {
       if(tokenResult != null) {
         ReplaceToPage(context: context, target: const HomePage()).go();

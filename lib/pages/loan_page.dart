@@ -88,7 +88,7 @@ class _LoanPageState extends State<LoanPage> {
                         Expanded(
                           child: Text(
                             'Pendanaan',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -130,7 +130,7 @@ class _LoanPageState extends State<LoanPage> {
                           Expanded(
                             child: Text(
                               'Untuk dapat mengajukan pendanaan, Anda perlu menyelesaikan langkah berikut ini:',
-                              style: Theme.of(context).textTheme.bodySmall!,
+                              style: STextStyles.regular(),
                             ),
                           ),
                         ],
@@ -160,8 +160,8 @@ class _LoanPageState extends State<LoanPage> {
                                 ),
                                 Text(
                                   'dipay',
-                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontBodyWeight.medium(),
+                                  style: MTextStyles.medium().copyWith(
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -207,14 +207,14 @@ class _LoanPageState extends State<LoanPage> {
                                           children: [
                                             Text(
                                               'Aktivasi Dipay',
-                                              style: Theme.of(context).textTheme.bodySmall!,
+                                              style: STextStyles.regular(),
                                             ),
                                             const SizedBox(
                                               height: 5.0,
                                             ),
                                             Text(
                                               'Login ke akun Dipay. Registrasi diperlukan jika belum memiliki akun.',
-                                              style: Theme.of(context).textTheme.labelSmall!,
+                                              style: XSTextStyles.regular(),
                                             ),
                                           ],
                                         ),
@@ -232,9 +232,8 @@ class _LoanPageState extends State<LoanPage> {
                                             padding: const EdgeInsets.all(10.0),
                                             child: Text(
                                               'Aktivasi',
-                                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                              style: MTextStyles.medium().copyWith(
                                                 color: PrimaryColorStyles.primaryMain(),
-                                                fontWeight: FontBodyWeight.medium(),
                                               ),
                                             ),
                                           ),
@@ -275,14 +274,14 @@ class _LoanPageState extends State<LoanPage> {
                                           children: [
                                             Text(
                                               'KYC akun Dipay',
-                                              style: Theme.of(context).textTheme.bodySmall!,
+                                              style: STextStyles.regular(),
                                             ),
                                             const SizedBox(
                                               height: 5.0,
                                             ),
                                             Text(
                                               'Upgrade akun Dipay menjadi Premium',
-                                              style: Theme.of(context).textTheme.labelSmall!,
+                                              style: XSTextStyles.regular(),
                                             ),
                                           ],
                                         ),
@@ -300,9 +299,8 @@ class _LoanPageState extends State<LoanPage> {
                                             padding: const EdgeInsets.all(10.0),
                                             child: Text(
                                               'KYC',
-                                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                              style: MTextStyles.medium().copyWith(
                                                 color: PrimaryColorStyles.primaryMain(),
-                                                fontWeight: FontBodyWeight.medium(),
                                               ),
                                             ),
                                           ),
@@ -381,14 +379,14 @@ class _LoanPageState extends State<LoanPage> {
                                           children: [
                                             Text(
                                               'Aktivasi akun Indofund',
-                                              style: Theme.of(context).textTheme.bodySmall!,
+                                              style: STextStyles.regular(),
                                             ),
                                             const SizedBox(
                                               height: 5.0,
                                             ),
                                             Text(
                                               'Login ke akun Indofund. Registrasi diperlukan jika belum memiliki akun.',
-                                              style: Theme.of(context).textTheme.labelSmall!,
+                                              style: XSTextStyles.regular(),
                                             ),
                                           ],
                                         ),
@@ -406,9 +404,8 @@ class _LoanPageState extends State<LoanPage> {
                                             padding: const EdgeInsets.all(10.0),
                                             child: Text(
                                               'Aktivasi',
-                                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                              style: MTextStyles.medium().copyWith(
                                                 color: PrimaryColorStyles.primaryMain(),
-                                                fontWeight: FontBodyWeight.medium(),
                                               ),
                                             ),
                                           ),
@@ -449,14 +446,14 @@ class _LoanPageState extends State<LoanPage> {
                                           children: [
                                             Text(
                                               'KYC akun Indofund',
-                                              style: Theme.of(context).textTheme.bodySmall!,
+                                              style: STextStyles.regular(),
                                             ),
                                             const SizedBox(
                                               height: 5.0,
                                             ),
                                             Text(
                                               'Lakukan KYC pada akun Indofund',
-                                              style: Theme.of(context).textTheme.labelSmall!,
+                                              style: XSTextStyles.regular(),
                                             ),
                                           ],
                                         ),
@@ -474,9 +471,8 @@ class _LoanPageState extends State<LoanPage> {
                                             padding: const EdgeInsets.all(10.0),
                                             child: Text(
                                               'KYC',
-                                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                              style: MTextStyles.medium().copyWith(
                                                 color: PrimaryColorStyles.primaryMain(),
-                                                fontWeight: FontBodyWeight.medium(),
                                               ),
                                             ),
                                           ),
@@ -525,7 +521,7 @@ class _LoanPageState extends State<LoanPage> {
                                       children: [
                                         Text(
                                           'Plafon',
-                                          style: Theme.of(context).textTheme.labelSmall!,
+                                          style: XSTextStyles.regular(),
                                           textAlign: TextAlign.center,
                                         ),
                                         const SizedBox(
@@ -533,9 +529,8 @@ class _LoanPageState extends State<LoanPage> {
                                         ),
                                         Text(
                                           'Rp 10.000.000',
-                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          style: STextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
-                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
@@ -551,7 +546,7 @@ class _LoanPageState extends State<LoanPage> {
                                       children: [
                                         Text(
                                           'Total Tagihan',
-                                          style: Theme.of(context).textTheme.labelSmall!,
+                                          style: XSTextStyles.regular(),
                                           textAlign: TextAlign.center,
                                         ),
                                         const SizedBox(
@@ -559,9 +554,8 @@ class _LoanPageState extends State<LoanPage> {
                                         ),
                                         Text(
                                           'Rp ${NumberFormat('#,###', 'en_id').format(totalLoan).replaceAll(',', '.')}',
-                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          style: STextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
-                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
@@ -628,9 +622,8 @@ class _LoanPageState extends State<LoanPage> {
                                         children: [
                                           Text(
                                             'Ajukan Pendanaan',
-                                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            style: MTextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
-                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -638,7 +631,7 @@ class _LoanPageState extends State<LoanPage> {
                                           ),
                                           Text(
                                             'Aman dengan bunga kompetitif',
-                                            style: Theme.of(context).textTheme.labelSmall!,
+                                            style: XSTextStyles.regular(),
                                           ),
                                         ],
                                       ),
@@ -699,9 +692,8 @@ class _LoanPageState extends State<LoanPage> {
                                         children: [
                                           Text(
                                             'Histori Pendanaan',
-                                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            style: MTextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
-                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -709,7 +701,7 @@ class _LoanPageState extends State<LoanPage> {
                                           ),
                                           Text(
                                             'Lihat daftar peminjaman Anda',
-                                            style: Theme.of(context).textTheme.labelSmall!,
+                                            style: XSTextStyles.regular(),
                                           ),
                                         ],
                                       ),
@@ -778,9 +770,8 @@ class _LoanPageState extends State<LoanPage> {
                                         children: [
                                           Text(
                                             'Pembayaran Pendanaan',
-                                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            style: MTextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
-                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -788,7 +779,7 @@ class _LoanPageState extends State<LoanPage> {
                                           ),
                                           Text(
                                             'Lihat total tagihan dan bayar disini!',
-                                            style: Theme.of(context).textTheme.labelSmall!,
+                                            style: XSTextStyles.regular(),
                                           ),
                                         ],
                                       ),
@@ -831,9 +822,8 @@ class _LoanPageState extends State<LoanPage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Selanjutnya',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: isDipayActivated == true && isDipayKYC == true && isIndofundActivated == true && isIndofundKYC == true ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        color: isDipayActivated == true && isDipayKYC == true && isIndofundActivated == true && isIndofundKYC == true ? Colors.white : Colors.black54,
                       ),
                     ),
                   ),

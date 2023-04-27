@@ -43,7 +43,7 @@ class DipayActivationPage extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Aktivasi Dipay',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -75,8 +75,8 @@ class DipayActivationPage extends StatelessWidget {
                         ),
                         Text(
                           'Aktivasi Dipay Sekarang',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
+                          style: MTextStyles.medium().copyWith(
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(
@@ -84,14 +84,14 @@ class DipayActivationPage extends StatelessWidget {
                         ),
                         Text(
                           'Aktifkan Dipay di akun Kenari Anda untuk kemudahan pembayaran tanpa tunai',
-                          style: Theme.of(context).textTheme.bodyMedium!,
+                          style: MTextStyles.regular(),
                         ),
                         const SizedBox(
                           height: 65.0,
                         ),
                         Text(
                           'Untuk menghubungkan akun Dipay dengan Kenari, pastikan bahwa:',
-                          style: Theme.of(context).textTheme.bodyMedium!,
+                          style: MTextStyles.regular(),
                         ),
                         const SizedBox(
                           height: 15.0,
@@ -113,7 +113,7 @@ class DipayActivationPage extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 'Anda telah memiliki aplikasi dan akun Dipay',
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                             ),
                           ],
@@ -139,7 +139,7 @@ class DipayActivationPage extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 'Nomor HP Akun Dipay Anda sama dengan Nomor HP Akun Kenari',
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                             ),
                           ],
@@ -166,8 +166,8 @@ class DipayActivationPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Lanjutkan',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        color: Colors.white,
                       ),
                     ),
                   ),

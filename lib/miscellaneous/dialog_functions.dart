@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
+import 'package:kenari_app/styles/text_styles.dart';
 
 class OkDialog {
   BuildContext context;
@@ -35,7 +36,7 @@ class OkDialog {
               title != null ?
               Text(
                 title!,
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: HeadingTextStyles.headingS(),
               ) :
               const Material(),
               showIcon != null ?
@@ -61,10 +62,8 @@ class OkDialog {
               const Material(),
               Text(
                 message,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: TextColorStyles.textSecondary(),
-                ),
-                textAlign: TextAlign.center,
+                style: MTextStyles.regular(),
+                textAlign: showIcon != null ? TextAlign.center : TextAlign.justify,
               ),
             ],
           ),
@@ -115,14 +114,12 @@ class OptionDialog {
         return AlertDialog(
           title: Text(
             title ?? 'Perhatian',
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: HeadingTextStyles.headingS(),
           ),
           content: Text(
             message,
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              color: TextColorStyles.textSecondary(),
-            ),
-            textAlign: TextAlign.center,
+            style: MTextStyles.regular(),
+            textAlign: TextAlign.justify,
           ),
           actions: [
             ElevatedButton(
@@ -187,9 +184,7 @@ class LoadingDialog {
                 ),
                 Text(
                   'Sedang memuat, mohon tunggu...',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: TextColorStyles.textSecondary(),
-                  ),
+                  style: MTextStyles.regular(),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -255,10 +250,8 @@ class ErrorHandler {
               ),
               Text(
                 '(${errCode ?? '-'}) $errMessage',
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: TextColorStyles.textSecondary(),
-                ),
-                textAlign: TextAlign.center,
+                style: MTextStyles.regular(),
+                textAlign: TextAlign.justify,
               ),
             ],
           ),

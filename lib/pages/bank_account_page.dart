@@ -68,7 +68,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                         Expanded(
                           child: Text(
                             'Daftar Rekening',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -98,23 +98,21 @@ class _BankAccountPageState extends State<BankAccountPage> {
                           children: [
                             Text(
                               bankModel!.bankData![index].bank!.name ?? 'Unknown Bank',
-                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                fontWeight: FontBodyWeight.medium(),
-                              ),
+                              style: MTextStyles.medium(),
                             ),
                             const SizedBox(
                               height: 5.0,
                             ),
                             Text(
                               bankModel!.bankData![index].accountNo ?? 'Unknown Account Number',
-                              style: Theme.of(context).textTheme.bodySmall!,
+                              style: STextStyles.regular(),
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
                               'a.n ${bankModel!.bankData![index].accountName ?? 'Unknown Name'}',
-                              style: Theme.of(context).textTheme.bodySmall!,
+                              style: STextStyles.regular(),
                             ),
                             const SizedBox(
                               height: 10.0,
@@ -133,9 +131,8 @@ class _BankAccountPageState extends State<BankAccountPage> {
                               },
                               child: Text(
                                 'Ubah Rekening',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                style: MTextStyles.medium().copyWith(
                                   color: PrimaryColorStyles.primaryMain(),
-                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                             )
@@ -169,9 +166,8 @@ class _BankAccountPageState extends State<BankAccountPage> {
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
                       'Tambah Rekening',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      style: LTextStyles.medium().copyWith(
                         color: Colors.white,
-                        fontWeight: FontBodyWeight.medium(),
                       ),
                     ),
                   ),

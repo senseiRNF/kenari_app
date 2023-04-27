@@ -96,7 +96,7 @@ class _FeePageState extends State<FeePage> {
                         Expanded(
                           child: Text(
                             'Iuran',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -151,14 +151,14 @@ class _FeePageState extends State<FeePage> {
                                     children: [
                                       Text(
                                         name ?? 'Unknown User',
-                                        style: Theme.of(context).textTheme.bodyMedium!,
+                                        style: MTextStyles.regular(),
                                       ),
                                       const SizedBox(
                                         height: 10.0,
                                       ),
                                       Text(
                                         companyCode ?? 'Unknown Code',
-                                        style: Theme.of(context).textTheme.labelSmall!,
+                                        style: XSTextStyles.regular(),
                                       ),
                                     ],
                                   ),
@@ -190,7 +190,7 @@ class _FeePageState extends State<FeePage> {
                                       children: [
                                         Text(
                                           'Saldo Iuran Wajib',
-                                          style: Theme.of(context).textTheme.labelSmall!,
+                                          style: XSTextStyles.regular(),
                                           textAlign: TextAlign.center,
                                         ),
                                         const SizedBox(
@@ -198,9 +198,8 @@ class _FeePageState extends State<FeePage> {
                                         ),
                                         Text(
                                           'Rp ${NumberFormat('#,###', 'en_id').format(mandatoryFeeAmount)}',
-                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          style: STextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
-                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
@@ -216,7 +215,7 @@ class _FeePageState extends State<FeePage> {
                                       children: [
                                         Text(
                                           'Saldo Iuran Berjangka',
-                                          style: Theme.of(context).textTheme.labelSmall!,
+                                          style: XSTextStyles.regular(),
                                           textAlign: TextAlign.center,
                                         ),
                                         const SizedBox(
@@ -224,9 +223,8 @@ class _FeePageState extends State<FeePage> {
                                         ),
                                         Text(
                                           'Rp ${NumberFormat('#,###', 'en_id').format(temporalFeeAmount)}',
-                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          style: STextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
-                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
@@ -293,9 +291,8 @@ class _FeePageState extends State<FeePage> {
                                         children: [
                                           Text(
                                             'Setoran Iuran Berjangka',
-                                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            style: MTextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
-                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -303,7 +300,7 @@ class _FeePageState extends State<FeePage> {
                                           ),
                                           Text(
                                             'Setoran Iuran Berjangka',
-                                            style: Theme.of(context).textTheme.labelSmall!,
+                                            style: XSTextStyles.regular(),
                                           ),
                                         ],
                                       ),
@@ -383,9 +380,8 @@ class _FeePageState extends State<FeePage> {
                                         children: [
                                           Text(
                                             'Daftar Iuran Saya',
-                                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            style: MTextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
-                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -393,7 +389,7 @@ class _FeePageState extends State<FeePage> {
                                           ),
                                           Text(
                                             'Lihat daftar detail Iuran wajib & berjangka',
-                                            style: Theme.of(context).textTheme.labelSmall!,
+                                            style: XSTextStyles.regular(),
                                           ),
                                         ],
                                       ),
@@ -454,9 +450,8 @@ class _FeePageState extends State<FeePage> {
                                         children: [
                                           Text(
                                             'Riwayat Iuran',
-                                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            style: MTextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
-                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                           const SizedBox(
@@ -464,7 +459,7 @@ class _FeePageState extends State<FeePage> {
                                           ),
                                           Text(
                                             'Riwayat Transaksi Iuran',
-                                            style: Theme.of(context).textTheme.labelSmall!,
+                                            style: XSTextStyles.regular(),
                                           ),
                                         ],
                                       ),

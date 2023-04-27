@@ -120,7 +120,7 @@ class _FeeListPageState extends State<FeeListPage> {
                         Expanded(
                           child: Text(
                             selectedTab == 0 ? 'Detail Iuran Wajib' : 'Daftar Iuran Saya',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -157,18 +157,16 @@ class _FeeListPageState extends State<FeeListPage> {
                       Tab(
                         child: Text(
                           'Iuran Wajib',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: MTextStyles.medium().copyWith(
                             color: selectedTab == 0 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
                       Tab(
                         child: Text(
                           'Iuran Berjangka',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: MTextStyles.medium().copyWith(
                             color: selectedTab == 1 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -208,9 +206,8 @@ class _FeeListPageState extends State<FeeListPage> {
                                   children: [
                                     Text(
                                       name ?? 'Unknown User',
-                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      style: STextStyles.medium().copyWith(
                                         color: TextColorStyles.textPrimary(),
-                                        fontWeight: FontBodyWeight.medium(),
                                       ),
                                     ),
                                     const SizedBox(
@@ -218,7 +215,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                     ),
                                     Text(
                                       companyCode ?? 'Unknown Company',
-                                      style: Theme.of(context).textTheme.labelSmall!,
+                                      style: XSTextStyles.regular(),
                                     ),
                                   ],
                                 ),
@@ -235,16 +232,15 @@ class _FeeListPageState extends State<FeeListPage> {
                                   children: [
                                     Text(
                                       'Saldo Iuran Wajib',
-                                      style: Theme.of(context).textTheme.labelSmall!,
+                                      style: XSTextStyles.regular(),
                                     ),
                                     const SizedBox(
                                       height: 5.0,
                                     ),
                                     Text(
                                       'Rp 1.200.000',
-                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      style: STextStyles.medium().copyWith(
                                         color: TextColorStyles.textPrimary(),
-                                        fontWeight: FontBodyWeight.medium(),
                                       ),
                                     ),
                                   ],
@@ -282,9 +278,8 @@ class _FeeListPageState extends State<FeeListPage> {
                                 Expanded(
                                   child: Text(
                                     'Selama aktif menjadi karyawan, Saldo Iuran Wajib tidak dapat di tarik',
-                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                    style: XSTextStyles.medium().copyWith(
                                       color: WarningColorStyles.warningMain(),
-                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ),
@@ -296,9 +291,8 @@ class _FeeListPageState extends State<FeeListPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Text(
                             'Penagihan Autodebet',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            style: LTextStyles.medium().copyWith(
                               color: TextColorStyles.textPrimary(),
-                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
@@ -335,9 +329,8 @@ class _FeeListPageState extends State<FeeListPage> {
                                       ),
                                       Text(
                                         'Dipay',
-                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                        style: MTextStyles.medium().copyWith(
                                           color: TextColorStyles.textPrimary(),
-                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                       Expanded(
@@ -346,9 +339,8 @@ class _FeeListPageState extends State<FeeListPage> {
                                           children: [
                                             Text(
                                               phoneNumber ?? 'Unknown Phone',
-                                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                              style: STextStyles.medium().copyWith(
                                                 color: TextColorStyles.textPrimary(),
-                                                fontWeight: FontBodyWeight.medium(),
                                               ),
                                             ),
                                           ],
@@ -362,7 +354,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                   ),
                                   Text(
                                     'Pembayaran Autodebet untuk Penagihan Iuran Wajib setiap bulannya langsung terpotong dari saldo Dipay.',
-                                    style: Theme.of(context).textTheme.bodySmall!,
+                                    style: STextStyles.regular(),
                                   ),
                                 ],
                               ),
@@ -396,7 +388,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                 index == 0 ?
                                 Text(
                                   DateFormat('yyyy').format(DateTime.now()),
-                                  style: Theme.of(context).textTheme.labelSmall!,
+                                  style: XSTextStyles.regular(),
                                 ) :
                                 const Material(),
                                 Padding(
@@ -407,16 +399,14 @@ class _FeeListPageState extends State<FeeListPage> {
                                     children: [
                                       Text(
                                         'Autodebet Iuran',
-                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                        style: MTextStyles.medium().copyWith(
                                           color: TextColorStyles.textPrimary(),
-                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                       Text(
                                         'Rp 100.000',
-                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                        style: MTextStyles.medium().copyWith(
                                           color: SuccessColorStyles.successMain(),
-                                          fontWeight: FontBodyWeight.medium(),
                                         ),
                                       ),
                                     ],
@@ -424,7 +414,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                 ),
                                 Text(
                                   DateFormat('dd MMMM yyyy, HH:mm').format(DateTime.now()),
-                                  style: Theme.of(context).textTheme.bodySmall!,
+                                  style: STextStyles.regular(),
                                 ),
                                 const SizedBox(
                                   height: 10.0,
@@ -450,16 +440,15 @@ class _FeeListPageState extends State<FeeListPage> {
                         children: [
                           Text(
                             'Total Saldo Iuran Berjangka',
-                            style: Theme.of(context).textTheme.bodySmall!,
+                            style: STextStyles.regular(),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
                             'Rp ${NumberFormat('#,###', 'en_id').format(widget.temporalFeeAmount).replaceAll(',', '.')}',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            style: LTextStyles.medium().copyWith(
                               color: TextColorStyles.textPrimary(),
-                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ],
@@ -499,9 +488,8 @@ class _FeeListPageState extends State<FeeListPage> {
                                       child: Center(
                                         child: Text(
                                           'Aktif',
-                                          style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                          style: XSTextStyles.medium().copyWith(
                                             color: isActiveStatus == true ? TextColorStyles.textPrimary() : null,
-                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                       ),
@@ -532,9 +520,8 @@ class _FeeListPageState extends State<FeeListPage> {
                                       child: Center(
                                         child: Text(
                                           'Selesai',
-                                          style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                          style: XSTextStyles.medium().copyWith(
                                             color: isActiveStatus == false ? TextColorStyles.textPrimary() : null,
-                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                       ),
@@ -574,7 +561,7 @@ class _FeeListPageState extends State<FeeListPage> {
                               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                               child: Text(
                                 filteredData()[index].tanggalMulai != null ? DateFormat('yyyy').format(DateTime.parse(filteredData()[index].tanggalMulai!)) : 'Unknown',
-                                style: Theme.of(context).textTheme.labelSmall!,
+                                style: XSTextStyles.regular(),
                               ),
                             ) :
                             const Material(),
@@ -606,16 +593,14 @@ class _FeeListPageState extends State<FeeListPage> {
                                             children: [
                                               Text(
                                                 'Iuran Berjangka',
-                                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                                style: MTextStyles.medium().copyWith(
                                                   color: TextColorStyles.textPrimary(),
-                                                  fontWeight: FontBodyWeight.medium(),
                                                 ),
                                               ),
                                               Text(
                                                 filteredData()[index].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredData()[index].jumlahIuran!)).replaceAll(',', '.')}' : 'Rp 0',
-                                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                                style: STextStyles.medium().copyWith(
                                                   color: TextColorStyles.textPrimary(),
-                                                  fontWeight: FontBodyWeight.medium(),
                                                 ),
                                               ),
                                             ],
@@ -623,7 +608,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                         ),
                                         Text(
                                           '${filteredData()[index].jangkaWaktu != null ? '${filteredData()[index].jangkaWaktu} Bulan' : 'Unknown'} (${filteredData()[index].imbalHasil != null ? '${filteredData()[index].imbalHasil}%' : 'Unknown'})',
-                                          style: Theme.of(context).textTheme.bodySmall!,
+                                          style: STextStyles.regular(),
                                         ),
                                         const SizedBox(
                                           height: 10.0,
@@ -634,13 +619,11 @@ class _FeeListPageState extends State<FeeListPage> {
                                           children: [
                                             Text(
                                               'Tanggal Pencairan',
-                                              style: Theme.of(context).textTheme.bodySmall!,
+                                              style: STextStyles.regular(),
                                             ),
                                             Text(
                                               filteredData()[index].tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(filteredData()[index].tanggalPencairan!)) : 'Unknown',
-                                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                                fontWeight: FontBodyWeight.medium(),
-                                              ),
+                                              style: STextStyles.medium(),
                                             ),
                                           ],
                                         ),
@@ -660,9 +643,7 @@ class _FeeListPageState extends State<FeeListPage> {
                     Center(
                       child: Text(
                         'Tidak ditemukan data yang cocok...',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontBodyWeight.medium(),
-                        ),
+                        style: MTextStyles.medium(),
                       ),
                     ),
                   ),
@@ -686,9 +667,8 @@ class _FeeListPageState extends State<FeeListPage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       selectedTab == 1 ? 'Tambah Iuran' : 'Tarik Saldo',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: selectedTab == 1 ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        color: selectedTab == 1 ? Colors.white : Colors.black54,
                       ),
                     ),
                   ),

@@ -129,7 +129,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                         Expanded(
                           child: Text(
                             'Setor Iuran Berjangka',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -186,16 +186,15 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                                         children: [
                                           Text(
                                             'Nama',
-                                            style: Theme.of(context).textTheme.labelSmall!,
+                                            style: XSTextStyles.regular(),
                                           ),
                                           const SizedBox(
                                             height: 5.0,
                                           ),
                                           Text(
                                             name ?? 'Unknown User',
-                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                            style: STextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
-                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                         ],
@@ -224,16 +223,15 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                                         children: [
                                           Text(
                                             'Saldo Dipay',
-                                            style: Theme.of(context).textTheme.labelSmall!,
+                                            style: XSTextStyles.regular(),
                                           ),
                                           const SizedBox(
                                             height: 5.0,
                                           ),
                                           Text(
                                             isDipayActive == true ? 'Rp ${NumberFormat('#,###', 'en_id').format(dipayAmount).replaceAll(',', '.')}' : 'Belum Aktif',
-                                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                            style: STextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
-                                              fontWeight: FontBodyWeight.medium(),
                                             ),
                                           ),
                                         ],
@@ -276,9 +274,8 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                               Expanded(
                                 child: Text(
                                   'Saldo Dipay Anda tidak cukup, silahkan isi ulang saldo Dipay Anda',
-                                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                  style: XSTextStyles.medium().copyWith(
                                     color: DangerColorStyles.dangerMain(),
-                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ),
@@ -314,9 +311,8 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                               ),
                               Text(
                                 'Lakukan aktivasi pada akun Dipay anda.',
-                                style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                style: XSTextStyles.medium().copyWith(
                                   color: DangerColorStyles.dangerMain(),
-                                  fontWeight: FontBodyWeight.medium(),
                                 ),
                               ),
                             ],
@@ -367,21 +363,21 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                                   Text(
                                     '${termList[index].keys.elementAt(0)} Bulan',
                                     style: selectedTerm == termList[index].keys.elementAt(0) ?
-                                    Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    STextStyles.medium().copyWith(
                                       color: TextColorStyles.textPrimary(),
-                                      fontWeight: FontBodyWeight.medium(),
+                                      fontWeight: FontWeight.bold,
                                     ) :
-                                    Theme.of(context).textTheme.bodySmall!,
+                                    STextStyles.regular(),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text(
                                     '(${termList[index].values.elementAt(0)}%)',
                                     style: selectedTerm == termList[index].keys.elementAt(0) ?
-                                    Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    STextStyles.medium().copyWith(
                                       color: TextColorStyles.textPrimary(),
-                                      fontWeight: FontBodyWeight.medium(),
+                                      fontWeight: FontWeight.bold,
                                     ) :
-                                    Theme.of(context).textTheme.bodySmall!,
+                                    STextStyles.regular(),
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
@@ -399,9 +395,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                       children: [
                         Text(
                           'Jumlah Iuran',
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: STextStyles.medium(),
                         ),
                         const SizedBox(
                           height: 10.0,
@@ -460,16 +454,15 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                       children: [
                         Text(
                           'Estimasi saldo akhir sebelum pajak',
-                          style: Theme.of(context).textTheme.bodySmall!,
+                          style: STextStyles.regular(),
                         ),
                         const SizedBox(
                           height: 10.0,
                         ),
                         Text(
                           selectedTerm != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(countFinalAmount()).replaceAll(',', '.')}' : 'Rp 0',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: MTextStyles.medium().copyWith(
                             color: TextColorStyles.textPrimary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ],
@@ -495,9 +488,8 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Setor',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: isDipayActive == true && showUnmatchedAmountFee == false && showInsufficientAmountBalance == false && selectedTerm != null ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        color: isDipayActive == true && showUnmatchedAmountFee == false && showInsufficientAmountBalance == false && selectedTerm != null ? Colors.white : Colors.black54,
                       ),
                     ),
                   ),
@@ -544,8 +536,8 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
               padding: const EdgeInsets.all(25.0),
               child: Text(
                 'Rincian Iuran',
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  fontWeight: FontBodyWeight.medium(),
+                style: STextStyles.medium().copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.start,
               ),
@@ -557,13 +549,12 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                 children: [
                   Text(
                     'Jumlah Iuran',
-                    style: Theme.of(context).textTheme.bodySmall!,
+                    style: STextStyles.regular(),
                   ),
                   Text(
                     'Rp ${NumberFormat('#,###', 'en_id').format(double.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    style: STextStyles.medium().copyWith(
                       color: TextColorStyles.textPrimary(),
-                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ],
@@ -579,13 +570,12 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                 children: [
                   Text(
                     'Jangka Waktu',
-                    style: Theme.of(context).textTheme.bodySmall!,
+                    style: STextStyles.regular(),
                   ),
                   Text(
                     '$selectedTerm Bulan',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    style: STextStyles.medium().copyWith(
                       color: TextColorStyles.textPrimary(),
-                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ],
@@ -601,13 +591,12 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                 children: [
                   Text(
                     'Imbal hasil pertahun',
-                    style: Theme.of(context).textTheme.bodySmall!,
+                    style: STextStyles.regular(),
                   ),
                   Text(
                     '$yearlyReturnPercentage %',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    style: STextStyles.medium().copyWith(
                       color: TextColorStyles.textPrimary(),
-                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ],
@@ -623,13 +612,12 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                 children: [
                   Text(
                     'Tanggal Pencairan',
-                    style: Theme.of(context).textTheme.bodySmall!,
+                    style: STextStyles.regular(),
                   ),
                   Text(
                     DateFormat('dd MMMM yyyy').format(DateTime.now().add(const Duration(days: 30))),
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    style: STextStyles.medium().copyWith(
                       color: TextColorStyles.textPrimary(),
-                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ],
@@ -655,13 +643,12 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                 children: [
                   Text(
                     'Pembayaran',
-                    style: Theme.of(context).textTheme.bodySmall!,
+                    style: STextStyles.regular(),
                   ),
                   Text(
                     'Rp ${NumberFormat('#,###', 'en_id').format(double.parse(feeAmountController.text != '' ? feeAmountController.text : '0')).replaceAll(',', '.')}',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    style: STextStyles.medium().copyWith(
                       color: TextColorStyles.textPrimary(),
-                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ],
@@ -677,7 +664,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                 children: [
                   Text(
                     'Pembayaran',
-                    style: Theme.of(context).textTheme.bodySmall!,
+                    style: STextStyles.regular(),
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -694,9 +681,8 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                       ),
                       Text(
                         'Dipay',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        style: MTextStyles.medium().copyWith(
                           color: TextColorStyles.textPrimary(),
-                          fontWeight: FontBodyWeight.medium(),
                         ),
                       ),
                     ],
@@ -717,9 +703,8 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
                     'Konfirmasi',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    style: LTextStyles.medium().copyWith(
                       color: Colors.white,
-                      fontWeight: FontBodyWeight.medium(),
                     ),
                   ),
                 ),

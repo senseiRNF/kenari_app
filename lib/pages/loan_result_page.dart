@@ -45,7 +45,7 @@ class _LoanResultPageState extends State<LoanResultPage> {
                         ),
                         Text(
                           'Peminjaman Berhasil!',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: HeadingTextStyles.headingS(),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -53,7 +53,7 @@ class _LoanResultPageState extends State<LoanResultPage> {
                         ),
                         Text(
                           'Selamat, Pengajuan Pendanaan anda telah Berhasil!',
-                          style: Theme.of(context).textTheme.bodyMedium!,
+                          style: MTextStyles.regular(),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -79,9 +79,8 @@ class _LoanResultPageState extends State<LoanResultPage> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'Kembali ke Beranda',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: Theme.of(context).textTheme.bodyLarge!.color,
-                              fontWeight: FontBodyWeight.medium(),
+                            style: LTextStyles.medium().copyWith(
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -97,9 +96,8 @@ class _LoanResultPageState extends State<LoanResultPage> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
                             'Lihat Status Pendanaan',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            style: LTextStyles.medium().copyWith(
                               color: PrimaryColorStyles.primaryMain(),
-                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),

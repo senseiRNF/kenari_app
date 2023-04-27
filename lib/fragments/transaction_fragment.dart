@@ -181,27 +181,24 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         Tab(
                           child: Text(
                             'Iuran',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            style: MTextStyles.medium().copyWith(
                               color: selectedTab == 0 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
                         Tab(
                           child: Text(
                             'Pendanaan',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            style: MTextStyles.medium().copyWith(
                               color: selectedTab == 1 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
                         Tab(
                           child: Text(
                             'Pesanan',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            style: MTextStyles.medium().copyWith(
                               color: selectedTab == 2 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                              fontWeight: FontBodyWeight.medium(),
                             ),
                           ),
                         ),
@@ -243,10 +240,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           padding: const EdgeInsets.all(5.0),
                           child: Text(
                             'Aktif',
-                            style: selectedStatus == 0 ? Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ) :
-                            Theme.of(context).textTheme.bodySmall!,
+                            style: selectedStatus == 0 ? STextStyles.medium() : STextStyles.regular(),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -280,9 +274,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           padding: const EdgeInsets.all(5.0),
                           child: Text(
                             'Selesai',
-                            style: selectedStatus == 1 ? Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ) : Theme.of(context).textTheme.bodySmall!,
+                            style: selectedStatus == 1 ? STextStyles.medium() : STextStyles.regular(),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -305,80 +297,83 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
     switch(selectedTab) {
       case 0:
         return filteredFeeData().isNotEmpty ?
-        ListView.builder(
-          itemCount: filteredFeeData().length,
-          itemBuilder: (BuildContext listContext, int index) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                  child: Text(
-                    'Iuran Berjangka',
-                    style: Theme.of(context).textTheme.labelSmall!,
+        RefreshIndicator(
+          onRefresh: () async {
+            loadFeeData();
+          },
+          child: ListView.builder(
+            itemCount: filteredFeeData().length,
+            itemBuilder: (BuildContext listContext, int index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+                    child: Text(
+                      'Iuran Berjangka',
+                      style: XSTextStyles.regular(),
+                    ),
                   ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        // if(temporalFeeList[index].values.elementAt(0) == 'wajib') {
-                        //   MoveToPage(context: context, target: const DetailMandatoryFeePage()).go();
-                        // } else {
-                        //   MoveToPage(context: context, target: DetailTemporalFeePage(temporalFeeData: '$type $index', feeId: 'fee_id', status: convertStatus)).go();
-                        // }
+                  Container(
+                    color: Colors.white,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          // if(temporalFeeList[index].values.elementAt(0) == 'wajib') {
+                          //   MoveToPage(context: context, target: const DetailMandatoryFeePage()).go();
+                          // } else {
+                          //   MoveToPage(context: context, target: DetailTemporalFeePage(temporalFeeData: '$type $index', feeId: 'fee_id', status: convertStatus)).go();
+                          // }
 
-                        MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: filteredFeeData()[index].sId!)).go();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Iuran Berjangka',
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    color: TextColorStyles.textPrimary(),
-                                    fontWeight: FontBodyWeight.medium(),
+                          MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: filteredFeeData()[index].sId!)).go();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Iuran Berjangka',
+                                    style: STextStyles.medium().copyWith(
+                                      color: TextColorStyles.textPrimary(),
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  filteredFeeData()[index].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index].jumlahIuran!))}' : 'Rp 0',
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    color: TextColorStyles.textPrimary(),
-                                    fontWeight: FontBodyWeight.medium(),
+                                  Text(
+                                    filteredFeeData()[index].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index].jumlahIuran!))}' : 'Rp 0',
+                                    style: STextStyles.medium().copyWith(
+                                      color: TextColorStyles.textPrimary(),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              companyCode ?? 'Unknown Company',
-                              style: Theme.of(context).textTheme.labelSmall!,
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            Text(
-                              'a.n ${name ?? 'Unknown User'}',
-                              style: Theme.of(context).textTheme.labelSmall!,
-                            ),
-                          ],
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                companyCode ?? 'Unknown Company',
+                                style: XSTextStyles.regular(),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Text(
+                                'a.n ${name ?? 'Unknown User'}',
+                                style: XSTextStyles.regular(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ) :
         Stack(
           children: [
@@ -397,7 +392,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Belum Ada Transaksi',
-                    style: Theme.of(context).textTheme.labelSmall,
+                    style: HeadingTextStyles.headingS(),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -405,7 +400,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Yuk mulai transaksi Iuranmu\nmelalui aplikasi Kenari!',
-                    style: Theme.of(context).textTheme.bodyMedium!,
+                    style: MTextStyles.regular(),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -413,7 +408,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
             ),
             RefreshIndicator(
               onRefresh: () async {
-
+                loadFeeData();
               },
               child: ListView(),
             ),
@@ -421,143 +416,142 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
         );
       case 1:
         return filterLoanData().isNotEmpty ?
-        ListView.separated(
-          itemCount: filterLoanData().length,
-          separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Divider(
-                height: 1.0,
-                color: BorderColorStyles.borderDivider(),
-              ),
-            );
+        RefreshIndicator(
+          onRefresh: () async {
+            loadLoanData();
           },
-          itemBuilder: (BuildContext listContext, int index) {
-            return Container(
-              color: Colors.white,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    if(filterLoanData()[index].sId != null) {
-                      MoveToPage(
-                        context: context,
-                        target: LoanDetailPage(
-                          loanId: filterLoanData()[index].sId!,
-                        ),
-                        callback: (callback) {
-                          widget.onCallbackFromLoanPage(callback);
-                        },
-                      ).go();
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Pendanaan',
-                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                color: TextColorStyles.textPrimary(),
-                                fontWeight: FontBodyWeight.medium(),
-                              ),
-                            ),
-                            Text(
-                              filterLoanData()[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filterLoanData()[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : 'Unknown',
-                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                color: TextColorStyles.textPrimary(),
-                                fontWeight: FontBodyWeight.medium(),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              filterLoanData()[index].jangkaWaktu != null ? '${filterLoanData()[index].jangkaWaktu} Bulan' : 'Unknown',
-                              style: Theme.of(context).textTheme.bodySmall!,
-                            ),
-                            filterLoanData()[index].status == false ?
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-                              decoration: BoxDecoration(
-                                color: WarningColorStyles.warningSurface(),
-                                border: Border.all(
-                                  color: WarningColorStyles.warningBorder(),
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Text(
-                                'Pendanaan Berjalan',
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  color: WarningColorStyles.warningMain(),
-                                  fontWeight: FontBodyWeight.medium(),
+          child: ListView.separated(
+            itemCount: filterLoanData().length,
+            separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Divider(
+                  height: 1.0,
+                  color: BorderColorStyles.borderDivider(),
+                ),
+              );
+            },
+            itemBuilder: (BuildContext listContext, int index) {
+              return Container(
+                color: Colors.white,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      if(filterLoanData()[index].sId != null) {
+                        MoveToPage(
+                          context: context,
+                          target: LoanDetailPage(
+                            loanId: filterLoanData()[index].sId!,
+                          ),
+                          callback: (callback) {
+                            widget.onCallbackFromLoanPage(callback);
+                          },
+                        ).go();
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Pendanaan',
+                                style: STextStyles.medium().copyWith(
+                                  color: TextColorStyles.textPrimary(),
                                 ),
                               ),
-                            ) :
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-                              decoration: BoxDecoration(
-                                color: SuccessColorStyles.successSurface(),
-                                border: Border.all(
-                                  color: SuccessColorStyles.successBorder(),
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Text(
-                                'Selesai',
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  color: SuccessColorStyles.successMain(),
-                                  fontWeight: FontBodyWeight.medium(),
+                              Text(
+                                filterLoanData()[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filterLoanData()[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : 'Unknown',
+                                style: STextStyles.medium().copyWith(
+                                  color: TextColorStyles.textPrimary(),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        filterLoanData()[index].status == false ?
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: filterLoanData()[index].jatuhTempo != null ?
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              DateTime.now().isBefore(DateTime.parse(filterLoanData()[index].jatuhTempo!)) || DateTime.now().isAtSameMomentAs(DateTime.parse(filterLoanData()[index].jatuhTempo!)) == true ?
                               Text(
-                                'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
-                                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                  color: DangerColorStyles.dangerMain(),
-                                  fontWeight: FontBodyWeight.medium(),
+                                filterLoanData()[index].jangkaWaktu != null ? '${filterLoanData()[index].jangkaWaktu} Bulan' : 'Unknown',
+                                style: STextStyles.regular(),
+                              ),
+                              filterLoanData()[index].status == false ?
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+                                decoration: BoxDecoration(
+                                  color: WarningColorStyles.warningSurface(),
+                                  border: Border.all(
+                                    color: WarningColorStyles.warningBorder(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Text(
+                                  'Pendanaan Berjalan',
+                                  style: STextStyles.medium().copyWith(
+                                    color: WarningColorStyles.warningMain(),
+                                  ),
                                 ),
                               ) :
-                              Text(
-                                'Terlambat ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
-                                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                  color: DangerColorStyles.dangerMain(),
-                                  fontWeight: FontBodyWeight.medium(),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+                                decoration: BoxDecoration(
+                                  color: SuccessColorStyles.successSurface(),
+                                  border: Border.all(
+                                    color: SuccessColorStyles.successBorder(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Text(
+                                  'Selesai',
+                                  style: STextStyles.medium().copyWith(
+                                    color: SuccessColorStyles.successMain(),
+                                  ),
                                 ),
                               ),
                             ],
+                          ),
+                          filterLoanData()[index].status == false ?
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: filterLoanData()[index].jatuhTempo != null ?
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                DateTime.now().isBefore(DateTime.parse(filterLoanData()[index].jatuhTempo!)) || DateTime.now().isAtSameMomentAs(DateTime.parse(filterLoanData()[index].jatuhTempo!)) == true ?
+                                Text(
+                                  'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
+                                  style: XSTextStyles.medium().copyWith(
+                                    color: DangerColorStyles.dangerMain(),
+                                  ),
+                                ) :
+                                Text(
+                                  'Terlambat ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
+                                  style: XSTextStyles.medium().copyWith(
+                                    color: DangerColorStyles.dangerMain(),
+                                  ),
+                                ),
+                              ],
+                            ) :
+                            const Material(),
                           ) :
                           const Material(),
-                        ) :
-                        const Material(),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ) :
         Stack(
           children: [
@@ -576,7 +570,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Belum Ada Transaksi',
-                    style: Theme.of(context).textTheme.labelSmall,
+                    style: HeadingTextStyles.headingS(),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -584,7 +578,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Yuk mulai transaksi Iuranmu\nmelalui aplikasi Kenari!',
-                    style: Theme.of(context).textTheme.bodyMedium!,
+                    style: MTextStyles.regular(),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -592,7 +586,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
             ),
             RefreshIndicator(
               onRefresh: () async {
-
+                loadLoanData();
               },
               child: ListView(),
             ),
@@ -600,78 +594,81 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
         );
       case 2:
         return orderTransactionList.isNotEmpty ?
-        ListView.builder(
-          itemCount: orderTransactionList.length,
-          itemBuilder: (BuildContext listContext, int index) {
-            bool convertStatus = selectedStatus == 0 ? true : false;
+        RefreshIndicator(
+          onRefresh: () async {
 
-            return orderTransactionList[index] == convertStatus ?
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                  child: Text(
-                    'Unknown Order',
-                    style: Theme.of(context).textTheme.labelSmall!,
+          },
+          child: ListView.builder(
+            itemCount: orderTransactionList.length,
+            itemBuilder: (BuildContext listContext, int index) {
+              bool convertStatus = selectedStatus == 0 ? true : false;
+
+              return orderTransactionList[index] == convertStatus ?
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+                    child: Text(
+                      'Unknown Order',
+                      style: XSTextStyles.regular(),
+                    ),
                   ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
+                  Container(
+                    color: Colors.white,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
 
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Unknown',
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    color: TextColorStyles.textPrimary(),
-                                    fontWeight: FontBodyWeight.medium(),
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Unknown',
+                                    style: STextStyles.medium().copyWith(
+                                      color: TextColorStyles.textPrimary(),
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  'Unknown Amount',
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    color: TextColorStyles.textPrimary(),
-                                    fontWeight: FontBodyWeight.medium(),
+                                  Text(
+                                    'Unknown Amount',
+                                    style: STextStyles.medium().copyWith(
+                                      color: TextColorStyles.textPrimary(),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              companyCode ?? 'Unknown Company',
-                              style: Theme.of(context).textTheme.labelSmall!,
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            Text(
-                              'a.n ${name ?? 'Unknown User'}',
-                              style: Theme.of(context).textTheme.labelSmall!,
-                            ),
-                          ],
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                companyCode ?? 'Unknown Company',
+                                style: XSTextStyles.regular(),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Text(
+                                'a.n ${name ?? 'Unknown User'}',
+                                style: XSTextStyles.regular(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ) :
-            const Material();
-          },
+                ],
+              ) :
+              const Material();
+            },
+          ),
         ) :
         Stack(
           children: [
@@ -690,7 +687,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Belum Ada Transaksi',
-                    style: Theme.of(context).textTheme.labelSmall,
+                    style: HeadingTextStyles.headingS(),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
@@ -698,7 +695,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   ),
                   Text(
                     'Yuk mulai transaksi Iuranmu\nmelalui aplikasi Kenari!',
-                    style: Theme.of(context).textTheme.bodyMedium!,
+                    style: MTextStyles.regular(),
                     textAlign: TextAlign.center,
                   ),
                 ],

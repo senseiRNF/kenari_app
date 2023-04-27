@@ -67,7 +67,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         Expanded(
                           child: Text(
                             'Varian',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -93,7 +93,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         Expanded(
                           child: Text(
                             'Apabila ada varian yang memiliki Harga & Stok sama, kamu bisa mengubahnya secara sekaligus bersamaan.',
-                            style: Theme.of(context).textTheme.labelSmall!,
+                            style: XSTextStyles.regular(),
                           ),
                         ),
                         TextButton(
@@ -122,9 +122,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                           },
                           child: Text(
                             'Ubah Sekaligus',
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontBodyWeight.medium(),
-                            ),
+                            style: STextStyles.medium(),
                           ),
                         ),
                       ],
@@ -141,9 +139,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                       children: [
                         Text(
                           'Daftar Varian',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: MTextStyles.medium().copyWith(
                             color: TextColorStyles.textPrimary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         const SizedBox(
@@ -164,9 +161,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                               children: [
                                 Text(
                                   savedVariant['subvariant'][subVariantIndex],
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  style: STextStyles.medium().copyWith(
                                     color: TextColorStyles.textSecondary(),
-                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                                 const SizedBox(
@@ -174,9 +170,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                 ),
                                 Text(
                                   'Harga',
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  style: STextStyles.medium().copyWith(
                                     color: TextColorStyles.textPrimary(),
-                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                                 TextField(
@@ -208,9 +203,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                 ),
                                 Text(
                                   'Stok',
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  style: STextStyles.medium().copyWith(
                                     color: TextColorStyles.textPrimary(),
-                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                                 TextField(
@@ -278,9 +272,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                         },
                                         child: Text(
                                           'Stok selalu ada',
-                                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                          style: MTextStyles.medium().copyWith(
                                             color: PrimaryColorStyles.primaryMain(),
-                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                       ),
@@ -306,16 +299,14 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                       children: [
                         Text(
                           'Tipe Varian',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: MTextStyles.medium(),
                         ),
                         const SizedBox(
                           height: 5.0,
                         ),
                         Text(
                           'Pilih maksimum 2 tipe varian produk',
-                          style: Theme.of(context).textTheme.bodySmall!,
+                          style: STextStyles.regular(),
                         ),
                         const SizedBox(
                           height: 10.0,
@@ -352,10 +343,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
                                       variantList[variantIndex]['title'] ?? 'Unknown',
-                                      style: selectedVariant == variantIndex ? Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                        fontWeight: FontBodyWeight.medium(),
-                                      ) :
-                                      Theme.of(context).textTheme.bodyMedium!,
+                                      style: selectedVariant == variantIndex ? MTextStyles.medium() : MTextStyles.regular(),
                                     ),
                                   ),
                                 ),
@@ -378,9 +366,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Text(
                                     'Buat Varian',
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    style: MTextStyles.medium().copyWith(
                                       color: PrimaryColorStyles.primaryMain(),
-                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ),
@@ -406,9 +393,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                             Expanded(
                               child: Text(
                                 variantList[selectedVariant!]['title'],
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: MTextStyles.medium(),
                               ),
                             ),
                             TextButton(
@@ -431,9 +416,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                               },
                               child: Text(
                                 'Tambah',
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
-                                ),
+                                style: STextStyles.medium(),
                               ),
                             )
                           ],
@@ -459,7 +442,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                 children: [
                                   Text(
                                     subVariantData,
-                                    style: Theme.of(context).textTheme.bodySmall!,
+                                    style: STextStyles.regular(),
                                   ),
                                   const SizedBox(
                                     width: 10.0,
@@ -546,9 +529,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       savedVariant.isNotEmpty ? 'Simpan Varian' : 'Lanjutkan',
-                      style: Theme.of(context).textTheme.bodyLarge!..copyWith(
-                        color: savedVariant.isNotEmpty ? Theme.of(context).textTheme.bodyLarge!.color : selectedSubVariant.isNotEmpty ? Theme.of(context).textTheme.bodyLarge!.color : Colors.black54,
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        color: savedVariant.isNotEmpty ? Colors.white : selectedSubVariant.isNotEmpty ? LTextStyles.regular().color : Colors.black54,
                       ),
                     ),
                   ),
@@ -597,8 +579,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
                       'Buat Varian',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
                     ),
@@ -610,9 +592,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
                       'Nama Tipe Varian',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
-                      ),
+                      style: STextStyles.medium(),
                     ),
                   ),
                   Padding(
@@ -638,9 +618,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
                           'Simpan',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          style: LTextStyles.medium().copyWith(
                             color: Colors.white,
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -713,8 +692,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
                       'Pilih $variantName',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
                     ),
@@ -758,9 +737,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   'Tambah $variantName Lain',
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  style: STextStyles.medium().copyWith(
                                     color: PrimaryColorStyles.primaryMain(),
-                                    fontWeight: FontBodyWeight.medium(),
                                   ),
                                 ),
                               ),
@@ -773,7 +751,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                             Expanded(
                               child: Text(
                                 selectedSubvariantList[subVariantIndex]['data'],
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                             ),
                             Checkbox(
@@ -799,7 +777,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                       children: [
                         Text(
                           'Belum ada daftar Berat yang ada, silahkan untuk menambahkan daftar Berat',
-                          style: Theme.of(context).textTheme.bodySmall!,
+                          style: STextStyles.regular(),
                         ),
                         const SizedBox(
                           height: 10.0,
@@ -823,9 +801,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Text(
                               'Tambah',
-                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              style: STextStyles.medium().copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
-                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                           ),
@@ -846,9 +823,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
                           'Simpan',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          style: LTextStyles.medium().copyWith(
                             color: Colors.white,
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -902,8 +878,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
                       'Tambah $variantName',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
                     ),
@@ -915,9 +891,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
                       'Nama $variantName',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
-                      ),
+                      style: STextStyles.medium(),
                     ),
                   ),
                   Padding(
@@ -943,9 +917,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
                           'Simpan',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          style: LTextStyles.medium().copyWith(
                             color: Colors.white,
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -1021,8 +994,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
                       'Pilih varian yang ingin diatur',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
                     ),
@@ -1050,7 +1023,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                             Expanded(
                               child: Text(
                                 updatedVariantList[variantIndex]['variant'],
-                                style: Theme.of(context).textTheme.bodyMedium!,
+                                style: MTextStyles.regular(),
                               ),
                             ),
                             SizedBox(
@@ -1110,9 +1083,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
                           'Simpan',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          style: LTextStyles.medium().copyWith(
                             color: Colors.white,
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -1174,8 +1146,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
                       'Pilih varian yang ingin diatur',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontBodyWeight.medium(),
+                      style: LTextStyles.medium().copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
                     ),
@@ -1190,9 +1162,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                       children: [
                         Text(
                           'Harga',
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          style: STextStyles.medium().copyWith(
                             color: TextColorStyles.textPrimary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         TextField(
@@ -1213,9 +1184,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         ),
                         Text(
                           'Stok',
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          style: STextStyles.medium().copyWith(
                             color: TextColorStyles.textPrimary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                         TextField(
@@ -1275,9 +1245,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                             },
                             child: Text(
                               'Stok selalu ada',
-                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              style: MTextStyles.medium().copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
-                                fontWeight: FontBodyWeight.medium(),
                               ),
                             ),
                           ),
@@ -1306,9 +1275,8 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
                           'Simpan',
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          style: LTextStyles.medium().copyWith(
                             color: Colors.white,
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),

@@ -330,7 +330,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         Expanded(
                           child: Text(
                             'Notifikasi',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -367,18 +367,16 @@ class _NotificationPageState extends State<NotificationPage> {
                       Tab(
                         child: Text(
                           'Update',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: MTextStyles.medium().copyWith(
                             color: selectedTab == 0 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
                       Tab(
                         child: Text(
                           'Transaksi',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: MTextStyles.medium().copyWith(
                             color: selectedTab == 1 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            fontWeight: FontBodyWeight.medium(),
                           ),
                         ),
                       ),
@@ -422,7 +420,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: Text(
                                     'Semua',
-                                    style: Theme.of(context).textTheme.bodySmall!,
+                                    style: STextStyles.regular(),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -456,7 +454,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: Text(
                                     'Iuran',
-                                    style: Theme.of(context).textTheme.bodySmall!,
+                                    style: STextStyles.regular(),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -490,7 +488,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: Text(
                                     'Pinjaman',
-                                    style: Theme.of(context).textTheme.bodySmall!,
+                                    style: STextStyles.regular(),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -524,7 +522,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: Text(
                                     'Titip Jual',
-                                    style: Theme.of(context).textTheme.bodySmall!,
+                                    style: STextStyles.regular(),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -558,7 +556,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: Text(
                                     'Pesanan',
-                                    style: Theme.of(context).textTheme.bodySmall!,
+                                    style: STextStyles.regular(),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -636,9 +634,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Text(
                               DateFormat('MMMM yyyy').format(notificationList[index].date),
-                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                fontWeight: FontBodyWeight.medium(),
-                              ),
+                              style: XSTextStyles.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -656,8 +652,8 @@ class _NotificationPageState extends State<NotificationPage> {
                             children: [
                               Text(
                                 notificationList[index].title,
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  fontWeight: FontBodyWeight.medium(),
+                                style: MTextStyles.medium().copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               const SizedBox(
@@ -665,14 +661,14 @@ class _NotificationPageState extends State<NotificationPage> {
                               ),
                               Text(
                                 notificationList[index].subtitle ?? '',
-                                style: Theme.of(context).textTheme.bodySmall!,
+                                style: STextStyles.regular(),
                               ),
                               const SizedBox(
                                 height: 10.0,
                               ),
                               Text(
                                 DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
-                                style: Theme.of(context).textTheme.bodySmall!,
+                                style: STextStyles.regular(),
                               ),
                             ],
                           ),
@@ -698,9 +694,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Text(
                               DateFormat('MMMM yyyy').format(notificationList[index].date),
-                              style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                fontWeight: FontBodyWeight.medium(),
-                              ),
+                              style: XSTextStyles.medium(),
                             ),
                           ),
                           const SizedBox(
@@ -725,16 +719,15 @@ class _NotificationPageState extends State<NotificationPage> {
                                   children: [
                                     Text(
                                       notificationList[index].title,
-                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                        fontWeight: FontBodyWeight.medium(),
+                                      style: MTextStyles.medium().copyWith(
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     notificationList[index].total != null ?
                                     Text(
                                       "${notificationList[index].total! < 0 ? '-Rp ' : '+Rp '}${NumberFormat('#,###', 'en_id').format(notificationList[index].total!.abs()).replaceAll(',', '.')}",
-                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                      style: MTextStyles.medium().copyWith(
                                         color: notificationList[index].total! < 0 ? Colors.red : Colors.green,
-                                        fontWeight: FontBodyWeight.medium(),
                                       ),
                                     ) :
                                     const Material(),
@@ -746,7 +739,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 notificationList[index].subtitle != null ?
                                 Text(
                                   notificationList[index].subtitle!,
-                                  style: Theme.of(context).textTheme.bodySmall!,
+                                  style: STextStyles.regular(),
                                 ) :
                                 const Material(),
                                 const SizedBox(
@@ -754,7 +747,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 ),
                                 Text(
                                   DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
-                                  style: Theme.of(context).textTheme.bodySmall!,
+                                  style: STextStyles.regular(),
                                 ),
                               ],
                             ),
@@ -783,7 +776,7 @@ class _NotificationPageState extends State<NotificationPage> {
                       ),
                       Text(
                         selectedTab == 0 ? 'Belum Ada Informasi' : 'Belum Ada Info Transaksi',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: HeadingTextStyles.headingS(),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -793,7 +786,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 30.0),
                         child: Text(
                           selectedTab == 0 ? 'Berbagai update pemberitahuan dapat Anda\nlihat pada halaman ini' : 'Berbagai informasi transaksi dapat Anda lihat\npada halaman ini',
-                          style: Theme.of(context).textTheme.bodyMedium!,
+                          style: MTextStyles.regular(),
                           textAlign: TextAlign.center,
                         ),
                       ),

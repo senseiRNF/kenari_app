@@ -40,7 +40,7 @@ class _RegisterResultPageState extends State<RegisterResultPage> {
                     ),
                     Text(
                       'Terima kasih telah mendaftar!',
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: HeadingTextStyles.headingS(),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -48,7 +48,7 @@ class _RegisterResultPageState extends State<RegisterResultPage> {
                     ),
                     Text(
                       'Kami akan memverifikasi akun Anda, Silahkan hubungi pihak kantor Anda jika akun anda belum terverifikasi',
-                      style: Theme.of(context).textTheme.bodyMedium!,
+                      style: MTextStyles.regular(),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(
@@ -66,9 +66,7 @@ class _RegisterResultPageState extends State<RegisterResultPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
                           widget.email,
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontBodyWeight.medium(),
-                          ),
+                          style: MTextStyles.medium(),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -90,9 +88,8 @@ class _RegisterResultPageState extends State<RegisterResultPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                   child: Text(
                     'Mengerti',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).textTheme.bodyLarge!.color,
-                      fontWeight: FontBodyWeight.medium(),
+                    style: LTextStyles.medium().copyWith(
+                      color: Colors.white,
                     ),
                   ),
                 ),

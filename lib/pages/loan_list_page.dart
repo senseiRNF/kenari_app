@@ -103,7 +103,7 @@ class _LoanListPageState extends State<LoanListPage> {
                         Expanded(
                           child: Text(
                             'Pembayaran Pendanaan',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -124,16 +124,14 @@ class _LoanListPageState extends State<LoanListPage> {
                 children: [
                   Text(
                     'Total Tagihan',
-                    style: Theme.of(context).textTheme.bodySmall!,
+                    style: STextStyles.regular(),
                   ),
                   const SizedBox(
                     height: 10.0,
                   ),
                   Text(
                     'Rp ${NumberFormat('#,###', 'en_id').format(totalLoan).replaceAll(',', '.')}',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontBodyWeight.medium(),
-                    ),
+                    style: LTextStyles.medium(),
                   ),
                 ],
               ),
@@ -171,9 +169,8 @@ class _LoanListPageState extends State<LoanListPage> {
                                 child: Center(
                                   child: Text(
                                     'Belum Di bayar',
-                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                    style: XSTextStyles.medium().copyWith(
                                       color: isNotPaidOff == true ? TextColorStyles.textPrimary() : null,
-                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ),
@@ -204,9 +201,8 @@ class _LoanListPageState extends State<LoanListPage> {
                                 child: Center(
                                   child: Text(
                                     'Berhasil di bayar',
-                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                    style: XSTextStyles.medium().copyWith(
                                       color: isNotPaidOff == false ? TextColorStyles.textPrimary() : null,
-                                      fontWeight: FontBodyWeight.medium(),
                                     ),
                                   ),
                                 ),
@@ -256,7 +252,7 @@ class _LoanListPageState extends State<LoanListPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                         child: Text(
                           DateFormat('yyyy').format(DateTime.now()),
-                          style: Theme.of(context).textTheme.labelSmall!,
+                          style: XSTextStyles.regular(),
                         ),
                       ) :
                       const Material(),
@@ -283,16 +279,14 @@ class _LoanListPageState extends State<LoanListPage> {
                                       children: [
                                         Text(
                                           'Pendanaan',
-                                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                          style: MTextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
-                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                         Text(
                                           filteredData()[index].bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(filteredData()[index].bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
-                                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                          style: STextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
-                                            fontWeight: FontBodyWeight.medium(),
                                           ),
                                         ),
                                       ],
@@ -300,7 +294,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                   ),
                                   Text(
                                     '$countPaid/${filteredData()[index].jangkaWaktu} Telah dibayar',
-                                    style: Theme.of(context).textTheme.bodySmall!,
+                                    style: STextStyles.regular(),
                                   ),
                                   const SizedBox(
                                     height: 10.0,
@@ -311,7 +305,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                     children: [
                                       Text(
                                         filteredData()[index].jatuhTempo != null ? "Jatuh tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredData()[index].jatuhTempo!))}" : 'Unknown',
-                                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                        style: STextStyles.regular().copyWith(
                                           color: DangerColorStyles.dangerMain(),
                                         ),
                                       ),
@@ -334,9 +328,7 @@ class _LoanListPageState extends State<LoanListPage> {
               Center(
                 child: Text(
                   'Tidak ditemukan data yang cocok...',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontBodyWeight.medium(),
-                  ),
+                  style: MTextStyles.medium(),
                 ),
               ),
             ),

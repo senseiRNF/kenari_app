@@ -70,7 +70,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                         Expanded(
                           child: Text(
                             'Alamat Perusahaan',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: HeadingTextStyles.headingS(),
                           ),
                         ),
                       ],
@@ -109,9 +109,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                                     Expanded(
                                       child: Text(
                                         companyModel!.companyData!.name ?? 'Unknown Company',
-                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                          fontWeight: FontBodyWeight.medium(),
-                                        ),
+                                        style: MTextStyles.medium(),
                                       ),
                                     ),
                                     // companyModel!.companyData!.status != null && companyModel!.companyData!.status! == true ?
@@ -127,7 +125,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                                     //     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
                                     //     child: Text(
                                     //       'Utama',
-                                    //       style: Theme.of(context).textTheme.bodySmall!.medium().copyWith(
+                                    //       style: STextStyles.medium().copyWith(
                                     //         color: PrimaryColorStyles.primaryMain(),
                                     //       ),
                                     //     ),
@@ -141,14 +139,14 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                                 ),
                                 Text(
                                   companyModel!.companyData!.phone ?? 'Unknown Phone',
-                                  style: Theme.of(context).textTheme.bodySmall!,
+                                  style: STextStyles.regular(),
                                 ),
                                 const SizedBox(
                                   height: 10.0,
                                 ),
                                 Text(
                                   companyModel!.companyData!.addresses![index].address ?? 'Unknown Address',
-                                  style: Theme.of(context).textTheme.bodySmall!,
+                                  style: STextStyles.regular(),
                                 ),
                               ],
                             ),

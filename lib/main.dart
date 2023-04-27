@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
+import 'package:kenari_app/styles/text_styles.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,49 +48,10 @@ class KenariApp extends StatelessWidget {
           surface: PrimaryColorStyles.primarySurface(),
           onSurface: Colors.black54,
         ),
-        textTheme: TextTheme(
-          headlineSmall: TextStyle(
-            color: TextColorStyles.textPrimary(),
-            fontSize: 20.0,
-            fontFamily: 'Raleway',
-            fontWeight: FontWeight.w700,
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: MTextStyles.regular().copyWith(
+            color: TextColorStyles.textDisabled(),
           ),
-          headlineMedium: TextStyle(
-            color: TextColorStyles.textPrimary(),
-            fontSize: 28.0,
-            fontFamily: 'Raleway',
-            fontWeight: FontWeight.w700,
-          ),
-          headlineLarge: TextStyle(
-            color: TextColorStyles.textPrimary(),
-            fontSize: 36.0,
-            fontFamily: 'Raleway',
-            fontWeight: FontWeight.w700,
-          ),
-          bodySmall: TextStyle(
-            color: TextColorStyles.textPrimary(),
-            fontSize: 12.0,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-          ),
-          bodyMedium: TextStyle(
-            color: TextColorStyles.textPrimary(),
-            fontSize: 14.0,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-          ),
-          bodyLarge: TextStyle(
-            color: TextColorStyles.textPrimary(),
-            fontSize: 16.0,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-          ),
-          labelSmall: TextStyle(
-            color: TextColorStyles.textPrimary(),
-            fontSize: 10.0,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-          )
         ),
       ),
       routes: {
