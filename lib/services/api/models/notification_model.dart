@@ -1,11 +1,19 @@
-class LocalNotificationData {
+class NotificationModel {
+  NotificationData? notificationData;
+
+  NotificationModel({
+    this.notificationData,
+});
+}
+
+class NotificationData {
   String type;
   DateTime date;
   String title;
   String? subtitle;
   int? total;
 
-  LocalNotificationData({
+  NotificationData({
     required this.type,
     required this.date,
     required this.title,

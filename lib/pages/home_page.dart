@@ -481,7 +481,7 @@ class _HomePageState extends State<HomePage> {
         String imagePath = product.images != null && product.images![0].url != null ? product.images![0].url! : '';
         String? variant;
 
-        if(product.varians != null) {
+        if(product.varians != null && product.varians!.isNotEmpty) {
           variant = product.varians![index].name1 ?? 'Unknown Variant';
         }
 

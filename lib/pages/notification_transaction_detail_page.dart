@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
-import 'package:kenari_app/services/local/models/local_notification_data.dart';
+import 'package:kenari_app/services/api/models/notification_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class NotificationTransactionDetailPage extends StatefulWidget {
-  final LocalNotificationData notificationData;
+  final NotificationData notificationData;
 
   const NotificationTransactionDetailPage({
     super.key,

@@ -100,11 +100,7 @@ class _ProductPageState extends State<ProductPage> {
                       onTap: () {
                         MoveToPage(
                           context: context,
-                          target: const TrolleyPage(
-                            productList: [
-
-                            ],
-                          ),
+                          target: const TrolleyPage(),
                           callback: (callbackResult) {
                             if(callbackResult != null) {
 

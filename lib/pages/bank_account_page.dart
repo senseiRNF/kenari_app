@@ -20,10 +20,10 @@ class _BankAccountPageState extends State<BankAccountPage> {
   void initState() {
     super.initState();
 
-    initLoad();
+    loadData();
   }
 
-  Future initLoad() async {
+  Future loadData() async {
     await APIBankServices(context: context).getBankByMemberId().then((bankResult) {
       setState(() {
         bankModel = bankResult;
@@ -83,68 +83,101 @@ class _BankAccountPageState extends State<BankAccountPage> {
             ),
             Expanded(
               child: bankModel != null && bankModel!.bankData != null && bankModel!.bankData!.isNotEmpty ?
-              ListView.builder(
-                itemCount: bankModel!.bankData!.length,
-                itemBuilder: (BuildContext listContext, int index) {
-                  return bankModel!.bankData![index].bank != null ?
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              bankModel!.bankData![index].bank!.name ?? 'Unknown Bank',
-                              style: MTextStyles.medium(),
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Text(
-                              bankModel!.bankData![index].accountNo ?? 'Unknown Account Number',
-                              style: STextStyles.regular(),
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            Text(
-                              'a.n ${bankModel!.bankData![index].accountName ?? 'Unknown Name'}',
-                              style: STextStyles.regular(),
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                MoveToPage(
-                                  context: context,
-                                  target: BankAccountFormPage(editData: bankModel!.bankData![index]),
-                                  callback: (callback) {
-                                    if(callback != null && callback == true) {
-                                      initLoad();
-                                    }
-                                  },
-                                ).go();
-                              },
-                              child: Text(
-                                'Ubah Rekening',
-                                style: MTextStyles.medium().copyWith(
-                                  color: PrimaryColorStyles.primaryMain(),
-                                ),
+              RefreshIndicator(
+                onRefresh: () async {
+                  loadData();
+                },
+                child: ListView.builder(
+                  itemCount: bankModel!.bankData!.length,
+                  itemBuilder: (BuildContext listContext, int index) {
+                    return bankModel!.bankData![index].bank != null ?
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Container(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                bankModel!.bankData![index].bank!.name ?? 'Unknown Bank',
+                                style: MTextStyles.medium(),
                               ),
-                            )
-                          ],
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                bankModel!.bankData![index].accountNo ?? 'Unknown Account Number',
+                                style: STextStyles.regular(),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Text(
+                                'a.n ${bankModel!.bankData![index].accountName ?? 'Unknown Name'}',
+                                style: STextStyles.regular(),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  MoveToPage(
+                                    context: context,
+                                    target: BankAccountFormPage(editData: bankModel!.bankData![index]),
+                                    callback: (callback) {
+                                      if(callback != null && callback == true) {
+                                        loadData();
+                                      }
+                                    },
+                                  ).go();
+                                },
+                                child: Text(
+                                  'Ubah Rekening',
+                                  style: MTextStyles.medium().copyWith(
+                                    color: PrimaryColorStyles.primaryMain(),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ) :
-                  const Material();
-                },
+                    ) :
+                    const Material();
+                  },
+                ),
               ) :
-              Stack(),
+              Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Image.asset(
+                        'assets/images/icon_empty.png',
+                        width: 200.0,
+                        height: 200.0,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        'Data tidak ditemukan',
+                        style: HeadingTextStyles.headingS(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      loadData();
+                    },
+                    child: ListView(),
+                  ),
+                ],
+              ),
             ),
             Container(
               color: Colors.white,
@@ -157,7 +190,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                       target: const BankAccountFormPage(),
                       callback: (callback) {
                         if(callback != null && callback == true) {
-                          initLoad();
+                          loadData();
                         }
                       },
                     ).go();

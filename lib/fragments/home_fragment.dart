@@ -101,11 +101,7 @@ class HomeFragment extends StatelessWidget {
                     onTap: () {
                       MoveToPage(
                         context: context,
-                        target: const TrolleyPage(
-                          productList: [
-
-                          ],
-                        ),
+                        target: const TrolleyPage(),
                         callback: (callbackResult) {
                           if(callbackResult != null) {
 
@@ -394,25 +390,28 @@ class HomeFragment extends StatelessWidget {
                                 ),
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
-                              child: InkWell(
-                                onTap: () {
-                                  MoveToPage(
-                                    context: context,
-                                    target: const FeePage(),
-                                    callback: (callbackResult) {
-                                      if(callbackResult != null && callbackResult == false) {
-                                        onCallbackFromFeePage();
-                                      }
-                                    },
-                                  ).go();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_iuran.png',
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    MoveToPage(
+                                      context: context,
+                                      target: const FeePage(),
+                                      callback: (callbackResult) {
+                                        if(callbackResult != null && callbackResult == false) {
+                                          onCallbackFromFeePage();
+                                        }
+                                      },
+                                    ).go();
+                                  },
+                                  customBorder: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/icon_iuran.png',
+                                    ),
                                   ),
                                 ),
                               ),
@@ -440,25 +439,28 @@ class HomeFragment extends StatelessWidget {
                                 ),
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
-                              child: InkWell(
-                                onTap: () {
-                                  MoveToPage(
-                                    context: context,
-                                    target: const LoanPage(),
-                                    callback: (callbackResult) {
-                                      if(callbackResult != null) {
-                                        onCallbackFromLoanPage(callbackResult);
-                                      }
-                                    },
-                                  ).go();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_pinjaman.png',
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    MoveToPage(
+                                      context: context,
+                                      target: const LoanPage(),
+                                      callback: (callbackResult) {
+                                        if(callbackResult != null) {
+                                          onCallbackFromLoanPage(callbackResult);
+                                        }
+                                      },
+                                    ).go();
+                                  },
+                                  customBorder: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/icon_pinjaman.png',
+                                    ),
                                   ),
                                 ),
                               ),
@@ -486,25 +488,28 @@ class HomeFragment extends StatelessWidget {
                                 ),
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
-                              child: InkWell(
-                                onTap: () {
-                                  MoveToPage(
-                                    context: context,
-                                    target: const SellerPage(),
-                                    callback: (callbackResult) {
-                                      if(callbackResult != null) {
-                                        onCallbackFromSellerPage(callbackResult);
-                                      }
-                                    },
-                                  ).go();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_titip_jual.png',
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    MoveToPage(
+                                      context: context,
+                                      target: const SellerPage(),
+                                      callback: (callbackResult) {
+                                        if(callbackResult != null) {
+                                          onCallbackFromSellerPage(callbackResult);
+                                        }
+                                      },
+                                    ).go();
+                                  },
+                                  customBorder: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/icon_titip_jual.png',
+                                    ),
                                   ),
                                 ),
                               ),
@@ -532,17 +537,20 @@ class HomeFragment extends StatelessWidget {
                                 ),
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
-                              child: InkWell(
-                                onTap: () {
-                                  onShowAllMenuBottomDialog();
-                                },
-                                customBorder: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_semua.png',
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    onShowAllMenuBottomDialog();
+                                  },
+                                  customBorder: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/icon_semua.png',
+                                    ),
                                   ),
                                 ),
                               ),
@@ -618,16 +626,16 @@ class HomeFragment extends StatelessWidget {
 
                               return Padding(
                                 padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 5.0) : index == newProductList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0) : const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: InkWell(
-                                  onTap: () => onProductSelected(newProductList[index]),
-                                  customBorder: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: SizedBox(
-                                    width: 150.0,
-                                    height: 200.0,
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
+                                child: SizedBox(
+                                  width: 150.0,
+                                  height: 200.0,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () => onProductSelected(newProductList[index]),
+                                      customBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       child: Column(
@@ -824,22 +832,25 @@ class HomeFragment extends StatelessWidget {
                                     ),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: InkWell(
-                                    onTap: () {
-                                      MoveToPage(context: context, target: ProductListPage(
-                                        filterType: 'Kategori_${categoryList[categoryIndex].name}',
-                                        filterList: filterList,
-                                      )).go();
-                                    },
-                                    customBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(
-                                          categoryList[categoryIndex].name ?? 'Unknown Category',
-                                          style: MTextStyles.regular(),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        MoveToPage(context: context, target: ProductListPage(
+                                          filterType: 'Kategori_${categoryList[categoryIndex].name}',
+                                          filterList: filterList,
+                                        )).go();
+                                      },
+                                      customBorder: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Text(
+                                            categoryList[categoryIndex].name ?? 'Unknown Category',
+                                            style: MTextStyles.regular(),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -864,23 +875,25 @@ class HomeFragment extends StatelessWidget {
                   ),
                   Container(
                     color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 30.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: popularProductList.length,
-                            separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-                              return Divider(
-                                thickness: 0.5,
-                                color: BorderColorStyles.borderDivider(),
-                              );
-                            },
-                            itemBuilder: (BuildContext popularContext, int index) {
-                              return Row(
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: popularProductList.length,
+                      separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+                        return Divider(
+                          thickness: 0.5,
+                          height: 1.0,
+                          color: BorderColorStyles.borderDivider(),
+                        );
+                      },
+                      itemBuilder: (BuildContext popularContext, int index) {
+                        return Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => onProductSelected(popularProductList[index]),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   CachedNetworkImage(
@@ -1006,11 +1019,11 @@ class HomeFragment extends StatelessWidget {
                                     ),
                                   ),
                                 ],
-                              );
-                            },
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ),
                   Padding(
@@ -1067,106 +1080,112 @@ class HomeFragment extends StatelessWidget {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: CachedNetworkImage(
-                                            imageUrl: discountProductList[index].images != null && discountProductList[index].images![0].url != null ? discountProductList[index].images![0].url! : '',
-                                            imageBuilder: (context, imgProvider) => Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: imgProvider,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                borderRadius: const BorderRadius.only(
-                                                  topLeft: Radius.circular(10.0),
-                                                  topRight: Radius.circular(10.0),
-                                                ),
-                                              ),
-                                            ),
-                                            errorWidget: (errContext, url, error) {
-                                              return Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Icon(
-                                                    Icons.broken_image_outlined,
-                                                    color: IconColorStyles.iconColor(),
+                                    child: InkWell(
+                                      onTap: () => onProductSelected(discountProductList[index]),
+                                      customBorder: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            child: CachedNetworkImage(
+                                              imageUrl: discountProductList[index].images != null && discountProductList[index].images![0].url != null ? discountProductList[index].images![0].url! : '',
+                                              imageBuilder: (context, imgProvider) => Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: imgProvider,
+                                                    fit: BoxFit.cover,
                                                   ),
-                                                  Text(
-                                                    'Unable to load image',
-                                                    style: XSTextStyles.medium(),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Text(
-                                                  discountProductList[index].productCategory != null && discountProductList[index].productCategory!.name != null ? discountProductList[index].productCategory!.name! : 'Unknown Category',
-                                                  style: XSTextStyles.regular(),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                  child: Text(
-                                                    discountProductList[index].name ?? 'Unknown Product',
-                                                    style: STextStyles.medium(),
+                                                  borderRadius: const BorderRadius.only(
+                                                    topLeft: Radius.circular(10.0),
+                                                    topRight: Radius.circular(10.0),
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(
-                                                height: 10.0,
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                child: Text(
-                                                  discountPrice,
-                                                  style: XSTextStyles.medium().copyWith(
-                                                    color: PrimaryColorStyles.primaryMain(),
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                              errorWidget: (errContext, url, error) {
+                                                return Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
                                                   children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        normalPrice,
-                                                        style: XSTextStyles.medium().copyWith(
-                                                          color: TextColorStyles.textDisabled(),
-                                                          decoration: TextDecoration.lineThrough,
-                                                        ),
-                                                      ),
+                                                    Icon(
+                                                      Icons.broken_image_outlined,
+                                                      color: IconColorStyles.iconColor(),
                                                     ),
-                                                    InkWell(
-                                                      onTap: () {
-
-                                                      },
-                                                      customBorder: const CircleBorder(),
-                                                      child: Icon(
-                                                        Icons.more_horiz,
-                                                        size: 15.0,
-                                                        color: IconColorStyles.iconColor(),
-                                                      ),
+                                                    Text(
+                                                      'Unable to load image',
+                                                      style: XSTextStyles.medium(),
+                                                      textAlign: TextAlign.center,
                                                     ),
                                                   ],
-                                                ),
-                                              ),
-                                            ],
+                                                );
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(10.0),
+                                                  child: Text(
+                                                    discountProductList[index].productCategory != null && discountProductList[index].productCategory!.name != null ? discountProductList[index].productCategory!.name! : 'Unknown Category',
+                                                    style: XSTextStyles.regular(),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                    child: Text(
+                                                      discountProductList[index].name ?? 'Unknown Product',
+                                                      style: STextStyles.medium(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10.0,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                                  child: Text(
+                                                    discountPrice,
+                                                    style: XSTextStyles.medium().copyWith(
+                                                      color: PrimaryColorStyles.primaryMain(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(10.0),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          normalPrice,
+                                                          style: XSTextStyles.medium().copyWith(
+                                                            color: TextColorStyles.textDisabled(),
+                                                            decoration: TextDecoration.lineThrough,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          onShowProductBottomDialog(discountProductList[index]);
+                                                        },
+                                                        customBorder: const CircleBorder(),
+                                                        child: Icon(
+                                                          Icons.more_horiz,
+                                                          size: 15.0,
+                                                          color: IconColorStyles.iconColor(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

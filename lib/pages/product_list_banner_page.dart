@@ -367,7 +367,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                   Padding(
                     padding: const EdgeInsets.all(25.0),
                     child: Text(
-                      'Oops! Produk yang kamu cari di halaman ini tidak dapat ditemukan',
+                      '',
                       style: MTextStyles.medium().copyWith(
                         fontWeight: FontWeight.bold,
                       ),

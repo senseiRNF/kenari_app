@@ -1,28 +1,27 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/checkout_page.dart';
-import 'package:kenari_app/services/api/models/product_model.dart';
+import 'package:kenari_app/services/api/models/trolley_model.dart';
+import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
 import 'package:kenari_app/services/local/models/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class TrolleyPage extends StatefulWidget {
-  final List<ProductData> productList;
-
-  const TrolleyPage({
-    super.key,
-    required this.productList,
-  });
+  const TrolleyPage({super.key,});
 
   @override
   State<TrolleyPage> createState() => _TrolleyPageState();
 }
 
 class _TrolleyPageState extends State<TrolleyPage> {
-  List<LocalTrolleyProduct> productList = [];
+  List<LocalTrolleyProduct> trolleyData = [];
+
+  int total = 0;
 
   bool isSelectedAll = false;
 
@@ -32,19 +31,38 @@ class _TrolleyPageState extends State<TrolleyPage> {
   void initState() {
     super.initState();
 
-    List<LocalTrolleyProduct> tempTrolley = [];
+    loadData();
+  }
 
-    for(int i = 0; i < widget.productList.length; i++) {
-      tempTrolley.add(
-        LocalTrolleyProduct(
-          isSelected: false,
-          productData: widget.productList[i],
-          qty: 1,
-        ),
-      );
-    }
-    setState(() {
-      productList = tempTrolley;
+  Future loadData() async {
+    List<TrolleyData> tempData = [];
+
+    await APITrolleyServices(context: context).call().then((trolleyResult) {
+      if(trolleyResult != null && trolleyResult.trolleyData != null) {
+        setState(() {
+          tempData = trolleyResult.trolleyData!;
+        });
+      }
+
+      List<LocalTrolleyProduct> tempLocalTrolleyData = [];
+      int tempTotal = 0;
+
+      for(int i = 0; i < tempData.length; i++) {
+        tempLocalTrolleyData.add(
+          LocalTrolleyProduct(
+            isSelected: false,
+            trolleyData: tempData[i],
+            qty: int.parse(tempData[i].qty ?? '0'),
+          ),
+        );
+
+        tempTotal = tempTotal + (int.parse(tempData[i].price ?? '0') * int.parse(tempData[i].qty ?? '0'));
+      }
+
+      setState(() {
+        trolleyData = tempLocalTrolleyData;
+        total = tempTotal;
+      });
     });
   }
 
@@ -103,7 +121,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
               ),
             ),
             Expanded(
-              child: productList.isNotEmpty ?
+              child: trolleyData.isNotEmpty ?
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -121,8 +139,8 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                   setState(() {
                                     isSelectedAll = newValue;
 
-                                    for(int i = 0; i < productList.length; i++) {
-                                      productList[i].isSelected = newValue;
+                                    for(int i = 0; i < trolleyData.length; i++) {
+                                      trolleyData[i].isSelected = newValue;
                                     }
                                   });
                                 }
@@ -146,17 +164,17 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                   title: 'Hapus Semua Produk?',
                                   message: 'Semua produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
                                   yesFunction: () {
-                                    List<LocalTrolleyProduct> tempList = productList;
+                                    List<LocalTrolleyProduct> tempList = trolleyData;
 
                                     for(int i = tempList.length - 1; i >= 0; i--) {
                                       if(tempList[i].isSelected == true) {
                                         LocalTrolleyProduct tempTrolleyProduct = tempList[i];
 
                                         setState(() {
-                                          productList.removeAt(i);
+                                          trolleyData.removeAt(i);
                                           listKey.currentState!.removeItem(i, (context, animation) {
                                             return ItemListWithAnimation(
-                                              product: tempTrolleyProduct,
+                                              trolleyProduct: tempTrolleyProduct,
                                               animation: animation,
                                               onChangedCheckbox: (_) {},
                                               onReduceQty: () {},
@@ -185,105 +203,110 @@ class _TrolleyPageState extends State<TrolleyPage> {
                     ),
                   ),
                   Expanded(
-                    child: AnimatedList(
-                      key: listKey,
-                      initialItemCount: productList.length,
-                      itemBuilder: (BuildContext listTrolleyContext, int index, Animation<double> animation) {
-                        return Slidable(
-                          key: ValueKey(index),
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            extentRatio: 0.15,
-                            children: [
-                              SlidableAction(
-                                onPressed: (BuildContext pressedContext) {
-                                  OptionDialog(
-                                    context: context,
-                                    title: 'Hapus Produk?',
-                                    message: 'Produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
-                                    yesFunction: () {
-                                      LocalTrolleyProduct tempList = productList[index];
-
-                                      setState(() {
-                                        productList.removeAt(index);
-                                        listKey.currentState!.removeItem(index, (context, animation) {
-                                          return ItemListWithAnimation(
-                                            product: tempList,
-                                            animation: animation,
-                                            onChangedCheckbox: (selectProduct) {
-                                              setState(() {
-                                                tempList.isSelected = selectProduct;
-                                              });
-
-                                              for(int i = 0; i < productList.length; i++) {
-                                                if(productList[i].isSelected == false) {
-                                                  setState(() {
-                                                    isSelectedAll = false;
-                                                  });
-
-                                                  break;
-                                                }
-                                              }
-                                            },
-                                            onReduceQty: () {
-                                              if(tempList.qty > 1) {
-                                                setState(() {
-                                                  tempList.qty = tempList.qty - 1;
-                                                });
-                                              }
-                                            },
-                                            onAddQty: () {
-                                              setState(() {
-                                                tempList.qty = tempList.qty + 1;
-                                              });
-                                            },
-                                          );
-                                        },
-                                        duration: const Duration(milliseconds: 500));
-                                      });
-                                    },
-                                    noFunction: () {},
-                                  ).show();
-                                },
-                                backgroundColor: Colors.red,
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                              ),
-                            ],
-                          ),
-                          child: ItemListWithAnimation(
-                            product: productList[index],
-                            animation: animation,
-                            onChangedCheckbox: (selectProduct) {
-                              setState(() {
-                                productList[index].isSelected = selectProduct;
-                              });
-
-                              for(int i = 0; i < productList.length; i++) {
-                                if(productList[i].isSelected == false) {
-                                  setState(() {
-                                    isSelectedAll = false;
-                                  });
-
-                                  break;
-                                }
-                              }
-                            },
-                            onReduceQty: () {
-                              if(productList[index].qty > 1) {
-                                setState(() {
-                                  productList[index].qty = productList[index].qty - 1;
-                                });
-                              }
-                            },
-                            onAddQty: () {
-                              setState(() {
-                                productList[index].qty = productList[index].qty + 1;
-                              });
-                            },
-                          ),
-                        );
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        loadData();
                       },
+                      child: AnimatedList(
+                        key: listKey,
+                        initialItemCount: trolleyData.length,
+                        itemBuilder: (BuildContext listTrolleyContext, int index, Animation<double> animation) {
+                          return Slidable(
+                            key: ValueKey(index),
+                            endActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              extentRatio: 0.15,
+                              children: [
+                                SlidableAction(
+                                  onPressed: (BuildContext pressedContext) {
+                                    OptionDialog(
+                                      context: context,
+                                      title: 'Hapus Produk?',
+                                      message: 'Produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
+                                      yesFunction: () {
+                                        LocalTrolleyProduct tempList = trolleyData[index];
+
+                                        setState(() {
+                                          trolleyData.removeAt(index);
+                                          listKey.currentState!.removeItem(index, (context, animation) {
+                                            return ItemListWithAnimation(
+                                              trolleyProduct: tempList,
+                                              animation: animation,
+                                              onChangedCheckbox: (selectProduct) {
+                                                setState(() {
+                                                  tempList.isSelected = selectProduct;
+                                                });
+
+                                                for(int i = 0; i < trolleyData.length; i++) {
+                                                  if(trolleyData[i].isSelected == false) {
+                                                    setState(() {
+                                                      isSelectedAll = false;
+                                                    });
+
+                                                    break;
+                                                  }
+                                                }
+                                              },
+                                              onReduceQty: () {
+                                                if(tempList.qty > 1) {
+                                                  setState(() {
+                                                    tempList.qty = tempList.qty - 1;
+                                                  });
+                                                }
+                                              },
+                                              onAddQty: () {
+                                                setState(() {
+                                                  tempList.qty = tempList.qty + 1;
+                                                });
+                                              },
+                                            );
+                                          },
+                                          duration: const Duration(milliseconds: 500));
+                                        });
+                                      },
+                                      noFunction: () {},
+                                    ).show();
+                                  },
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.delete,
+                                ),
+                              ],
+                            ),
+                            child: ItemListWithAnimation(
+                              trolleyProduct: trolleyData[index],
+                              animation: animation,
+                              onChangedCheckbox: (selectProduct) {
+                                setState(() {
+                                  trolleyData[index].isSelected = selectProduct;
+                                });
+
+                                for(int i = 0; i < trolleyData.length; i++) {
+                                  if(trolleyData[i].isSelected == false) {
+                                    setState(() {
+                                      isSelectedAll = false;
+                                    });
+
+                                    break;
+                                  }
+                                }
+                              },
+                              onReduceQty: () {
+                                if(trolleyData[index].qty > 1) {
+                                  setState(() {
+                                    trolleyData[index].qty = trolleyData[index].qty - 1;
+                                  });
+                                }
+                              },
+                              onAddQty: () {
+                                setState(() {
+                                  trolleyData[index].qty = trolleyData[index].qty + 1;
+                                });
+                              },
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -324,14 +347,14 @@ class _TrolleyPageState extends State<TrolleyPage> {
                   ),
                   RefreshIndicator(
                     onRefresh: () async {
-
+                      loadData();
                     },
                     child: ListView(),
                   ),
                 ],
               ),
             ),
-            productList.isNotEmpty ?
+            trolleyData.isNotEmpty ?
             Container(
               color: Colors.white,
               child: Padding(
@@ -351,7 +374,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                             height: 10.0,
                           ),
                           Text(
-                            'Rp.1.225.000,-',
+                            'Rp ${NumberFormat('#,###', 'en_id').format(total).replaceAll(',', '.')},-',
                             style: TextStyle(
                               color: PrimaryColorStyles.primaryMain(),
                               fontSize: 18.0,
@@ -365,7 +388,9 @@ class _TrolleyPageState extends State<TrolleyPage> {
                       onPressed: () {
                         MoveToPage(
                           context: context,
-                          target: CheckoutPage(productList: widget.productList),
+                          target: const CheckoutPage(
+                            productList: [],
+                          ),
                           callback: (callbackResult) {
                             if(callbackResult != null) {
                               BackFromThisPage(context: context, callbackData: callbackResult).go();
@@ -415,7 +440,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
 }
 
 class ItemListWithAnimation extends StatelessWidget {
-  final LocalTrolleyProduct product;
+  final LocalTrolleyProduct trolleyProduct;
   final Animation<double> animation;
   final Function onChangedCheckbox;
   final Function onReduceQty;
@@ -423,7 +448,7 @@ class ItemListWithAnimation extends StatelessWidget {
 
   const ItemListWithAnimation({
     super.key,
-    required this.product,
+    required this.trolleyProduct,
     required this.animation,
     required this.onChangedCheckbox,
     required this.onReduceQty,
@@ -447,7 +472,7 @@ class ItemListWithAnimation extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Checkbox(
-              value: product.isSelected,
+              value: trolleyProduct.isSelected,
               onChanged: (selectProduct) {
                 if(selectProduct != null) {
                   onChangedCheckbox(selectProduct);
@@ -462,18 +487,42 @@ class ItemListWithAnimation extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 65.0,
-                    height: 65.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          product.productData.images != null && product.productData.images![0].url != null ? product.productData.images![0].url! : '',
+                  CachedNetworkImage(
+                    imageUrl: trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.images != null && trolleyProduct.trolleyData.product!.images![0].url != null ? trolleyProduct.trolleyData.product!.images![0].url! : '',
+                    imageBuilder: (context, imgProvider) {
+                      return Container(
+                        width: 65.0,
+                        height: 65.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          image: DecorationImage(
+                            image: imgProvider,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                      );
+                    },
+                    errorWidget: (context, url, error) {
+                      return SizedBox(
+                        width: 65.0,
+                        height: 65.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Icon(
+                              Icons.broken_image_outlined,
+                              color: IconColorStyles.iconColor(),
+                            ),
+                            Text(
+                              'Unable to load image',
+                              style: XSTextStyles.medium(),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(
                     width: 15.0,
@@ -483,10 +532,10 @@ class ItemListWithAnimation extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          product.productData.name ?? 'Unknown Product',
+                          trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.name != null ? trolleyProduct.trolleyData.product!.name! : 'Unknown Product',
                           style: MTextStyles.medium(),
                         ),
-                        product.productData.varians != null ?
+                        trolleyProduct.trolleyData.varian != null && trolleyProduct.trolleyData.varianName != null ?
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -494,7 +543,7 @@ class ItemListWithAnimation extends StatelessWidget {
                               height: 15.0,
                             ),
                             Text(
-                              product.productData.varians![0].name1 ?? 'Unknown Variant',
+                              trolleyProduct.trolleyData.varianName ?? 'Unknown Variant',
                               style: STextStyles.regular(),
                             ),
                           ],
@@ -507,7 +556,7 @@ class ItemListWithAnimation extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.productData.price ?? '0')).replaceAll(',', '.')}',
+                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(trolleyProduct.trolleyData.price ?? '0')).replaceAll(',', '.')}',
                                 style: MTextStyles.regular().copyWith(
                                   color: PrimaryColorStyles.primaryMain(),
                                 ),
@@ -516,7 +565,7 @@ class ItemListWithAnimation extends StatelessWidget {
                             Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: product.qty == 1 ? NeutralColorStyles.neutral03() : BorderColorStyles.borderDivider(),
+                                  color: trolleyProduct.qty == 1 ? NeutralColorStyles.neutral03() : BorderColorStyles.borderDivider(),
                                 ),
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
@@ -529,7 +578,7 @@ class ItemListWithAnimation extends StatelessWidget {
                                 ),
                                 child: Icon(
                                   Icons.remove,
-                                  color: product.qty == 1 ? NeutralColorStyles.neutral03() : IconColorStyles.iconColor(),
+                                  color: trolleyProduct.qty == 1 ? NeutralColorStyles.neutral03() : IconColorStyles.iconColor(),
                                 ),
                               ),
                             ),
@@ -538,7 +587,7 @@ class ItemListWithAnimation extends StatelessWidget {
                               child: SizedBox(
                                 width: 20.0,
                                 child: Text(
-                                  '${product.qty}',
+                                  '${trolleyProduct.qty}',
                                   style: MTextStyles.regular(),
                                   textAlign: TextAlign.center,
                                 ),
@@ -566,6 +615,10 @@ class ItemListWithAnimation extends StatelessWidget {
                             ),
                           ],
                         ),
+                        // const Padding(
+                        //   padding: EdgeInsets.symmetric(vertical: 5.0),
+                        //   child: LinearProgressIndicator(),
+                        // ),
                       ],
                     ),
                   ),

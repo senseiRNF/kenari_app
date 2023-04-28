@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/bank_account_page.dart';
+import 'package:kenari_app/pages/change_password_page.dart';
 import 'package:kenari_app/pages/company_address_page.dart';
 import 'package:kenari_app/pages/dipay_activation_page.dart';
 import 'package:kenari_app/pages/edit_profile_page.dart';
@@ -300,7 +301,7 @@ class ProfileFragment extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                               child: InkWell(
                                 onTap: () {
-
+                                  MoveToPage(context: context, target: const ChangePasswordPage()).go();
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
