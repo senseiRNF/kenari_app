@@ -389,7 +389,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                         MoveToPage(
                           context: context,
                           target: const CheckoutPage(
-                            productList: [],
+                            trolleyData: [],
                           ),
                           callback: (callbackResult) {
                             if(callbackResult != null) {

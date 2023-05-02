@@ -5,7 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
 import 'package:kenari_app/services/api/models/detail_product_model.dart';
+import 'package:kenari_app/services/api/models/trolley_model.dart';
 import 'package:kenari_app/services/api/product_services/api_product_services.dart';
+import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
+import 'package:kenari_app/services/local/models/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -43,6 +46,30 @@ class _ProductPageState extends State<ProductPage> {
         setState(() {
           detailProductData = detailResult.detailProductData;
         });
+      }
+    });
+  }
+
+  Future updateCart(int index, DetailProductData product, int qty) async {
+    String? price = product.varians != null && product.varians!.isNotEmpty ?
+    product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice : product.varians![index].price :
+    product.isPromo != null && product.isPromo == true ? product.promoPrice : product.price;
+
+    await APITrolleyServices(context: context).update(
+      LocalTrolleyProduct(
+        isSelected: true,
+        trolleyData: TrolleyData(
+          price: price,
+          varian: product.varians != null && product.varians!.isNotEmpty ? product.varians![index].sId : '',
+          product: Product(
+            sId: product.sId,
+          ),
+        ),
+        qty: qty,
+      ),
+    ).then((updateResult) {
+      if(updateResult == true) {
+        showToastSuccessMessage();
       }
     });
   }
@@ -124,169 +151,195 @@ class _ProductPageState extends State<ProductPage> {
             ),
             Expanded(
               child: detailProductData != null ?
-              ListView(
-                children: [
-                  Container(
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        detailProductData!.images != null ?
-                        CarouselSlider(
-                          options: CarouselOptions(
-                            height: 300,
-                            enableInfiniteScroll: false,
-                            viewportFraction: 1.0,
-                            onPageChanged: (page, whyChanged) {
-                              setState(() {
-                                imageSelected = page + 1;
-                              });
-                            },
-                          ),
-                          items: detailProductData!.images!.map((product) {
-                            return CachedNetworkImage(
-                              imageUrl: product.url ?? '',
-                              imageBuilder: (context, imgProvider) => Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imgProvider,
-                                    fit: BoxFit.fitHeight,
+              RefreshIndicator(
+                onRefresh: () async {
+                  loadData();
+                },
+                child: ListView(
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          detailProductData!.images != null ?
+                          CarouselSlider(
+                            options: CarouselOptions(
+                              height: 300,
+                              enableInfiniteScroll: false,
+                              viewportFraction: 1.0,
+                              onPageChanged: (page, whyChanged) {
+                                setState(() {
+                                  imageSelected = page + 1;
+                                });
+                              },
+                            ),
+                            items: detailProductData!.images!.map((product) {
+                              return CachedNetworkImage(
+                                imageUrl: product.url ?? '',
+                                imageBuilder: (context, imgProvider) => Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imgProvider,
+                                      fit: BoxFit.fitHeight,
+                                    ),
                                   ),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Center(
-                                      child: Card(
-                                        color: Colors.black38,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
-                                          child: Text(
-                                            '$imageSelected / ${detailProductData!.images!.length}',
-                                            style: MTextStyles.medium().copyWith(
-                                              color: Colors.white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Center(
+                                        child: Card(
+                                          color: Colors.black38,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
+                                            child: Text(
+                                              '$imageSelected / ${detailProductData!.images!.length}',
+                                              style: MTextStyles.medium().copyWith(
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              errorWidget: (context, url, error) {
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Icon(
-                                      Icons.broken_image_outlined,
-                                      color: IconColorStyles.iconColor(),
-                                    ),
-                                    Text(
-                                      'Unable to load image',
-                                      style: XSTextStyles.medium(),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }).toList(),
-                        ) :
-                        const Material(),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Text(
-                            detailProductData!.name ?? 'Unknown Product',
-                            style: LTextStyles.medium(),
+                                errorWidget: (context, url, error) {
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Icon(
+                                        Icons.broken_image_outlined,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
+                                      Text(
+                                        'Unable to load image',
+                                        style: XSTextStyles.medium(),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ) :
+                          const Material(),
+                          const SizedBox(
+                            height: 15.0,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Text(
-                            'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(detailProductData!.price ?? '0'))}',
-                            style: LTextStyles.medium().copyWith(
-                              color: PrimaryColorStyles.primaryMain(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Text(
+                              detailProductData!.name ?? 'Unknown Product',
+                              style: LTextStyles.medium(),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Divider(
-                            height: 1.0,
-                            color: BorderColorStyles.borderDivider(),
+                          const SizedBox(
+                            height: 10.0,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: BorderColorStyles.borderStrokes(),
-                                  ),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: InkWell(
-                                  onTap: () {
-
-                                  },
-                                  customBorder: RoundedRectangleBorder(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Text(
+                              'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(detailProductData!.isPromo != null && detailProductData!.isPromo == true ? detailProductData!.promoPrice ?? '0' : detailProductData!.price ?? '0'))}',
+                              style: LTextStyles.medium().copyWith(
+                                color: PrimaryColorStyles.primaryMain(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Divider(
+                              height: 1.0,
+                              color: BorderColorStyles.borderDivider(),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: BorderColorStyles.borderStrokes(),
+                                    ),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-                                    child: Text(
-                                      detailProductData!.productCategory != null && detailProductData!.productCategory!.name != null ? detailProductData!.productCategory!.name! : 'Unknown Product',
-                                      style: XSTextStyles.regular(),
+                                  child: InkWell(
+                                    onTap: () {
+
+                                    },
+                                    customBorder: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+                                      child: Text(
+                                        detailProductData!.productCategory != null && detailProductData!.productCategory!.name != null ? detailProductData!.productCategory!.name! : 'Unknown Product',
+                                        style: XSTextStyles.regular(),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                'Detail Produk',
-                                style: STextStyles.medium().copyWith(
-                                  color: TextColorStyles.textPrimary(),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'Detail Produk',
+                                  style: STextStyles.medium().copyWith(
+                                    color: TextColorStyles.textPrimary(),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Row(
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          'Min Pemesanan',
+                                          style: STextStyles.regular(),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          '1 Buah',
+                                          style: STextStyles.medium().copyWith(
+                                            color: TextColorStyles.textPrimary(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                detailProductData!.varians != null && detailProductData!.varians!.isNotEmpty ?
+                                const Material() :
+                                Row(
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        'Min Pemesanan',
+                                        'Stok',
                                         style: STextStyles.regular(),
                                       ),
                                     ),
                                     Expanded(
                                       child: Text(
-                                        '1 Buah',
+                                        detailProductData!.isStockAlwaysAvailable != null && detailProductData!.isStockAlwaysAvailable! == true ? 'Stok selalu tersedia' :
+                                        '${detailProductData!.stock != null && detailProductData!.stock != '' ? detailProductData!.stock! : '0'} Buah',
                                         style: STextStyles.medium().copyWith(
                                           color: TextColorStyles.textPrimary(),
                                         ),
@@ -294,196 +347,177 @@ class _ProductPageState extends State<ProductPage> {
                                     ),
                                   ],
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Stok',
-                                      style: STextStyles.regular(),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      detailProductData!.isStockAlwaysAvailable != null && detailProductData!.isStockAlwaysAvailable! == true ? 'Stok selalu tersedia' :
-                                      '${detailProductData!.stock != null && detailProductData!.stock != '' ? detailProductData!.stock! : '0'} Buah',
-                                      style: STextStyles.medium().copyWith(
-                                        color: TextColorStyles.textPrimary(),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15.0),
-                          child: detailProductData!.varians != null && detailProductData!.varians!.isNotEmpty ?
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                                child: Text(
-                                  'Pilih Varian :',
-                                  style: STextStyles.medium().copyWith(
-                                    color: TextColorStyles.textPrimary(),
-                                  ),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                                child: SizedBox(
-                                  height: 30.0,
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: detailProductData!.varians!.length,
-                                    separatorBuilder: (BuildContext separatorContext, int index) {
-                                      return const SizedBox(
-                                        width: 10.0,
-                                      );
-                                    },
-                                    itemBuilder: (BuildContext gridContext, int itemIndex) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            width: 1.0,
-                                            color: BorderColorStyles.borderStrokes(),
-                                          ),
-                                          borderRadius: BorderRadius.circular(5.0),
-                                        ),
-                                        child: InkWell(
-                                          onTap: () {
-                                            showProductBottomDialog(detailProductData!);
-                                          },
-                                          customBorder: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                                            child: Text(
-                                              detailProductData!.varians![itemIndex].name1 ?? 'Unknown Variant',
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ) :
-                          const Material(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'Alamat Pengambilan :',
-                            style: STextStyles.medium().copyWith(
-                              color: TextColorStyles.textPrimary(),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Text(
-                            detailProductData!.company != null && detailProductData!.company!.name != null ? detailProductData!.company!.name! : 'Unknown Company',
-                            style: STextStyles.medium().copyWith(
-                              color: TextColorStyles.textPrimary(),
+                              ],
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5.0),
-                            child: Text(
-                              detailProductData!.company != null && detailProductData!.company!.phone != null ? detailProductData!.company!.phone! : 'Unknown Phone Number',
-                              style: STextStyles.regular().copyWith(
-                                color: NeutralColorStyles.neutral08(),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            detailProductData!.address != null && detailProductData!.address!.address != null ? detailProductData!.address!.address! : 'Unknown Address',
-                            style: STextStyles.regular().copyWith(
-                              color: NeutralColorStyles.neutral06(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'Deskripsi :',
-                            style: MTextStyles.medium().copyWith(
-                              color: TextColorStyles.textPrimary(),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Text(
-                            detailProductData!.description ?? '',
-                            maxLines: expandDesc ? null : 3,
-                            style: STextStyles.medium().copyWith(
-                              color: TextColorStyles.textPrimary(),
-                            ),
-                            overflow: TextOverflow.fade,
-                          ),
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    expandDesc = !expandDesc;
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+                            child: detailProductData!.varians != null && detailProductData!.varians!.isNotEmpty ?
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                                   child: Text(
-                                    expandDesc ? 'Lihat lebih sedikit' : 'Lihat lebih banyak',
+                                    'Pilih Varian :',
                                     style: STextStyles.medium().copyWith(
-                                      color: PrimaryColorStyles.primaryMain(),
+                                      color: TextColorStyles.textPrimary(),
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                                  child: SizedBox(
+                                    height: 30.0,
+                                    child: ListView.separated(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: detailProductData!.varians!.length,
+                                      separatorBuilder: (BuildContext separatorContext, int index) {
+                                        return const SizedBox(
+                                          width: 10.0,
+                                        );
+                                      },
+                                      itemBuilder: (BuildContext gridContext, int itemIndex) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              width: 1.0,
+                                              color: BorderColorStyles.borderStrokes(),
+                                            ),
+                                            borderRadius: BorderRadius.circular(5.0),
+                                          ),
+                                          child: InkWell(
+                                            onTap: () {
+                                              showProductBottomDialog(detailProductData!);
+                                            },
+                                            customBorder: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(5.0),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                              child: Text(
+                                                detailProductData!.varians![itemIndex].name1 ?? 'Unknown Variant',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ) :
+                            const Material(),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                ],
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              'Alamat Pengambilan :',
+                              style: STextStyles.medium().copyWith(
+                                color: TextColorStyles.textPrimary(),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              detailProductData!.company != null && detailProductData!.company!.name != null ? detailProductData!.company!.name! : 'Unknown Company',
+                              style: STextStyles.medium().copyWith(
+                                color: TextColorStyles.textPrimary(),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5.0),
+                              child: Text(
+                                detailProductData!.company != null && detailProductData!.company!.phone != null ? detailProductData!.company!.phone! : 'Unknown Phone Number',
+                                style: STextStyles.regular().copyWith(
+                                  color: NeutralColorStyles.neutral08(),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              detailProductData!.address != null && detailProductData!.address!.address != null ? detailProductData!.address!.address! : 'Unknown Address',
+                              style: STextStyles.regular().copyWith(
+                                color: NeutralColorStyles.neutral06(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              'Deskripsi :',
+                              style: MTextStyles.medium().copyWith(
+                                color: TextColorStyles.textPrimary(),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              detailProductData!.description ?? '',
+                              maxLines: expandDesc ? null : 3,
+                              style: STextStyles.medium().copyWith(
+                                color: TextColorStyles.textPrimary(),
+                              ),
+                              overflow: TextOverflow.fade,
+                            ),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      expandDesc = !expandDesc;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                                    child: Text(
+                                      expandDesc ? 'Lihat lebih sedikit' : 'Lihat lebih banyak',
+                                      style: STextStyles.medium().copyWith(
+                                        color: PrimaryColorStyles.primaryMain(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                  ],
+                ),
               ) :
               Stack(
                 children: [
@@ -507,6 +541,7 @@ class _ProductPageState extends State<ProductPage> {
                 ],
               ),
             ),
+            detailProductData != null ?
             Container(
               color: Colors.white,
               child: Padding(
@@ -542,7 +577,8 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                 ),
               ),
-            ),
+            ) :
+            const Material(),
           ],
         ),
       ),
@@ -561,13 +597,19 @@ class _ProductPageState extends State<ProductPage> {
       builder: (BuildContext modalBottomContext) {
         int index = 0;
         int qty = 1;
-        int stock = product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
+        int stock = product.varians != null && product.varians!.isNotEmpty ?
+        product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
+        product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
 
-        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+        String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].isPromo != null && product.varians![index].isPromo == true ?
+        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}' :
+        product.isPromo != null && product.isPromo == true ?
+        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+
         String imagePath = product.images != null && product.images![index].url != null ? product.images![index].url! : '';
         String? variant;
 
-        if(product.varians != null) {
+        if(product.varians != null && product.varians!.isNotEmpty) {
           variant = product.varians![index].name1 ?? 'Unknown Variant';
         }
 
@@ -605,20 +647,44 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              imagePath,
+                      CachedNetworkImage(
+                        imageUrl: imagePath,
+                        imageBuilder: (context, imgProvider) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imgProvider,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: const SizedBox(
-                          width: 80.0,
-                          height: 80.0,
-                        ),
+                            child: const SizedBox(
+                              width: 80.0,
+                              height: 80.0,
+                            ),
+                          );
+                        },
+                        errorWidget: (context, url, error) {
+                          return SizedBox(
+                            width: 80.0,
+                            height: 80.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Icon(
+                                  Icons.broken_image_outlined,
+                                  color: IconColorStyles.iconColor(),
+                                ),
+                                Text(
+                                  'Unable to load image',
+                                  style: XSTextStyles.medium(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(
                         width: 10.0,
@@ -678,6 +744,13 @@ class _ProductPageState extends State<ProductPage> {
                                 const SizedBox(
                                   width: 5.0,
                                 ),
+                                product.varians != null && product.varians!.isNotEmpty ?
+                                Expanded(
+                                  child: Text(
+                                    product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable! == true ? 'Selalu ada' : stock.toString(),
+                                    style: STextStyles.medium(),
+                                  ),
+                                ) :
                                 Expanded(
                                   child: Text(
                                     product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 'Selalu ada' : stock.toString(),
@@ -695,7 +768,7 @@ class _ProductPageState extends State<ProductPage> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                product.varians != null ?
+                product.varians != null && product.varians!.isNotEmpty ?
                 Column (
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -739,10 +812,32 @@ class _ProductPageState extends State<ProductPage> {
                                   stateSetter(() {
                                     index = itemIndex;
 
-                                    if(product.promoPrice != null && product.promoPrice != '') {
-                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice!)).replaceAll(',', '.')}';
+                                    if(product.varians != null && product.varians!.isNotEmpty) {
+                                      if(product.varians![index].isPromo != null && product.varians![index].isPromo == true) {
+                                        price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                                      } else {
+                                        price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}';
+                                      }
                                     } else {
-                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(product.price ?? '0').replaceAll(',', '.')}';
+                                      if(product.isPromo != null && product.isPromo == true) {
+                                        price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
+                                      } else {
+                                        price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+                                      }
+                                    }
+
+                                    if(product.varians != null && product.varians!.isNotEmpty) {
+                                      if(product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true) {
+                                        stock = 1;
+                                      } else {
+                                        stock = int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0');
+                                      }
+                                    } else {
+                                      if(product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true) {
+                                        stock = 1;
+                                      } else {
+                                        stock = int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
+                                      }
                                     }
                                   });
                                 },
@@ -839,7 +934,7 @@ class _ProductPageState extends State<ProductPage> {
                           onPressed: () {
                             BackFromThisPage(context: context).go();
 
-                            showToastMessage();
+                            updateCart(index, product, qty);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: PrimaryColorStyles.primaryMain(),
@@ -879,7 +974,7 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  showToastMessage() {
+  showToastSuccessMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         elevation: 0,
@@ -902,6 +997,42 @@ class _ProductPageState extends State<ProductPage> {
                     'Produk berhasil ditambahkan ke Troli.',
                     style: XSTextStyles.medium().copyWith(
                       color: SuccessColorStyles.successMain(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        duration: const Duration(seconds: 3),
+        backgroundColor: Colors.transparent,
+      ),
+    );
+  }
+
+  showToastFailedMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        elevation: 0,
+        content: Padding(
+          padding: const EdgeInsets.only(bottom: 50.0),
+          child: Card(
+            color: SuccessColorStyles.successSurface(),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info,
+                    color: DangerColorStyles.dangerMain(),
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(
+                    'Produk gagal ditambahkan ke Troli!',
+                    style: XSTextStyles.medium().copyWith(
+                      color: DangerColorStyles.dangerMain(),
                     ),
                   ),
                 ],

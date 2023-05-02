@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/transaction_result_page.dart';
-import 'package:kenari_app/services/api/models/product_model.dart';
+import 'package:kenari_app/services/local/models/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class CheckoutPage extends StatefulWidget {
-  final List<ProductData> productList;
+  final List<LocalTrolleyProduct> trolleyData;
   
   const CheckoutPage({
     super.key,
-    required this.productList,
+    required this.trolleyData,
   });
 
   @override
@@ -19,7 +19,7 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  List<TextEditingController> searchController = [];
+  List<TextEditingController> optionalRequestController = [];
 
   bool isDipayActivated = false;
 
@@ -27,10 +27,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void initState() {
     super.initState();
 
-    for(int i = 0; i < widget.productList.length; i++) {
-      searchController.add(
-        TextEditingController(),
-      );
+    for(int i = 0; i < widget.trolleyData.length; i++) {
+      optionalRequestController.add(TextEditingController(text: ''));
     }
   }
 
@@ -147,7 +145,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: widget.productList.length,
+                            itemCount: widget.trolleyData.length,
                             itemBuilder: (BuildContext listContext, int index) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -164,7 +162,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             borderRadius: BorderRadius.circular(5.0),
                                             image: DecorationImage(
                                               image: AssetImage(
-                                                widget.productList[index].images != null && widget.productList[index].images![0].url != null ? widget.productList[index].images![0].url! : '',
+                                                widget.trolleyData[index].images != null && widget.trolleyData[index].images![0].url != null ? widget.trolleyData[index].images![0].url! : '',
                                               ),
                                               fit: BoxFit.cover,
                                             ),
@@ -178,10 +176,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             crossAxisAlignment: CrossAxisAlignment.stretch,
                                             children: [
                                               Text(
-                                                widget.productList[index].name ?? 'Unknown Product',
+                                                widget.trolleyData[index].name ?? 'Unknown Product',
                                                 style: MTextStyles.medium(),
                                               ),
-                                              widget.productList[index].varians != null ?
+                                              widget.trolleyData[index].varians != null ?
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                                 children: [
@@ -189,7 +187,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                     height: 10.0,
                                                   ),
                                                   Text(
-                                                    widget.productList[index].varians![0].name1 ?? 'Unknown Variant',
+                                                    widget.trolleyData[index].varians![0].name1 ?? 'Unknown Variant',
                                                     style: STextStyles.regular(),
                                                   ),
                                                   const SizedBox(
@@ -204,7 +202,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(widget.productList[index].price ?? '0')).replaceAll(',', '.')}',
+                                                    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(widget.trolleyData[index].price ?? '0')).replaceAll(',', '.')}',
                                                     style: MTextStyles.medium().copyWith(
                                                       color: PrimaryColorStyles.primaryMain(),
                                                     ),
@@ -238,7 +236,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             hintText: 'Tambah catatan disini (optional)',
                                             hintStyle: STextStyles.regular(),
                                           ),
-                                          controller: searchController[index],
+                                          controller: optionalRequestController[index],
                                         ),
                                       ),
                                     ),
@@ -397,7 +395,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                'Total Harga (${widget.productList.length} Produk)',
+                                'Total Harga (${widget.trolleyData.length} Produk)',
                                 style: MTextStyles.regular(),
                               ),
                               Text(

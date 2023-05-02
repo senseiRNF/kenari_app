@@ -50,7 +50,7 @@ class APITrolleyServices {
     return result;
   }
 
-  Future<bool> addOrUpdate(LocalTrolleyProduct data) async {
+  Future<bool> update(LocalTrolleyProduct data) async {
     bool result = false;
 
     await LocalSharedPrefs().readKey('token').then((token) async {
@@ -60,7 +60,7 @@ class APITrolleyServices {
 
           try {
             await dio.post(
-              '/transaction/cart',
+              '/transaction/cart/add-to-cart',
               options: Options(
                 headers: {
                   'Authorization': 'Bearer $token',
@@ -80,8 +80,87 @@ class APITrolleyServices {
                 'qty': data.qty,
                 'price': data.trolleyData.price,
               },
-            ).then((getResult) {
-              if(getResult.statusCode == 200 || getResult.statusCode == 201) {
+            ).then((postResult) {
+              if(postResult.statusCode == 200 || postResult.statusCode == 201) {
+                result = true;
+              }
+
+              BackFromThisPage(context: context).go();
+            });
+          } on DioError catch(dioErr) {
+            BackFromThisPage(context: context).go();
+
+            ErrorHandler(context: context, dioErr: dioErr).handle();
+          }
+        });
+      });
+    });
+
+    return result;
+  }
+
+  Future<bool> remove(String data) async {
+    bool result = false;
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await LocalSharedPrefs().readKey('member_id').then((memberId) async {
+        await APIOptions.init().then((dio) async {
+          LoadingDialog(context: context).show();
+
+          try {
+            await dio.delete(
+              '/transaction/cart/remove-item/$data',
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer $token',
+                },
+              ),
+            ).then((deleteResult) {
+              if(deleteResult.statusCode == 200 || deleteResult.statusCode == 201) {
+                result = true;
+              }
+
+              BackFromThisPage(context: context).go();
+            });
+          } on DioError catch(dioErr) {
+            BackFromThisPage(context: context).go();
+
+            ErrorHandler(context: context, dioErr: dioErr).handle();
+          }
+        });
+      });
+    });
+
+    return result;
+  }
+
+  Future<bool> removeAll(List<String> data) async {
+    bool result = false;
+
+    FormData formData = FormData();
+
+    for(int i = 0; i < data.length; i++) {
+      formData.fields.add(
+        MapEntry('cart_id[$i]', data[i]),
+      );
+    }
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await LocalSharedPrefs().readKey('member_id').then((memberId) async {
+        await APIOptions.init().then((dio) async {
+          LoadingDialog(context: context).show();
+
+          try {
+            await dio.delete(
+              '/transaction/cart/remove-all-item',
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer $token',
+                },
+              ),
+              data: formData,
+            ).then((deleteResult) {
+              if(deleteResult.statusCode == 200 || deleteResult.statusCode == 201) {
                 result = true;
               }
 

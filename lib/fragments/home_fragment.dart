@@ -968,7 +968,7 @@ class HomeFragment extends StatelessWidget {
                                           crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
                                             Expanded(
-                                              child: popularProductList[index].promoPrice != null ?
+                                              child: popularProductList[index].isPromo != null && popularProductList[index].isPromo == true ?
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                                 children: [
