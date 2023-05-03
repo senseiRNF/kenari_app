@@ -9,9 +9,11 @@ import 'package:kenari_app/services/local/models/local_trolley_product.dart';
 
 class APITrolleyServices {
   BuildContext context;
+  bool? hideLoadingOnUpdate;
 
   APITrolleyServices({
     required this.context,
+    this.hideLoadingOnUpdate,
   });
 
   Future<TrolleyModel?> call() async {
@@ -56,7 +58,9 @@ class APITrolleyServices {
     await LocalSharedPrefs().readKey('token').then((token) async {
       await LocalSharedPrefs().readKey('member_id').then((memberId) async {
         await APIOptions.init().then((dio) async {
-          LoadingDialog(context: context).show();
+          if(hideLoadingOnUpdate == null || hideLoadingOnUpdate == false) {
+            LoadingDialog(context: context).show();
+          }
 
           try {
             await dio.post(
@@ -85,10 +89,14 @@ class APITrolleyServices {
                 result = true;
               }
 
-              BackFromThisPage(context: context).go();
+              if(hideLoadingOnUpdate == null || hideLoadingOnUpdate == false) {
+                BackFromThisPage(context: context).go();
+              }
             });
           } on DioError catch(dioErr) {
-            BackFromThisPage(context: context).go();
+            if(hideLoadingOnUpdate == null || hideLoadingOnUpdate == false) {
+              BackFromThisPage(context: context).go();
+            }
 
             ErrorHandler(context: context, dioErr: dioErr).handle();
           }
@@ -151,7 +159,7 @@ class APITrolleyServices {
           LoadingDialog(context: context).show();
 
           try {
-            await dio.delete(
+            await dio.post(
               '/transaction/cart/remove-all-item',
               options: Options(
                 headers: {

@@ -50,7 +50,7 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
-  Future updateCart(int index, DetailProductData product, int qty) async {
+  Future updateTrolley(int index, DetailProductData product, int qty) async {
     String? price = product.varians != null && product.varians!.isNotEmpty ?
     product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice : product.varians![index].price :
     product.isPromo != null && product.isPromo == true ? product.promoPrice : product.price;
@@ -60,7 +60,18 @@ class _ProductPageState extends State<ProductPage> {
         isSelected: true,
         trolleyData: TrolleyData(
           price: price,
-          varian: product.varians != null && product.varians!.isNotEmpty ? product.varians![index].sId : '',
+          varian: product.varians != null && product.varians!.isNotEmpty ?
+          Varian(
+            sId: product.varians![index].sId,
+            price: product.varians![index].price,
+            name1: product.varians![index].name1,
+            stock: product.varians![index].stock,
+            isStockAlwaysAvailable: product.varians![index].isStockAlwaysAvailable,
+            varianType1: product.varians![index].varianType1,
+            promoPrice: product.varians![index].promoPrice,
+            isPromo: product.varians![index].isPromo,
+          ) :
+          null,
           product: Product(
             sId: product.sId,
           ),
@@ -934,7 +945,7 @@ class _ProductPageState extends State<ProductPage> {
                           onPressed: () {
                             BackFromThisPage(context: context).go();
 
-                            updateCart(index, product, qty);
+                            updateTrolley(index, product, qty);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: PrimaryColorStyles.primaryMain(),

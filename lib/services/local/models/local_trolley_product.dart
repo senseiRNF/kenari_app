@@ -4,10 +4,12 @@ class LocalTrolleyProduct {
   bool isSelected;
   TrolleyData trolleyData;
   int qty;
+  bool? canBeUpdated;
 
   LocalTrolleyProduct({
     required this.isSelected,
     required this.trolleyData,
     required this.qty,
+    this.canBeUpdated,
   });
 }

@@ -21,8 +21,6 @@ class TrolleyPage extends StatefulWidget {
 class _TrolleyPageState extends State<TrolleyPage> {
   List<LocalTrolleyProduct> trolleyData = [];
 
-  int total = 0;
-
   bool isSelectedAll = false;
 
   GlobalKey<AnimatedListState> listKey = GlobalKey();
@@ -45,7 +43,6 @@ class _TrolleyPageState extends State<TrolleyPage> {
       }
 
       List<LocalTrolleyProduct> tempLocalTrolleyData = [];
-      int tempTotal = 0;
 
       for(int i = 0; i < tempData.length; i++) {
         tempLocalTrolleyData.add(
@@ -53,17 +50,62 @@ class _TrolleyPageState extends State<TrolleyPage> {
             isSelected: false,
             trolleyData: tempData[i],
             qty: int.parse(tempData[i].qty ?? '0'),
+            canBeUpdated: true,
           ),
         );
-
-        tempTotal = tempTotal + (int.parse(tempData[i].price ?? '0') * int.parse(tempData[i].qty ?? '0'));
       }
 
       setState(() {
         trolleyData = tempLocalTrolleyData;
-        total = tempTotal;
       });
     });
+  }
+
+  Future<bool> updateCart(LocalTrolleyProduct product, int qty) async {
+    bool result = false;
+
+    await APITrolleyServices(context: context, hideLoadingOnUpdate: true).update(
+      LocalTrolleyProduct(
+        isSelected: true,
+        trolleyData: TrolleyData(
+          price: product.trolleyData.price,
+          varian: product.trolleyData.varian != null ?
+          Varian(
+            sId: product.trolleyData.varian!.sId,
+            price: product.trolleyData.varian!.price,
+            name1: product.trolleyData.varian!.name1,
+            stock: product.trolleyData.varian!.stock,
+            isStockAlwaysAvailable: product.trolleyData.varian!.isStockAlwaysAvailable,
+            varianType1: product.trolleyData.varian!.varianType1,
+            promoPrice: product.trolleyData.varian!.promoPrice,
+            isPromo: product.trolleyData.varian!.isPromo,
+          ) :
+          null,
+          product: product.trolleyData.product != null ?
+          Product(
+            sId: product.trolleyData.product!.sId,
+          ) :
+          null,
+        ),
+        qty: qty,
+      ),
+    ).then((updateResult) {
+      result = updateResult;
+    });
+
+    return result;
+  }
+
+  int countTotal() {
+    int result = 0;
+
+    if(trolleyData.isNotEmpty) {
+      for(int i = 0; i < trolleyData.length; i++) {
+        result = result + (int.parse(trolleyData[i].trolleyData.price ?? '0') * trolleyData[i].qty);
+      }
+    }
+
+    return result;
   }
 
   Future deleteAllProduct() async {
@@ -163,27 +205,112 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                   context: context,
                                   title: 'Hapus Semua Produk?',
                                   message: 'Semua produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
-                                  yesFunction: () {
+                                  yesFunction: () async {
                                     List<LocalTrolleyProduct> tempList = trolleyData;
+                                    List<LocalTrolleyProduct> tempRemovedProduct = [];
+                                    List<String> tempIdRemovedProduct = [];
+                                    List<int> tempIndexRemovedProduct = [];
 
                                     for(int i = tempList.length - 1; i >= 0; i--) {
                                       if(tempList[i].isSelected == true) {
-                                        LocalTrolleyProduct tempTrolleyProduct = tempList[i];
-
-                                        setState(() {
-                                          trolleyData.removeAt(i);
-                                          listKey.currentState!.removeItem(i, (context, animation) {
-                                            return ItemListWithAnimation(
-                                              trolleyProduct: tempTrolleyProduct,
-                                              animation: animation,
-                                              onChangedCheckbox: (_) {},
-                                              onReduceQty: () {},
-                                              onAddQty: () {},
-                                            );
-                                          }, duration: const Duration(milliseconds: 500));
-                                        });
+                                        tempRemovedProduct.add(tempList[i]);
+                                        tempIdRemovedProduct.add(tempList[i].trolleyData.sId ?? '');
+                                        tempIndexRemovedProduct.add(i);
                                       }
                                     }
+
+                                    await APITrolleyServices(context: context).removeAll(tempIdRemovedProduct).then((removeResult) {
+                                      if(removeResult == true) {
+                                        setState(() {
+                                          for(int x = 0; x < tempIndexRemovedProduct.length; x++) {
+                                            print(tempIndexRemovedProduct[x]);
+
+                                            trolleyData.removeAt(tempIndexRemovedProduct[x]);
+                                            listKey.currentState!.removeItem(tempIndexRemovedProduct[x], (context, animation) {
+                                              return ItemListWithAnimation(
+                                                trolleyProduct: tempRemovedProduct[x],
+                                                animation: animation,
+                                                onChangedCheckbox: (selectProduct) {
+                                                  setState(() {
+                                                    tempRemovedProduct[x].isSelected = selectProduct;
+                                                  });
+
+                                                  for(int i = 0; i < trolleyData.length; i++) {
+                                                    if(trolleyData[i].isSelected == false) {
+                                                      setState(() {
+                                                        isSelectedAll = false;
+                                                      });
+
+                                                      break;
+                                                    }
+                                                  }
+                                                },
+                                                onReduceQty: () async {
+                                                  if(tempRemovedProduct[x].canBeUpdated == true) {
+                                                    if(tempRemovedProduct[x].qty > 1) {
+                                                      setState(() {
+                                                        tempRemovedProduct[x].canBeUpdated = false;
+                                                      });
+
+                                                      await updateCart(tempRemovedProduct[x], -1).then((updateResult) {
+                                                        setState(() {
+                                                          tempRemovedProduct[x].canBeUpdated = true;
+
+                                                          if(updateResult == true) {
+                                                            tempRemovedProduct[x].qty = tempRemovedProduct[x].qty - 1;
+                                                          }
+                                                        });
+                                                      });
+                                                    }
+                                                  }
+                                                },
+                                                onAddQty: () async {
+                                                  if(tempRemovedProduct[x].canBeUpdated == true) {
+                                                    if(tempRemovedProduct[x].trolleyData.product != null) {
+                                                      if(tempRemovedProduct[x].trolleyData.varian != null) {
+                                                        if(tempRemovedProduct[x].qty < int.parse(tempRemovedProduct[x].trolleyData.varian!.stock ?? '0')) {
+                                                          setState(() {
+                                                            tempRemovedProduct[x].canBeUpdated = false;
+                                                          });
+
+                                                          await updateCart(tempRemovedProduct[x], 1).then((updateResult) {
+                                                            setState(() {
+                                                              tempRemovedProduct[x].canBeUpdated = true;
+
+                                                              if(updateResult == true) {
+                                                                tempRemovedProduct[x].qty = tempRemovedProduct[x].qty + 1;
+                                                              }
+                                                            });
+                                                          });
+                                                        }
+                                                      } else {
+                                                        if(tempRemovedProduct[x].trolleyData.product!.stock != null && tempRemovedProduct[x].trolleyData.product!.stock != '') {
+                                                          if(tempRemovedProduct[x].qty < int.parse(tempRemovedProduct[x].trolleyData.product!.stock ?? '0')) {
+                                                            setState(() {
+                                                              tempRemovedProduct[x].canBeUpdated = false;
+                                                            });
+
+                                                            await updateCart(tempRemovedProduct[x], 1).then((updateResult) {
+                                                              setState(() {
+                                                                tempRemovedProduct[x].canBeUpdated = true;
+
+                                                                if(updateResult == true) {
+                                                                  tempRemovedProduct[x].qty = tempRemovedProduct[x].qty + 1;
+                                                                }
+                                                              });
+                                                            });
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                              );
+                                            }, duration: const Duration(milliseconds: 500));
+                                          }
+                                        });
+                                      }
+                                    });
                                   },
                                   noFunction: () {},
                                 ).show();
@@ -223,45 +350,97 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                       context: context,
                                       title: 'Hapus Produk?',
                                       message: 'Produk yang di pilih akan di hapus dari daftar Troli. Lanjutkan?',
-                                      yesFunction: () {
+                                      yesFunction: () async {
                                         LocalTrolleyProduct tempList = trolleyData[index];
 
-                                        setState(() {
-                                          trolleyData.removeAt(index);
-                                          listKey.currentState!.removeItem(index, (context, animation) {
-                                            return ItemListWithAnimation(
-                                              trolleyProduct: tempList,
-                                              animation: animation,
-                                              onChangedCheckbox: (selectProduct) {
-                                                setState(() {
-                                                  tempList.isSelected = selectProduct;
-                                                });
-
-                                                for(int i = 0; i < trolleyData.length; i++) {
-                                                  if(trolleyData[i].isSelected == false) {
+                                        await APITrolleyServices(context: context).remove(trolleyData[index].trolleyData.sId ?? '').then((removeResult) {
+                                          if(removeResult == true) {
+                                            setState(() {
+                                              trolleyData.removeAt(index);
+                                              listKey.currentState!.removeItem(index, (context, animation) {
+                                                return ItemListWithAnimation(
+                                                  trolleyProduct: tempList,
+                                                  animation: animation,
+                                                  onChangedCheckbox: (selectProduct) {
                                                     setState(() {
-                                                      isSelectedAll = false;
+                                                      tempList.isSelected = selectProduct;
                                                     });
 
-                                                    break;
-                                                  }
-                                                }
+                                                    for(int i = 0; i < trolleyData.length; i++) {
+                                                      if(trolleyData[i].isSelected == false) {
+                                                        setState(() {
+                                                          isSelectedAll = false;
+                                                        });
+
+                                                        break;
+                                                      }
+                                                    }
+                                                  },
+                                                  onReduceQty: () async {
+                                                    if(tempList.canBeUpdated == true) {
+                                                      if(tempList.qty > 1) {
+                                                        setState(() {
+                                                          tempList.canBeUpdated = false;
+                                                        });
+
+                                                        await updateCart(tempList, -1).then((updateResult) {
+                                                          setState(() {
+                                                            tempList.canBeUpdated = true;
+
+                                                            if(updateResult == true) {
+                                                              tempList.qty = tempList.qty - 1;
+                                                            }
+                                                          });
+                                                        });
+                                                      }
+                                                    }
+                                                  },
+                                                  onAddQty: () async {
+                                                    if(tempList.canBeUpdated == true) {
+                                                      if(tempList.trolleyData.product != null) {
+                                                        if(tempList.trolleyData.varian != null) {
+                                                          if(tempList.qty < int.parse(tempList.trolleyData.varian!.stock ?? '0')) {
+                                                            setState(() {
+                                                              tempList.canBeUpdated = false;
+                                                            });
+
+                                                            await updateCart(tempList, 1).then((updateResult) {
+                                                              setState(() {
+                                                                tempList.canBeUpdated = true;
+
+                                                                if(updateResult == true) {
+                                                                  tempList.qty = tempList.qty + 1;
+                                                                }
+                                                              });
+                                                            });
+                                                          }
+                                                        } else {
+                                                          if(tempList.trolleyData.product!.stock != null && tempList.trolleyData.product!.stock != '') {
+                                                            if(tempList.qty < int.parse(tempList.trolleyData.product!.stock ?? '0')) {
+                                                              setState(() {
+                                                                tempList.canBeUpdated = false;
+                                                              });
+
+                                                              await updateCart(tempList, 1).then((updateResult) {
+                                                                setState(() {
+                                                                  tempList.canBeUpdated = true;
+
+                                                                  if(updateResult == true) {
+                                                                    tempList.qty = tempList.qty + 1;
+                                                                  }
+                                                                });
+                                                              });
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                );
                                               },
-                                              onReduceQty: () {
-                                                if(tempList.qty > 1) {
-                                                  setState(() {
-                                                    tempList.qty = tempList.qty - 1;
-                                                  });
-                                                }
-                                              },
-                                              onAddQty: () {
-                                                setState(() {
-                                                  tempList.qty = tempList.qty + 1;
-                                                });
-                                              },
-                                            );
-                                          },
-                                          duration: const Duration(milliseconds: 500));
+                                                  duration: const Duration(milliseconds: 500));
+                                            });
+                                          }
                                         });
                                       },
                                       noFunction: () {},
@@ -291,17 +470,65 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                   }
                                 }
                               },
-                              onReduceQty: () {
-                                if(trolleyData[index].qty > 1) {
-                                  setState(() {
-                                    trolleyData[index].qty = trolleyData[index].qty - 1;
-                                  });
+                              onReduceQty: () async {
+                                if(trolleyData[index].canBeUpdated == true) {
+                                  if(trolleyData[index].qty > 1) {
+                                    setState(() {
+                                      trolleyData[index].canBeUpdated = false;
+                                    });
+
+                                    await updateCart(trolleyData[index], -1).then((updateResult) {
+                                      setState(() {
+                                        trolleyData[index].canBeUpdated = true;
+
+                                        if(updateResult == true) {
+                                          trolleyData[index].qty = trolleyData[index].qty - 1;
+                                        }
+                                      });
+                                    });
+                                  }
                                 }
                               },
-                              onAddQty: () {
-                                setState(() {
-                                  trolleyData[index].qty = trolleyData[index].qty + 1;
-                                });
+                              onAddQty: () async {
+                                if(trolleyData[index].canBeUpdated == true) {
+                                  if(trolleyData[index].trolleyData.product != null) {
+                                    if(trolleyData[index].trolleyData.varian != null) {
+                                      if(trolleyData[index].qty < int.parse(trolleyData[index].trolleyData.varian!.stock ?? '0')) {
+                                        setState(() {
+                                          trolleyData[index].canBeUpdated = false;
+                                        });
+
+                                        await updateCart(trolleyData[index], 1).then((updateResult) {
+                                          setState(() {
+                                            trolleyData[index].canBeUpdated = true;
+
+                                            if(updateResult == true) {
+                                              trolleyData[index].qty = trolleyData[index].qty + 1;
+                                            }
+                                          });
+                                        });
+                                      }
+                                    } else {
+                                      if(trolleyData[index].trolleyData.product!.stock != null && trolleyData[index].trolleyData.product!.stock != '') {
+                                        if(trolleyData[index].qty < int.parse(trolleyData[index].trolleyData.product!.stock ?? '0')) {
+                                          setState(() {
+                                            trolleyData[index].canBeUpdated = false;
+                                          });
+
+                                          await updateCart(trolleyData[index], 1).then((updateResult) {
+                                            setState(() {
+                                              trolleyData[index].canBeUpdated = true;
+
+                                              if(updateResult == true) {
+                                                trolleyData[index].qty = trolleyData[index].qty + 1;
+                                              }
+                                            });
+                                          });
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                               },
                             ),
                           );
@@ -374,7 +601,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                             height: 10.0,
                           ),
                           Text(
-                            'Rp ${NumberFormat('#,###', 'en_id').format(total).replaceAll(',', '.')},-',
+                            'Rp ${NumberFormat('#,###', 'en_id').format(countTotal()).replaceAll(',', '.')},-',
                             style: TextStyle(
                               color: PrimaryColorStyles.primaryMain(),
                               fontSize: 18.0,
@@ -388,9 +615,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                       onPressed: () {
                         MoveToPage(
                           context: context,
-                          target: const CheckoutPage(
-                            trolleyData: [],
-                          ),
+                          target: const CheckoutPage(),
                           callback: (callbackResult) {
                             if(callbackResult != null) {
                               BackFromThisPage(context: context, callbackData: callbackResult).go();
@@ -535,7 +760,7 @@ class ItemListWithAnimation extends StatelessWidget {
                           trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.name != null ? trolleyProduct.trolleyData.product!.name! : 'Unknown Product',
                           style: MTextStyles.medium(),
                         ),
-                        trolleyProduct.trolleyData.varian != null && trolleyProduct.trolleyData.varianName != null ?
+                        trolleyProduct.trolleyData.varian != null ?
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -543,7 +768,7 @@ class ItemListWithAnimation extends StatelessWidget {
                               height: 15.0,
                             ),
                             Text(
-                              trolleyProduct.trolleyData.varianName ?? 'Unknown Variant',
+                              trolleyProduct.trolleyData.varian!.name1 ?? 'Unknown Variant',
                               style: STextStyles.regular(),
                             ),
                           ],
@@ -615,10 +840,12 @@ class ItemListWithAnimation extends StatelessWidget {
                             ),
                           ],
                         ),
-                        // const Padding(
-                        //   padding: EdgeInsets.symmetric(vertical: 5.0),
-                        //   child: LinearProgressIndicator(),
-                        // ),
+                        trolleyProduct.canBeUpdated != true ?
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.0),
+                          child: LinearProgressIndicator(),
+                        ) :
+                        const Material(),
                       ],
                     ),
                   ),
