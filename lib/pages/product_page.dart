@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/detail_product_model.dart';
 import 'package:kenari_app/services/api/models/trolley_model.dart';
 import 'package:kenari_app/services/api/product_services/api_product_services.dart';
@@ -26,7 +27,7 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   TextEditingController searchController = TextEditingController();
-  
+
   DetailProductData? detailProductData;
 
   int imageSelected = 1;
@@ -141,7 +142,11 @@ class _ProductPageState extends State<ProductPage> {
                           target: const TrolleyPage(),
                           callback: (callbackResult) {
                             if(callbackResult != null) {
-
+                              if(callbackResult == true) {
+                                BackFromThisPage(context: context).go();
+                              } else {
+                                BackFromThisPage(context: context, callbackData: callbackResult).go();
+                              }
                             }
                           },
                         ).go();
@@ -177,7 +182,6 @@ class _ProductPageState extends State<ProductPage> {
                           CarouselSlider(
                             options: CarouselOptions(
                               height: 300,
-                              enableInfiniteScroll: false,
                               viewportFraction: 1.0,
                               onPageChanged: (page, whyChanged) {
                                 setState(() {
@@ -187,12 +191,12 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                             items: detailProductData!.images!.map((product) {
                               return CachedNetworkImage(
-                                imageUrl: product.url ?? '',
+                                imageUrl: "$baseURL/${product.url ?? ''}",
                                 imageBuilder: (context, imgProvider) => Container(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: imgProvider,
-                                      fit: BoxFit.fitHeight,
+                                      fit: BoxFit.contain,
                                     ),
                                   ),
                                   child: Column(
@@ -659,13 +663,13 @@ class _ProductPageState extends State<ProductPage> {
                   child: Row(
                     children: [
                       CachedNetworkImage(
-                        imageUrl: imagePath,
+                        imageUrl: '$baseURL/$imagePath',
                         imageBuilder: (context, imgProvider) {
                           return Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imgProvider,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
                               ),
                               borderRadius: BorderRadius.circular(10.0),
                             ),

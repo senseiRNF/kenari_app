@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
@@ -333,8 +334,8 @@ class _ProductListPageState extends State<ProductListPage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 CachedNetworkImage(
-                                  imageUrl: productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : '',
-                                  fit: BoxFit.cover,
+                                  imageUrl: "$baseURL/${productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : ''}",
+                                  fit: BoxFit.contain,
                                   width: 110.0,
                                   height: 100.0,
                                   errorWidget: (errContext, url, error) {

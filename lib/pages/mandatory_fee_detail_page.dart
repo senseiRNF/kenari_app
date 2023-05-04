@@ -6,7 +6,12 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class MandatoryFeeDetailPage extends StatefulWidget {
-  const MandatoryFeeDetailPage({super.key});
+  final String mandatoryFeeId;
+
+  const MandatoryFeeDetailPage({
+    super.key,
+    required this.mandatoryFeeId,
+  });
 
   @override
   State<MandatoryFeeDetailPage> createState() => _MandatoryFeeDetailPageState();

@@ -94,8 +94,10 @@ class _HomePageState extends State<HomePage> {
         List<ProductData> discountProductList = [];
 
         for(int i = 0; i < productList.length; i++) {
-          if(productList[i].status == true) {
-            newProductList.add(productList[i]);
+          if(productList[i].createdAt != null) {
+            if(DateTime.now().difference(DateTime.parse(productList[i].createdAt!)) < const Duration(days: 7)) {
+              newProductList.add(productList[i]);
+            }
           }
 
           if(productList[i].isRecomendation == true) {
@@ -127,7 +129,24 @@ class _HomePageState extends State<HomePage> {
             showProductBottomDialog(product);
           },
           onProductSelected: (ProductData product) {
-            MoveToPage(context: context, target: ProductPage(productId: product.sId!)).go();
+            MoveToPage(
+              context: context,
+              target: ProductPage(productId: product.sId!),
+              callback: (callback) {
+                if(callback != null) {
+                  if(callback == true) {
+                    setState(() {
+                      selectedMenu = 0;
+                    });
+                  } else {
+                    setState(() {
+                      selectedMenu = 2;
+                      openMenuFromPage = 3;
+                    });
+                  }
+                }
+              },
+            ).go();
           },
           onCallbackFromFeePage: () {
             setState(() {
@@ -159,6 +178,20 @@ class _HomePageState extends State<HomePage> {
                 setState(() {
                   selectedMenu = 2;
                   openMenuFromPage = 2;
+                });
+              }
+            }
+          },
+          onCallbackFromTrolleyPage: (dynamic callback) {
+            if(callback != null) {
+              if(callback == true) {
+                setState(() {
+                  selectedMenu = 0;
+                });
+              } else {
+                setState(() {
+                  selectedMenu = 2;
+                  openMenuFromPage = 3;
                 });
               }
             }

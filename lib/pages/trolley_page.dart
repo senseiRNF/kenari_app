@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/checkout_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/trolley_model.dart';
 import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
 import 'package:kenari_app/services/local/models/local_trolley_product.dart';
@@ -21,7 +22,7 @@ class TrolleyPage extends StatefulWidget {
 class _TrolleyPageState extends State<TrolleyPage> {
   List<LocalTrolleyProduct> trolleyData = [];
 
-  bool isSelectedAll = false;
+  bool isSelectedAll = true;
 
   GlobalKey<AnimatedListState> listKey = GlobalKey();
 
@@ -47,7 +48,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
       for(int i = 0; i < tempData.length; i++) {
         tempLocalTrolleyData.add(
           LocalTrolleyProduct(
-            isSelected: false,
+            isSelected: true,
             trolleyData: tempData[i],
             qty: int.parse(tempData[i].qty ?? '0'),
             canBeUpdated: true,
@@ -58,6 +59,8 @@ class _TrolleyPageState extends State<TrolleyPage> {
       setState(() {
         trolleyData = tempLocalTrolleyData;
       });
+
+      checkIsAllSelected(trolleyData);
     });
   }
 
@@ -96,20 +99,38 @@ class _TrolleyPageState extends State<TrolleyPage> {
     return result;
   }
 
+  Future deleteAllProduct() async {
+
+  }
+
   int countTotal() {
     int result = 0;
 
     if(trolleyData.isNotEmpty) {
       for(int i = 0; i < trolleyData.length; i++) {
-        result = result + (int.parse(trolleyData[i].trolleyData.price ?? '0') * trolleyData[i].qty);
+        if(trolleyData[i].isSelected == true) {
+          result = result + (int.parse(trolleyData[i].trolleyData.price ?? '0') * trolleyData[i].qty);
+        }
       }
     }
 
     return result;
   }
 
-  Future deleteAllProduct() async {
+  checkIsAllSelected(List<LocalTrolleyProduct> data) {
+    bool result = true;
 
+    for(int i = 0; i < data.length; i++) {
+      if(data[i].isSelected == false) {
+        result = false;
+
+        break;
+      }
+    }
+
+    setState(() {
+      isSelectedAll = result;
+    });
   }
 
   @override
@@ -223,27 +244,15 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                       if(removeResult == true) {
                                         setState(() {
                                           for(int x = 0; x < tempIndexRemovedProduct.length; x++) {
-                                            print(tempIndexRemovedProduct[x]);
-
                                             trolleyData.removeAt(tempIndexRemovedProduct[x]);
                                             listKey.currentState!.removeItem(tempIndexRemovedProduct[x], (context, animation) {
                                               return ItemListWithAnimation(
                                                 trolleyProduct: tempRemovedProduct[x],
                                                 animation: animation,
                                                 onChangedCheckbox: (selectProduct) {
-                                                  setState(() {
-                                                    tempRemovedProduct[x].isSelected = selectProduct;
-                                                  });
+                                                  tempRemovedProduct[x].isSelected = selectProduct;
 
-                                                  for(int i = 0; i < trolleyData.length; i++) {
-                                                    if(trolleyData[i].isSelected == false) {
-                                                      setState(() {
-                                                        isSelectedAll = false;
-                                                      });
-
-                                                      break;
-                                                    }
-                                                  }
+                                                  checkIsAllSelected(tempRemovedProduct);
                                                 },
                                                 onReduceQty: () async {
                                                   if(tempRemovedProduct[x].canBeUpdated == true) {
@@ -362,19 +371,9 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                                   trolleyProduct: tempList,
                                                   animation: animation,
                                                   onChangedCheckbox: (selectProduct) {
-                                                    setState(() {
-                                                      tempList.isSelected = selectProduct;
-                                                    });
+                                                    tempList.isSelected = selectProduct;
 
-                                                    for(int i = 0; i < trolleyData.length; i++) {
-                                                      if(trolleyData[i].isSelected == false) {
-                                                        setState(() {
-                                                          isSelectedAll = false;
-                                                        });
-
-                                                        break;
-                                                      }
-                                                    }
+                                                    checkIsAllSelected(trolleyData);
                                                   },
                                                   onReduceQty: () async {
                                                     if(tempList.canBeUpdated == true) {
@@ -437,8 +436,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                                     }
                                                   },
                                                 );
-                                              },
-                                                  duration: const Duration(milliseconds: 500));
+                                              }, duration: const Duration(milliseconds: 500));
                                             });
                                           }
                                         });
@@ -460,15 +458,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                   trolleyData[index].isSelected = selectProduct;
                                 });
 
-                                for(int i = 0; i < trolleyData.length; i++) {
-                                  if(trolleyData[i].isSelected == false) {
-                                    setState(() {
-                                      isSelectedAll = false;
-                                    });
-
-                                    break;
-                                  }
-                                }
+                                checkIsAllSelected(trolleyData);
                               },
                               onReduceQty: () async {
                                 if(trolleyData[index].canBeUpdated == true) {
@@ -613,15 +603,33 @@ class _TrolleyPageState extends State<TrolleyPage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        MoveToPage(
-                          context: context,
-                          target: const CheckoutPage(),
-                          callback: (callbackResult) {
-                            if(callbackResult != null) {
-                              BackFromThisPage(context: context, callbackData: callbackResult).go();
-                            }
+                        List<LocalTrolleyProduct> selectedProductList = [];
+
+                        for(int i = 0; i < trolleyData.length; i++) {
+                          if(trolleyData[i].isSelected == true) {
+                            selectedProductList.add(trolleyData[i]);
                           }
-                        ).go();
+                        }
+
+                        if(selectedProductList.isNotEmpty) {
+                          MoveToPage(
+                            context: context,
+                            target: CheckoutPage(
+                              selectedProductList: selectedProductList,
+                            ),
+                            callback: (callbackResult) {
+                              if(callbackResult != null) {
+                                BackFromThisPage(context: context, callbackData: callbackResult).go();
+                              }
+                            },
+                          ).go();
+                        } else {
+                          OkDialog(
+                            context: context,
+                            message: 'Harap pilih produk terlebih dahulu!',
+                            showIcon: false,
+                          ).show();
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
@@ -713,7 +721,7 @@ class ItemListWithAnimation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CachedNetworkImage(
-                    imageUrl: trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.images != null && trolleyProduct.trolleyData.product!.images![0].url != null ? trolleyProduct.trolleyData.product!.images![0].url! : '',
+                    imageUrl: "$baseURL/${trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.images != null && trolleyProduct.trolleyData.product!.images![0].url != null ? trolleyProduct.trolleyData.product!.images![0].url! : ''}",
                     imageBuilder: (context, imgProvider) {
                       return Container(
                         width: 65.0,
@@ -722,7 +730,7 @@ class ItemListWithAnimation extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5.0),
                           image: DecorationImage(
                             image: imgProvider,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       );

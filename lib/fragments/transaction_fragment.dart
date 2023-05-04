@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/loan_detail_page.dart';
+import 'package:kenari_app/pages/mandatory_fee_detail_page.dart';
 import 'package:kenari_app/pages/temporal_fee_detail_page.dart';
+import 'package:kenari_app/services/api/fee_services/api_mandatory_fee_services.dart';
 import 'package:kenari_app/services/api/fee_services/api_temporal_fee_services.dart';
 import 'package:kenari_app/services/api/loan_services/api_loan_services.dart';
 import 'package:kenari_app/services/api/models/loan_model.dart';
-import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
+import 'package:kenari_app/services/api/models/transaction_order_model.dart';
+import 'package:kenari_app/services/api/transaction_services/api_transaction_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -34,11 +37,9 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   String? name;
   String? companyCode;
 
-  List<TemporalFeeData> temporalFeeList = [];
-
+  List<Map> feeList = [];
   List<LoanData> loanList = [];
-
-  List<bool> orderTransactionList = [];
+  List<TransactionOrderData> transactionOrderList = [];
 
   late TabController tabController;
 
@@ -65,6 +66,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
       if(widget.openMenu == 1) {
         loadLoanData();
       }
+
+      if(widget.openMenu == 2) {
+        loadTransactionData();
+      }
     });
 
     await LocalSharedPrefs().readKey('name').then((nameResult) async {
@@ -81,12 +86,32 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   }
 
   Future loadFeeData() async {
-    await APITemporalFeeServices(context: context).callAll().then((callResult) {
-      if(callResult != null) {
-        setState(() {
-          temporalFeeList = callResult.temporalFeeData ?? [];
-        });
+    List<Map> tempFeeList = [];
+
+    await APITemporalFeeServices(context: context).callAll().then((temporalCallResult) async {
+      if(temporalCallResult != null && temporalCallResult.temporalFeeData != null) {
+        for(int i = 0; i < temporalCallResult.temporalFeeData!.length; i++) {
+          tempFeeList.add({
+            'type': 'temporal',
+            'data': temporalCallResult.temporalFeeData![i],
+          });
+        }
       }
+
+      await APIMandatoryFeeServices(context: context).callAll().then((mandatoryCallResult) {
+        if(mandatoryCallResult != null && mandatoryCallResult.mandatoryFeeData != null) {
+          for(int x = 0; x < mandatoryCallResult.mandatoryFeeData!.length; x++) {
+            tempFeeList.add({
+              'type': 'mandatory',
+              'data': mandatoryCallResult.mandatoryFeeData![x],
+            });
+          }
+        }
+      });
+
+      setState(() {
+        feeList = tempFeeList;
+      });
     });
   }
 
@@ -95,6 +120,16 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
       if(callResult != null) {
         setState(() {
           loanList = callResult.loanData ?? [];
+        });
+      }
+    });
+  }
+
+  Future loadTransactionData() async {
+    await APITransactionServices(context: context).callAll().then((callResult) {
+      if(callResult != null) {
+        setState(() {
+          transactionOrderList = callResult.transactionOrderData ?? [];
         });
       }
     });
@@ -116,15 +151,28 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
     return result;
   }
 
-  List<TemporalFeeData> filteredFeeData() {
-    List<TemporalFeeData> result = [];
+  List<Map> filteredFeeData() {
+    List<Map> result = [];
 
-    bool isActiveStatus = selectedStatus == 0 ? true : false;
+    bool temporalFeeStatus = selectedStatus == 0 ? true : false;
+    bool mandatoryFeeStatus = selectedStatus == 0 ? true : false;
 
-    if(temporalFeeList.isNotEmpty) {
-      for(int i = 0; i < temporalFeeList.length; i++) {
-        if(temporalFeeList[i].statusPencairan == !isActiveStatus) {
-          result.add(temporalFeeList[i]);
+    if(feeList.isNotEmpty) {
+      for(int i = 0; i < feeList.length; i++) {
+        if(feeList[i]['type'] == 'mandatory') {
+          if(feeList[i]['data'].status == !mandatoryFeeStatus) {
+            result.add({
+              'type': feeList[i]['type'],
+              'data': feeList[i]['data'],
+            });
+          }
+        } else if(feeList[i]['type'] == 'temporal') {
+          if(feeList[i]['data'].statusPencairan == !temporalFeeStatus) {
+            result.add({
+              'type': feeList[i]['type'],
+              'data': feeList[i]['data'],
+            });
+          }
         }
       }
     }
@@ -168,6 +216,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               loadLoanData();
                               break;
                             case 2:
+                              loadTransactionData();
                               break;
                             default:
                               loadFeeData();
@@ -212,80 +261,9 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: selectedStatus == 0 ? Colors.white : null,
-                        border: Border.all(
-                          color: selectedStatus == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          if(selectedStatus != 0) {
-                            setState(() {
-                              selectedStatus = 0;
-                            });
-                          }
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            'Aktif',
-                            style: selectedStatus == 0 ? STextStyles.medium() : STextStyles.regular(),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: selectedStatus == 1 ? Colors.white : null,
-                        border: Border.all(
-                          color: selectedStatus == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          if(selectedStatus != 1) {
-                            setState(() {
-                              selectedStatus = 1;
-                            });
-                          }
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            'Selesai',
-                            style: selectedStatus == 1 ? STextStyles.medium() : STextStyles.regular(),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            activeTabWidget(),
             Expanded(
-              child: activeList(),
+              child: activeMainWidget(),
             ),
           ],
         ),
@@ -293,7 +271,306 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
     );
   }
 
-  Widget activeList() {
+  Widget activeTabWidget() {
+    switch(selectedTab) {
+      case 0:
+        if(selectedStatus > 2) {
+          setState(() {
+            selectedStatus = 0;
+          });
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: selectedStatus == 0 ? Colors.white : null,
+                    border: Border.all(
+                      color: selectedStatus == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      if(selectedStatus != 0) {
+                        setState(() {
+                          selectedStatus = 0;
+                        });
+                      }
+                    },
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        'Aktif',
+                        style: selectedStatus == 0 ? STextStyles.medium() : STextStyles.regular(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: selectedStatus == 1 ? Colors.white : null,
+                    border: Border.all(
+                      color: selectedStatus == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      if(selectedStatus != 1) {
+                        setState(() {
+                          selectedStatus = 1;
+                        });
+                      }
+                    },
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        'Selesai',
+                        style: selectedStatus == 1 ? STextStyles.medium() : STextStyles.regular(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      case 1:
+        if(selectedStatus > 2) {
+          setState(() {
+            selectedStatus = 0;
+          });
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: selectedStatus == 0 ? Colors.white : null,
+                    border: Border.all(
+                      color: selectedStatus == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      if(selectedStatus != 0) {
+                        setState(() {
+                          selectedStatus = 0;
+                        });
+                      }
+                    },
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        'Aktif',
+                        style: selectedStatus == 0 ? STextStyles.medium() : STextStyles.regular(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: selectedStatus == 1 ? Colors.white : null,
+                    border: Border.all(
+                      color: selectedStatus == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      if(selectedStatus != 1) {
+                        setState(() {
+                          selectedStatus = 1;
+                        });
+                      }
+                    },
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        'Selesai',
+                        style: selectedStatus == 1 ? STextStyles.medium() : STextStyles.regular(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      case 2:
+        setState(() {
+          selectedStatus = 0;
+        });
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 30.0,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 5,
+                    separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+                      return const SizedBox(
+                        width: 10.0,
+                      );
+                    },
+                    itemBuilder: (BuildContext listContext, int index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: selectedStatus == index ? Colors.white : null,
+                          border: Border.all(
+                            color: selectedStatus == index ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                selectedStatus = index;
+                              });
+                            },
+                            customBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                child: Text(
+                                  index == 0 ? 'Semua' : index == 1 ? 'Menunggu Konfirmasi Penjual' : index == 2 ? 'Diproses' : index == 3 ? 'Selesai' : index == 4 ? 'Gagal' : 'Unknown Status',
+                                  style: selectedStatus == index ? STextStyles.medium() : STextStyles.regular(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      default:
+        setState(() {
+          selectedStatus = 0;
+        });
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: selectedStatus == 0 ? Colors.white : null,
+                    border: Border.all(
+                      color: selectedStatus == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      if(selectedStatus != 0) {
+                        setState(() {
+                          selectedStatus = 0;
+                        });
+                      }
+                    },
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        'Aktif',
+                        style: selectedStatus == 0 ? STextStyles.medium() : STextStyles.regular(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: selectedStatus == 1 ? Colors.white : null,
+                    border: Border.all(
+                      color: selectedStatus == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      if(selectedStatus != 1) {
+                        setState(() {
+                          selectedStatus = 1;
+                        });
+                      }
+                    },
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        'Selesai',
+                        style: selectedStatus == 1 ? STextStyles.medium() : STextStyles.regular(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+    }
+  }
+
+  Widget activeMainWidget() {
     switch(selectedTab) {
       case 0:
         return filteredFeeData().isNotEmpty ?
@@ -310,7 +587,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                     child: Text(
-                      'Iuran Berjangka',
+                      filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : 'Unknown',
                       style: XSTextStyles.regular(),
                     ),
                   ),
@@ -320,13 +597,11 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          // if(temporalFeeList[index].values.elementAt(0) == 'wajib') {
-                          //   MoveToPage(context: context, target: const DetailMandatoryFeePage()).go();
-                          // } else {
-                          //   MoveToPage(context: context, target: DetailTemporalFeePage(temporalFeeData: '$type $index', feeId: 'fee_id', status: convertStatus)).go();
-                          // }
-
-                          MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: filteredFeeData()[index].sId!)).go();
+                          if(filteredFeeData()[index]['type'] == 'temporal') {
+                            MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: filteredFeeData()[index]['data'].sId!)).go();
+                          } else if(filteredFeeData()[index]['type'] == 'mandatory') {
+                            MoveToPage(context: context, target: MandatoryFeeDetailPage(mandatoryFeeId: filteredFeeData()[index]['data'].sId!)).go();
+                          }
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
@@ -337,13 +612,17 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Iuran Berjangka',
+                                    filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : 'Unknown',
                                     style: STextStyles.medium().copyWith(
                                       color: TextColorStyles.textPrimary(),
                                     ),
                                   ),
                                   Text(
-                                    filteredFeeData()[index].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index].jumlahIuran!))}' : 'Rp 0',
+                                    filteredFeeData()[index]['type'] == 'temporal' ?
+                                    filteredFeeData()[index]['data'].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index]['data'].jumlahIuran!))}' : 'Rp 0' :
+                                    filteredFeeData()[index]['type'] == 'mandatory' ?
+                                    filteredFeeData()[index]['data'].amount != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index]['data'].amount!))}' : 'Rp 0' :
+                                    'Rp 0',
                                     style: STextStyles.medium().copyWith(
                                       color: TextColorStyles.textPrimary(),
                                     ),
@@ -593,80 +872,50 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ],
         );
       case 2:
-        return orderTransactionList.isNotEmpty ?
+        return transactionOrderList.isNotEmpty ?
         RefreshIndicator(
           onRefresh: () async {
-
+            loadTransactionData();
           },
           child: ListView.builder(
-            itemCount: orderTransactionList.length,
+            itemCount: transactionOrderList.length,
             itemBuilder: (BuildContext listContext, int index) {
-              bool convertStatus = selectedStatus == 0 ? true : false;
+              return Container(
+                color: Colors.white,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
 
-              return orderTransactionList[index] == convertStatus ?
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                    child: Text(
-                      'Unknown Order',
-                      style: XSTextStyles.regular(),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Unknown',
-                                    style: STextStyles.medium().copyWith(
-                                      color: TextColorStyles.textPrimary(),
-                                    ),
-                                  ),
-                                  Text(
-                                    'Unknown Amount',
-                                    style: STextStyles.medium().copyWith(
-                                      color: TextColorStyles.textPrimary(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5.0,
+                              Text(
+                                transactionOrderList[index].transactionNo ?? 'Unknown',
+                                style: STextStyles.medium().copyWith(
+                                  color: TextColorStyles.textPrimary(),
+                                ),
                               ),
                               Text(
-                                companyCode ?? 'Unknown Company',
-                                style: XSTextStyles.regular(),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                'a.n ${name ?? 'Unknown User'}',
-                                style: XSTextStyles.regular(),
+                                transactionOrderList[index].status ?? 'Unknown Status',
+                                style: STextStyles.medium().copyWith(
+                                  color: TextColorStyles.textPrimary(),
+                                ),
                               ),
                             ],
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              ) :
-              const Material();
+                ),
+              );
             },
           ),
         ) :
@@ -703,7 +952,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
             ),
             RefreshIndicator(
               onRefresh: () async {
-
+                loadTransactionData();
               },
               child: ListView(),
             ),

@@ -110,123 +110,59 @@ class _FeePageState extends State<FeePage> {
               ),
             ),
             Expanded(
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: BorderColorStyles.borderStrokes(),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  loadData();
+                },
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 45.0,
-                                  height: 45.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: BackgroundColorStyles.pageBackground(),
-                                  ),
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 30.0,
-                                    color: IconColorStyles.iconColor(),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10.0,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        name ?? 'Unknown User',
-                                        style: MTextStyles.regular(),
-                                      ),
-                                      const SizedBox(
-                                        height: 10.0,
-                                      ),
-                                      Text(
-                                        companyCode ?? 'Unknown Code',
-                                        style: XSTextStyles.regular(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: BorderColorStyles.borderStrokes(),
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: IntrinsicHeight(
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: [
-                                        Text(
-                                          'Saldo Iuran Wajib',
-                                          style: XSTextStyles.regular(),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        const SizedBox(
-                                          height: 5.0,
-                                        ),
-                                        Text(
-                                          'Rp ${NumberFormat('#,###', 'en_id').format(mandatoryFeeAmount)}',
-                                          style: STextStyles.medium().copyWith(
-                                            color: TextColorStyles.textPrimary(),
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
+                                  Container(
+                                    width: 45.0,
+                                    height: 45.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: BackgroundColorStyles.pageBackground(),
+                                    ),
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 30.0,
+                                      color: IconColorStyles.iconColor(),
                                     ),
                                   ),
-                                  const VerticalDivider(
-                                    thickness: 1.0,
+                                  const SizedBox(
+                                    width: 10.0,
                                   ),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
                                         Text(
-                                          'Saldo Iuran Berjangka',
-                                          style: XSTextStyles.regular(),
-                                          textAlign: TextAlign.center,
+                                          name ?? 'Unknown User',
+                                          style: MTextStyles.regular(),
                                         ),
                                         const SizedBox(
-                                          height: 5.0,
+                                          height: 10.0,
                                         ),
                                         Text(
-                                          'Rp ${NumberFormat('#,###', 'en_id').format(temporalFeeAmount)}',
-                                          style: STextStyles.medium().copyWith(
-                                            color: TextColorStyles.textPrimary(),
-                                          ),
-                                          textAlign: TextAlign.center,
+                                          companyCode ?? 'Unknown Code',
+                                          style: XSTextStyles.regular(),
                                         ),
                                       ],
                                     ),
@@ -235,248 +171,317 @@ class _FeePageState extends State<FeePage> {
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 30.0,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: BorderColorStyles.borderStrokes(),
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
+                          const SizedBox(
+                            height: 10.0,
                           ),
-                          child: Material(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: InkWell(
-                              onTap: () {
-                                MoveToPage(
-                                  context: context,
-                                  target: const TemporalFeeDepositPage(),
-                                  callback: (callbackResult) {
-                                    if(callbackResult != null) {
-                                      BackFromThisPage(context: context, callbackData: callbackResult).go();
-                                    }
-                                  },
-                                ).go();
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: IntrinsicHeight(
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
-                                    Container(
-                                      width: 30.0,
-                                      height: 30.0,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                            'assets/images/icon_setoran_iuran.png',
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Text(
+                                            'Saldo Iuran Wajib',
+                                            style: XSTextStyles.regular(),
+                                            textAlign: TextAlign.center,
                                           ),
-                                          fit: BoxFit.cover,
-                                        ),
+                                          const SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Text(
+                                            'Rp ${NumberFormat('#,###', 'en_id').format(mandatoryFeeAmount)}',
+                                            style: STextStyles.medium().copyWith(
+                                              color: TextColorStyles.textPrimary(),
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    const SizedBox(
-                                      width: 15.0,
+                                    const VerticalDivider(
+                                      thickness: 1.0,
                                     ),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: [
                                           Text(
-                                            'Setoran Iuran Berjangka',
-                                            style: MTextStyles.medium().copyWith(
-                                              color: TextColorStyles.textPrimary(),
-                                            ),
+                                            'Saldo Iuran Berjangka',
+                                            style: XSTextStyles.regular(),
+                                            textAlign: TextAlign.center,
                                           ),
                                           const SizedBox(
                                             height: 5.0,
                                           ),
                                           Text(
-                                            'Setoran Iuran Berjangka',
-                                            style: XSTextStyles.regular(),
+                                            'Rp ${NumberFormat('#,###', 'en_id').format(temporalFeeAmount)}',
+                                            style: STextStyles.medium().copyWith(
+                                              color: TextColorStyles.textPrimary(),
+                                            ),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    const Icon(
-                                      Icons.chevron_right,
                                     ),
                                   ],
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: BorderColorStyles.borderStrokes(),
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
+                          const SizedBox(
+                            height: 30.0,
                           ),
-                          child: Material(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: InkWell(
-                              onTap: () {
-                                MoveToPage(
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: InkWell(
+                                onTap: () {
+                                  MoveToPage(
                                     context: context,
-                                    target: FeeListPage(
-                                      mandatoryFeeAmount: mandatoryFeeAmount,
-                                      temporalFeeAmount: temporalFeeAmount,
-                                    ),
+                                    target: const TemporalFeeDepositPage(),
                                     callback: (callbackResult) {
-                                      if(callbackResult != null && callbackResult == true) {
-                                        MoveToPage(
-                                          context: context,
-                                          target: const TemporalFeeDepositPage(),
-                                          callback: (callbackResult) {
-                                            if(callbackResult != null) {
-                                              BackFromThisPage(context: context, callbackData: callbackResult).go();
-                                            }
-                                          },
-                                        ).go();
+                                      if(callbackResult != null) {
+                                        BackFromThisPage(context: context, callbackData: callbackResult).go();
                                       }
-                                    }
-                                ).go();
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 30.0,
-                                      height: 30.0,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                            'assets/images/icon_daftar_iuran.png',
+                                    },
+                                  ).go();
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 30.0,
+                                        height: 30.0,
+                                        decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                              'assets/images/icon_setoran_iuran.png',
+                                            ),
+                                            fit: BoxFit.cover,
                                           ),
-                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 15.0,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          Text(
-                                            'Daftar Iuran Saya',
-                                            style: MTextStyles.medium().copyWith(
-                                              color: TextColorStyles.textPrimary(),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Text(
-                                            'Lihat daftar detail Iuran wajib & berjangka',
-                                            style: XSTextStyles.regular(),
-                                          ),
-                                        ],
+                                      const SizedBox(
+                                        width: 15.0,
                                       ),
-                                    ),
-                                    const Icon(
-                                      Icons.chevron_right,
-                                    ),
-                                  ],
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            Text(
+                                              'Setoran Iuran Berjangka',
+                                              style: MTextStyles.medium().copyWith(
+                                                color: TextColorStyles.textPrimary(),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Text(
+                                              'Setoran Iuran Berjangka',
+                                              style: XSTextStyles.regular(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Icon(
+                                        Icons.chevron_right,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: BorderColorStyles.borderStrokes(),
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
+                          const SizedBox(
+                            height: 10.0,
                           ),
-                          child: Material(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: InkWell(
-                              onTap: () {
-                                BackFromThisPage(context: context, callbackData: false).go();
-                              },
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 30.0,
-                                      height: 30.0,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                            'assets/images/icon_riwayat_iuran.png',
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: InkWell(
+                                onTap: () {
+                                  MoveToPage(
+                                      context: context,
+                                      target: FeeListPage(
+                                        mandatoryFeeAmount: mandatoryFeeAmount,
+                                        temporalFeeAmount: temporalFeeAmount,
+                                      ),
+                                      callback: (callbackResult) {
+                                        if(callbackResult != null && callbackResult == true) {
+                                          MoveToPage(
+                                            context: context,
+                                            target: const TemporalFeeDepositPage(),
+                                            callback: (callbackResult) {
+                                              if(callbackResult != null) {
+                                                BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                              }
+                                            },
+                                          ).go();
+                                        }
+                                      }
+                                  ).go();
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 30.0,
+                                        height: 30.0,
+                                        decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                              'assets/images/icon_daftar_iuran.png',
+                                            ),
+                                            fit: BoxFit.cover,
                                           ),
-                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 15.0,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          Text(
-                                            'Riwayat Iuran',
-                                            style: MTextStyles.medium().copyWith(
-                                              color: TextColorStyles.textPrimary(),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Text(
-                                            'Riwayat Transaksi Iuran',
-                                            style: XSTextStyles.regular(),
-                                          ),
-                                        ],
+                                      const SizedBox(
+                                        width: 15.0,
                                       ),
-                                    ),
-                                    const Icon(
-                                      Icons.chevron_right,
-                                    ),
-                                  ],
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            Text(
+                                              'Daftar Iuran Saya',
+                                              style: MTextStyles.medium().copyWith(
+                                                color: TextColorStyles.textPrimary(),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Text(
+                                              'Lihat daftar detail Iuran wajib & berjangka',
+                                              style: XSTextStyles.regular(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Icon(
+                                        Icons.chevron_right,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: BorderColorStyles.borderStrokes(),
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: InkWell(
+                                onTap: () {
+                                  BackFromThisPage(context: context, callbackData: false).go();
+                                },
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 30.0,
+                                        height: 30.0,
+                                        decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                              'assets/images/icon_riwayat_iuran.png',
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 15.0,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            Text(
+                                              'Riwayat Iuran',
+                                              style: MTextStyles.medium().copyWith(
+                                                color: TextColorStyles.textPrimary(),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Text(
+                                              'Riwayat Transaksi Iuran',
+                                              style: XSTextStyles.regular(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Icon(
+                                        Icons.chevron_right,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

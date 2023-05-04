@@ -3,14 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/transaction_result_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/trolley_model.dart';
+import 'package:kenari_app/services/api/transaction_services/api_transaction_services.dart';
 import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
 import 'package:kenari_app/services/local/models/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({super.key,});
+  final List<LocalTrolleyProduct> selectedProductList;
+
+  const CheckoutPage({
+    super.key,
+    required this.selectedProductList,
+  });
 
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
@@ -46,13 +53,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
       int tempTotal = 0;
 
       for(int i = 0; i < tempData.length; i++) {
-        tempLocalTrolleyData.add(
-          LocalTrolleyProduct(
-            isSelected: false,
-            trolleyData: tempData[i],
-            qty: int.parse(tempData[i].qty ?? '0'),
-          ),
-        );
+        for(int x = 0; x < widget.selectedProductList.length; x++) {
+          if(widget.selectedProductList[x].trolleyData.product != null && tempData[i].product != null && widget.selectedProductList[x].trolleyData.product!.sId == tempData[i].product!.sId && widget.selectedProductList[x].isSelected == true) {
+            tempLocalTrolleyData.add(
+              LocalTrolleyProduct(
+                isSelected: true,
+                trolleyData: tempData[i],
+                qty: int.parse(tempData[i].qty ?? '0'),
+              ),
+            );
+          }
+        }
 
         tempOptionalRequestControllerList.add(TextEditingController());
 
@@ -208,7 +219,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           CachedNetworkImage(
-                                            imageUrl: trolleyData[index].trolleyData.product != null && trolleyData[index].trolleyData.product!.images != null && trolleyData[index].trolleyData.product!.images![0].url != null ? trolleyData[index].trolleyData.product!.images![0].url! : '',
+                                            imageUrl: "$baseURL/${trolleyData[index].trolleyData.product != null && trolleyData[index].trolleyData.product!.images != null && trolleyData[index].trolleyData.product!.images![0].url != null ? trolleyData[index].trolleyData.product!.images![0].url! : ''}",
                                             imageBuilder: (context, imgProvider) {
                                               return Container(
                                                 width: 65.0,
@@ -217,7 +228,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                   borderRadius: BorderRadius.circular(5.0),
                                                   image: DecorationImage(
                                                     image: imgProvider,
-                                                    fit: BoxFit.cover,
+                                                    fit: BoxFit.contain,
                                                   ),
                                                 ),
                                               );
@@ -547,15 +558,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       onPressed: () async {
                         if(trolleyData.isNotEmpty) {
                           if(isDipayActivated == true) {
-                            MoveToPage(
-                              context: context,
-                              target: const TransactionResultPage(isSuccess: true),
-                              callback: (callbackResult) {
-                                if(callbackResult != null) {
-                                  BackFromThisPage(context: context, callbackData: callbackResult).go();
-                                }
-                              },
-                            ).go();
+                            await APITransactionServices(context: context).update(trolleyData).then((updateResult) {
+                              if(updateResult == true) {
+                                MoveToPage(
+                                  context: context,
+                                  target: const TransactionResultPage(isSuccess: true),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null) {
+                                      BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                    }
+                                  },
+                                ).go();
+                              }
+                            });
                           }
                         }
                       },

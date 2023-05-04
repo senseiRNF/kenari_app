@@ -10,6 +10,7 @@ import 'package:kenari_app/pages/product_list_banner_page.dart';
 import 'package:kenari_app/pages/product_list_page.dart';
 import 'package:kenari_app/pages/seller_page.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -30,6 +31,7 @@ class HomeFragment extends StatelessWidget {
   final Function onCallbackFromFeePage;
   final Function onCallbackFromLoanPage;
   final Function onCallbackFromSellerPage;
+  final Function onCallbackFromTrolleyPage;
   final Function onRefreshPage;
 
   const HomeFragment({
@@ -48,6 +50,7 @@ class HomeFragment extends StatelessWidget {
     required this.onCallbackFromFeePage,
     required this.onCallbackFromLoanPage,
     required this.onCallbackFromSellerPage,
+    required this.onCallbackFromTrolleyPage,
     required this.onRefreshPage,
   });
 
@@ -103,8 +106,8 @@ class HomeFragment extends StatelessWidget {
                         context: context,
                         target: const TrolleyPage(),
                         callback: (callbackResult) {
-                          if(callbackResult != null) {
-
+                          if(callbackResult != null && callbackResult == false) {
+                            onCallbackFromTrolleyPage();
                           }
                         },
                       ).go();
@@ -604,7 +607,8 @@ class HomeFragment extends StatelessWidget {
                       Expanded(
                         child: SizedBox(
                           height: 200.0,
-                          child: ListView.builder(
+                          child: newProductList.isNotEmpty ?
+                          ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemCount: newProductList.length,
@@ -642,12 +646,12 @@ class HomeFragment extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: CachedNetworkImage(
-                                              imageUrl: newProductList[index].images != null && newProductList[index].images![0].url != null ? newProductList[index].images![0].url! : '',
+                                              imageUrl: "$baseURL/${newProductList[index].images != null && newProductList[index].images![0].url != null ? newProductList[index].images![0].url! : ''}",
                                               imageBuilder: (context, imgProvider) => Container(
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                     image: imgProvider,
-                                                    fit: BoxFit.cover,
+                                                    fit: BoxFit.contain,
                                                   ),
                                                   borderRadius: const BorderRadius.only(
                                                     topLeft: Radius.circular(10.0),
@@ -731,6 +735,25 @@ class HomeFragment extends StatelessWidget {
                                 ),
                               );
                             },
+                          ) :
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Image.asset(
+                                'assets/images/icon_empty.png',
+                                width: 150,
+                                height: 130,
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Text(
+                                'Oops! Untuk saat ini kategori ini masih kosong',
+                                style: STextStyles.medium(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -818,7 +841,8 @@ class HomeFragment extends StatelessWidget {
                       Expanded(
                         child: SizedBox(
                           height: 50.0,
-                          child: ListView.builder(
+                          child: categoryList.isNotEmpty ?
+                          ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemCount: categoryList.length,
@@ -831,6 +855,7 @@ class HomeFragment extends StatelessWidget {
                                       color: BorderColorStyles.borderStrokes(),
                                     ),
                                     borderRadius: BorderRadius.circular(10.0),
+                                    color: Colors.white,
                                   ),
                                   child: Material(
                                     color: Colors.transparent,
@@ -858,6 +883,14 @@ class HomeFragment extends StatelessWidget {
                                 ),
                               );
                             },
+                          ) :
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              'Kategori tidak ditemukan...',
+                              style: MTextStyles.medium(),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ),
@@ -875,7 +908,8 @@ class HomeFragment extends StatelessWidget {
                   ),
                   Container(
                     color: Colors.white,
-                    child: ListView.separated(
+                    child: popularProductList.isNotEmpty ?
+                    ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: popularProductList.length,
@@ -897,7 +931,7 @@ class HomeFragment extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   CachedNetworkImage(
-                                    imageUrl: popularProductList[index].images != null && popularProductList[index].images![0].url != null ? popularProductList[index].images![0].url! : '',
+                                    imageUrl: "$baseURL/${popularProductList[index].images != null && popularProductList[index].images![0].url != null ? popularProductList[index].images![0].url! : ''}",
                                     imageBuilder: (context, imgProvider) => Container(
                                       width: 110.0,
                                       height: 100.0,
@@ -905,7 +939,7 @@ class HomeFragment extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(5.0),
                                         image: DecorationImage(
                                           image: imgProvider,
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.contain,
                                         ),
                                       ),
                                     ),
@@ -1024,6 +1058,28 @@ class HomeFragment extends StatelessWidget {
                           ),
                         );
                       },
+                    ) :
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Image.asset(
+                            'assets/images/icon_empty.png',
+                            width: 150,
+                            height: 130,
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Text(
+                            'Oops! Untuk saat ini kategori ini masih kosong',
+                            style: STextStyles.medium(),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Padding(
@@ -1060,7 +1116,8 @@ class HomeFragment extends StatelessWidget {
                       Expanded(
                         child: SizedBox(
                           height: 210.0,
-                          child: ListView.builder(
+                          child: discountProductList.isNotEmpty ?
+                          ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemCount: discountProductList.length,
@@ -1089,12 +1146,12 @@ class HomeFragment extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: CachedNetworkImage(
-                                              imageUrl: discountProductList[index].images != null && discountProductList[index].images![0].url != null ? discountProductList[index].images![0].url! : '',
+                                              imageUrl: "$baseURL/${discountProductList[index].images != null && discountProductList[index].images![0].url != null ? discountProductList[index].images![0].url! : ''}",
                                               imageBuilder: (context, imgProvider) => Container(
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                     image: imgProvider,
-                                                    fit: BoxFit.cover,
+                                                    fit: BoxFit.contain,
                                                   ),
                                                   borderRadius: const BorderRadius.only(
                                                     topLeft: Radius.circular(10.0),
@@ -1191,6 +1248,25 @@ class HomeFragment extends StatelessWidget {
                                 ),
                               );
                             },
+                          ) :
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Image.asset(
+                                'assets/images/icon_empty.png',
+                                width: 150,
+                                height: 130,
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              Text(
+                                'Oops! Untuk saat ini kategori ini masih kosong',
+                                style: STextStyles.medium(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ),
                       ),

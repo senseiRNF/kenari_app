@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/temporal_fee_detail_page.dart';
+import 'package:kenari_app/services/api/fee_services/api_mandatory_fee_services.dart';
 import 'package:kenari_app/services/api/fee_services/api_temporal_fee_services.dart';
+import 'package:kenari_app/services/api/models/mandatory_fee_model.dart';
 import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -24,7 +26,6 @@ class FeeListPage extends StatefulWidget {
 
 class _FeeListPageState extends State<FeeListPage> {
   int selectedTab = 0;
-  int mandatoryFeeDummy = 10;
 
   String? name;
   String? companyCode;
@@ -33,6 +34,7 @@ class _FeeListPageState extends State<FeeListPage> {
   bool isActiveStatus = true;
 
   List<TemporalFeeData> temporalFeeList = [];
+  List<MandatoryFeeData> mandatoryFeeList = [];
 
   @override
   void initState() {
@@ -57,16 +59,30 @@ class _FeeListPageState extends State<FeeListPage> {
             phoneNumber = phoneResult;
           });
 
-          await APITemporalFeeServices(context: context).callAll().then((callResult) {
-            if(callResult != null) {
-              setState(() {
-                temporalFeeList = callResult.temporalFeeData ?? [];
-              });
-            }
-          });
+          loadActiveData();
         });
       });
     });
+  }
+
+  Future loadActiveData() async {
+    if(selectedTab == 0) {
+      await APIMandatoryFeeServices(context: context).callAll().then((callResult) {
+        if(callResult != null) {
+          setState(() {
+            mandatoryFeeList = callResult.mandatoryFeeData ?? [];
+          });
+        }
+      });
+    } else {
+      await APITemporalFeeServices(context: context).callAll().then((callResult) {
+        if(callResult != null) {
+          setState(() {
+            temporalFeeList = callResult.temporalFeeData ?? [];
+          });
+        }
+      });
+    }
   }
 
   List<TemporalFeeData> filteredData() {
@@ -151,6 +167,8 @@ class _FeeListPageState extends State<FeeListPage> {
                     onTap: (index) {
                       setState(() {
                         selectedTab = index;
+
+                        loadActiveData();
                       });
                     },
                     tabs: [
@@ -238,7 +256,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                       height: 5.0,
                                     ),
                                     Text(
-                                      'Rp 1.200.000',
+                                      'Rp ${NumberFormat('#,###', 'en_id').format(widget.mandatoryFeeAmount).replaceAll(',', '.')}',
                                       style: STextStyles.medium().copyWith(
                                         color: TextColorStyles.textPrimary(),
                                       ),
@@ -371,7 +389,7 @@ class _FeeListPageState extends State<FeeListPage> {
                     child: Container(
                       color: Colors.white,
                       child: ListView.separated(
-                        itemCount: mandatoryFeeDummy,
+                        itemCount: mandatoryFeeList.length,
                         separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
                           return const Divider(
                             height: 1.0,
@@ -387,7 +405,7 @@ class _FeeListPageState extends State<FeeListPage> {
                               children: [
                                 index == 0 ?
                                 Text(
-                                  DateFormat('yyyy').format(DateTime.now()),
+                                  mandatoryFeeList[index].createdAt != null ? DateFormat('yyyy').format(DateTime.parse(mandatoryFeeList[index].createdAt!)) : 'Unknown Year',
                                   style: XSTextStyles.regular(),
                                 ) :
                                 const Material(),
@@ -404,7 +422,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                         ),
                                       ),
                                       Text(
-                                        'Rp 100.000',
+                                        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(mandatoryFeeList[index].amount != null && mandatoryFeeList[index].amount != '' ? mandatoryFeeList[index].amount! : '0')).replaceAll(',', '.')}',
                                         style: MTextStyles.medium().copyWith(
                                           color: SuccessColorStyles.successMain(),
                                         ),
@@ -413,7 +431,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                   ),
                                 ),
                                 Text(
-                                  DateFormat('dd MMMM yyyy, HH:mm').format(DateTime.now()),
+                                  mandatoryFeeList[index].createdAt != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(mandatoryFeeList[index].createdAt!)) : 'Unknown',
                                   style: STextStyles.regular(),
                                 ),
                                 const SizedBox(
