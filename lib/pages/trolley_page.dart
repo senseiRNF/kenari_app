@@ -615,7 +615,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                           MoveToPage(
                             context: context,
                             target: CheckoutPage(
-                              selectedProductList: selectedProductList,
+                              selectedProductList: trolleyData,
                             ),
                             callback: (callbackResult) {
                               if(callbackResult != null) {

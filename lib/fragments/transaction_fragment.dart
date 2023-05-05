@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/loan_detail_page.dart';
 import 'package:kenari_app/pages/mandatory_fee_detail_page.dart';
 import 'package:kenari_app/pages/temporal_fee_detail_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/fee_services/api_mandatory_fee_services.dart';
 import 'package:kenari_app/services/api/fee_services/api_temporal_fee_services.dart';
 import 'package:kenari_app/services/api/loan_services/api_loan_services.dart';
@@ -230,25 +232,31 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         Tab(
                           child: Text(
                             'Iuran',
-                            style: MTextStyles.medium().copyWith(
-                              color: selectedTab == 0 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            ),
+                            style: selectedTab == 0 ?
+                            MTextStyles.medium().copyWith(
+                              color: PrimaryColorStyles.primaryMain(),
+                            ) :
+                            STextStyles.medium(),
                           ),
                         ),
                         Tab(
                           child: Text(
                             'Pendanaan',
-                            style: MTextStyles.medium().copyWith(
-                              color: selectedTab == 1 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            ),
+                            style: selectedTab == 1 ?
+                            MTextStyles.medium().copyWith(
+                              color: PrimaryColorStyles.primaryMain(),
+                            ) :
+                            STextStyles.medium(),
                           ),
                         ),
                         Tab(
                           child: Text(
                             'Pesanan',
-                            style: MTextStyles.medium().copyWith(
-                              color: selectedTab == 2 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
-                            ),
+                            style: selectedTab == 2 ?
+                            MTextStyles.medium().copyWith(
+                              color: PrimaryColorStyles.primaryMain(),
+                            ) :
+                            STextStyles.medium(),
                           ),
                         ),
                       ],
@@ -877,9 +885,25 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           onRefresh: () async {
             loadTransactionData();
           },
-          child: ListView.builder(
+          child: ListView.separated(
             itemCount: transactionOrderList.length,
+            separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+              return const SizedBox(
+                height: 10.0,
+              );
+            },
             itemBuilder: (BuildContext listContext, int index) {
+              late String status;
+
+              switch(transactionOrderList[index].status) {
+                case 'waiting':
+                  status = 'Menunggu Konfirmasi Penjual';
+                  break;
+                default:
+                  status = 'Unknown';
+                  break;
+              }
+
               return Container(
                 color: Colors.white,
                 child: Material(
@@ -896,17 +920,144 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                transactionOrderList[index].transactionNo ?? 'Unknown',
-                                style: STextStyles.medium().copyWith(
-                                  color: TextColorStyles.textPrimary(),
+                              Expanded(
+                                child: Text(
+                                  transactionOrderList[index].transactionNo ?? 'Unknown',
+                                  style: STextStyles.medium().copyWith(
+                                    color: TextColorStyles.textPrimary(),
+                                  ),
                                 ),
                               ),
-                              Text(
-                                transactionOrderList[index].status ?? 'Unknown Status',
-                                style: STextStyles.medium().copyWith(
-                                  color: TextColorStyles.textPrimary(),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
+                                decoration: BoxDecoration(
+                                  color: WarningColorStyles.warningSurface(),
+                                  border: Border.all(
+                                    color: WarningColorStyles.warningBorder(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
+                                child: Text(
+                                  status,
+                                  style: STextStyles.medium().copyWith(
+                                    color: WarningColorStyles.warningMain(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: "$baseURL/${transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.images != null && transactionOrderList[index].orderDetails![0].product!.images![0].url != null ? transactionOrderList[index].orderDetails![0].product!.images![0].url! : ''}",
+                                imageBuilder: (context, imgProvider) {
+                                  return Container(
+                                    width: 65.0,
+                                    height: 65.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      image: DecorationImage(
+                                        image: imgProvider,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (context, url, error) {
+                                  return SizedBox(
+                                    width: 65.0,
+                                    height: 65.0,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Icon(
+                                          Icons.broken_image_outlined,
+                                          color: IconColorStyles.iconColor(),
+                                        ),
+                                        Text(
+                                          'Unable to load image',
+                                          style: XSTextStyles.medium(),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(
+                                width: 15.0,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.name != null ? transactionOrderList[index].orderDetails![0].product!.name! : 'Unknown Product',
+                                      style: MTextStyles.medium(),
+                                    ),
+                                    transactionOrderList[index].orderDetails![0].varianName != null ?
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        const SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        Text(
+                                          transactionOrderList[index].orderDetails![0].varianName ?? 'Unknown Variant',
+                                          style: STextStyles.regular(),
+                                        ),
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                      ],
+                                    ) :
+                                    const SizedBox(
+                                      height: 25.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].price != null && transactionOrderList[index].orderDetails![0].price != '' ? transactionOrderList[index].orderDetails![0].price! : '0')).replaceAll(',', '.')}',
+                                          style: MTextStyles.medium().copyWith(
+                                            color: PrimaryColorStyles.primaryMain(),
+                                          ),
+                                        ),
+                                        Text(
+                                          '${transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].qty != null && transactionOrderList[index].orderDetails![0].qty != '' ? transactionOrderList[index].orderDetails![0].qty : '0'}x',
+                                          style: MTextStyles.regular(),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Divider(
+                              height: 1.0,
+                              color: BorderColorStyles.borderDivider(),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${transactionOrderList[index].orderDetails != null ? transactionOrderList[index].orderDetails!.length : '0'} Produk',
+                                style: MTextStyles.medium(),
+                              ),
+                              Text(
+                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].total != null && transactionOrderList[index].orderDetails![0].total != '' ? transactionOrderList[index].orderDetails![0].total! : '0')).replaceAll(',', '.')}',
+                                style: MTextStyles.medium(),
                               ),
                             ],
                           ),

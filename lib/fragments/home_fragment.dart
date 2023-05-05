@@ -13,6 +13,7 @@ import 'package:kenari_app/pages/trolley_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/models/product_model.dart';
+import 'package:kenari_app/services/api/models/trolley_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -24,6 +25,7 @@ class HomeFragment extends StatelessWidget {
   final List<ProductData> popularProductList;
   final List<ProductData> discountProductList;
   final List<CategoryData> categoryList;
+  final List<TrolleyData> trolleyList;
   final Function onChangeSelectedPage;
   final Function onShowAllMenuBottomDialog;
   final Function onShowProductBottomDialog;
@@ -32,6 +34,7 @@ class HomeFragment extends StatelessWidget {
   final Function onCallbackFromLoanPage;
   final Function onCallbackFromSellerPage;
   final Function onCallbackFromTrolleyPage;
+  final Function onCallbackFromProductListPage;
   final Function onRefreshPage;
 
   const HomeFragment({
@@ -43,6 +46,7 @@ class HomeFragment extends StatelessWidget {
     required this.popularProductList,
     required this.discountProductList,
     required this.categoryList,
+    required this.trolleyList,
     required this.onChangeSelectedPage,
     required this.onShowAllMenuBottomDialog,
     required this.onShowProductBottomDialog,
@@ -51,6 +55,7 @@ class HomeFragment extends StatelessWidget {
     required this.onCallbackFromLoanPage,
     required this.onCallbackFromSellerPage,
     required this.onCallbackFromTrolleyPage,
+    required this.onCallbackFromProductListPage,
     required this.onRefreshPage,
   });
 
@@ -106,18 +111,33 @@ class HomeFragment extends StatelessWidget {
                         context: context,
                         target: const TrolleyPage(),
                         callback: (callbackResult) {
-                          if(callbackResult != null && callbackResult == false) {
-                            onCallbackFromTrolleyPage();
+                          if(callbackResult != null) {
+                            onCallbackFromTrolleyPage(callbackResult);
                           }
                         },
                       ).go();
                     },
                     customBorder: const CircleBorder(),
-                    child: const Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Stack(
+                        children: [
+                          const Icon(
+                            Icons.shopping_cart,
+                            color: Colors.white,
+                          ),
+                          trolleyList.isNotEmpty ?
+                          Container(
+                            width: 10.0,
+                            height: 10.0,
+                            margin: const EdgeInsets.only(left: 15.0),
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ) :
+                          const Material(),
+                        ],
                       ),
                     ),
                   ),
@@ -401,8 +421,8 @@ class HomeFragment extends StatelessWidget {
                                       context: context,
                                       target: const FeePage(),
                                       callback: (callbackResult) {
-                                        if(callbackResult != null && callbackResult == false) {
-                                          onCallbackFromFeePage();
+                                        if(callbackResult != null) {
+                                          onCallbackFromFeePage(callbackResult);
                                         }
                                       },
                                     ).go();
@@ -584,10 +604,18 @@ class HomeFragment extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            MoveToPage(context: context, target: ProductListPage(
-                              filterType: 'Terbaru',
-                              filterList: filterList,
-                            )).go();
+                            MoveToPage(
+                              context: context,
+                              target: ProductListPage(
+                                filterType: 'Terbaru',
+                                filterList: filterList,
+                              ),
+                              callback: (callbackResult) {
+                                if(callbackResult != null) {
+                                  onCallbackFromProductListPage(callbackResult);
+                                }
+                              },
+                            ).go();
                           },
                           child: Text(
                             'Lihat semua',
@@ -620,7 +648,7 @@ class HomeFragment extends StatelessWidget {
                               } else {
                                 List sortedVariantPrice = newProductList[index].varians!;
 
-                                sortedVariantPrice.sort((a, b) => a.price.compareTo(b.price));
+                                sortedVariantPrice.sort((a, b) => int.parse(a.price ?? '0').compareTo(int.parse(b.price ?? '0')));
 
                                 int lowest = int.parse(sortedVariantPrice[0].price ?? '0');
                                 int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].price ?? '0');

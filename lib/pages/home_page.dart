@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/fragments/home_fragment.dart';
@@ -9,12 +10,17 @@ import 'package:kenari_app/pages/fee_page.dart';
 import 'package:kenari_app/pages/loan_page.dart';
 import 'package:kenari_app/pages/product_page.dart';
 import 'package:kenari_app/pages/seller_page.dart';
+import 'package:kenari_app/pages/seller_product_form_page.dart';
 import 'package:kenari_app/pages/splash_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/models/product_model.dart';
+import 'package:kenari_app/services/api/models/trolley_model.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/services/api/product_services/api_product_services.dart';
+import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
+import 'package:kenari_app/services/local/models/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -40,6 +46,8 @@ class _HomePageState extends State<HomePage> {
 
   List<CategoryData> categoryList = [];
 
+  List<TrolleyData> trolleyList = [];
+
   List<String> filterList = [
     'Tampilkan Semua',
     'Terbaru',
@@ -48,6 +56,8 @@ class _HomePageState extends State<HomePage> {
     'Harga Terendah',
     'Harga Tertinggi',
   ];
+
+  CategoryData? selectedCategory;
 
   @override
   void initState() {
@@ -74,12 +84,20 @@ class _HomePageState extends State<HomePage> {
             });
           }
 
-          await APIProductServices(context: context).call().then((productResult) {
+          await APIProductServices(context: context).call().then((productResult) async {
             if(productResult != null && productResult.productData != null) {
               setState(() {
                 productList = productResult.productData!;
               });
             }
+
+            await APITrolleyServices(context: context).call().then((trolleyResult) {
+              if(trolleyResult != null && trolleyResult.trolleyData != null) {
+                setState(() {
+                  trolleyList = trolleyResult.trolleyData!;
+                });
+              }
+            });
           });
         });
       });
@@ -117,6 +135,7 @@ class _HomePageState extends State<HomePage> {
           popularProductList: popularProductList,
           discountProductList: discountProductList,
           categoryList: categoryList,
+          trolleyList: trolleyList,
           onChangeSelectedPage: (int page) {
             setState(() {
               selectedCard = page;
@@ -141,18 +160,26 @@ class _HomePageState extends State<HomePage> {
                   } else {
                     setState(() {
                       selectedMenu = 2;
-                      openMenuFromPage = 3;
+                      openMenuFromPage = 2;
                     });
                   }
                 }
               },
             ).go();
           },
-          onCallbackFromFeePage: () {
-            setState(() {
-              selectedMenu = 2;
-              openMenuFromPage = 0;
-            });
+          onCallbackFromFeePage: (dynamic callback) {
+            if(callback != null) {
+              if(callback == true) {
+                setState(() {
+                  selectedMenu = 0;
+                });
+              } else {
+                setState(() {
+                  selectedMenu = 2;
+                  openMenuFromPage = 0;
+                });
+              }
+            }
           },
           onCallbackFromLoanPage: (dynamic callback) {
             if(callback != null) {
@@ -191,7 +218,21 @@ class _HomePageState extends State<HomePage> {
               } else {
                 setState(() {
                   selectedMenu = 2;
-                  openMenuFromPage = 3;
+                  openMenuFromPage = 2;
+                });
+              }
+            }
+          },
+          onCallbackFromProductListPage: (dynamic callback) {
+            if(callback != null) {
+              if(callback == true) {
+                setState(() {
+                  selectedMenu = 0;
+                });
+              } else {
+                setState(() {
+                  selectedMenu = 2;
+                  openMenuFromPage = 2;
                 });
               }
             }
@@ -201,12 +242,37 @@ class _HomePageState extends State<HomePage> {
           },
         );
       case 1:
+        List<ProductData> queryData = [];
+
+        for(int i = 0; i < productList.length; i++) {
+          if(selectedCategory != null) {
+            if(filterType == 'Tampilkan Semua') {
+              if(productList[i].productCategory != null && productList[i].productCategory!.sId == selectedCategory!.sId) {
+                queryData.add(productList[i]);
+              }
+            } else {
+
+            }
+          } else {
+            if(filterType == 'Tampilkan Semua') {
+              queryData = productList;
+            } else {
+
+            }
+          }
+        }
+
         return SearchFragment(
           searchController: searchController,
-          productList: productList,
+          productList: queryData,
           categoryList: categoryList,
           filterList: filterList,
           filterType: filterType,
+          onCategoryChange: (CategoryData? newSelectedCategory) {
+            setState(() {
+              selectedCategory = newSelectedCategory;
+            });
+          },
           onFilterChange: (String? selectedFilter) {
             if(selectedFilter != null) {
               setState(() {
@@ -217,6 +283,27 @@ class _HomePageState extends State<HomePage> {
           onRefreshPage: () {
             loadData();
           },
+          onProductSelected: (ProductData product) {
+            MoveToPage(
+              context: context,
+              target: ProductPage(productId: product.sId!),
+              callback: (callback) {
+                if(callback != null) {
+                  if(callback == true) {
+                    setState(() {
+                      selectedMenu = 0;
+                    });
+                  } else {
+                    setState(() {
+                      selectedMenu = 2;
+                      openMenuFromPage = 2;
+                    });
+                  }
+                }
+              },
+            ).go();
+          },
+          selectedCategory: selectedCategory,
         );
       case 2:
         return TransactionFragment(
@@ -276,6 +363,43 @@ class _HomePageState extends State<HomePage> {
           ],
         );
     }
+  }
+
+  Future updateTrolley(int index, ProductData product, int qty) async {
+    String? price = product.varians != null && product.varians!.isNotEmpty ?
+    product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice : product.varians![index].price :
+    product.isPromo != null && product.isPromo == true ? product.promoPrice : product.price;
+
+    await APITrolleyServices(context: context).update(
+      LocalTrolleyProduct(
+        isSelected: true,
+        trolleyData: TrolleyData(
+          price: price,
+          varian: product.varians != null && product.varians!.isNotEmpty ?
+          Varian(
+            sId: product.varians![index].sId,
+            price: product.varians![index].price,
+            name1: product.varians![index].name1,
+            stock: product.varians![index].stock,
+            isStockAlwaysAvailable: product.varians![index].isStockAlwaysAvailable,
+            varianType1: product.varians![index].varianType1,
+            promoPrice: product.varians![index].promoPrice,
+            isPromo: product.varians![index].isPromo,
+          ) :
+          null,
+          product: Product(
+            sId: product.sId,
+          ),
+        ),
+        qty: qty,
+      ),
+    ).then((updateResult) {
+      if(updateResult == true) {
+        showToastSuccessMessage();
+      } else {
+        showToastFailedMessage();
+      }
+    });
   }
 
   Future<void> showAllMenuBottomDialog() async {
@@ -511,7 +635,7 @@ class _HomePageState extends State<HomePage> {
         int stock = product.stock != null && product.stock != '' ? int.parse(product.stock!) : 0;
 
         String price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
-        String imagePath = product.images != null && product.images![0].url != null ? product.images![0].url! : '';
+        String imagePath = "$baseURL/${product.images != null && product.images![0].url != null ? product.images![0].url! : ''}";
         String? variant;
 
         if(product.varians != null && product.varians!.isNotEmpty) {
@@ -552,19 +676,26 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              imagePath,
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: const SizedBox(
-                          width: 80.0,
-                          height: 80.0,
+                      SizedBox(
+                        width: 80.0,
+                        height: 80.0,
+                        child: CachedNetworkImage(
+                          imageUrl: imagePath,
+                          imageBuilder: (context, imgProvider) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imgProvider,
+                                  fit: BoxFit.contain,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: const SizedBox(
+                                width: 80.0,
+                                height: 80.0,
+                              ),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(
@@ -687,7 +818,7 @@ class _HomePageState extends State<HomePage> {
                                     index = itemIndex;
                                     variant = product.varians![itemIndex].name1 ?? 'Unknown Variant';
 
-                                    if(product.promoPrice != null && product.promoPrice != '') {
+                                    if(product.isPromo != null && product.isPromo == true) {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
                                     } else {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
@@ -785,7 +916,9 @@ class _HomePageState extends State<HomePage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
+                            BackFromThisPage(context: context).go();
 
+                            updateTrolley(index, product, qty);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: PrimaryColorStyles.primaryMain(),
@@ -822,6 +955,78 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
+    );
+  }
+
+  showToastSuccessMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        elevation: 0,
+        content: Padding(
+          padding: const EdgeInsets.only(bottom: 50.0),
+          child: Card(
+            color: SuccessColorStyles.successSurface(),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info,
+                    color: SuccessColorStyles.successMain(),
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(
+                    'Produk berhasil ditambahkan ke Troli.',
+                    style: XSTextStyles.medium().copyWith(
+                      color: SuccessColorStyles.successMain(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        duration: const Duration(seconds: 3),
+        backgroundColor: Colors.transparent,
+      ),
+    );
+  }
+
+  showToastFailedMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        elevation: 0,
+        content: Padding(
+          padding: const EdgeInsets.only(bottom: 50.0),
+          child: Card(
+            color: SuccessColorStyles.successSurface(),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info,
+                    color: DangerColorStyles.dangerMain(),
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(
+                    'Produk gagal ditambahkan ke Troli!',
+                    style: XSTextStyles.medium().copyWith(
+                      color: DangerColorStyles.dangerMain(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        duration: const Duration(seconds: 3),
+        backgroundColor: Colors.transparent,
+      ),
     );
   }
 
@@ -994,7 +1199,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-
+          MoveToPage(context: context, target: const SellerProductFormPage()).go();
         },
         backgroundColor: PrimaryColorStyles.primaryMain(),
         child: const Icon(

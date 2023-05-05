@@ -82,6 +82,8 @@ class _ProductPageState extends State<ProductPage> {
     ).then((updateResult) {
       if(updateResult == true) {
         showToastSuccessMessage();
+      } else {
+        showToastFailedMessage();
       }
     });
   }
@@ -408,7 +410,7 @@ class _ProductPageState extends State<ProductPage> {
                                           ),
                                           child: InkWell(
                                             onTap: () {
-                                              showProductBottomDialog(detailProductData!);
+                                              showProductBottomDialog(detailProductData!, itemIndex);
                                             },
                                             customBorder: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(5.0),
@@ -563,7 +565,7 @@ class _ProductPageState extends State<ProductPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    showProductBottomDialog(detailProductData!);
+                    showProductBottomDialog(detailProductData!, 0);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PrimaryColorStyles.primaryMain(),
@@ -600,7 +602,7 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  Future<void> showProductBottomDialog(DetailProductData product) async {
+  Future<void> showProductBottomDialog(DetailProductData product, int selectedIndex) async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -610,7 +612,7 @@ class _ProductPageState extends State<ProductPage> {
         ),
       ),
       builder: (BuildContext modalBottomContext) {
-        int index = 0;
+        int index = selectedIndex;
         int qty = 1;
         int stock = product.varians != null && product.varians!.isNotEmpty ?
         product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
@@ -621,7 +623,7 @@ class _ProductPageState extends State<ProductPage> {
         product.isPromo != null && product.isPromo == true ?
         'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
 
-        String imagePath = product.images != null && product.images![index].url != null ? product.images![index].url! : '';
+        String imagePath = "$baseURL/${product.images != null && product.images![0].url != null ? product.images![0].url! : ''}";
         String? variant;
 
         if(product.varians != null && product.varians!.isNotEmpty) {
@@ -663,7 +665,7 @@ class _ProductPageState extends State<ProductPage> {
                   child: Row(
                     children: [
                       CachedNetworkImage(
-                        imageUrl: '$baseURL/$imagePath',
+                        imageUrl: imagePath,
                         imageBuilder: (context, imgProvider) {
                           return Container(
                             decoration: BoxDecoration(

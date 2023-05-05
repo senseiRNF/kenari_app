@@ -13,8 +13,11 @@ class SearchFragment extends StatelessWidget {
   final List<CategoryData> categoryList;
   final List filterList;
   final String? filterType;
+  final Function onCategoryChange;
   final Function onFilterChange;
   final Function onRefreshPage;
+  final Function onProductSelected;
+  final CategoryData? selectedCategory;
 
   const SearchFragment({
     super.key,
@@ -23,8 +26,11 @@ class SearchFragment extends StatelessWidget {
     required this.categoryList,
     required this.filterList,
     this.filterType,
+    required this.onCategoryChange,
     required this.onFilterChange,
     required this.onRefreshPage,
+    required this.onProductSelected,
+    required this.selectedCategory,
   });
 
   @override
@@ -99,7 +105,7 @@ class SearchFragment extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(
-                                color: BorderColorStyles.borderStrokes(),
+                                color: selectedCategory != null && selectedCategory!.sId == categoryList[categoryIndex].sId ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                               ),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
@@ -107,7 +113,15 @@ class SearchFragment extends StatelessWidget {
                               color: Colors.transparent,
                               child: InkWell(
                                 onTap: () {
-
+                                  if(selectedCategory != null) {
+                                    if(selectedCategory!.sId != categoryList[categoryIndex].sId) {
+                                      onCategoryChange(categoryList[categoryIndex]);
+                                    } else {
+                                      onCategoryChange(null);
+                                    }
+                                  } else {
+                                    onCategoryChange(categoryList[categoryIndex]);
+                                  }
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -117,7 +131,9 @@ class SearchFragment extends StatelessWidget {
                                     padding: const EdgeInsets.all(10.0),
                                     child: Text(
                                       categoryList[categoryIndex].name ?? 'Unknown Category',
-                                      style: MTextStyles.regular(),
+                                      style: MTextStyles.regular().copyWith(
+                                        color: selectedCategory != null && selectedCategory!.sId == categoryList[categoryIndex].sId ? PrimaryColorStyles.primaryMain() : MTextStyles.regular().color,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -207,8 +223,9 @@ class SearchFragment extends StatelessWidget {
                         itemCount: productList.length,
                         separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
                           return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Divider(
+                              height: 1.0,
                               thickness: 0.5,
                               color: BorderColorStyles.borderDivider(),
                             ),
@@ -217,120 +234,129 @@ class SearchFragment extends StatelessWidget {
                         itemBuilder: (BuildContext popularContext, int index) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: "$baseURL/${productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : ''}",
-                                  fit: BoxFit.contain,
-                                  width: 110.0,
-                                  height: 100.0,
-                                  errorWidget: (errContext, url, error) {
-                                    return Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: [
-                                        Icon(
-                                          Icons.broken_image_outlined,
-                                          color: IconColorStyles.iconColor(),
-                                        ),
-                                        Text(
-                                          'Unable to load image',
-                                          style: XSTextStyles.medium(),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                                const SizedBox(
-                                  width: 15.0,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () => onProductSelected(productList[index]),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        productList[index].name ?? 'Unknown Product',
-                                        style: STextStyles.medium(),
+                                      CachedNetworkImage(
+                                        imageUrl: "$baseURL/${productList[index].images != null && productList[index].images![0].url != null ? productList[index].images![0].url! : ''}",
+                                        fit: BoxFit.contain,
+                                        width: 110.0,
+                                        height: 100.0,
+                                        errorWidget: (errContext, url, error) {
+                                          return Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Icon(
+                                                Icons.broken_image_outlined,
+                                                color: IconColorStyles.iconColor(),
+                                              ),
+                                              Text(
+                                                'Unable to load image',
+                                                style: XSTextStyles.medium(),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          );
+                                        },
                                       ),
                                       const SizedBox(
-                                        height: 15.0,
+                                        width: 15.0,
                                       ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: BorderColorStyles.borderStrokes(),
-                                              ),
-                                              borderRadius: BorderRadius.circular(20.0),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            Text(
+                                              productList[index].name ?? 'Unknown Product',
+                                              style: STextStyles.medium(),
                                             ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                                              child: Text(
-                                                productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : 'Unknown Category',
-                                                style: XSTextStyles.regular(),
-                                              ),
+                                            const SizedBox(
+                                              height: 15.0,
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: [
-                                          Expanded(
-                                            child: productList[index].promoPrice != null && productList[index].promoPrice != '0' ?
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            Row(
                                               children: [
-                                                const SizedBox(
-                                                  height: 10.0,
-                                                ),
-                                                Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
-                                                    color: PrimaryColorStyles.primaryMain(),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: BorderColorStyles.borderStrokes(),
+                                                    ),
+                                                    borderRadius: BorderRadius.circular(20.0),
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 5.0,
-                                                ),
-                                                Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
-                                                    color: TextColorStyles.textDisabled(),
-                                                    decoration: TextDecoration.lineThrough,
-                                                  ),
-                                                ),
-                                              ],
-                                            ) :
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                                              children: [
-                                                const SizedBox(
-                                                  height: 25.0,
-                                                ),
-                                                Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
-                                                    color: PrimaryColorStyles.primaryMain(),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                                    child: Text(
+                                                      productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : 'Unknown Category',
+                                                      style: XSTextStyles.regular(),
+                                                    ),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                          Icon(
-                                            Icons.shopping_cart,
-                                            color: IconColorStyles.iconColor(),
-                                            size: 20.0,
-                                          ),
-                                        ],
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Expanded(
+                                                  child: productList[index].promoPrice != null && productList[index].promoPrice != '0' ?
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 10.0,
+                                                      ),
+                                                      Text(
+                                                        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
+                                                        style: STextStyles.regular().copyWith(
+                                                          color: PrimaryColorStyles.primaryMain(),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5.0,
+                                                      ),
+                                                      Text(
+                                                        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
+                                                        style: STextStyles.regular().copyWith(
+                                                          color: TextColorStyles.textDisabled(),
+                                                          decoration: TextDecoration.lineThrough,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ) :
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 25.0,
+                                                      ),
+                                                      Text(
+                                                        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
+                                                        style: STextStyles.regular().copyWith(
+                                                          color: PrimaryColorStyles.primaryMain(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  Icons.shopping_cart,
+                                                  color: IconColorStyles.iconColor(),
+                                                  size: 20.0,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
                           );
                         },

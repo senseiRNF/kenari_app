@@ -6,6 +6,8 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/company_address_selection_page.dart';
 import 'package:kenari_app/pages/seller_product_result_page.dart';
 import 'package:kenari_app/pages/variant_selection_page.dart';
+import 'package:kenari_app/services/api/models/category_model.dart';
+import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -22,8 +24,11 @@ class SellerProductFormPage extends StatefulWidget {
 }
 
 class _SellerProductFormPageState extends State<SellerProductFormPage> {
+  List<CategoryData> categoryList = [];
+
   TextEditingController productNameController = TextEditingController();
   TextEditingController productDescriptionController = TextEditingController();
+  TextEditingController productCategoryController = TextEditingController();
   TextEditingController productPriceController = TextEditingController();
   TextEditingController productStockController = TextEditingController();
   TextEditingController preOrderDurationController = TextEditingController(text: '1');
@@ -37,7 +42,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
   bool isUnlimitedStock = false;
   bool isPreOrder = false;
 
-  String? category;
+  String? categoryId;
   String durationSelected = 'Hari';
 
   Map variant = {};
@@ -46,6 +51,8 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
   @override
   void initState() {
     super.initState();
+
+    loadData();
 
     if(widget.updateData != null && widget.updateData!.isNotEmpty) {
       setState(() {
@@ -62,6 +69,16 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
         productPriceController.text = 'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}';
       });
     }
+  }
+
+  Future loadData() async {
+    await APICategoryServices(context: context).call().then((categoryResult) async {
+      if(categoryResult != null && categoryResult.categoryData != null) {
+        setState(() {
+          categoryList = categoryResult.categoryData!;
+        });
+      }
+    });
   }
 
   @override
@@ -275,31 +292,51 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         const SizedBox(
                           height: 5.0,
                         ),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
+                        Stack(
+                          children: [
+                            TextField(
+                              controller: productCategoryController,
+                              decoration: InputDecoration(
+                                hintText: 'Pilih Kategori',
+                                hintStyle: MTextStyles.regular(),
+                                suffixIcon: Icon(
+                                  Icons.expand_more_outlined,
+                                  color: PrimaryColorStyles.primaryMain(),
+                                ),
+                              ),
+                              textCapitalization: TextCapitalization.characters,
+                              textInputAction: TextInputAction.next,
+                              enabled: false,
+                            ),
+                            DropdownButton(
+                              onChanged: (newValue) {
+                                if(newValue != null) {
+                                  setState(() {
+                                    productCategoryController.text = newValue.name ?? '';
+                                    categoryId = newValue.sId;
+                                  });
+                                }
+                              },
+                              isExpanded: true,
+                              icon: const Icon(
+                                Icons.expand_more,
+                                color: Colors.transparent,
+                              ),
+                              underline: const Material(),
+                              items: categoryList.map<DropdownMenuItem<CategoryData>>((value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                                     child: Text(
-                                      category ?? 'Pilih Kategori',
-                                      style: MTextStyles.regular(),
+                                      value.name ?? 'Unknown Category',
+                                      style: STextStyles.regular(),
                                     ),
                                   ),
-                                  Icon(
-                                    Icons.expand_more,
-                                    color: PrimaryColorStyles.primaryMain(),
-                                  ),
-                                ],
-                              ),
+                                );
+                              }).toList(),
                             ),
-                          ),
+                          ],
                         ),
                         const Divider(
                           height: 1.0,

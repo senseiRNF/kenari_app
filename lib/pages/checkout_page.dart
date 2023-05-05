@@ -4,9 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/transaction_result_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
-import 'package:kenari_app/services/api/models/trolley_model.dart';
 import 'package:kenari_app/services/api/transaction_services/api_transaction_services.dart';
-import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
 import 'package:kenari_app/services/local/models/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -39,42 +37,30 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Future loadData() async {
-    List<TrolleyData> tempData = [];
+    List<LocalTrolleyProduct> tempLocalTrolleyData = [];
+    List<TextEditingController> tempOptionalRequestControllerList = [];
+    int tempTotal = 0;
 
-    await APITrolleyServices(context: context).call().then((trolleyResult) {
-      if(trolleyResult != null && trolleyResult.trolleyData != null) {
-        setState(() {
-          tempData = trolleyResult.trolleyData!;
-        });
+    for(int i = 0; i < widget.selectedProductList.length; i++) {
+      if(widget.selectedProductList[i].isSelected == true) {
+        tempLocalTrolleyData.add(
+          LocalTrolleyProduct(
+            isSelected: true,
+            trolleyData: widget.selectedProductList[i].trolleyData,
+            qty: widget.selectedProductList[i].qty,
+          ),
+        );
       }
 
-      List<LocalTrolleyProduct> tempLocalTrolleyData = [];
-      List<TextEditingController> tempOptionalRequestControllerList = [];
-      int tempTotal = 0;
+      tempOptionalRequestControllerList.add(TextEditingController());
 
-      for(int i = 0; i < tempData.length; i++) {
-        for(int x = 0; x < widget.selectedProductList.length; x++) {
-          if(widget.selectedProductList[x].trolleyData.product != null && tempData[i].product != null && widget.selectedProductList[x].trolleyData.product!.sId == tempData[i].product!.sId && widget.selectedProductList[x].isSelected == true) {
-            tempLocalTrolleyData.add(
-              LocalTrolleyProduct(
-                isSelected: true,
-                trolleyData: tempData[i],
-                qty: int.parse(tempData[i].qty ?? '0'),
-              ),
-            );
-          }
-        }
+      tempTotal = tempTotal + (int.parse(widget.selectedProductList[i].trolleyData.price ?? '0') * widget.selectedProductList[i].qty);
+    }
 
-        tempOptionalRequestControllerList.add(TextEditingController());
-
-        tempTotal = tempTotal + (int.parse(tempData[i].price ?? '0') * int.parse(tempData[i].qty ?? '0'));
-      }
-
-      setState(() {
-        optionalRequestControllerList = tempOptionalRequestControllerList;
-        trolleyData = tempLocalTrolleyData;
-        total = tempTotal;
-      });
+    setState(() {
+      optionalRequestControllerList = tempOptionalRequestControllerList;
+      trolleyData = tempLocalTrolleyData;
+      total = tempTotal;
     });
   }
 
@@ -559,17 +545,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         if(trolleyData.isNotEmpty) {
                           if(isDipayActivated == true) {
                             await APITransactionServices(context: context).update(trolleyData).then((updateResult) {
-                              if(updateResult == true) {
-                                MoveToPage(
-                                  context: context,
-                                  target: const TransactionResultPage(isSuccess: true),
-                                  callback: (callbackResult) {
-                                    if(callbackResult != null) {
-                                      BackFromThisPage(context: context, callbackData: callbackResult).go();
-                                    }
-                                  },
-                                ).go();
-                              }
+                              MoveToPage(
+                                context: context,
+                                target: TransactionResultPage(isSuccess: updateResult),
+                                callback: (callbackResult) {
+                                  if(callbackResult != null) {
+                                    BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                  }
+                                },
+                              ).go();
                             });
                           }
                         }
