@@ -36,6 +36,7 @@ class HomeFragment extends StatelessWidget {
   final Function onCallbackFromTrolleyPage;
   final Function onCallbackFromProductListPage;
   final Function onRefreshPage;
+  final Function onReloadTrolley;
 
   const HomeFragment({
     super.key,
@@ -57,6 +58,7 @@ class HomeFragment extends StatelessWidget {
     required this.onCallbackFromTrolleyPage,
     required this.onCallbackFromProductListPage,
     required this.onRefreshPage,
+    required this.onReloadTrolley,
   });
 
   @override
@@ -111,6 +113,8 @@ class HomeFragment extends StatelessWidget {
                         context: context,
                         target: const TrolleyPage(),
                         callback: (callbackResult) {
+                          onReloadTrolley();
+
                           if(callbackResult != null) {
                             onCallbackFromTrolleyPage(callbackResult);
                           }
@@ -611,6 +615,8 @@ class HomeFragment extends StatelessWidget {
                                 filterList: filterList,
                               ),
                               callback: (callbackResult) {
+                                onReloadTrolley();
+
                                 if(callbackResult != null) {
                                   onCallbackFromProductListPage(callbackResult);
                                 }
@@ -801,11 +807,21 @@ class HomeFragment extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: InkWell(
                           onTap: () {
-                            MoveToPage(context: context, target: ProductListBannerPage(
-                              productList: productList,
-                              bannerType: 'discount',
-                              filterList: filterList,
-                            )).go();
+                            MoveToPage(
+                              context: context,
+                              target: ProductListBannerPage(
+                                productList: productList,
+                                bannerType: 'discount',
+                                filterList: filterList,
+                              ),
+                              callback: (callbackResult) {
+                                onReloadTrolley();
+
+                                if(callbackResult != null) {
+                                  onCallbackFromProductListPage(callbackResult);
+                                }
+                              },
+                            ).go();
                           },
                           customBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -827,11 +843,21 @@ class HomeFragment extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: InkWell(
                           onTap: () {
-                            MoveToPage(context: context, target: ProductListBannerPage(
-                              productList: productList,
-                              bannerType: 'clothes',
-                              filterList: filterList,
-                            )).go();
+                            MoveToPage(
+                              context: context,
+                              target: ProductListBannerPage(
+                                productList: productList,
+                                bannerType: 'clothes',
+                                filterList: filterList,
+                              ),
+                              callback: (callbackResult) {
+                                onReloadTrolley();
+
+                                if(callbackResult != null) {
+                                  onCallbackFromProductListPage(callbackResult);
+                                }
+                              },
+                            ).go();
                           },
                           customBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -889,10 +915,20 @@ class HomeFragment extends StatelessWidget {
                                     color: Colors.transparent,
                                     child: InkWell(
                                       onTap: () {
-                                        MoveToPage(context: context, target: ProductListPage(
-                                          filterType: 'Kategori_${categoryList[categoryIndex].name}',
-                                          filterList: filterList,
-                                        )).go();
+                                        MoveToPage(
+                                          context: context,
+                                          target: ProductListPage(
+                                            filterType: 'Kategori_${categoryList[categoryIndex].name}',
+                                            filterList: filterList,
+                                          ),
+                                          callback: (callbackResult) {
+                                            onReloadTrolley();
+
+                                            if(callbackResult != null) {
+                                              onCallbackFromProductListPage(callbackResult);
+                                            }
+                                          },
+                                        ).go();
                                       },
                                       customBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10.0),
@@ -1121,10 +1157,20 @@ class HomeFragment extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            MoveToPage(context: context, target: ProductListPage(
-                              filterType: 'Diskon',
-                              filterList: filterList,
-                            )).go();
+                            MoveToPage(
+                              context: context,
+                              target: ProductListPage(
+                                filterType: 'Diskon',
+                                filterList: filterList,
+                              ),
+                              callback: (callbackResult) {
+                                onReloadTrolley();
+
+                                if(callbackResult != null) {
+                                  onCallbackFromProductListPage(callbackResult);
+                                }
+                              },
+                            ).go();
                           },
                           child: Text(
                             'Lihat semua',

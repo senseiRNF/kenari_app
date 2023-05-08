@@ -77,30 +77,42 @@ class _HomePageState extends State<HomePage> {
           companyCode = companyCodeResult;
         });
 
-        await APICategoryServices(context: context).call().then((categoryResult) async {
-          if(categoryResult != null && categoryResult.categoryData != null) {
-            setState(() {
-              categoryList = categoryResult.categoryData!;
-            });
-          }
-
-          await APIProductServices(context: context).call().then((productResult) async {
-            if(productResult != null && productResult.productData != null) {
-              setState(() {
-                productList = productResult.productData!;
-              });
-            }
-
-            await APITrolleyServices(context: context).call().then((trolleyResult) {
-              if(trolleyResult != null && trolleyResult.trolleyData != null) {
-                setState(() {
-                  trolleyList = trolleyResult.trolleyData!;
-                });
-              }
-            });
+        await loadCategory().then((_) async {
+          await loadProduct().then((_) async {
+            await loadTrolley();
           });
         });
       });
+    });
+  }
+
+  Future loadCategory() async {
+    await APICategoryServices(context: context).call().then((categoryResult) async {
+      if(categoryResult != null && categoryResult.categoryData != null) {
+        setState(() {
+          categoryList = categoryResult.categoryData!;
+        });
+      }
+    });
+  }
+
+  Future loadProduct() async {
+    await APIProductServices(context: context).call().then((productResult) async {
+      if(productResult != null && productResult.productData != null) {
+        setState(() {
+          productList = productResult.productData!;
+        });
+      }
+    });
+  }
+
+  Future loadTrolley() async {
+    await APITrolleyServices(context: context).call().then((trolleyResult) {
+      if(trolleyResult != null && trolleyResult.trolleyData != null) {
+        setState(() {
+          trolleyList = trolleyResult.trolleyData!;
+        });
+      }
     });
   }
 
@@ -141,17 +153,14 @@ class _HomePageState extends State<HomePage> {
               selectedCard = page;
             });
           },
-          onShowAllMenuBottomDialog: () {
-            showAllMenuBottomDialog();
-          },
-          onShowProductBottomDialog: (ProductData product) {
-            showProductBottomDialog(product);
-          },
-          onProductSelected: (ProductData product) {
-            MoveToPage(
+          onShowAllMenuBottomDialog: () => showAllMenuBottomDialog(),
+          onShowProductBottomDialog: (ProductData product) => showProductBottomDialog(product),
+          onProductSelected: (ProductData product) => MoveToPage(
               context: context,
               target: ProductPage(productId: product.sId!),
               callback: (callback) {
+                loadTrolley();
+
                 if(callback != null) {
                   if(callback == true) {
                     setState(() {
@@ -165,8 +174,7 @@ class _HomePageState extends State<HomePage> {
                   }
                 }
               },
-            ).go();
-          },
+            ).go(),
           onCallbackFromFeePage: (dynamic callback) {
             if(callback != null) {
               if(callback == true) {
@@ -237,9 +245,8 @@ class _HomePageState extends State<HomePage> {
               }
             }
           },
-          onRefreshPage: () {
-            loadData();
-          },
+          onRefreshPage: () => loadData(),
+          onReloadTrolley: () => loadTrolley(),
         );
       case 1:
         List<ProductData> queryData = [];
@@ -280,11 +287,8 @@ class _HomePageState extends State<HomePage> {
               });
             }
           },
-          onRefreshPage: () {
-            loadData();
-          },
-          onProductSelected: (ProductData product) {
-            MoveToPage(
+          onRefreshPage: () => loadData(),
+          onProductSelected: (ProductData product) => MoveToPage(
               context: context,
               target: ProductPage(productId: product.sId!),
               callback: (callback) {
@@ -301,8 +305,7 @@ class _HomePageState extends State<HomePage> {
                   }
                 }
               },
-            ).go();
-          },
+            ).go(),
           selectedCategory: selectedCategory,
         );
       case 2:
@@ -331,16 +334,12 @@ class _HomePageState extends State<HomePage> {
         return ProfileFragment(
           name: name,
           companyCode: companyCode,
-          refreshPage: () {
-            loadData();
-          },
-          onLogout: () async {
-            await LocalSharedPrefs().removeAllKey().then((removeResult) {
-              if(removeResult == true) {
-                RedirectToPage(context: context, target: const SplashPage()).go();
-              }
-            });
-          },
+          refreshPage: () => loadData(),
+          onLogout: () async => await LocalSharedPrefs().removeAllKey().then((removeResult) {
+            if(removeResult == true) {
+              RedirectToPage(context: context, target: const SplashPage()).go();
+            }
+          }),
         );
       default:
         return Column(
@@ -394,6 +393,8 @@ class _HomePageState extends State<HomePage> {
         qty: qty,
       ),
     ).then((updateResult) {
+      loadTrolley();
+
       if(updateResult == true) {
         showToastSuccessMessage();
       } else {

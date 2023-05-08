@@ -949,11 +949,12 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           const SizedBox(
                             height: 15.0,
                           ),
+                          transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails!.isNotEmpty ?
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
-                                imageUrl: "$baseURL/${transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.images != null && transactionOrderList[index].orderDetails![0].product!.images![0].url != null ? transactionOrderList[index].orderDetails![0].product!.images![0].url! : ''}",
+                                imageUrl: "$baseURL/${transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.images != null && transactionOrderList[index].orderDetails![0].product!.images![0].url != null ? transactionOrderList[index].orderDetails![0].product!.images![0].url! : ''}",
                                 imageBuilder: (context, imgProvider) {
                                   return Container(
                                     width: 65.0,
@@ -997,7 +998,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.name != null ? transactionOrderList[index].orderDetails![0].product!.name! : 'Unknown Product',
+                                      transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.name != null ? transactionOrderList[index].orderDetails![0].product!.name! : 'Unknown Product',
                                       style: MTextStyles.medium(),
                                     ),
                                     transactionOrderList[index].orderDetails![0].varianName != null ?
@@ -1039,7 +1040,8 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 ),
                               ),
                             ],
-                          ),
+                          ) :
+                          const Material(),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Divider(
@@ -1052,11 +1054,11 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                '${transactionOrderList[index].orderDetails != null ? transactionOrderList[index].orderDetails!.length : '0'} Produk',
+                                '${transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails!.isNotEmpty ? transactionOrderList[index].orderDetails!.length : '0'} Produk',
                                 style: MTextStyles.medium(),
                               ),
                               Text(
-                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].total != null && transactionOrderList[index].orderDetails![0].total != '' ? transactionOrderList[index].orderDetails![0].total! : '0')).replaceAll(',', '.')}',
+                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails!.isNotEmpty && transactionOrderList[index].orderDetails![0].total != null && transactionOrderList[index].orderDetails![0].total != '' ? transactionOrderList[index].orderDetails![0].total! : '0')).replaceAll(',', '.')}',
                                 style: MTextStyles.medium(),
                               ),
                             ],

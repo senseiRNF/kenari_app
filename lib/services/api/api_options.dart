@@ -3,14 +3,13 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 
-String baseURL = 'https://develop-app.kenari.id/v1';
+const String baseURL = 'https://develop-app.kenari.id/v1';
 
 class APIOptions {
   static Future<Dio> init() async {
     Dio dio = Dio();
 
     dio.options = BaseOptions(
-      // baseUrl: 'https://kenari-backend.netlify.app/v1',
       baseUrl: baseURL,
       headers: {
         'Accept': 'application/json',

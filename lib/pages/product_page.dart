@@ -26,6 +26,8 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  List<TrolleyData> trolleyList = [];
+
   TextEditingController searchController = TextEditingController();
 
   DetailProductData? detailProductData;
@@ -46,6 +48,18 @@ class _ProductPageState extends State<ProductPage> {
       if(detailResult != null && detailResult.detailProductData != null) {
         setState(() {
           detailProductData = detailResult.detailProductData;
+        });
+      }
+
+      loadTrolley();
+    });
+  }
+
+  Future loadTrolley() async {
+    await APITrolleyServices(context: context).call().then((trolleyResult) {
+      if(trolleyResult != null && trolleyResult.trolleyData != null) {
+        setState(() {
+          trolleyList = trolleyResult.trolleyData!;
         });
       }
     });
@@ -80,6 +94,8 @@ class _ProductPageState extends State<ProductPage> {
         qty: qty,
       ),
     ).then((updateResult) {
+      loadTrolley();
+
       if(updateResult == true) {
         showToastSuccessMessage();
       } else {
@@ -143,6 +159,8 @@ class _ProductPageState extends State<ProductPage> {
                           context: context,
                           target: const TrolleyPage(),
                           callback: (callbackResult) {
+                            loadTrolley();
+
                             if(callbackResult != null) {
                               if(callbackResult == true) {
                                 BackFromThisPage(context: context).go();
@@ -156,10 +174,25 @@ class _ProductPageState extends State<ProductPage> {
                       customBorder: const CircleBorder(),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                        child: Icon(
-                          Icons.shopping_cart,
-                          size: 20.0,
-                          color: IconColorStyles.iconColor(),
+                        child: Stack(
+                          children: [
+                            Icon(
+                              Icons.shopping_cart,
+                              size: 20.0,
+                              color: IconColorStyles.iconColor(),
+                            ),
+                            trolleyList.isNotEmpty ?
+                            Container(
+                              width: 10.0,
+                              height: 10.0,
+                              margin: const EdgeInsets.only(left: 15.0),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            ) :
+                            const Material(),
+                          ],
                         ),
                       ),
                     ),
