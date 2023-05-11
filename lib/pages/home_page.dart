@@ -963,34 +963,32 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         elevation: 0,
-        content: Padding(
-          padding: const EdgeInsets.only(bottom: 50.0),
-          child: Card(
-            color: SuccessColorStyles.successSurface(),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.info,
+        content: Card(
+          color: SuccessColorStyles.successSurface(),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info,
+                  color: SuccessColorStyles.successMain(),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  'Produk berhasil ditambahkan ke Troli.',
+                  style: XSTextStyles.medium().copyWith(
                     color: SuccessColorStyles.successMain(),
                   ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Text(
-                    'Produk berhasil ditambahkan ke Troli.',
-                    style: XSTextStyles.medium().copyWith(
-                      color: SuccessColorStyles.successMain(),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
         duration: const Duration(seconds: 3),
         backgroundColor: Colors.transparent,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -999,34 +997,32 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         elevation: 0,
-        content: Padding(
-          padding: const EdgeInsets.only(bottom: 50.0),
-          child: Card(
-            color: SuccessColorStyles.successSurface(),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.info,
+        content: Card(
+          color: SuccessColorStyles.successSurface(),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info,
+                  color: DangerColorStyles.dangerMain(),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  'Produk gagal ditambahkan ke Troli!',
+                  style: XSTextStyles.medium().copyWith(
                     color: DangerColorStyles.dangerMain(),
                   ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Text(
-                    'Produk gagal ditambahkan ke Troli!',
-                    style: XSTextStyles.medium().copyWith(
-                      color: DangerColorStyles.dangerMain(),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
         duration: const Duration(seconds: 3),
         backgroundColor: Colors.transparent,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
