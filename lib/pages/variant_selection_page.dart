@@ -174,7 +174,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Belum ada daftar Berat yang ada, silahkan untuk menambahkan daftar Berat',
+                          'Belum ada daftar yang ada, silahkan untuk menambahkan daftar',
                           style: STextStyles.regular(),
                         ),
                         const SizedBox(
@@ -765,6 +765,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                   const SizedBox(
                     height: 10.0,
                   ),
+                  variantList.isNotEmpty ?
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Wrap(
@@ -774,7 +775,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                       children: variantList.asMap().map((variantIndex, variantData) => MapEntry(variantIndex, Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: selectedVariant[0].sId == variantData.sId ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                            color: selectedVariant.isNotEmpty && selectedVariant[0].sId == variantData.sId ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                           ),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -786,7 +787,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                selectedVariant[0] = variantData;
+                                selectedVariant.add(variantData);
                               });
                             },
                             customBorder: RoundedRectangleBorder(
@@ -796,14 +797,15 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                               child: Text(
                                 variantData.name ?? 'Unknown',
-                                style: selectedVariant[0].sId == variantData.sId ? MTextStyles.medium() : MTextStyles.regular(),
+                                style: selectedVariant.isNotEmpty && selectedVariant[0].sId == variantData.sId ? MTextStyles.medium() : MTextStyles.regular(),
                               ),
                             ),
                           ),
                         ),
                       ))).values.toList(),
                     ),
-                  ),
+                  ) :
+                  const Material(),
                 ],
               ),
             ),
