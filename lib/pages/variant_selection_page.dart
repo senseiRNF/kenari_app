@@ -21,8 +21,6 @@ class VariantSelectionPage extends StatefulWidget {
 class _VariantSelectionPageState extends State<VariantSelectionPage> {
   List<VariantTypeData> variantList = [];
   List<VariantTypeData> selectedVariant = [];
-  
-  List<Map> detailVariantList = [];
 
   @override
   void initState() {
@@ -46,10 +44,10 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
   }
 
   Future<List> showVariantListBottomDialog(int variantIndex, String variantName, List subVariantList) async {
-    List detailVariantListList = [];
+    List detailVariantList = [];
 
     for(int i = 0; i < subVariantList.length; i++) {
-      detailVariantListList.add(
+      detailVariantList.add(
         {
           'selected': true,
           'data': subVariantList[i],
@@ -99,12 +97,12 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                   const SizedBox(
                     height: 25.0,
                   ),
-                  detailVariantListList.isNotEmpty ?
+                  detailVariantList.isNotEmpty ?
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: ListView.separated(
                       shrinkWrap: true,
-                      itemCount: detailVariantListList.length + 1,
+                      itemCount: detailVariantList.length + 1,
                       separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
                         return const Divider(
                           height: 1.0,
@@ -113,7 +111,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         );
                       },
                       itemBuilder: (BuildContext subVariantContext, int subVariantIndex) {
-                        return subVariantIndex == detailVariantListList.length ?
+                        return subVariantIndex == detailVariantList.length ?
                         Row(
                           children: [
                             InkWell(
@@ -121,7 +119,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                 showAddNewSubVariantBottomDialog(variantIndex, variantName).then((subVariantResult) {
                                   if(subVariantResult != null) {
                                     stateSetter(() {
-                                      detailVariantListList.add(
+                                      detailVariantList.add(
                                         {
                                           'selected': true,
                                           'data': subVariantResult,
@@ -148,17 +146,17 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                detailVariantListList[subVariantIndex]['data'],
+                                detailVariantList[subVariantIndex]['data'],
                                 style: MTextStyles.regular(),
                               ),
                             ),
                             Checkbox(
-                              value: detailVariantListList[subVariantIndex]['selected'],
+                              value: detailVariantList[subVariantIndex]['selected'],
                               activeColor: PrimaryColorStyles.primaryMain(),
                               onChanged: (newValue) {
                                 if(newValue != null) {
                                   stateSetter(() {
-                                    detailVariantListList[subVariantIndex]['selected'] = newValue;
+                                    detailVariantList[subVariantIndex]['selected'] = newValue;
                                   });
                                 }
                               },
@@ -185,7 +183,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                             showAddNewSubVariantBottomDialog(variantIndex, variantName).then((subVariantResult) {
                               if(subVariantResult != null) {
                                 stateSetter(() {
-                                  detailVariantListList.add(
+                                  detailVariantList.add(
                                     {
                                       'selected': true,
                                       'data': subVariantResult,
@@ -236,7 +234,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
       },
     );
 
-    return detailVariantListList;
+    return detailVariantList;
   }
 
   Future<String?> showAddNewSubVariantBottomDialog(int variantIndex, String variantName) async {
@@ -745,378 +743,108 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical:  15.0),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+            Expanded(
+              child: ListView(
                 children: [
-                  Text(
-                    'Tipe Varian',
-                    style: MTextStyles.medium(),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Text(
-                    'Pilih maksimum 2 tipe varian produk',
-                    style: STextStyles.regular(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical:  15.0),
+                    color: Colors.white,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Tipe Varian',
+                          style: MTextStyles.medium(),
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          'Pilih maksimum 2 tipe varian produk',
+                          style: STextStyles.regular(),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        variantList.isNotEmpty ?
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Wrap(
+                            spacing: 5.0,
+                            runSpacing: 5.0,
+                            alignment: WrapAlignment.start,
+                            children: variantList.asMap().map((variantIndex, variantData) => MapEntry(variantIndex, Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: selectedVariant.isNotEmpty ?
+                                  selectedVariant.length < 2 ?
+                                  selectedVariant[0].sId == variantData.sId ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes() :
+                                  selectedVariant[0].sId == variantData.sId || selectedVariant[1].sId == variantData.sId ? PrimaryColorStyles.primaryMain() :
+                                  BorderColorStyles.borderStrokes() :
+                                  BorderColorStyles.borderStrokes(),
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    if(selectedVariant.isNotEmpty) {
+                                      bool found = false;
+                                      int? foundIndex;
+
+                                      for(int i = 0; i < selectedVariant.length; i++) {
+                                        if(selectedVariant[i].sId == variantData.sId) {
+                                          found = true;
+                                          foundIndex = i;
+                                        }
+                                      }
+
+                                      if(found == true) {
+                                        setState(() {
+                                          selectedVariant.removeAt(foundIndex!);
+                                        });
+                                      } else {
+                                        if(selectedVariant.length < 2) {
+                                          setState(() {
+                                            selectedVariant.add(variantData);
+                                          });
+                                        }
+                                      }
+                                    } else {
+                                      setState(() {
+                                        selectedVariant.add(variantData);
+                                      });
+                                    }
+                                  },
+                                  customBorder: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                    child: Text(
+                                      variantData.name ?? 'Unknown',
+                                      style: selectedVariant.isNotEmpty && selectedVariant[0].sId == variantData.sId ? MTextStyles.medium() : MTextStyles.regular(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ))).values.toList(),
+                          ),
+                        ) :
+                        const Material(),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 10.0,
                   ),
-                  variantList.isNotEmpty ?
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Wrap(
-                      spacing: 5.0,
-                      runSpacing: 5.0,
-                      alignment: WrapAlignment.start,
-                      children: variantList.asMap().map((variantIndex, variantData) => MapEntry(variantIndex, Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: selectedVariant.isNotEmpty && selectedVariant[0].sId == variantData.sId ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                selectedVariant.add(variantData);
-                              });
-                            },
-                            customBorder: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                              child: Text(
-                                variantData.name ?? 'Unknown',
-                                style: selectedVariant.isNotEmpty && selectedVariant[0].sId == variantData.sId ? MTextStyles.medium() : MTextStyles.regular(),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ))).values.toList(),
-                    ),
-                  ) :
-                  const Material(),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            selectedVariant.isNotEmpty ?
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical:  15.0),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          selectedVariant[0].name ?? 'Unknown',
-                          style: MTextStyles.medium(),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          // showSubVariantListBottomDialog(selectedVariant!, variantList[selectedVariant!]['title'], variantList[selectedVariant!]['subvariant']).then((detailVariantListResult) {
-                          //   if(detailVariantListResult.isNotEmpty) {
-                          //     List tempdetailVariantList = [];
-                          //
-                          //     for(int i = 0; i < detailVariantListResult.length; i++) {
-                          //       if(detailVariantListResult[i]['selected'] == true) {
-                          //         tempdetailVariantList.add(detailVariantListResult[i]['data']);
-                          //       }
-                          //     }
-                          //
-                          //     setState(() {
-                          //       detailVariantList = tempdetailVariantList;
-                          //     });
-                          //   }
-                          // });
-                        },
-                        child: Text(
-                          'Tambah',
-                          style: STextStyles.medium(),
-                        ),
-                      )
-                    ],
-                  ),
-                  detailVariantList.isNotEmpty ?
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Wrap(
-                      spacing: 5.0,
-                      runSpacing: 5.0,
-                      alignment: WrapAlignment.start,
-                      children: detailVariantList.map((subVariantData) => Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: BorderColorStyles.borderStrokes(),
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              subVariantData['name'],
-                              style: STextStyles.regular(),
-                            ),
-                            const SizedBox(
-                              width: 10.0,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  detailVariantList.removeWhere((element) => element == subVariantData);
-                                });
-                              },
-                              customBorder: const CircleBorder(),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: NeutralColorStyles.neutral07(),
-                                ),
-                                child: const Icon(
-                                  Icons.close,
-                                  color: Colors.white,
-                                  size: 10.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )).toList(),
-                    ),
-                  ) :
-                  const Material(),
-                ],
-              ),
-            ) :
-            const Material(),
-            variantList.isNotEmpty ?
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                  color: Colors.white,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Apabila ada varian yang memiliki Harga & Stok sama, kamu bisa mengubahnya secara sekaligus bersamaan.',
-                          style: XSTextStyles.regular(),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showUpdateAllSelectedVariantBottomDialog().then((variantResult) {
-                            // if(variantList.isNotEmpty) {
-                            //   showUpdateAllPriceAndStockVariantBottomDialog(variantResult).then((priceAndStockResult) {
-                            //     for(int i = 0; i < priceAndStockResult['variant'].length; i++) {
-                            //       for(int x = 0; x < savedVariant['subvariant'].length; x++) {
-                            //         if(priceAndStockResult['variant'][i]['selected'] == true && priceAndStockResult['variant'][i]['variant'] == savedVariant['subvariant'][x]) {
-                            //           setState(() {
-                            //             savedVariant['price'][x] = priceAndStockResult['price'];
-                            //             savedVariant['price_controller'][x].text = priceAndStockResult['price'];
-                            //             savedVariant['stock'][x] = priceAndStockResult['stock'];
-                            //             savedVariant['stock_controller'][x].text = priceAndStockResult['stock'];
-                            //             savedVariant['is_always_available'][x] = priceAndStockResult['is_always_available'];
-                            //           });
-                            //
-                            //           break;
-                            //         }
-                            //       }
-                            //     }
-                            //   });
-                            // }
-                          });
-                        },
-                        child: Text(
-                          'Ubah Sekaligus',
-                          style: STextStyles.medium(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-                  color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Daftar Varian',
-                        style: MTextStyles.medium().copyWith(
-                          color: TextColorStyles.textPrimary(),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: selectedVariant.length,
-                        separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-                          return const SizedBox(
-                            height: 25.0,
-                          );
-                        },
-                        itemBuilder: (BuildContext variantContext, int variantIndex) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                selectedVariant[variantIndex].name ?? 'Unknown',
-                                style: STextStyles.medium().copyWith(
-                                  color: TextColorStyles.textSecondary(),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                'Harga',
-                                style: STextStyles.medium().copyWith(
-                                  color: TextColorStyles.textPrimary(),
-                                ),
-                              ),
-                              TextField(
-                                controller: detailVariantList[variantIndex]['price_controller'],
-                                decoration: const InputDecoration(
-                                  isDense: true,
-                                  prefixIcon: Text("Rp "),
-                                  prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
-                                  hintText: '0',
-                                ),
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                onChanged: (changedValue) {
-                                  // if(changedValue != '') {
-                                  //   setState(() {
-                                  //     savedVariant['price'][variantIndex] = int.parse(changedValue);
-                                  //   });
-                                  // } else {
-                                  //   setState(() {
-                                  //     savedVariant['price'][variantIndex] = 0;
-                                  //   });
-                                  // }
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                'Stok',
-                                style: STextStyles.medium().copyWith(
-                                  color: TextColorStyles.textPrimary(),
-                                ),
-                              ),
-                              TextField(
-                                controller: detailVariantList[variantIndex][variantIndex],
-                                decoration: const InputDecoration(
-                                  isDense: true,
-                                  hintText: '0',
-                                ),
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                onChanged: (changedValue) {
-                                  if(changedValue != '') {
-                                    setState(() {
-                                      detailVariantList[variantIndex]['stock'] = int.parse(changedValue);
-                                    });
-                                  } else {
-                                    setState(() {
-                                      detailVariantList[variantIndex]['stock'] = 0;
-                                    });
-                                  }
-                                },
-                              ),
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 20.0,
-                                    height: 20.0,
-                                    child: Checkbox(
-                                      value: detailVariantList[variantIndex]['is_always_available'],
-                                      activeColor: PrimaryColorStyles.primaryMain(),
-                                      onChanged: (newValue) {
-                                        if(newValue != null) {
-                                          setState(() {
-                                            detailVariantList[variantIndex]['is_always_available'] = newValue;
-
-                                            if(detailVariantList[variantIndex]['is_always_available'] == true) {
-                                              detailVariantList[variantIndex]['stock'] = 1;
-                                              detailVariantList[variantIndex]['stock_controller'].text = '1';
-                                            }
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10.0,
-                                  ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          detailVariantList[variantIndex]['is_always_available'] = !detailVariantList[variantIndex]['is_always_available'];
-
-                                          if(detailVariantList[variantIndex]['is_always_available'] == true) {
-                                            detailVariantList[variantIndex]['stock'] = 1;
-                                            detailVariantList[variantIndex]['stock_controller'].text = '1';
-                                          }
-                                        });
-                                      },
-                                      child: Text(
-                                        'Stok selalu ada',
-                                        style: MTextStyles.medium().copyWith(
-                                          color: PrimaryColorStyles.primaryMain(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ) :
-            const Material(),
             Container(
               color: Colors.white,
               child: Padding(
@@ -1161,14 +889,14 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     // }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedVariant.isNotEmpty ? PrimaryColorStyles.primaryMain() : detailVariantList.isNotEmpty ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
+                    backgroundColor: selectedVariant.isNotEmpty ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
-                      selectedVariant.isNotEmpty ? 'Simpan Varian' : 'Lanjutkan',
+                      'Simpan Varian',
                       style: LTextStyles.medium().copyWith(
-                        color: selectedVariant.isNotEmpty ? Colors.white : detailVariantList.isNotEmpty ? LTextStyles.regular().color : Colors.black54,
+                        color: selectedVariant.isNotEmpty ? LTextStyles.regular().color : Colors.black54,
                       ),
                     ),
                   ),
@@ -1181,3 +909,244 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
     );
   }
 }
+
+// class SubVariantSelectionPage extends StatefulWidget {
+//   final List<VariantTypeData> variantData;
+//
+//   const SubVariantSelectionPage({
+//     super.key,
+//     required this.variantData,
+//   });
+//
+//   @override
+//   State<SubVariantSelectionPage> createState() => _SubVariantSelectionPageState();
+// }
+//
+// class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Column(
+//         crossAxisAlignment: CrossAxisAlignment.stretch,
+//         children: [
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+//             color: Colors.white,
+//             child: Row(
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 Expanded(
+//                   child: Text(
+//                     'Apabila ada varian yang memiliki Harga & Stok sama, kamu bisa mengubahnya secara sekaligus bersamaan.',
+//                     style: XSTextStyles.regular(),
+//                   ),
+//                 ),
+//                 TextButton(
+//                   onPressed: () {
+//                     showUpdateAllSelectedVariantBottomDialog().then((variantResult) {
+//                       // if(variantList.isNotEmpty) {
+//                       //   showUpdateAllPriceAndStockVariantBottomDialog(variantResult).then((priceAndStockResult) {
+//                       //     for(int i = 0; i < priceAndStockResult['variant'].length; i++) {
+//                       //       for(int x = 0; x < savedVariant['subvariant'].length; x++) {
+//                       //         if(priceAndStockResult['variant'][i]['selected'] == true && priceAndStockResult['variant'][i]['variant'] == savedVariant['subvariant'][x]) {
+//                       //           setState(() {
+//                       //             savedVariant['price'][x] = priceAndStockResult['price'];
+//                       //             savedVariant['price_controller'][x].text = priceAndStockResult['price'];
+//                       //             savedVariant['stock'][x] = priceAndStockResult['stock'];
+//                       //             savedVariant['stock_controller'][x].text = priceAndStockResult['stock'];
+//                       //             savedVariant['is_always_available'][x] = priceAndStockResult['is_always_available'];
+//                       //           });
+//                       //
+//                       //           break;
+//                       //         }
+//                       //       }
+//                       //     }
+//                       //   });
+//                       // }
+//                     });
+//                   },
+//                   child: Text(
+//                     'Ubah Sekaligus',
+//                     style: STextStyles.medium(),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           const SizedBox(
+//             height: 5.0,
+//           ),
+//           detailVariantList.isNotEmpty ?
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+//             color: Colors.white,
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.stretch,
+//               children: [
+//                 Text(
+//                   'Daftar Varian',
+//                   style: MTextStyles.medium().copyWith(
+//                     color: TextColorStyles.textPrimary(),
+//                   ),
+//                 ),
+//                 const SizedBox(
+//                   height: 25.0,
+//                 ),
+//                 ListView.separated(
+//                   shrinkWrap: true,
+//                   physics: const NeverScrollableScrollPhysics(),
+//                   itemCount: detailVariantList.length,
+//                   separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+//                     return const SizedBox(
+//                       height: 25.0,
+//                     );
+//                   },
+//                   itemBuilder: (BuildContext variantContext, int variantIndex) {
+//                     return Column(
+//                       crossAxisAlignment: CrossAxisAlignment.stretch,
+//                       children: [
+//                         Text(
+//                           'Nama',
+//                           style: STextStyles.medium().copyWith(
+//                             color: TextColorStyles.textPrimary(),
+//                           ),
+//                         ),
+//                         TextField(
+//                           controller: detailVariantList[variantIndex]['title'],
+//                           decoration: const InputDecoration(
+//                             isDense: true,
+//                           ),
+//                           onChanged: (changedValue) {
+//                             setState(() {
+//                               detailVariantList[variantIndex]['title'] = TextEditingController(text: changedValue);
+//                             });
+//                           },
+//                         ),
+//                         const SizedBox(
+//                           height: 10.0,
+//                         ),
+//                         Text(
+//                           'Harga',
+//                           style: STextStyles.medium().copyWith(
+//                             color: TextColorStyles.textPrimary(),
+//                           ),
+//                         ),
+//                         TextField(
+//                           controller: detailVariantList[variantIndex]['price_controller'],
+//                           decoration: const InputDecoration(
+//                             isDense: true,
+//                             prefixIcon: Text("Rp "),
+//                             prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+//                             hintText: '0',
+//                           ),
+//                           keyboardType: TextInputType.number,
+//                           inputFormatters: [
+//                             FilteringTextInputFormatter.digitsOnly,
+//                           ],
+//                           onChanged: (changedValue) {
+//                             if(changedValue != '') {
+//                               setState(() {
+//                                 detailVariantList[variantIndex]['price'] = int.parse(changedValue);
+//                               });
+//                             } else {
+//                               setState(() {
+//                                 detailVariantList[variantIndex]['price'] = 0;
+//                               });
+//                             }
+//                           },
+//                         ),
+//                         const SizedBox(
+//                           height: 10.0,
+//                         ),
+//                         Text(
+//                           'Stok',
+//                           style: STextStyles.medium().copyWith(
+//                             color: TextColorStyles.textPrimary(),
+//                           ),
+//                         ),
+//                         TextField(
+//                           controller: detailVariantList[variantIndex]['stock_controller'],
+//                           decoration: const InputDecoration(
+//                             isDense: true,
+//                             hintText: '0',
+//                           ),
+//                           keyboardType: TextInputType.number,
+//                           inputFormatters: [
+//                             FilteringTextInputFormatter.digitsOnly,
+//                           ],
+//                           onChanged: (changedValue) {
+//                             if(changedValue != '') {
+//                               setState(() {
+//                                 detailVariantList[variantIndex]['stock'] = int.parse(changedValue);
+//                               });
+//                             } else {
+//                               setState(() {
+//                                 detailVariantList[variantIndex]['stock'] = 0;
+//                               });
+//                             }
+//                           },
+//                         ),
+//                         const SizedBox(
+//                           height: 10.0,
+//                         ),
+//                         Row(
+//                           crossAxisAlignment: CrossAxisAlignment.center,
+//                           children: [
+//                             SizedBox(
+//                               width: 20.0,
+//                               height: 20.0,
+//                               child: Checkbox(
+//                                 value: detailVariantList[variantIndex]['is_always_available'],
+//                                 activeColor: PrimaryColorStyles.primaryMain(),
+//                                 onChanged: (newValue) {
+//                                   if(newValue != null) {
+//                                     setState(() {
+//                                       detailVariantList[variantIndex]['is_always_available'] = newValue;
+//
+//                                       if(detailVariantList[variantIndex]['is_always_available'] == true) {
+//                                         detailVariantList[variantIndex]['stock'] = 1;
+//                                         detailVariantList[variantIndex]['stock_controller'].text = '1';
+//                                       }
+//                                     });
+//                                   }
+//                                 },
+//                               ),
+//                             ),
+//                             const SizedBox(
+//                               width: 10.0,
+//                             ),
+//                             Expanded(
+//                               child: InkWell(
+//                                 onTap: () {
+//                                   setState(() {
+//                                     detailVariantList[variantIndex]['is_always_available'] = !detailVariantList[variantIndex]['is_always_available'];
+//
+//                                     if(detailVariantList[variantIndex]['is_always_available'] == true) {
+//                                       detailVariantList[variantIndex]['stock'] = 1;
+//                                       detailVariantList[variantIndex]['stock_controller'].text = '1';
+//                                     }
+//                                   });
+//                                 },
+//                                 child: Text(
+//                                   'Stok selalu ada',
+//                                   style: MTextStyles.medium().copyWith(
+//                                     color: PrimaryColorStyles.primaryMain(),
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ],
+//                     );
+//                   },
+//                 ),
+//               ],
+//             ),
+//           ) :
+//           const Material(),
+//         ],
+//       ),
+//     );
+//   }
+// }

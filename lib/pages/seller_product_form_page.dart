@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
@@ -33,7 +34,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
   TextEditingController productStockController = TextEditingController();
   TextEditingController preOrderDurationController = TextEditingController(text: '1');
 
-  List productImg = [];
+  List<XFile> productImg = [];
   List durationList = [
     'Hari',
     'Minggu',
@@ -79,6 +80,18 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
         });
       }
     });
+  }
+
+  Future<XFile?> pickingImage(ImageSource source) async {
+    XFile? result;
+
+    ImagePicker picker = ImagePicker();
+    
+    await picker.pickImage(source: source).then((pickResult) {
+      result = pickResult;
+    });
+
+    return result;
   }
 
   @override
@@ -201,9 +214,29 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                 child: InkWell(
                                   onTap: () {
                                     if(index == 0) {
-                                      setState(() {
-                                        productImg.add(null);
-                                      });
+                                      SourceSelectionDialog(
+                                        context: context,
+                                        title: 'Tambah Gambar',
+                                        message: 'Silahkan pilih sumber gambar',
+                                        cameraFunction: () async {
+                                          await pickingImage(ImageSource.camera).then((pickResult) {
+                                            if(pickResult != null) {
+                                              setState(() {
+                                                productImg.add(pickResult);
+                                              });
+                                            }
+                                          });
+                                        },
+                                        galleryFunction: () async {
+                                          await pickingImage(ImageSource.gallery).then((pickResult) {
+                                            if(pickResult != null) {
+                                              setState(() {
+                                                productImg.add(pickResult);
+                                              });
+                                            }
+                                          });
+                                        },
+                                      ).show();
                                     }
                                   },
                                   onLongPress: () {
@@ -229,7 +262,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                         height: 5.0,
                                       ),
                                       Text(
-                                        index == 0 ? 'Tambah\nFoto/Video' : 'Dummy Image',
+                                        index == 0 ? 'Tambah\nFoto/Video' : '${productImg[index-1].name.substring(0, 10)}...',
                                         style: XSTextStyles.regular().copyWith(
                                           color: PrimaryColorStyles.primaryMain(),
                                         ),

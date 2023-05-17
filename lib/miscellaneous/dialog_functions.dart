@@ -272,3 +272,72 @@ class ErrorHandler {
     });
   }
 }
+
+class SourceSelectionDialog {
+  BuildContext context;
+  String? title;
+  String message;
+  Function cameraFunction;
+  Function galleryFunction;
+
+  SourceSelectionDialog({
+    required this.context,
+    this.title,
+    required this.message,
+    required this.cameraFunction,
+    required this.galleryFunction,
+  });
+
+  Future<void> show() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(
+            title ?? 'Perhatian',
+            style: HeadingTextStyles.headingS(),
+          ),
+          content: Text(
+            message,
+            style: MTextStyles.regular(),
+            textAlign: TextAlign.justify,
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                galleryFunction();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+              ),
+              child: Text(
+                'Galeri',
+                style: TextStyle(
+                  color: NeutralColorStyles.neutral09(),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                cameraFunction();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+              ),
+              child: Text(
+                'Kamera',
+                style: TextStyle(
+                  color: NeutralColorStyles.neutral09(),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
