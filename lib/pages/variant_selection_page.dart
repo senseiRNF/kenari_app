@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/models/variant_type_model.dart';
 import 'package:kenari_app/services/api/variant_services/api_variant_type_services.dart';
@@ -20,7 +21,9 @@ class VariantSelectionPage extends StatefulWidget {
 
 class _VariantSelectionPageState extends State<VariantSelectionPage> {
   List<VariantTypeData> variantList = [];
-  List<VariantTypeData> selectedVariant = [];
+  List<SelectedVariant> selectedVariantList = [];
+
+  List<CompleteVariant> completeVariantList = [];
 
   @override
   void initState() {
@@ -43,201 +46,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
     });
   }
 
-  Future<List> showVariantListBottomDialog(int variantIndex, String variantName, List subVariantList) async {
-    List detailVariantList = [];
-
-    for(int i = 0; i < subVariantList.length; i++) {
-      detailVariantList.add(
-        {
-          'selected': true,
-          'data': subVariantList[i],
-        },
-      );
-    }
-
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
-        ),
-      ),
-      builder: (BuildContext modalBottomContext) {
-        return StatefulBuilder(
-          builder: (BuildContext modalContext, stateSetter) {
-            return Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: Container(
-                      margin: const EdgeInsets.all(10.0),
-                      height: 5.0,
-                      width: 60.0,
-                      color: NeutralColorStyles.neutral04(),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 25.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Text(
-                      'Pilih $variantName',
-                      style: LTextStyles.medium().copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 25.0,
-                  ),
-                  detailVariantList.isNotEmpty ?
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: detailVariantList.length + 1,
-                      separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-                        return const Divider(
-                          height: 1.0,
-                          thickness: 1.0,
-                          color: Colors.black38,
-                        );
-                      },
-                      itemBuilder: (BuildContext subVariantContext, int subVariantIndex) {
-                        return subVariantIndex == detailVariantList.length ?
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                showAddNewSubVariantBottomDialog(variantIndex, variantName).then((subVariantResult) {
-                                  if(subVariantResult != null) {
-                                    stateSetter(() {
-                                      detailVariantList.add(
-                                        {
-                                          'selected': true,
-                                          'data': subVariantResult,
-                                        },
-                                      );
-                                    });
-                                  }
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text(
-                                  'Tambah $variantName Lain',
-                                  style: STextStyles.medium().copyWith(
-                                    color: PrimaryColorStyles.primaryMain(),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ) :
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                detailVariantList[subVariantIndex]['data'],
-                                style: MTextStyles.regular(),
-                              ),
-                            ),
-                            Checkbox(
-                              value: detailVariantList[subVariantIndex]['selected'],
-                              activeColor: PrimaryColorStyles.primaryMain(),
-                              onChanged: (newValue) {
-                                if(newValue != null) {
-                                  stateSetter(() {
-                                    detailVariantList[subVariantIndex]['selected'] = newValue;
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ) :
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Belum ada daftar yang ada, silahkan untuk menambahkan daftar',
-                          style: STextStyles.regular(),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            showAddNewSubVariantBottomDialog(variantIndex, variantName).then((subVariantResult) {
-                              if(subVariantResult != null) {
-                                stateSetter(() {
-                                  detailVariantList.add(
-                                    {
-                                      'selected': true,
-                                      'data': subVariantResult,
-                                    },
-                                  );
-                                });
-                              }
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              'Tambah',
-                              style: STextStyles.medium().copyWith(
-                                color: PrimaryColorStyles.primaryMain(),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        BackFromThisPage(context: context).go();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: PrimaryColorStyles.primaryMain(),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          'Simpan',
-                          style: LTextStyles.medium().copyWith(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-
-    return detailVariantList;
-  }
-
-  Future<String?> showAddNewSubVariantBottomDialog(int variantIndex, String variantName) async {
+  Future<String?> showAddNewSubVariantBottomDialog(VariantTypeData data) async {
     String? subvariant;
     TextEditingController subVariantNameController = TextEditingController();
 
@@ -273,7 +82,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
-                      'Tambah $variantName',
+                      'Tambah ${data.name}',
                       style: LTextStyles.medium().copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -286,7 +95,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
-                      'Nama $variantName',
+                      'Nama ${data.name}',
                       style: STextStyles.medium(),
                     ),
                   ),
@@ -295,7 +104,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     child: TextField(
                       controller: subVariantNameController,
                       decoration: InputDecoration(
-                        hintText: 'Masukan nama $variantName',
+                        hintText: 'Masukan nama ${data.name}',
                       ),
                       textCapitalization: TextCapitalization.words,
                     ),
@@ -304,7 +113,15 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     padding: const EdgeInsets.all(25.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        BackFromThisPage(context: context, callbackData: subVariantNameController.text).go();
+                        if(subVariantNameController.text != '') {
+                          BackFromThisPage(context: context, callbackData: subVariantNameController.text).go();
+                        } else {
+                          OkDialog(
+                            context: context,
+                            message: 'Mohon untuk memasukan nama terlebih dahulu!',
+                            showIcon: false,
+                          ).show();
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PrimaryColorStyles.primaryMain(),
@@ -327,178 +144,10 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
         );
       },
     ).then((result) {
-      if(result != null) {
-        subvariant = subVariantNameController.text;
-
-        setState(() {
-          // variantList[variantIndex]['subvariant'].add(
-          //   subVariantNameController.text,
-          // );
-        });
-      }
+      subvariant = result;
     });
 
     return subvariant;
-  }
-
-  Future<List> showUpdateAllSelectedVariantBottomDialog() async {
-    List variantResult = [];
-    List updatedVariantList = [
-      {
-        'variant': 'Semua',
-        'selected': true,
-      }
-    ];
-
-    // for(int i = 0; i < savedVariant['subvariant'].length; i++) {
-    //   updatedVariantList.add({
-    //     'variant': savedVariant['subvariant'][i],
-    //     'selected': true,
-    //   });
-    // }
-
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
-        ),
-      ),
-      builder: (BuildContext modalBottomContext) {
-        return StatefulBuilder(
-          builder: (BuildContext modalContext, stateSetter) {
-            return Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: Container(
-                      margin: const EdgeInsets.all(10.0),
-                      height: 5.0,
-                      width: 60.0,
-                      color: NeutralColorStyles.neutral04(),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 25.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Text(
-                      'Pilih varian yang ingin diatur',
-                      style: LTextStyles.medium().copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 25.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: updatedVariantList.length,
-                      separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-                        return Divider(
-                          height: 15.0,
-                          thickness: 1.0,
-                          color: BorderColorStyles.borderDivider(),
-                        );
-                      },
-                      itemBuilder: (BuildContext variantContext, int variantIndex) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                updatedVariantList[variantIndex]['variant'],
-                                style: MTextStyles.regular(),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20.0,
-                              height: 20.0,
-                              child: Checkbox(
-                                value: updatedVariantList[variantIndex]['selected'],
-                                activeColor: PrimaryColorStyles.primaryMain(),
-                                onChanged: (newValue) {
-                                  if(variantIndex == 0) {
-                                    for(int x = 0; x < updatedVariantList.length; x++) {
-                                      if(newValue != null) {
-                                        stateSetter(() {
-                                          updatedVariantList[x]['selected'] = newValue;
-                                        });
-                                      }
-                                    }
-                                  } else {
-                                    if(newValue != null) {
-                                      stateSetter(() {
-                                        updatedVariantList[variantIndex]['selected'] = newValue;
-                                      });
-
-                                      bool isSelectedAll = true;
-
-                                      for(int x = 1; x < updatedVariantList.length; x++) {
-                                        if(updatedVariantList[x]['selected'] == false) {
-                                          isSelectedAll = false;
-
-                                          break;
-                                        }
-                                      }
-
-                                      stateSetter(() {
-                                        updatedVariantList[0]['selected'] = isSelectedAll;
-                                      });
-                                    }
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        BackFromThisPage(context: context, callbackData: updatedVariantList).go();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: PrimaryColorStyles.primaryMain(),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          'Simpan',
-                          style: LTextStyles.medium().copyWith(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    ).then((result) {
-      if(result != null && result.isNotEmpty) {
-        variantResult = result;
-      }
-    });
-
-    return variantResult;
   }
 
   Future<Map> showUpdateAllPriceAndStockVariantBottomDialog(List selectedVariant) async {
@@ -776,10 +425,10 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                             children: variantList.asMap().map((variantIndex, variantData) => MapEntry(variantIndex, Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: selectedVariant.isNotEmpty ?
-                                  selectedVariant.length < 2 ?
-                                  selectedVariant[0].sId == variantData.sId ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes() :
-                                  selectedVariant[0].sId == variantData.sId || selectedVariant[1].sId == variantData.sId ? PrimaryColorStyles.primaryMain() :
+                                  color: selectedVariantList.isNotEmpty ?
+                                  selectedVariantList.length < 2 ?
+                                  selectedVariantList[0].variantType.sId == variantData.sId ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes() :
+                                  selectedVariantList[0].variantType.sId == variantData.sId || selectedVariantList[1].variantType.sId == variantData.sId ? PrimaryColorStyles.primaryMain() :
                                   BorderColorStyles.borderStrokes() :
                                   BorderColorStyles.borderStrokes(),
                                 ),
@@ -792,12 +441,12 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                 ),
                                 child: InkWell(
                                   onTap: () {
-                                    if(selectedVariant.isNotEmpty) {
+                                    if(selectedVariantList.isNotEmpty) {
                                       bool found = false;
                                       int? foundIndex;
 
-                                      for(int i = 0; i < selectedVariant.length; i++) {
-                                        if(selectedVariant[i].sId == variantData.sId) {
+                                      for(int i = 0; i < selectedVariantList.length; i++) {
+                                        if(selectedVariantList[i].variantType.sId == variantData.sId) {
                                           found = true;
                                           foundIndex = i;
                                         }
@@ -805,18 +454,28 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
 
                                       if(found == true) {
                                         setState(() {
-                                          selectedVariant.removeAt(foundIndex!);
+                                          selectedVariantList.removeAt(foundIndex!);
                                         });
                                       } else {
-                                        if(selectedVariant.length < 2) {
+                                        if(selectedVariantList.length < 2) {
                                           setState(() {
-                                            selectedVariant.add(variantData);
+                                            selectedVariantList.add(
+                                              SelectedVariant(
+                                                variantType: variantData,
+                                                subvariantList: [],
+                                              ),
+                                            );
                                           });
                                         }
                                       }
                                     } else {
                                       setState(() {
-                                        selectedVariant.add(variantData);
+                                        selectedVariantList.add(
+                                          SelectedVariant(
+                                            variantType: variantData,
+                                            subvariantList: [],
+                                          ),
+                                        );
                                       });
                                     }
                                   },
@@ -827,7 +486,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
                                       variantData.name ?? 'Unknown',
-                                      style: selectedVariant.isNotEmpty && selectedVariant[0].sId == variantData.sId ? MTextStyles.medium() : MTextStyles.regular(),
+                                      style: selectedVariantList.isNotEmpty && selectedVariantList[0].variantType.sId == variantData.sId ? MTextStyles.medium() : MTextStyles.regular(),
                                     ),
                                   ),
                                 ),
@@ -842,72 +501,205 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                   const SizedBox(
                     height: 10.0,
                   ),
+                  selectedVariantList.isNotEmpty ?
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical:  15.0),
+                    color: Colors.white,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: selectedVariantList.length,
+                      separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+                        return const SizedBox(
+                          height: 20.0,
+                        );
+                      },
+                      itemBuilder: (BuildContext variantContext, int variantIndex) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  selectedVariantList[variantIndex].variantType.name ?? 'Unknown',
+                                  style: LTextStyles.medium(),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    showAddNewSubVariantBottomDialog(selectedVariantList[variantIndex].variantType).then((subvariantResult) {
+                                      if(subvariantResult != null && subvariantResult != '') {
+                                        setState(() {
+                                          selectedVariantList[variantIndex].subvariantList.add(
+                                            Subvariant(
+                                              name: subvariantResult,
+                                              isSelected: true,
+                                            )
+                                          );
+                                        });
+                                      }
+                                    });
+                                  },
+                                  child: Text(
+                                    'Tambah Varian',
+                                    style: MTextStyles.medium().copyWith(
+                                      color: PrimaryColorStyles.primaryMain(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            selectedVariantList[variantIndex].subvariantList.isNotEmpty ?
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: selectedVariantList[variantIndex].subvariantList.length,
+                              itemBuilder: (BuildContext subvariantContext, int subvariantIndex) {
+                                return Column(
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            selectedVariantList[variantIndex].subvariantList[subvariantIndex].name,
+                                            style: MTextStyles.regular(),
+                                          ),
+                                        ),
+                                        Checkbox(
+                                          value: selectedVariantList[variantIndex].subvariantList[subvariantIndex].isSelected,
+                                          activeColor: PrimaryColorStyles.primaryMain(),
+                                          onChanged: (newValue) {
+                                            if(newValue != null) {
+                                              setState(() {
+                                                selectedVariantList[variantIndex].subvariantList[subvariantIndex].isSelected = newValue;
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(
+                                      height: 1.0,
+                                      thickness: 1.0,
+                                      color: Colors.black54,
+                                    )
+                                  ],
+                                );
+                              },
+                            ) :
+                            const Material(),
+                          ],
+                        );
+                      },
+                    ),
+                  ) :
+                  const Material(),
                 ],
               ),
             ),
+            completeVariantList.isEmpty ?
             Container(
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    // if(savedVariant.isNotEmpty) {
-                    //   BackFromThisPage(context: context, callbackData: savedVariant).go();
-                    // } else {
-                    //   if(detailVariantList.isNotEmpty) {
-                    //     Map data = {
-                    //       'variant': variantList[selectedVariant!]['title'],
-                    //       'subvariant': detailVariantList,
-                    //     };
-                    //
-                    //     List price = [];
-                    //     List stock = [];
-                    //     List isAlwaysAvailable = [];
-                    //     List priceController = [];
-                    //     List stockController = [];
-                    //
-                    //     for(int i = 0; i < detailVariantList.length; i++) {
-                    //       priceController.add(TextEditingController());
-                    //       price.add(0);
-                    //       stockController.add(TextEditingController());
-                    //       stock.add(0);
-                    //       isAlwaysAvailable.add(false);
-                    //     }
-                    //
-                    //     data.addEntries({
-                    //       MapEntry('price_controller', priceController),
-                    //       MapEntry('stock_controller', stockController),
-                    //       MapEntry('price', price),
-                    //       MapEntry('stock', stock),
-                    //       MapEntry('is_always_available', isAlwaysAvailable),
-                    //     });
-                    //
-                    //     setState(() {
-                    //       savedVariant = data;
-                    //     });
-                    //   }
-                    // }
+                    if(selectedVariantList.isNotEmpty) {
+                      List<CompleteVariant> tempCompleteVariantList = [];
+                      List tempSelectedVariantList = [];
+
+                      for(int i = 0; i < selectedVariantList.length; i++) {
+                        List tempFirstFilteredList = [];
+
+                        for(int x = 0; x < selectedVariantList[i].subvariantList.length; x++) {
+                          List<Map> tempSecondFilteredList = [];
+
+                          if(selectedVariantList[i].subvariantList[x].isSelected == true) {
+                            tempSecondFilteredList.add({
+                              'variant_type': selectedVariantList[i].variantType,
+                              'subvariant': selectedVariantList[i].subvariantList[x],
+                            });
+
+                            // tempCompleteVariantList.add(
+                            //   CompleteVariant(
+                            //     name: selectedVariantList[i].subvariantList[x].name,
+                            //     priceController: TextEditingController(),
+                            //     price: 0,
+                            //     stockController: TextEditingController(),
+                            //     stock: 0,
+                            //     isAlwaysAvailable: false,
+                            //   ),
+                            // );
+                          }
+
+                          tempFirstFilteredList.add(
+                            tempSecondFilteredList,
+                          );
+                        }
+                      }
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedVariant.isNotEmpty ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
+                    backgroundColor: selectedVariantList.isNotEmpty ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Simpan Varian',
                       style: LTextStyles.medium().copyWith(
-                        color: selectedVariant.isNotEmpty ? LTextStyles.regular().color : Colors.black54,
+                        color: selectedVariantList.isNotEmpty ? Colors.white : Colors.black54,
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ) :
+            const Material(),
           ],
         ),
       ),
     );
   }
+}
+
+class Subvariant {
+  String name;
+  bool isSelected;
+
+  Subvariant({
+    required this.name,
+    required this.isSelected,
+  });
+}
+
+class SelectedVariant {
+  VariantTypeData variantType;
+  List<Subvariant> subvariantList;
+
+  SelectedVariant({
+    required this.variantType,
+    required this.subvariantList,
+  });
+}
+
+class CompleteVariant {
+  String name;
+  TextEditingController priceController;
+  int price;
+  TextEditingController stockController;
+  int stock;
+  bool isAlwaysAvailable;
+
+  CompleteVariant({
+    required this.name,
+    required this.priceController,
+    required this.price,
+    required this.stockController,
+    required this.stock,
+    required this.isAlwaysAvailable,
+  });
 }
 
 // class SubVariantSelectionPage extends StatefulWidget {
