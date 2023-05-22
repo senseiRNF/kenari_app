@@ -606,39 +606,24 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    if(selectedVariantList.isNotEmpty) {
-                      List<CompleteVariant> tempCompleteVariantList = [];
-                      List tempSelectedVariantList = [];
+                    List tempListSubvariant = [];
 
-                      for(int i = 0; i < selectedVariantList.length; i++) {
-                        List tempFirstFilteredList = [];
+                    for(int i = 0; i < selectedVariantList.length; i++) {
+                      List tempSubvariant = [];
 
-                        for(int x = 0; x < selectedVariantList[i].subvariantList.length; x++) {
-                          List<Map> tempSecondFilteredList = [];
-
-                          if(selectedVariantList[i].subvariantList[x].isSelected == true) {
-                            tempSecondFilteredList.add({
-                              'variant_type': selectedVariantList[i].variantType,
-                              'subvariant': selectedVariantList[i].subvariantList[x],
-                            });
-
-                            // tempCompleteVariantList.add(
-                            //   CompleteVariant(
-                            //     name: selectedVariantList[i].subvariantList[x].name,
-                            //     priceController: TextEditingController(),
-                            //     price: 0,
-                            //     stockController: TextEditingController(),
-                            //     stock: 0,
-                            //     isAlwaysAvailable: false,
-                            //   ),
-                            // );
-                          }
-
-                          tempFirstFilteredList.add(
-                            tempSecondFilteredList,
-                          );
-                        }
+                      for(int j = 0; j < selectedVariantList[i].subvariantList.length; j++) {
+                        tempSubvariant.add(selectedVariantList[i].subvariantList[j].name);
                       }
+
+                      tempListSubvariant.add(tempSubvariant);
+                    }
+
+                    for(int x = 0; x < tempListSubvariant.length; x++) {
+                      print('[');
+                      for(int y = 0; y < tempListSubvariant[x].length; y++) {
+                        print(tempListSubvariant[x][y]);
+                      }
+                      print(']');
                     }
                   },
                   style: ElevatedButton.styleFrom(
