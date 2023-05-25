@@ -608,23 +608,34 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                   onPressed: () {
                     List tempListSubvariant = [];
 
-                    for(int i = 0; i < selectedVariantList.length; i++) {
+                    if(selectedVariantList.length > 1) {
+                      List tempFirstSubvariant = [];
+                      List tempSecondSubvariant = [];
+
+                      for(int j = 0; j < selectedVariantList[0].subvariantList.length; j++) {
+                        tempFirstSubvariant.add(selectedVariantList[0].subvariantList[j].name);
+                      }
+
+                      for(int k = 0; k < selectedVariantList[1].subvariantList.length; k++) {
+                        tempSecondSubvariant.add(selectedVariantList[1].subvariantList[k].name);
+                      }
+
+                      for(int a = 0; a < tempFirstSubvariant.length; a++) {
+                        for(int b = 0; b < tempSecondSubvariant.length; b++) {
+                          tempListSubvariant.add("${tempFirstSubvariant[a]} - ${tempSecondSubvariant[b]}");
+                        }
+                      }
+                    } else {
                       List tempSubvariant = [];
 
-                      for(int j = 0; j < selectedVariantList[i].subvariantList.length; j++) {
-                        tempSubvariant.add(selectedVariantList[i].subvariantList[j].name);
+                      for(int l = 0; l < selectedVariantList[0].subvariantList.length; l++) {
+                        tempSubvariant.add(selectedVariantList[0].subvariantList[l].name);
                       }
 
                       tempListSubvariant.add(tempSubvariant);
                     }
 
-                    for(int x = 0; x < tempListSubvariant.length; x++) {
-                      print('[');
-                      for(int y = 0; y < tempListSubvariant[x].length; y++) {
-                        print(tempListSubvariant[x][y]);
-                      }
-                      print(']');
-                    }
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: selectedVariantList.isNotEmpty ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
@@ -687,243 +698,243 @@ class CompleteVariant {
   });
 }
 
-// class SubVariantSelectionPage extends StatefulWidget {
-//   final List<VariantTypeData> variantData;
-//
-//   const SubVariantSelectionPage({
-//     super.key,
-//     required this.variantData,
-//   });
-//
-//   @override
-//   State<SubVariantSelectionPage> createState() => _SubVariantSelectionPageState();
-// }
-//
-// class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Column(
-//         crossAxisAlignment: CrossAxisAlignment.stretch,
-//         children: [
-//           Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-//             color: Colors.white,
-//             child: Row(
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 Expanded(
-//                   child: Text(
-//                     'Apabila ada varian yang memiliki Harga & Stok sama, kamu bisa mengubahnya secara sekaligus bersamaan.',
-//                     style: XSTextStyles.regular(),
-//                   ),
-//                 ),
-//                 TextButton(
-//                   onPressed: () {
-//                     showUpdateAllSelectedVariantBottomDialog().then((variantResult) {
-//                       // if(variantList.isNotEmpty) {
-//                       //   showUpdateAllPriceAndStockVariantBottomDialog(variantResult).then((priceAndStockResult) {
-//                       //     for(int i = 0; i < priceAndStockResult['variant'].length; i++) {
-//                       //       for(int x = 0; x < savedVariant['subvariant'].length; x++) {
-//                       //         if(priceAndStockResult['variant'][i]['selected'] == true && priceAndStockResult['variant'][i]['variant'] == savedVariant['subvariant'][x]) {
-//                       //           setState(() {
-//                       //             savedVariant['price'][x] = priceAndStockResult['price'];
-//                       //             savedVariant['price_controller'][x].text = priceAndStockResult['price'];
-//                       //             savedVariant['stock'][x] = priceAndStockResult['stock'];
-//                       //             savedVariant['stock_controller'][x].text = priceAndStockResult['stock'];
-//                       //             savedVariant['is_always_available'][x] = priceAndStockResult['is_always_available'];
-//                       //           });
-//                       //
-//                       //           break;
-//                       //         }
-//                       //       }
-//                       //     }
-//                       //   });
-//                       // }
-//                     });
-//                   },
-//                   child: Text(
-//                     'Ubah Sekaligus',
-//                     style: STextStyles.medium(),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           const SizedBox(
-//             height: 5.0,
-//           ),
-//           detailVariantList.isNotEmpty ?
-//           Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
-//             color: Colors.white,
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.stretch,
-//               children: [
-//                 Text(
-//                   'Daftar Varian',
-//                   style: MTextStyles.medium().copyWith(
-//                     color: TextColorStyles.textPrimary(),
-//                   ),
-//                 ),
-//                 const SizedBox(
-//                   height: 25.0,
-//                 ),
-//                 ListView.separated(
-//                   shrinkWrap: true,
-//                   physics: const NeverScrollableScrollPhysics(),
-//                   itemCount: detailVariantList.length,
-//                   separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-//                     return const SizedBox(
-//                       height: 25.0,
-//                     );
-//                   },
-//                   itemBuilder: (BuildContext variantContext, int variantIndex) {
-//                     return Column(
-//                       crossAxisAlignment: CrossAxisAlignment.stretch,
-//                       children: [
-//                         Text(
-//                           'Nama',
-//                           style: STextStyles.medium().copyWith(
-//                             color: TextColorStyles.textPrimary(),
-//                           ),
-//                         ),
-//                         TextField(
-//                           controller: detailVariantList[variantIndex]['title'],
-//                           decoration: const InputDecoration(
-//                             isDense: true,
-//                           ),
-//                           onChanged: (changedValue) {
-//                             setState(() {
-//                               detailVariantList[variantIndex]['title'] = TextEditingController(text: changedValue);
-//                             });
-//                           },
-//                         ),
-//                         const SizedBox(
-//                           height: 10.0,
-//                         ),
-//                         Text(
-//                           'Harga',
-//                           style: STextStyles.medium().copyWith(
-//                             color: TextColorStyles.textPrimary(),
-//                           ),
-//                         ),
-//                         TextField(
-//                           controller: detailVariantList[variantIndex]['price_controller'],
-//                           decoration: const InputDecoration(
-//                             isDense: true,
-//                             prefixIcon: Text("Rp "),
-//                             prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
-//                             hintText: '0',
-//                           ),
-//                           keyboardType: TextInputType.number,
-//                           inputFormatters: [
-//                             FilteringTextInputFormatter.digitsOnly,
-//                           ],
-//                           onChanged: (changedValue) {
-//                             if(changedValue != '') {
-//                               setState(() {
-//                                 detailVariantList[variantIndex]['price'] = int.parse(changedValue);
-//                               });
-//                             } else {
-//                               setState(() {
-//                                 detailVariantList[variantIndex]['price'] = 0;
-//                               });
-//                             }
-//                           },
-//                         ),
-//                         const SizedBox(
-//                           height: 10.0,
-//                         ),
-//                         Text(
-//                           'Stok',
-//                           style: STextStyles.medium().copyWith(
-//                             color: TextColorStyles.textPrimary(),
-//                           ),
-//                         ),
-//                         TextField(
-//                           controller: detailVariantList[variantIndex]['stock_controller'],
-//                           decoration: const InputDecoration(
-//                             isDense: true,
-//                             hintText: '0',
-//                           ),
-//                           keyboardType: TextInputType.number,
-//                           inputFormatters: [
-//                             FilteringTextInputFormatter.digitsOnly,
-//                           ],
-//                           onChanged: (changedValue) {
-//                             if(changedValue != '') {
-//                               setState(() {
-//                                 detailVariantList[variantIndex]['stock'] = int.parse(changedValue);
-//                               });
-//                             } else {
-//                               setState(() {
-//                                 detailVariantList[variantIndex]['stock'] = 0;
-//                               });
-//                             }
-//                           },
-//                         ),
-//                         const SizedBox(
-//                           height: 10.0,
-//                         ),
-//                         Row(
-//                           crossAxisAlignment: CrossAxisAlignment.center,
-//                           children: [
-//                             SizedBox(
-//                               width: 20.0,
-//                               height: 20.0,
-//                               child: Checkbox(
-//                                 value: detailVariantList[variantIndex]['is_always_available'],
-//                                 activeColor: PrimaryColorStyles.primaryMain(),
-//                                 onChanged: (newValue) {
-//                                   if(newValue != null) {
-//                                     setState(() {
-//                                       detailVariantList[variantIndex]['is_always_available'] = newValue;
-//
-//                                       if(detailVariantList[variantIndex]['is_always_available'] == true) {
-//                                         detailVariantList[variantIndex]['stock'] = 1;
-//                                         detailVariantList[variantIndex]['stock_controller'].text = '1';
-//                                       }
-//                                     });
-//                                   }
-//                                 },
-//                               ),
-//                             ),
-//                             const SizedBox(
-//                               width: 10.0,
-//                             ),
-//                             Expanded(
-//                               child: InkWell(
-//                                 onTap: () {
-//                                   setState(() {
-//                                     detailVariantList[variantIndex]['is_always_available'] = !detailVariantList[variantIndex]['is_always_available'];
-//
-//                                     if(detailVariantList[variantIndex]['is_always_available'] == true) {
-//                                       detailVariantList[variantIndex]['stock'] = 1;
-//                                       detailVariantList[variantIndex]['stock_controller'].text = '1';
-//                                     }
-//                                   });
-//                                 },
-//                                 child: Text(
-//                                   'Stok selalu ada',
-//                                   style: MTextStyles.medium().copyWith(
-//                                     color: PrimaryColorStyles.primaryMain(),
-//                                   ),
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ],
-//                     );
-//                   },
-//                 ),
-//               ],
-//             ),
-//           ) :
-//           const Material(),
-//         ],
-//       ),
-//     );
-//   }
-// }
+class SubVariantSelectionPage extends StatefulWidget {
+  final List<VariantTypeData> variantData;
+
+  const SubVariantSelectionPage({
+    super.key,
+    required this.variantData,
+  });
+
+  @override
+  State<SubVariantSelectionPage> createState() => _SubVariantSelectionPageState();
+}
+
+class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+            color: Colors.white,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Text(
+                    'Apabila ada varian yang memiliki Harga & Stok sama, kamu bisa mengubahnya secara sekaligus bersamaan.',
+                    style: XSTextStyles.regular(),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    showUpdateAllSelectedVariantBottomDialog().then((variantResult) {
+                      // if(variantList.isNotEmpty) {
+                      //   showUpdateAllPriceAndStockVariantBottomDialog(variantResult).then((priceAndStockResult) {
+                      //     for(int i = 0; i < priceAndStockResult['variant'].length; i++) {
+                      //       for(int x = 0; x < savedVariant['subvariant'].length; x++) {
+                      //         if(priceAndStockResult['variant'][i]['selected'] == true && priceAndStockResult['variant'][i]['variant'] == savedVariant['subvariant'][x]) {
+                      //           setState(() {
+                      //             savedVariant['price'][x] = priceAndStockResult['price'];
+                      //             savedVariant['price_controller'][x].text = priceAndStockResult['price'];
+                      //             savedVariant['stock'][x] = priceAndStockResult['stock'];
+                      //             savedVariant['stock_controller'][x].text = priceAndStockResult['stock'];
+                      //             savedVariant['is_always_available'][x] = priceAndStockResult['is_always_available'];
+                      //           });
+                      //
+                      //           break;
+                      //         }
+                      //       }
+                      //     }
+                      //   });
+                      // }
+                    });
+                  },
+                  child: Text(
+                    'Ubah Sekaligus',
+                    style: STextStyles.medium(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 5.0,
+          ),
+          detailVariantList.isNotEmpty ?
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Daftar Varian',
+                  style: MTextStyles.medium().copyWith(
+                    color: TextColorStyles.textPrimary(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 25.0,
+                ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: detailVariantList.length,
+                  separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+                    return const SizedBox(
+                      height: 25.0,
+                    );
+                  },
+                  itemBuilder: (BuildContext variantContext, int variantIndex) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Nama',
+                          style: STextStyles.medium().copyWith(
+                            color: TextColorStyles.textPrimary(),
+                          ),
+                        ),
+                        TextField(
+                          controller: detailVariantList[variantIndex]['title'],
+                          decoration: const InputDecoration(
+                            isDense: true,
+                          ),
+                          onChanged: (changedValue) {
+                            setState(() {
+                              detailVariantList[variantIndex]['title'] = TextEditingController(text: changedValue);
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          'Harga',
+                          style: STextStyles.medium().copyWith(
+                            color: TextColorStyles.textPrimary(),
+                          ),
+                        ),
+                        TextField(
+                          controller: detailVariantList[variantIndex]['price_controller'],
+                          decoration: const InputDecoration(
+                            isDense: true,
+                            prefixIcon: Text("Rp "),
+                            prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                            hintText: '0',
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          onChanged: (changedValue) {
+                            if(changedValue != '') {
+                              setState(() {
+                                detailVariantList[variantIndex]['price'] = int.parse(changedValue);
+                              });
+                            } else {
+                              setState(() {
+                                detailVariantList[variantIndex]['price'] = 0;
+                              });
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          'Stok',
+                          style: STextStyles.medium().copyWith(
+                            color: TextColorStyles.textPrimary(),
+                          ),
+                        ),
+                        TextField(
+                          controller: detailVariantList[variantIndex]['stock_controller'],
+                          decoration: const InputDecoration(
+                            isDense: true,
+                            hintText: '0',
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          onChanged: (changedValue) {
+                            if(changedValue != '') {
+                              setState(() {
+                                detailVariantList[variantIndex]['stock'] = int.parse(changedValue);
+                              });
+                            } else {
+                              setState(() {
+                                detailVariantList[variantIndex]['stock'] = 0;
+                              });
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 20.0,
+                              height: 20.0,
+                              child: Checkbox(
+                                value: detailVariantList[variantIndex]['is_always_available'],
+                                activeColor: PrimaryColorStyles.primaryMain(),
+                                onChanged: (newValue) {
+                                  if(newValue != null) {
+                                    setState(() {
+                                      detailVariantList[variantIndex]['is_always_available'] = newValue;
+
+                                      if(detailVariantList[variantIndex]['is_always_available'] == true) {
+                                        detailVariantList[variantIndex]['stock'] = 1;
+                                        detailVariantList[variantIndex]['stock_controller'].text = '1';
+                                      }
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    detailVariantList[variantIndex]['is_always_available'] = !detailVariantList[variantIndex]['is_always_available'];
+
+                                    if(detailVariantList[variantIndex]['is_always_available'] == true) {
+                                      detailVariantList[variantIndex]['stock'] = 1;
+                                      detailVariantList[variantIndex]['stock_controller'].text = '1';
+                                    }
+                                  });
+                                },
+                                child: Text(
+                                  'Stok selalu ada',
+                                  style: MTextStyles.medium().copyWith(
+                                    color: PrimaryColorStyles.primaryMain(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ) :
+          const Material(),
+        ],
+      ),
+    );
+  }
+}
