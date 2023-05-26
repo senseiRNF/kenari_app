@@ -43,6 +43,18 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
     setState(() {
       variantList = tempVariantList;
     });
+
+    if(widget.productVariant != null) {
+      List<SelectedVariant> tempSelectedVariantList = [];
+
+      for(int i = 0; i < widget.productVariant!['variant_type_data'].length; i++) {
+        tempSelectedVariantList.add(widget.productVariant!['variant_type_data'][i]);
+      }
+
+      setState(() {
+        selectedVariantList = tempSelectedVariantList;
+      });
+    }
   }
 
   Future<String?> showAddNewSubVariantBottomDialog(VariantTypeData data) async {
@@ -419,17 +431,21 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                       List tempSecondSubvariant = [];
 
                       for(int j = 0; j < selectedVariantList[0].subvariantList.length; j++) {
-                        tempFirstSubvariant.add({
-                          'selected_variant': selectedVariantList[0],
-                          'name': selectedVariantList[0].subvariantList[j].name,
-                        });
+                        if(selectedVariantList[0].subvariantList[j].isSelected == true) {
+                          tempFirstSubvariant.add({
+                            'selected_variant': selectedVariantList[0],
+                            'name': selectedVariantList[0].subvariantList[j].name,
+                          });
+                        }
                       }
 
                       for(int k = 0; k < selectedVariantList[1].subvariantList.length; k++) {
-                        tempSecondSubvariant.add({
-                          'selected_variant': selectedVariantList[1],
-                          'name': selectedVariantList[1].subvariantList[k].name,
-                        });
+                        if(selectedVariantList[1].subvariantList[k].isSelected == true) {
+                          tempSecondSubvariant.add({
+                            'selected_variant': selectedVariantList[1],
+                            'name': selectedVariantList[1].subvariantList[k].name,
+                          });
+                        }
                       }
 
                       for(int a = 0; a < tempFirstSubvariant.length; a++) {
@@ -444,12 +460,14 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                       }
                     } else {
                       for(int l = 0; l < selectedVariantList[0].subvariantList.length; l++) {
-                        tempListSubvariant.add({
-                          'variant_type1_id': selectedVariantList[0].variantType.sId,
-                          'name1': selectedVariantList[0].subvariantList[l].name,
-                          'variant_type2_id': '',
-                          'name2': '',
-                        });
+                        if(selectedVariantList[0].subvariantList[l].isSelected == true) {
+                          tempListSubvariant.add({
+                            'variant_type1_id': selectedVariantList[0].variantType.sId,
+                            'name1': selectedVariantList[0].subvariantList[l].name,
+                            'variant_type2_id': '',
+                            'name2': '',
+                          });
+                        }
                       }
                     }
 
@@ -462,7 +480,16 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         },
                       ),
                       callback: (callbackResult) {
-
+                        if(callbackResult != null) {
+                          BackFromThisPage(
+                            context: context,
+                            callbackData: {
+                              'variant_type_data': selectedVariantList,
+                              'generated_data': tempListSubvariant,
+                              'inputted_data': callbackResult,
+                            },
+                          ).go();
+                        }
                       },
                     ).go();
                   },
@@ -523,6 +550,20 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
         });
       }
     }
+  }
+
+  bool checkingIfUpdatedSomething() {
+    bool result = true;
+
+    for(int i = 0; i < subvariantList.length; i++) {
+      if(subvariantList[i]['price_controller'].text == '' || subvariantList[i]['stock_controller'].text == '') {
+        result = false;
+
+        break;
+      }
+    }
+
+    return result;
   }
 
   @override
@@ -705,6 +746,7 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                                     isDense: true,
                                     hintText: '0',
                                   ),
+                                  enabled: subvariantList[subvariantIndex]['is_always_available'] == true ? false : true,
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
@@ -780,6 +822,34 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                     ),
                   ),
                 ],
+              ),
+            ),
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if(checkingIfUpdatedSomething() != false) {
+                      BackFromThisPage(
+                        context: context,
+                        callbackData: subvariantList,
+                      ).go();
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: checkingIfUpdatedSomething() != false ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      'Simpan Varian',
+                      style: LTextStyles.medium().copyWith(
+                        color: checkingIfUpdatedSomething() != false ? Colors.white : Colors.black54,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
@@ -1023,6 +1093,7 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
                             isDense: true,
                             hintText: '0',
                           ),
+                          enabled: isAlwaysAvailable == true ? false : true,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,

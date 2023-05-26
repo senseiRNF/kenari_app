@@ -8,7 +8,9 @@ import 'package:kenari_app/pages/company_address_selection_page.dart';
 import 'package:kenari_app/pages/seller_product_result_page.dart';
 import 'package:kenari_app/pages/variant_selection_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
+import 'package:kenari_app/services/api/models/company_model.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
+import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -40,7 +42,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
     'Minggu',
   ];
 
-  bool isUnlimitedStock = false;
+  bool isAlwaysAvailable = false;
   bool isPreOrder = false;
 
   String? categoryId;
@@ -406,8 +408,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         TextField(
                           controller: productStockController,
                           decoration: const InputDecoration(
-                            hintText: '1',
+                            hintText: '0',
                           ),
+                          enabled: isAlwaysAvailable == false ? true : false,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
@@ -423,12 +426,17 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               width: 20.0,
                               height: 20.0,
                               child: Checkbox(
-                                value: isUnlimitedStock,
+                                value: isAlwaysAvailable,
                                 activeColor: Theme.of(context).primaryColor,
                                 onChanged: (newValue) {
                                   if(newValue != null) {
+                                    if(newValue == true) {
+                                      setState(() {
+                                        productStockController.text = '1';
+                                      });
+                                    }
                                     setState(() {
-                                      isUnlimitedStock = newValue;
+                                      isAlwaysAvailable = newValue;
                                     });
                                   }
                                 },
@@ -441,7 +449,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               child: InkWell(
                                 onTap: () {
                                   setState(() {
-                                    isUnlimitedStock = !isUnlimitedStock;
+                                    isAlwaysAvailable = !isAlwaysAvailable;
                                   });
                                 },
                                 child: Text(
@@ -618,7 +626,9 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               onPressed: () {
                                 MoveToPage(
                                   context: context,
-                                  target: const VariantSelectionPage(),
+                                  target: VariantSelectionPage(
+                                    productVariant: variant,
+                                  ),
                                   callback: (callbackData) {
                                     if(callbackData != null) {
                                       setState(() {
@@ -645,20 +655,20 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              '${variant['variant']} (${variant['subvariant'].length} Varian)',
+                              '${variant['generated_data'].length} Varian',
                               style: STextStyles.medium(),
                             ),
                             const SizedBox(
                               height: 10.0,
                             ),
                             Text(
-                              'Tambahkan varian warna, ukuran, atau tipe lainnya agar pembeli mudah memilih.',
+                              'Tambahkan varian agar pembeli mudah memilih.',
                               style: STextStyles.regular(),
                             ),
                           ],
                         ) :
                         Text(
-                          'Tambahkan varian warna, ukuran, atau tipe lainnya agar pembeli mudah memilih.',
+                          'Tambahkan varian agar pembeli mudah memilih.',
                           style: STextStyles.regular(),
                         ),
                       ],
@@ -757,16 +767,45 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         title: 'Titip Produk',
                         message: 'Pastikan semua detail Produk yang akan di submit sudah sesuai',
                         yesText: 'Lanjutkan',
-                        yesFunction: () {
-                          MoveToPage(
-                            context: context,
-                            target: const SellerProductResultPage(isSuccess: true),
-                            callback: (callbackData) {
-                              if(callbackData != null) {
-                                BackFromThisPage(context: context, callbackData: callbackData).go();
-                              }
-                            },
-                          ).go();
+                        yesFunction: () async {
+                          List items = [];
+
+                          for(int a = 0; a < variant['generated_data'].length; a++) {
+                            items.add({
+                              'variant_type1_id': variant['generated_data'][a]['variant_type1_id'],
+                              'name1': variant['generated_data'][a]['name1'],
+                              'variant_type2_id': variant['generated_data'][a]['variant_type2_id'],
+                              'name2': variant['generated_data'][a]['name2'],
+                              'price': variant['inputted_data'][a]['price'],
+                              'stock': variant['inputted_data'][a]['stock'],
+                              'is_stock_always_available': variant['inputted_data'][a]['is_always_available'],
+                            });
+                          }
+
+                          await APISellerProductServices(context: context).update({
+                            'name': productNameController.text,
+                            'product_category_id': categoryId,
+                            'description': productDescriptionController.text,
+                            'price': productPriceController.text,
+                            'stock': productStockController.text,
+                            'is_always_available': isAlwaysAvailable,
+                            'is_preorder': isPreOrder,
+                            'address_id': companyData['company_data'].sId,
+                            'items': items,
+                            'files': productImg,
+                          }).then((postResult) {
+                            if(postResult == true) {
+                              MoveToPage(
+                                context: context,
+                                target: const SellerProductResultPage(isSuccess: true),
+                                callback: (callbackData) {
+                                  if(callbackData != null) {
+                                    BackFromThisPage(context: context, callbackData: callbackData).go();
+                                  }
+                                },
+                              ).go();
+                            }
+                          });
                         },
                         noText: 'Batal',
                         noFunction: () {
