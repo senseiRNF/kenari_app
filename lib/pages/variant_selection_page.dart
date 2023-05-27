@@ -44,7 +44,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
       variantList = tempVariantList;
     });
 
-    if(widget.productVariant != null) {
+    if(widget.productVariant != null && widget.productVariant!.isNotEmpty) {
       List<SelectedVariant> tempSelectedVariantList = [];
 
       for(int i = 0; i < widget.productVariant!['variant_type_data'].length; i++) {

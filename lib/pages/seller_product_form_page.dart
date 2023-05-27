@@ -8,9 +8,9 @@ import 'package:kenari_app/pages/company_address_selection_page.dart';
 import 'package:kenari_app/pages/seller_product_result_page.dart';
 import 'package:kenari_app/pages/variant_selection_page.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
-import 'package:kenari_app/services/api/models/company_model.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
+import 'package:kenari_app/services/local/models/local_variant_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -94,6 +94,51 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
     });
 
     return result;
+  }
+
+  Future saveData() async {
+    List items = [];
+
+    if(variant.isNotEmpty) {
+      for(int a = 0; a < variant['generated_data'].length; a++) {
+        items.add({
+          'variant_type1_id': variant['generated_data'][a]['variant_type1_id'],
+          'name1': variant['generated_data'][a]['name1'],
+          'variant_type2_id': variant['generated_data'][a]['variant_type2_id'],
+          'name2': variant['generated_data'][a]['name2'],
+          'price': variant['inputted_data'][a]['price'],
+          'stock': variant['inputted_data'][a]['stock'],
+          'is_stock_always_available': variant['inputted_data'][a]['is_always_available'],
+        });
+      }
+    }
+
+    await APISellerProductServices(context: context).update(
+      UpdateVariantData(
+        name: productNameController.text,
+        productCategoryId: '$categoryId',
+        description: productDescriptionController.text,
+        price: productPriceController.text,
+        stock: productStockController.text,
+        isAlwaysAvailable: isAlwaysAvailable,
+        isPreorder: isPreOrder,
+        addressId: companyData['selected_id'],
+        items: items,
+        files: productImg,
+      ),
+    ).then((postResult) {
+      if(postResult == true) {
+        MoveToPage(
+          context: context,
+          target: const SellerProductResultPage(isSuccess: true),
+          callback: (callbackData) {
+            if(callbackData != null) {
+              BackFromThisPage(context: context, callbackData: callbackData).go();
+            }
+          },
+        ).go();
+      }
+    });
   }
 
   @override
@@ -762,67 +807,30 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     if(widget.updateData == null) {
-                      OptionDialog(
-                        context: context,
-                        title: 'Titip Produk',
-                        message: 'Pastikan semua detail Produk yang akan di submit sudah sesuai',
-                        yesText: 'Lanjutkan',
-                        yesFunction: () async {
-                          List items = [];
+                      if(productImg.isNotEmpty && productNameController.text != '' && categoryId != null && productPriceController.text != '' && productStockController.text != '' && companyData.isNotEmpty) {
+                        OptionDialog(
+                          context: context,
+                          title: 'Titip Produk',
+                          message: 'Pastikan semua detail Produk yang akan di submit sudah sesuai',
+                          yesText: 'Lanjutkan',
+                          yesFunction: () async => saveData(),
+                          noText: 'Batal',
+                          noFunction: () {
 
-                          for(int a = 0; a < variant['generated_data'].length; a++) {
-                            items.add({
-                              'variant_type1_id': variant['generated_data'][a]['variant_type1_id'],
-                              'name1': variant['generated_data'][a]['name1'],
-                              'variant_type2_id': variant['generated_data'][a]['variant_type2_id'],
-                              'name2': variant['generated_data'][a]['name2'],
-                              'price': variant['inputted_data'][a]['price'],
-                              'stock': variant['inputted_data'][a]['stock'],
-                              'is_stock_always_available': variant['inputted_data'][a]['is_always_available'],
-                            });
-                          }
-
-                          await APISellerProductServices(context: context).update({
-                            'name': productNameController.text,
-                            'product_category_id': categoryId,
-                            'description': productDescriptionController.text,
-                            'price': productPriceController.text,
-                            'stock': productStockController.text,
-                            'is_always_available': isAlwaysAvailable,
-                            'is_preorder': isPreOrder,
-                            'address_id': companyData['company_data'].sId,
-                            'items': items,
-                            'files': productImg,
-                          }).then((postResult) {
-                            if(postResult == true) {
-                              MoveToPage(
-                                context: context,
-                                target: const SellerProductResultPage(isSuccess: true),
-                                callback: (callbackData) {
-                                  if(callbackData != null) {
-                                    BackFromThisPage(context: context, callbackData: callbackData).go();
-                                  }
-                                },
-                              ).go();
-                            }
-                          });
-                        },
-                        noText: 'Batal',
-                        noFunction: () {
-
-                        },
-                      ).show();
+                          },
+                        ).show();
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: productNameController.text != '' && productPriceController.text != '' ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
+                    backgroundColor: productImg.isNotEmpty && productNameController.text != '' && categoryId != null && productPriceController.text != '' && productStockController.text != '' && companyData.isNotEmpty ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       widget.updateData != null ? 'Simpan Perubahan' : 'Ajukan Penitipan',
                       style: LTextStyles.medium().copyWith(
-                        color: productNameController.text != '' && productPriceController.text != '' ? Colors.white : Colors.black54,
+                        color: productImg.isNotEmpty && productNameController.text != '' && categoryId != null && productPriceController.text != '' && productStockController.text != '' && companyData.isNotEmpty ? Colors.white : Colors.black54,
                       ),
                     ),
                   ),

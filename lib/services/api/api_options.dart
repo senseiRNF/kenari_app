@@ -15,7 +15,7 @@ class APIOptions {
         'Accept': 'application/json',
       },
       connectTimeout: const Duration(milliseconds: 10000),
-      receiveTimeout: const Duration(milliseconds: 20000),
+      receiveTimeout: const Duration(milliseconds: 60000),
     );
 
     (dio.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (HttpClient client) {

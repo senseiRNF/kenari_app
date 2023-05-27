@@ -15,25 +15,7 @@ class SellerOrderListPage extends StatefulWidget {
 class _SellerOrderListPageState extends State<SellerOrderListPage> {
   int selectedTab = 0;
 
-  List sellerOrderList = [
-    {
-      'order_no': '0123456789',
-      'status': 'Konfirmasi Pesanan',
-      'title': 'Cabai Merah',
-      'image': 'assets/images/example_images/cabai-rawit-merah.png',
-      'variant': '1 Kg',
-      'price': 65000,
-      'qty': 4,
-      'respond_limit': 1,
-      'order_date': DateTime.now(),
-      'payment_date': DateTime.now().add(const Duration(minutes: 3)),
-      'company': {
-        'name': 'PT. Surya Fajar Capital.tbk',
-        'phone': '08123456789',
-        'address': 'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
-      },
-    },
-  ];
+  List sellerOrderList = [];
 
   @override
   void initState() {

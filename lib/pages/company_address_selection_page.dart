@@ -147,13 +147,16 @@ class _CompanyAddressSelectionPageState extends State<CompanyAddressSelectionPag
                             ),
                             TextButton(
                               onPressed: () {
-                                BackFromThisPage(
-                                  context: context,
-                                  callbackData: {
-                                    'company_data': companyModel!.companyData!,
-                                    'selected': companyModel!.companyData!.addresses![index].address,
-                                  },
-                                ).go();
+                                if(companyModel != null && companyModel!.companyData != null && companyModel!.companyData!.addresses != null) {
+                                  BackFromThisPage(
+                                    context: context,
+                                    callbackData: {
+                                      'company_data': companyModel!.companyData!,
+                                      'selected_id': companyModel!.companyData!.addresses![index].sId,
+                                      'selected': companyModel!.companyData!.addresses![index].address,
+                                    },
+                                  ).go();
+                                }
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 5.0),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/seller_product_detail_page.dart';
+import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -15,21 +16,22 @@ class SellerProductAdjustmentFormPage extends StatefulWidget {
 class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmentFormPage> {
   int selectedTab = 0;
 
-  List waitingList = [
-    {
-      'title': 'Cabai Merah',
-      'image': 'assets/images/example_images/cabai-rawit-merah.png',
-      'price': [25000, 65000],
-    },
-  ];
-  List activeList = [
-    {
-      'title': 'Cabai Merah',
-      'image': 'assets/images/example_images/cabai-rawit-merah.png',
-      'price': [25000, 65000],
-    },
-  ];
+  List waitingList = [];
+  List activeList = [];
   List completedList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadData();
+  }
+
+  Future loadData() async {
+    await APISellerProductServices(context: context).call().then((_) {
+
+    });
+  }
 
   Widget activeTab() {
     List priceList = [];

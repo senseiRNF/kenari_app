@@ -13,37 +13,7 @@ class SellerProductDetailPage extends StatefulWidget {
 }
 
 class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
-  Map productData = {
-    'title': 'Cabai Merah',
-    'image': 'assets/images/example_images/cabai-rawit-merah.png',
-    'description': 'Cabai atau cabe merah atau lombok (bahasa Jawa) adalah buah dan tumbuhan anggota genus Capsicum. Buahnya dapat digolongkan sebagai sayuran maupun bumbu, tergantung bagaimana digunakan. Sebagai bumbu, buah cabai yang pedas sangat populer di Asia Tenggara sebagai penguat rasa makanan. Bagi seni masakan Padang, cabai bahkan dianggap sebagai "bahan makanan pokok" kesepuluh (alih-alih sembilan). Sangat sulit bagi masakan Padang dibuat tanpa cabai.',
-    'price': [25000, 65000],
-    'variant_stock': {
-      'variant': 'Berat',
-      'subvariant': [
-        {
-          'name': '1/4 Kg',
-          'stock': 1,
-          'is_always_available': true,
-        },
-        {
-          'name': '1/2 Kg',
-          'stock': 13,
-          'is_always_available': false,
-        },
-        {
-          'name': '1 Kg',
-          'stock': 1,
-          'is_always_available': true,
-        },
-      ],
-    },
-    'company': {
-      'name': 'PT. Surya Fajar Capital. tbk',
-      'phone': '0123456789',
-      'address': 'Satrio Tower Building Lt. 14 Unit 6, Jalan Prof. Dr. Satrio Blok C4/5, Kuningan, DKI Jakarta 12950, Indonesia',
-    },
-  };
+  Map productData = {};
 
   List priceList = [];
 

@@ -38,3 +38,29 @@ class CompleteVariant {
     required this.isAlwaysAvailable,
   });
 }
+
+class UpdateVariantData {
+  String name;
+  String productCategoryId;
+  String description;
+  String price;
+  String stock;
+  bool isAlwaysAvailable;
+  bool isPreorder;
+  String addressId;
+  List items;
+  List files;
+
+  UpdateVariantData({
+    required this.name,
+    required this.productCategoryId,
+    required this.description,
+    required this.price,
+    required this.stock,
+    required this.isAlwaysAvailable,
+    required this.isPreorder,
+    required this.addressId,
+    required this.items,
+    required this.files,
+  });
+}

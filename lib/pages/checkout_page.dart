@@ -150,8 +150,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             const SizedBox(
                               height: 10.0,
                             ),
+                            ListView(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                            ),
                             Text(
-                              'PT. Surya Fajar Capital.tbk (08123456789)',
+                              'Some Company Name',
                               style: STextStyles.medium().copyWith(
                                 color: TextColorStyles.textPrimary(),
                               ),
