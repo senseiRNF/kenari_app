@@ -636,7 +636,7 @@ class _HomePageState extends State<HomePage> {
         int stock = product.stock != null && product.stock != '' ? int.parse(product.stock!) : 0;
 
         String price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
-        String imagePath = "$baseURL/${product.images != null && product.images![0].url != null ? product.images![0].url! : ''}";
+        String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
         String? variant;
 
         if(product.varians != null && product.varians!.isNotEmpty) {

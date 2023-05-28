@@ -954,7 +954,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
-                                imageUrl: "$baseURL/${transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.images != null && transactionOrderList[index].orderDetails![0].product!.images![0].url != null ? transactionOrderList[index].orderDetails![0].product!.images![0].url! : ''}",
+                                imageUrl: "$baseURL/${transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.images != null && transactionOrderList[index].orderDetails![0].product!.images!.isNotEmpty && transactionOrderList[index].orderDetails![0].product!.images![0].url != null ? transactionOrderList[index].orderDetails![0].product!.images![0].url! : ''}",
                                 imageBuilder: (context, imgProvider) {
                                   return Container(
                                     width: 65.0,
