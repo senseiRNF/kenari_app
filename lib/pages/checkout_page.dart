@@ -155,7 +155,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               physics: const NeverScrollableScrollPhysics(),
                             ),
                             Text(
-                              'Some Company Name',
+                              'PT Bangkit Bangun Jaya',
                               style: STextStyles.medium().copyWith(
                                 color: TextColorStyles.textPrimary(),
                               ),

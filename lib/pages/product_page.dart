@@ -125,7 +125,7 @@ class _ProductPageState extends State<ProductPage> {
         product.isPromo != null && product.isPromo == true ?
         'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
 
-        String imagePath = "$baseURL/${product.images != null && product.images![0].url != null ? product.images![0].url! : ''}";
+        String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
         String? variant;
 
         if(product.varians != null && product.varians!.isNotEmpty) {
@@ -670,7 +670,7 @@ class _ProductPageState extends State<ProductPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          detailProductData!.images != null ?
+                          detailProductData!.images != null && detailProductData!.images!.isNotEmpty ?
                           CarouselSlider(
                             options: CarouselOptions(
                               height: 300,
@@ -732,7 +732,27 @@ class _ProductPageState extends State<ProductPage> {
                               );
                             }).toList(),
                           ) :
-                          const Material(),
+                          SizedBox(
+                            height: 300,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const Icon(
+                                  Icons.image_search,
+                                  size: 40.0,
+                                ),
+                                const SizedBox(
+                                  height: 30.0,
+                                ),
+                                Text(
+                                  'Produk tidak memiliki gambar',
+                                  style: MTextStyles.medium(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
                           const SizedBox(
                             height: 15.0,
                           ),

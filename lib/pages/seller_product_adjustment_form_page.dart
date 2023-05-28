@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/seller_product_detail_page.dart';
+import 'package:kenari_app/services/api/models/seller_product_model.dart';
 import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -20,6 +21,8 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
   List activeList = [];
   List completedList = [];
 
+  List<SellerProductData> sellerProductDataList = [];
+
   @override
   void initState() {
     super.initState();
@@ -28,8 +31,18 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
   }
 
   Future loadData() async {
-    await APISellerProductServices(context: context).call().then((_) {
+    List<SellerProductData> tempSellerProductDataList = [];
 
+    await APISellerProductServices(context: context).call().then((callResult) {
+      if(callResult != null && callResult.sellerProductData != null) {
+        for(int i = 0; i < callResult.sellerProductData!.length; i++) {
+          tempSellerProductDataList.add(callResult.sellerProductData![i]);
+        }
+      }
+    });
+
+    setState(() {
+      sellerProductDataList = tempSellerProductDataList;
     });
   }
 

@@ -680,7 +680,7 @@ class HomeFragment extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: CachedNetworkImage(
-                                              imageUrl: "$baseURL/${newProductList[index].images != null && newProductList[index].images![0].url != null ? newProductList[index].images![0].url! : ''}",
+                                              imageUrl: "$baseURL/${newProductList[index].images != null && newProductList[index].images!.isNotEmpty && newProductList[index].images![0].url != null ? newProductList[index].images![0].url! : ''}",
                                               imageBuilder: (context, imgProvider) => Container(
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(

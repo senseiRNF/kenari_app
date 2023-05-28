@@ -17,33 +17,30 @@ class APISellerProductServices {
 
     await LocalSharedPrefs().readKey('token').then((token) async {
       await LocalSharedPrefs().readKey('member_id').then((memberId) async {
-        await LocalSharedPrefs().readKey('company_id').then((companyId) async {
-          await APIOptions.init().then((dio) async {
-            LoadingDialog(context: context).show();
+        await APIOptions.init().then((dio) async {
+          LoadingDialog(context: context).show();
 
-            try {
-              await dio.get(
-                '/product',
-                options: Options(
-                  headers: {
-                    'Authorization': 'Bearer $token',
-                  },
-                ),
-                queryParameters: {
-                  'member_id': memberId,
-                  'company_id': companyId,
+          try {
+            await dio.get(
+              '/product',
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer $token',
                 },
-              ).then((getResult) {
-                result = SellerProductModel.fromJson(getResult.data);
+              ),
+              queryParameters: {
+                'member_id': memberId,
+              },
+            ).then((getResult) {
+              result = SellerProductModel.fromJson(getResult.data);
 
-                BackFromThisPage(context: context).go();
-              });
-            } on DioError catch(dioErr) {
               BackFromThisPage(context: context).go();
+            });
+          } on DioError catch(dioErr) {
+            BackFromThisPage(context: context).go();
 
-              ErrorHandler(context: context, dioErr: dioErr).handle();
-            }
-          });
+            ErrorHandler(context: context, dioErr: dioErr).handle();
+          }
         });
       });
     });
@@ -55,14 +52,6 @@ class APISellerProductServices {
     bool result = false;
 
     FormData formData = FormData();
-
-    if(data.files.isNotEmpty) {
-      for(int i = 0; i < data.files.length; i++) {
-        formData.files.add(
-          MapEntry('files', await MultipartFile.fromFile(data.files[i].path)),
-        );
-      }
-    }
 
     await LocalSharedPrefs().readKey('token').then((token) async {
       await LocalSharedPrefs().readKey('member_id').then((memberId) async {
@@ -85,6 +74,14 @@ class APISellerProductServices {
             for(int i = 0; i < data.items.length; i++) {
               formData.fields.add(
                 MapEntry('items[$i]', data.items[i].toString()),
+              );
+            }
+          }
+
+          if(data.files.isNotEmpty) {
+            for(int i = 0; i < data.files.length; i++) {
+              formData.files.add(
+                MapEntry('files', await MultipartFile.fromFile(data.files[i].path)),
               );
             }
           }
