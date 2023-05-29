@@ -697,6 +697,27 @@ class _HomePageState extends State<HomePage> {
                               ),
                             );
                           },
+                          errorWidget: (context, url, error) {
+                            return SizedBox(
+                              width: 80.0,
+                              height: 80.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Icon(
+                                    Icons.broken_image_outlined,
+                                    color: IconColorStyles.iconColor(),
+                                  ),
+                                  Text(
+                                    'Unable to load image',
+                                    style: XSTextStyles.medium(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(

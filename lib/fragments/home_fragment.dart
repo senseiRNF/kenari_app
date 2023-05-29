@@ -995,7 +995,7 @@ class HomeFragment extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   CachedNetworkImage(
-                                    imageUrl: "$baseURL/${popularProductList[index].images != null && popularProductList[index].images![0].url != null ? popularProductList[index].images![0].url! : ''}",
+                                    imageUrl: "$baseURL/${popularProductList[index].images != null && popularProductList[index].images!.isNotEmpty && popularProductList[index].images![0].url != null ? popularProductList[index].images![0].url! : ''}",
                                     imageBuilder: (context, imgProvider) => Container(
                                       width: 110.0,
                                       height: 100.0,
@@ -1220,7 +1220,7 @@ class HomeFragment extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: CachedNetworkImage(
-                                              imageUrl: "$baseURL/${discountProductList[index].images != null && discountProductList[index].images![0].url != null ? discountProductList[index].images![0].url! : ''}",
+                                              imageUrl: "$baseURL/${discountProductList[index].images != null && discountProductList[index].images!.isNotEmpty && discountProductList[index].images![0].url != null ? discountProductList[index].images![0].url! : ''}",
                                               imageBuilder: (context, imgProvider) => Container(
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(

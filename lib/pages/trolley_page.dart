@@ -721,7 +721,7 @@ class ItemListWithAnimation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CachedNetworkImage(
-                    imageUrl: "$baseURL/${trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.images != null && trolleyProduct.trolleyData.product!.images![0].url != null ? trolleyProduct.trolleyData.product!.images![0].url! : ''}",
+                    imageUrl: "$baseURL/${trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.images != null && trolleyProduct.trolleyData.product!.images!.isNotEmpty && trolleyProduct.trolleyData.product!.images![0].url != null ? trolleyProduct.trolleyData.product!.images![0].url! : ''}",
                     imageBuilder: (context, imgProvider) {
                       return Container(
                         width: 65.0,
