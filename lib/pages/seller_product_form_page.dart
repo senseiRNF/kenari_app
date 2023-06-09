@@ -113,32 +113,113 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
       }
     }
 
-    await APISellerProductServices(context: context).update(
-      UpdateVariantData(
-        name: productNameController.text,
-        productCategoryId: '$categoryId',
-        description: productDescriptionController.text,
-        price: productPriceController.text,
-        stock: productStockController.text,
-        isAlwaysAvailable: isAlwaysAvailable,
-        isPreorder: isPreOrder,
-        addressId: companyData['selected_id'],
-        items: items,
-        files: productImg,
-      ),
-    ).then((postResult) {
-      if(postResult == true) {
-        MoveToPage(
-          context: context,
-          target: const SellerProductResultPage(isSuccess: true),
-          callback: (callbackData) {
-            if(callbackData != null) {
-              BackFromThisPage(context: context, callbackData: callbackData).go();
-            }
-          },
-        ).go();
-      }
-    });
+    // await APISellerProductServices(context: context).dioUpdate(
+    //   UpdateVariantData(
+    //     name: productNameController.text,
+    //     productCategoryId: '$categoryId',
+    //     description: productDescriptionController.text,
+    //     price: productPriceController.text,
+    //     stock: productStockController.text,
+    //     isAlwaysAvailable: isAlwaysAvailable,
+    //     isPreorder: isPreOrder,
+    //     addressId: companyData['selected_id'],
+    //     items: items,
+    //     files: productImg,
+    //   ),
+    // ).then((postResult) {
+    //   if(postResult == true) {
+    //     MoveToPage(
+    //       context: context,
+    //       target: const SellerProductResultPage(isSuccess: true),
+    //       callback: (callbackData) {
+    //         if(callbackData != null) {
+    //           BackFromThisPage(context: context, callbackData: callbackData).go();
+    //         }
+    //       },
+    //     ).go();
+    //   }
+    // });
+
+    // await APISellerProductServices(context: context).httpUpdate(
+    //   UpdateVariantData(
+    //   name: productNameController.text,
+    //   productCategoryId: '$categoryId',
+    //   description: productDescriptionController.text,
+    //   price: productPriceController.text,
+    //   stock: productStockController.text,
+    //   isAlwaysAvailable: isAlwaysAvailable,
+    //   isPreorder: isPreOrder,
+    //   addressId: companyData['selected_id'],
+    //   items: items,
+    //   files: productImg,
+    // ),
+    // ).then((postResult) {
+    //   if(postResult == true) {
+    //     MoveToPage(
+    //       context: context,
+    //       target: const SellerProductResultPage(isSuccess: true),
+    //       callback: (callbackData) {
+    //         if(callbackData != null) {
+    //           BackFromThisPage(context: context, callbackData: callbackData).go();
+    //         }
+    //       },
+    //     ).go();
+    //   }
+    // });
+
+    // await APISellerProductServices(context: context).tempDioUpdate(
+    //   UpdateVariantData(
+    //     name: productNameController.text,
+    //     productCategoryId: '$categoryId',
+    //     description: productDescriptionController.text,
+    //     price: productPriceController.text,
+    //     stock: productStockController.text,
+    //     isAlwaysAvailable: isAlwaysAvailable,
+    //     isPreorder: isPreOrder,
+    //     addressId: companyData['selected_id'],
+    //     items: items,
+    //     files: productImg,
+    //   ),
+    // ).then((postResult) {
+    //   if(postResult == true) {
+    //     MoveToPage(
+    //       context: context,
+    //       target: const SellerProductResultPage(isSuccess: true),
+    //       callback: (callbackData) {
+    //         if(callbackData != null) {
+    //           BackFromThisPage(context: context, callbackData: callbackData).go();
+    //         }
+    //       },
+    //     ).go();
+    //   }
+    // });
+
+    // await APISellerProductServices(context: context).tempHttpUpdate(
+    //   UpdateVariantData(
+    //     name: productNameController.text,
+    //     productCategoryId: '$categoryId',
+    //     description: productDescriptionController.text,
+    //     price: productPriceController.text,
+    //     stock: productStockController.text,
+    //     isAlwaysAvailable: isAlwaysAvailable,
+    //     isPreorder: isPreOrder,
+    //     addressId: companyData['selected_id'],
+    //     items: items,
+    //     files: productImg,
+    //   ),
+    // ).then((postResult) {
+    //   if(postResult == true) {
+    //     MoveToPage(
+    //       context: context,
+    //       target: const SellerProductResultPage(isSuccess: true),
+    //       callback: (callbackData) {
+    //         if(callbackData != null) {
+    //           BackFromThisPage(context: context, callbackData: callbackData).go();
+    //         }
+    //       },
+    //     ).go();
+    //   }
+    // });
   }
 
   @override

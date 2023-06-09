@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kenari_app/services/api/models/variant_type_model.dart';
 
 class Subvariant {
@@ -49,7 +50,7 @@ class UpdateVariantData {
   bool isPreorder;
   String addressId;
   List items;
-  List files;
+  List<XFile> files;
 
   UpdateVariantData({
     required this.name,
