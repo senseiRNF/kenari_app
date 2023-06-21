@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:http/http.dart';
 
 const String baseURL = 'https://develop-app.kenari.id/v1';
 
@@ -32,14 +31,6 @@ class APIOptions {
     dio.httpClientAdapter = clientAdapter;
 
     return dio;
-  }
-}
-
-class HTTPOptions {
-  static Future<Client> init() async {
-    Client client = Client();
-
-    return client;
   }
 }
 

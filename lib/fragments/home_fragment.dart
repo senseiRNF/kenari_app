@@ -132,12 +132,20 @@ class HomeFragment extends StatelessWidget {
                           ),
                           trolleyList.isNotEmpty ?
                           Container(
-                            width: 10.0,
-                            height: 10.0,
+                            width: 20.0,
+                            height: 20.0,
                             margin: const EdgeInsets.only(left: 15.0),
                             decoration: const BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${trolleyList.length}',
+                                style: XSTextStyles.regular().copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ) :
                           const Material(),
@@ -180,14 +188,14 @@ class HomeFragment extends StatelessWidget {
                   CarouselSlider(
                     options: CarouselOptions(
                       enableInfiniteScroll: false,
-                      viewportFraction: 1.0,
+                      viewportFraction: 0.85,
                       onPageChanged: (page, reason) {
                         onChangeSelectedPage(page);
                       },
                     ),
                     items: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 15.0),
                         child: Container(
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
@@ -274,7 +282,7 @@ class HomeFragment extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 15.0),
                         child: Container(
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(

@@ -444,7 +444,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
           ),
         );
       default:
-        return Column();
+        return const Material();
     }
   }
 

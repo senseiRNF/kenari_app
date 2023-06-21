@@ -36,10 +36,10 @@ class APITransactionServices {
 
               BackFromThisPage(context: context).go();
             });
-          } on DioError catch(dioErr) {
+          } on DioException catch(dioExc) {
             BackFromThisPage(context: context).go();
 
-            ErrorHandler(context: context, dioErr: dioErr).handle();
+            ErrorHandler(context: context, dioExc: dioExc).handle();
           }
         });
       });
@@ -88,7 +88,7 @@ class APITransactionServices {
 
               BackFromThisPage(context: context).go();
             });
-          } on DioError catch(_) {
+          } on DioException catch(_) {
             BackFromThisPage(context: context).go();
           }
         });

@@ -90,7 +90,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                         ),
                         Expanded(
                           child: Text(
-                            'Detail Transaksi Pendanaan',
+                            'Detail Transaksi Pinjaman',
                             style: HeadingTextStyles.headingS(),
                           ),
                         ),

@@ -24,60 +24,98 @@ class OkDialog {
     this.hideButton,
   });
 
-  void show() {
+  Future<void> show() async {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          content: Column(
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              title != null ?
-              Text(
-                title!,
-                style: HeadingTextStyles.headingS(),
-              ) :
-              const Material(),
-              showIcon != null ?
               Padding(
-                padding: const EdgeInsets.only(bottom: 10.0,),
-                child: showIcon == true ?
-                const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 60.0,
-                ) :
-                const Icon(
-                  Icons.cancel,
-                  color: Colors.red,
-                  size: 60.0,
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    title != null || showIcon != null ?
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          showIcon != null ?
+                          Row(
+                            children: [
+                              showIcon == true ?
+                              const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                size: 30.0,
+                              ) :
+                              const Icon(
+                                Icons.cancel,
+                                color: Colors.red,
+                                size: 30.0,
+                              ),
+                              const SizedBox(
+                                width: 10.0,
+                              ),
+                            ],
+                          ) :
+                          const Material(),
+                          Expanded(
+                            child: title != null ?
+                            Text(
+                              title!,
+                              style: HeadingTextStyles.headingS(),
+                            ) :
+                            const Material(),
+                          ),
+                        ],
+                      ),
+                    ) :
+                    const Material(),
+                    Text(
+                      message,
+                      style: MTextStyles.regular(),
+                    ),
+                  ],
+                ),
+              ),
+              hideButton == null || hideButton == false ?
+              Container(
+                decoration: BoxDecoration(
+                  color: NeutralColorStyles.neutral02(),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(5.0),
+                    bottomRight: Radius.circular(5.0),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          BackFromThisPage(context: context).go();
+                        },
+                        child: Text(
+                          okText ?? 'Mengerti',
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ) :
               const Material(),
-              title != null || showIcon != null ?
-              const SizedBox(
-                height: 10.0,
-              ) :
-              const Material(),
-              Text(
-                message,
-                style: MTextStyles.regular(),
-                textAlign: showIcon != null ? TextAlign.center : TextAlign.justify,
-              ),
             ],
           ),
-          actions: hideButton == null || hideButton == false ? [
-            ElevatedButton(
-              onPressed: () {
-                BackFromThisPage(context: context).go();
-              },
-              child: Text(
-                okText ?? 'Mengerti',
-              ),
-            ),
-          ] :
-          [],
         );
       },
     ).then((_) {
@@ -107,48 +145,88 @@ class OptionDialog {
     required this.noFunction,
   });
 
-  Future<void> show() async {
+  Future show() async {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text(
-            title ?? 'Perhatian',
-            style: HeadingTextStyles.headingS(),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
           ),
-          content: Text(
-            message,
-            style: MTextStyles.regular(),
-            textAlign: TextAlign.justify,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-
-                noFunction();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-              ),
-              child: Text(
-                noText ?? 'Tidak',
-                style: TextStyle(
-                  color: NeutralColorStyles.neutral09(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      title ?? 'Perhatian',
+                      style: HeadingTextStyles.headingS(),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      message,
+                      style: MTextStyles.regular(),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
+              Container(
+                decoration: BoxDecoration(
+                  color: NeutralColorStyles.neutral02(),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(5.0),
+                    bottomRight: Radius.circular(5.0),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
 
-                yesFunction();
-              },
-              child: Text(
-                yesText ?? 'Ya',
+                          noFunction();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          noText ?? 'Tidak',
+                          style: TextStyle(
+                            color: NeutralColorStyles.neutral09(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+
+                          yesFunction();
+                        },
+                        child: Text(
+                          yesText ?? 'Ya',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
@@ -198,19 +276,19 @@ class LoadingDialog {
 
 class ErrorHandler {
   BuildContext context;
-  DioError dioErr;
+  DioException dioExc;
 
   ErrorHandler({
     required this.context,
-    required this.dioErr,
+    required this.dioExc,
   });
 
   void handle() {
     int? errCode;
     String errMessage = 'Unknown Error.\n\nTerjadi kesalahan yang tak diketahui, silahkan hubungi Admin untuk informasi lebih lanjut.';
 
-    if(dioErr.response != null) {
-      errCode = dioErr.response!.statusCode;
+    if(dioExc.response != null) {
+      errCode = dioExc.response!.statusCode;
 
       switch(errCode) {
         case 401:
@@ -233,36 +311,59 @@ class ErrorHandler {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          content: Column(
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Center(
-                child: Icon(
-                  Icons.cancel,
-                  color: Colors.red,
-                  size: 40.0,
+              const Padding(
+                padding: EdgeInsets.only(top: 20.0, bottom: 5.0),
+                child: Center(
+                  child: Icon(
+                    Icons.cancel,
+                    color: Colors.red,
+                    size: 40.0,
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 20.0,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: Text(
+                  '(${errCode ?? '-'}) $errMessage',
+                  style: MTextStyles.regular(),
+                ),
               ),
-              Text(
-                '(${errCode ?? '-'}) $errMessage',
-                style: MTextStyles.regular(),
-                textAlign: TextAlign.justify,
+              Container(
+                decoration: BoxDecoration(
+                  color: NeutralColorStyles.neutral02(),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(5.0),
+                    bottomRight: Radius.circular(5.0),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          BackFromThisPage(context: context).go();
+                        },
+                        child: const Text(
+                          'OK',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
         );
       },
     ).then((_) {
@@ -292,50 +393,90 @@ class SourceSelectionDialog {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text(
-            title ?? 'Perhatian',
-            style: HeadingTextStyles.headingS(),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
           ),
-          content: Text(
-            message,
-            style: MTextStyles.regular(),
-            textAlign: TextAlign.justify,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-
-                galleryFunction();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-              ),
-              child: Text(
-                'Galeri',
-                style: TextStyle(
-                  color: NeutralColorStyles.neutral09(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      title ?? 'Perhatian',
+                      style: HeadingTextStyles.headingS(),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      message,
+                      style: MTextStyles.regular(),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
+              Container(
+                decoration: BoxDecoration(
+                  color: NeutralColorStyles.neutral02(),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(5.0),
+                    bottomRight: Radius.circular(5.0),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
 
-                cameraFunction();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-              ),
-              child: Text(
-                'Kamera',
-                style: TextStyle(
-                  color: NeutralColorStyles.neutral09(),
+                          galleryFunction();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          'Galeri',
+                          style: TextStyle(
+                            color: NeutralColorStyles.neutral09(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+
+                          cameraFunction();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          'Kamera',
+                          style: TextStyle(
+                            color: NeutralColorStyles.neutral09(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );

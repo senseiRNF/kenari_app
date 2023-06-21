@@ -41,10 +41,10 @@ class APITemporalFeeServices {
 
               BackFromThisPage(context: context).go();
             });
-          } on DioError catch(dioErr) {
+          } on DioException catch(dioExc) {
             BackFromThisPage(context: context).go();
 
-            ErrorHandler(context: context, dioErr: dioErr).handle();
+            ErrorHandler(context: context, dioExc: dioExc).handle();
           }
         });
       });
@@ -75,10 +75,10 @@ class APITemporalFeeServices {
 
             BackFromThisPage(context: context).go();
           });
-        } on DioError catch(dioErr) {
+        } on DioException catch(dioExc) {
           BackFromThisPage(context: context).go();
 
-          ErrorHandler(context: context, dioErr: dioErr).handle();
+          ErrorHandler(context: context, dioExc: dioExc).handle();
         }
       });
     });
@@ -115,14 +115,14 @@ class APITemporalFeeServices {
 
             result = APIResponseResult(apiResult: true, dataResult: TemporalFeeResultModel.fromJson(postResult.data));
           });
-        } on DioError catch(dioErr) {
+        } on DioException catch(dioExc) {
           BackFromThisPage(context: context).go();
 
-          if(dioErr.response == null || dioErr.response!.statusCode != 412) {
-            ErrorHandler(context: context, dioErr: dioErr).handle();
+          if(dioExc.response == null || dioExc.response!.statusCode != 412) {
+            ErrorHandler(context: context, dioExc: dioExc).handle();
           }
 
-          result = APIResponseResult(apiResult: false, dioError: dioErr);
+          result = APIResponseResult(apiResult: false, dioException: dioExc);
         }
       });
     });

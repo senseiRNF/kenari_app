@@ -69,7 +69,7 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                           height: 15.0,
                         ),
                         Text(
-                          'Terimakasih, pembayaran cicilan Pendanaan 1 telah berhasil.',
+                          'Terimakasih, pembayaran cicilan Pinjaman telah berhasil.',
                           style: MTextStyles.regular(),
                           textAlign: TextAlign.center,
                         ),

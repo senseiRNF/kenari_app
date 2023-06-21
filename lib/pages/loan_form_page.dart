@@ -81,7 +81,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         ),
                         Expanded(
                           child: Text(
-                            'Ajukan Pendanaan',
+                            'Ajukan Pinjaman',
                             style: HeadingTextStyles.headingS(),
                           ),
                         ),
@@ -106,7 +106,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            'Periode Pendanaan',
+                            'Periode Pinjaman',
                             style: STextStyles.medium(),
                           ),
                           const SizedBox(
@@ -166,7 +166,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                             height: 15.0,
                           ),
                           Text(
-                            'Pengajuan Pendanaan',
+                            'Pengajuan Pinjaman',
                             style: STextStyles.medium(),
                           ),
                           Row(
@@ -324,7 +324,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Pembayaran Pendanaan Bulanan',
+                                      'Pembayaran Pinjaman Bulanan',
                                       style: STextStyles.regular(),
                                     ),
                                     const SizedBox(
@@ -486,7 +486,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         ),
                         Expanded(
                           child: Text(
-                            '"Perjanjian pendanaan"',
+                            '"Perjanjian pinjaman"',
                             style: XSTextStyles.regular().copyWith(
                               color: PrimaryColorStyles.primaryMain(),
                             ),
@@ -499,8 +499,8 @@ class _LoanFormPageState extends State<LoanFormPage> {
                         if(selectedTerm != null && loanAmount != 0.0 && isAgreed == true) {
                           OptionDialog(
                             context: context,
-                            title: 'Pengajuan Pendanaan',
-                            message: 'Apakah anda yakin untuk melanjutkan pengajuan pendanaan?',
+                            title: 'Pengajuan Pinjaman',
+                            message: 'Apakah anda yakin untuk melanjutkan pengajuan pinjaman?',
                             yesText: 'Ya, Ajukan',
                             yesFunction: () async {
                               await LocalSharedPrefs().readKey('member_id').then((memberId) async {

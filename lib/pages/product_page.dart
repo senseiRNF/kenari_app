@@ -640,12 +640,20 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                             trolleyList.isNotEmpty ?
                             Container(
-                              width: 10.0,
-                              height: 10.0,
+                              width: 20.0,
+                              height: 20.0,
                               margin: const EdgeInsets.only(left: 15.0),
                               decoration: const BoxDecoration(
                                 color: Colors.red,
                                 shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${trolleyList.length}',
+                                  style: XSTextStyles.regular().copyWith(
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ) :
                             const Material(),

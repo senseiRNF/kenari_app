@@ -192,81 +192,82 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
             Container(
               padding: const EdgeInsets.only(top: 15.0),
               color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TabBar(
-                      controller: tabController,
-                      indicator: UnderlineTabIndicator(
-                        borderSide: BorderSide(
-                          width: 2.0,
-                          color: PrimaryColorStyles.primaryMain(),
-                        ),
-                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(5.0), topRight: Radius.circular(5.0)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TabBar(
+                    controller: tabController,
+                    indicator: UnderlineTabIndicator(
+                      borderSide: BorderSide(
+                        width: 2.0,
+                        color: PrimaryColorStyles.primaryMain(),
                       ),
-                      onTap: (index) {
-                        setState(() {
-                          selectedTab = index;
-
-                          switch(selectedTab) {
-                            case 0:
-                              loadFeeData();
-                              break;
-                            case 1:
-                              loadLoanData();
-                              break;
-                            case 2:
-                              loadTransactionData();
-                              break;
-                            default:
-                              loadFeeData();
-                              break;
-                          }
-                        });
-
-                        widget.changeTab(index);
-                      },
-                      tabs: [
-                        Tab(
-                          child: Text(
-                            'Iuran',
-                            style: selectedTab == 0 ?
-                            MTextStyles.medium().copyWith(
-                              color: PrimaryColorStyles.primaryMain(),
-                            ) :
-                            STextStyles.medium(),
-                          ),
-                        ),
-                        Tab(
-                          child: Text(
-                            'Pendanaan',
-                            style: selectedTab == 1 ?
-                            MTextStyles.medium().copyWith(
-                              color: PrimaryColorStyles.primaryMain(),
-                            ) :
-                            STextStyles.medium(),
-                          ),
-                        ),
-                        Tab(
-                          child: Text(
-                            'Pesanan',
-                            style: selectedTab == 2 ?
-                            MTextStyles.medium().copyWith(
-                              color: PrimaryColorStyles.primaryMain(),
-                            ) :
-                            STextStyles.medium(),
-                          ),
-                        ),
-                      ],
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(5.0), topRight: Radius.circular(5.0)),
                     ),
-                    Divider(
-                      height: 1.0,
-                      color: BorderColorStyles.borderDivider(),
-                    ),
-                  ],
-                ),
+                    onTap: (index) {
+                      setState(() {
+                        selectedTab = index;
+
+                        switch(selectedTab) {
+                          case 0:
+                            loadFeeData();
+                            break;
+                          case 1:
+                            loadLoanData();
+                            break;
+                          case 2:
+                            loadTransactionData();
+                            break;
+                          default:
+                            loadFeeData();
+                            break;
+                        }
+                      });
+
+                      widget.changeTab(index);
+                    },
+                    tabs: [
+                      Tab(
+                        child: Text(
+                          'Iuran',
+                          style: selectedTab == 0 ?
+                          MTextStyles.medium().copyWith(
+                            color: PrimaryColorStyles.primaryMain(),
+                          ) :
+                          STextStyles.medium(),
+                        ),
+                      ),
+                      Tab(
+                        child: Wrap(
+                          children: [
+                            Text(
+                              'Pinjaman',
+                              style: selectedTab == 1 ?
+                              MTextStyles.medium().copyWith(
+                                color: PrimaryColorStyles.primaryMain(),
+                              ) :
+                              STextStyles.medium(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          'Pesanan',
+                          style: selectedTab == 2 ?
+                          MTextStyles.medium().copyWith(
+                            color: PrimaryColorStyles.primaryMain(),
+                          ) :
+                          STextStyles.medium(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    height: 1.0,
+                    color: BorderColorStyles.borderDivider(),
+                  ),
+                ],
               ),
             ),
             activeTabWidget(),
@@ -746,7 +747,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Pendanaan',
+                                'Pinjaman',
                                 style: STextStyles.medium().copyWith(
                                   color: TextColorStyles.textPrimary(),
                                 ),
@@ -781,7 +782,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 child: Text(
-                                  'Pendanaan Berjalan',
+                                  'Pinjaman Berjalan',
                                   style: STextStyles.medium().copyWith(
                                     color: WarningColorStyles.warningMain(),
                                   ),

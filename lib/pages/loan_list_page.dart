@@ -102,7 +102,7 @@ class _LoanListPageState extends State<LoanListPage> {
                         ),
                         Expanded(
                           child: Text(
-                            'Pembayaran Pendanaan',
+                            'Pembayaran Pinjaman',
                             style: HeadingTextStyles.headingS(),
                           ),
                         ),
@@ -278,7 +278,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          'Pendanaan',
+                                          'Pinjaman',
                                           style: MTextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
                                           ),

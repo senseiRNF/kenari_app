@@ -52,7 +52,7 @@ class _LoanResultPageState extends State<LoanResultPage> {
                           height: 15.0,
                         ),
                         Text(
-                          'Selamat, Pengajuan Pendanaan anda telah Berhasil!',
+                          'Selamat, Pengajuan pinjaman anda telah Berhasil!',
                           style: MTextStyles.regular(),
                           textAlign: TextAlign.center,
                         ),
@@ -95,7 +95,7 @@ class _LoanResultPageState extends State<LoanResultPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
-                            'Lihat Status Pendanaan',
+                            'Lihat Status Pinjaman',
                             style: LTextStyles.medium().copyWith(
                               color: PrimaryColorStyles.primaryMain(),
                             ),

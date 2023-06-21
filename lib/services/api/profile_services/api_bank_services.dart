@@ -39,10 +39,10 @@ class APIBankServices {
 
               result = BankModel.fromJson(getResult.data);
             });
-          } on DioError catch(dioErr) {
+          } on DioException catch(dioExc) {
             BackFromThisPage(context: context).go();
 
-            ErrorHandler(context: context, dioErr: dioErr).handle();
+            ErrorHandler(context: context, dioExc: dioExc).handle();
           }
         });
       });
@@ -71,10 +71,10 @@ class APIBankServices {
 
             result = ListBankModel.fromJson(getResult.data);
           });
-        } on DioError catch(dioErr) {
+        } on DioException catch(dioExc) {
           BackFromThisPage(context: context).go();
 
-          ErrorHandler(context: context, dioErr: dioErr).handle();
+          ErrorHandler(context: context, dioExc: dioExc).handle();
         }
       });
     });
@@ -110,10 +110,10 @@ class APIBankServices {
 
             result = true;
           });
-        } on DioError catch(dioErr) {
+        } on DioException catch(dioExc) {
           BackFromThisPage(context: context).go();
 
-          ErrorHandler(context: context, dioErr: dioErr).handle();
+          ErrorHandler(context: context, dioExc: dioExc).handle();
         }
       });
     });
@@ -149,10 +149,10 @@ class APIBankServices {
 
             result = true;
           });
-        } on DioError catch(dioErr) {
+        } on DioException catch(dioExc) {
           BackFromThisPage(context: context).go();
 
-          ErrorHandler(context: context, dioErr: dioErr).handle();
+          ErrorHandler(context: context, dioExc: dioExc).handle();
         }
       });
     });
@@ -180,10 +180,10 @@ class APIBankServices {
 
             result = true;
           });
-        } on DioError catch(dioErr) {
+        } on DioException catch(dioExc) {
           BackFromThisPage(context: context).go();
 
-          ErrorHandler(context: context, dioErr: dioErr).handle();
+          ErrorHandler(context: context, dioExc: dioExc).handle();
         }
       });
     });

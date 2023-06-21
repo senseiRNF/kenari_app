@@ -87,7 +87,7 @@ class _LoanPageState extends State<LoanPage> {
                         ),
                         Expanded(
                           child: Text(
-                            'Pendanaan',
+                            'Pinjaman',
                             style: HeadingTextStyles.headingS(),
                           ),
                         ),
@@ -129,7 +129,7 @@ class _LoanPageState extends State<LoanPage> {
                           ),
                           Expanded(
                             child: Text(
-                              'Untuk dapat mengajukan pendanaan, Anda perlu menyelesaikan langkah berikut ini:',
+                              'Untuk dapat mengajukan pinjaman, Anda perlu menyelesaikan langkah berikut ini:',
                               style: STextStyles.regular(),
                             ),
                           ),
@@ -621,7 +621,7 @@ class _LoanPageState extends State<LoanPage> {
                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: [
                                           Text(
-                                            'Ajukan Pendanaan',
+                                            'Ajukan Pinjaman',
                                             style: MTextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
                                             ),
@@ -691,7 +691,7 @@ class _LoanPageState extends State<LoanPage> {
                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: [
                                           Text(
-                                            'Histori Pendanaan',
+                                            'Histori Pinjaman',
                                             style: MTextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
                                             ),
@@ -769,7 +769,7 @@ class _LoanPageState extends State<LoanPage> {
                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: [
                                           Text(
-                                            'Pembayaran Pendanaan',
+                                            'Pembayaran Pinjaman',
                                             style: MTextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
                                             ),

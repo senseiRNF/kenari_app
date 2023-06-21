@@ -28,15 +28,15 @@ class APICompanyServices {
 
           result = CheckCompanyModel.fromJson(getResult.data);
         });
-      } on DioError catch(dioErr) {
+      } on DioException catch(dioExc) {
         BackFromThisPage(context: context).go();
 
-        if(dioErr.response != null) {
-          if(dioErr.response!.statusCode != 404) {
-            ErrorHandler(context: context, dioErr: dioErr).handle();
+        if(dioExc.response != null) {
+          if(dioExc.response!.statusCode != 404) {
+            ErrorHandler(context: context, dioExc: dioExc).handle();
           }
         } else {
-          ErrorHandler(context: context, dioErr: dioErr).handle();
+          ErrorHandler(context: context, dioExc: dioExc).handle();
         }
       }
     });
@@ -64,10 +64,10 @@ class APICompanyServices {
 
             result = CompanyModel.fromJson(getResult.data);
           });
-        } on DioError catch(dioErr) {
+        } on DioException catch(dioExc) {
           BackFromThisPage(context: context).go();
 
-          ErrorHandler(context: context, dioErr: dioErr).handle();
+          ErrorHandler(context: context, dioExc: dioExc).handle();
         }
       });
     });

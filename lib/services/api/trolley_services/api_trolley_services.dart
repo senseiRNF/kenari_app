@@ -40,10 +40,10 @@ class APITrolleyServices {
 
               BackFromThisPage(context: context).go();
             });
-          } on DioError catch(dioErr) {
+          } on DioException catch(dioExc) {
             BackFromThisPage(context: context).go();
 
-            ErrorHandler(context: context, dioErr: dioErr).handle();
+            ErrorHandler(context: context, dioExc: dioExc).handle();
           }
         });
       });
@@ -93,12 +93,12 @@ class APITrolleyServices {
                 BackFromThisPage(context: context).go();
               }
             });
-          } on DioError catch(dioErr) {
+          } on DioException catch(dioExc) {
             if(hideLoadingOnUpdate == null || hideLoadingOnUpdate == false) {
               BackFromThisPage(context: context).go();
             }
 
-            ErrorHandler(context: context, dioErr: dioErr).handle();
+            ErrorHandler(context: context, dioExc: dioExc).handle();
           }
         });
       });
@@ -130,10 +130,10 @@ class APITrolleyServices {
 
               BackFromThisPage(context: context).go();
             });
-          } on DioError catch(dioErr) {
+          } on DioException catch(dioExc) {
             BackFromThisPage(context: context).go();
 
-            ErrorHandler(context: context, dioErr: dioErr).handle();
+            ErrorHandler(context: context, dioExc: dioExc).handle();
           }
         });
       });
@@ -174,10 +174,10 @@ class APITrolleyServices {
 
               BackFromThisPage(context: context).go();
             });
-          } on DioError catch(dioErr) {
+          } on DioException catch(dioExc) {
             BackFromThisPage(context: context).go();
 
-            ErrorHandler(context: context, dioErr: dioErr).handle();
+            ErrorHandler(context: context, dioExc: dioExc).handle();
           }
         });
       });

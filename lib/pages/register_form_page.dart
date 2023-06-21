@@ -95,29 +95,29 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                         ),
                       ).go();
                     } else {
-                      if(callResult.dioError != null && callResult.dioError!.response != null && callResult.dioError!.response!.statusCode == 412) {
-                        if(callResult.dioError!.response!.data['data']['errors']['name'] != null) {
+                      if(callResult.dioException != null && callResult.dioException!.response != null && callResult.dioException!.response!.statusCode == 412) {
+                        if(callResult.dioException!.response!.data['data']['errors']['name'] != null) {
                           setState(() {
                             showErrorNameHint = true;
                             errorNameMessage = 'Harap masukkan nama terlebih dahulu';
                           });
                         }
 
-                        if(callResult.dioError!.response!.data['data']['errors']['email'] != null) {
+                        if(callResult.dioException!.response!.data['data']['errors']['email'] != null) {
                           setState(() {
                             showErrorEmailHint = true;
                             errorEmailMessage = 'Email telah terdaftar!';
                           });
                         }
 
-                        if(callResult.dioError!.response!.data['data']['errors']['phone'] != null) {
+                        if(callResult.dioException!.response!.data['data']['errors']['phone'] != null) {
                           setState(() {
                             showErrorPhoneHint = true;
                             errorPhoneMessage = phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu';
                           });
                         }
 
-                        if(callResult.dioError!.response!.data['data']['errors']['password'] != null) {
+                        if(callResult.dioException!.response!.data['data']['errors']['password'] != null) {
                           setState(() {
                             showErrorPasswordHint = true;
                             errorPasswordMessage = passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Harap masukkan password terlebih dahulu';

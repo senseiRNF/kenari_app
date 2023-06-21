@@ -36,7 +36,7 @@ class SellerProductData {
   dynamic address;
   bool? isPreOrder;
   List<Varians>? varians;
-  List? images;
+  List<Images>? images;
   List? tipeVarian;
   bool? isCompleted;
   bool? status;
@@ -93,9 +93,9 @@ class SellerProductData {
       });
     }
     if (json['images'] != null) {
-      images = <Null>[];
+      images = <Images>[];
       json['images'].forEach((v) {
-        images!.add(v);
+        images!.add(Images.fromJson(v));
       });
     }
     if (json['tipeVarian'] != null) {
@@ -307,6 +307,37 @@ class Member {
     data['user'] = user;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    return data;
+  }
+}
+
+class Images {
+  String? sId;
+  String? filename;
+  String? url;
+  bool? primary;
+  String? product;
+  int? iV;
+
+  Images({this.sId, this.filename, this.url, this.primary, this.product, this.iV});
+
+  Images.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    filename = json['filename'];
+    url = json['url'];
+    primary = json['primary'];
+    product = json['product'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['filename'] = filename;
+    data['url'] = url;
+    data['primary'] = primary;
+    data['product'] = product;
     data['__v'] = iV;
     return data;
   }

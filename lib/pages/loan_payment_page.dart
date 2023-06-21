@@ -110,7 +110,9 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                             ),
                             Text(
                               DateFormat('dd MMM yyyy').format(dueDate),
-                              style: STextStyles.medium(),
+                              style: STextStyles.medium().copyWith(
+                                color: DangerColorStyles.dangerMain(),
+                              ),
                             ),
                           ],
                         ),

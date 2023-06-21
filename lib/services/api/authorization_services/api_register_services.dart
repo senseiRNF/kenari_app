@@ -43,14 +43,14 @@ class APIRegisterServices {
 
           result = APIResponseResult(apiResult: true);
         });
-      } on DioError catch(dioErr) {
+      } on DioException catch(dioExc) {
         BackFromThisPage(context: context).go();
 
-        if(dioErr.response == null || dioErr.response!.statusCode != 412) {
-          ErrorHandler(context: context, dioErr: dioErr).handle();
+        if(dioExc.response == null || dioExc.response!.statusCode != 412) {
+          ErrorHandler(context: context, dioExc: dioExc).handle();
         }
 
-        result = APIResponseResult(apiResult: false, dioError: dioErr);
+        result = APIResponseResult(apiResult: false, dioException: dioExc);
       }
     });
 

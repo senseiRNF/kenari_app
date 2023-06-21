@@ -162,7 +162,9 @@ class _CompanyAddressSelectionPageState extends State<CompanyAddressSelectionPag
                                 padding: const EdgeInsets.symmetric(vertical: 5.0),
                                 child: Text(
                                   'Pilih',
-                                  style: MTextStyles.medium(),
+                                  style: MTextStyles.medium().copyWith(
+                                    color: PrimaryColorStyles.primaryMain(),
+                                  ),
                                 ),
                               ),
                             ),
@@ -173,7 +175,7 @@ class _CompanyAddressSelectionPageState extends State<CompanyAddressSelectionPag
                   );
                 },
               ) :
-              Stack(),
+              const Stack(),
             ),
           ],
         ),

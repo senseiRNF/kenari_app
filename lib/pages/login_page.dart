@@ -153,8 +153,8 @@ class _LoginPageState extends State<LoginPage> {
                           if(callResult.apiResult == true) {
                             ReplaceToPage(context: context, target: const HomePage()).go();
                           } else {
-                            if(callResult.dioError != null && callResult.dioError!.response != null && callResult.dioError!.response!.statusCode == 412) {
-                              if(callResult.dioError!.response!.data['data']['errors']['email'] != null || callResult.dioError!.response!.data['data']['errors']['password'] != null) {
+                            if(callResult.dioException != null && callResult.dioException!.response != null && callResult.dioException!.response!.statusCode == 412) {
+                              if(callResult.dioException!.response!.data['data']['errors']['email'] != null || callResult.dioException!.response!.data['data']['errors']['password'] != null) {
                                 setState(() {
                                   errorHintMessage = 'Email atau password salah';
                                   showErrorHint = true;
