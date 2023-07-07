@@ -67,9 +67,7 @@ class APILoginServices {
       } on DioException catch(dioExc) {
         BackFromThisPage(context: context).go();
 
-        if(dioExc.response == null || dioExc.response!.statusCode != 412) {
-          ErrorHandler(context: context, dioExc: dioExc).handle();
-        }
+        ErrorHandler(context: context, dioExc: dioExc, isLoginService: true).handle();
 
         result = APIResponseResult(apiResult: false, dioException: dioExc);
       }

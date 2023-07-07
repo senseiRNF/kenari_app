@@ -277,10 +277,12 @@ class LoadingDialog {
 class ErrorHandler {
   BuildContext context;
   DioException dioExc;
+  bool? isLoginService;
 
   ErrorHandler({
     required this.context,
     required this.dioExc,
+    this.isLoginService,
   });
 
   void handle() {
@@ -368,7 +370,9 @@ class ErrorHandler {
       },
     ).then((_) {
       if(errCode != null && errCode == 401) {
-        RedirectToPage(context: context, target: const SplashPage()).go();
+        if(isLoginService == null && isLoginService == false) {
+          RedirectToPage(context: context, target: const SplashPage()).go();
+        }
       }
     });
   }
