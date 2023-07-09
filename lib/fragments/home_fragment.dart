@@ -693,7 +693,7 @@ class HomeFragment extends StatelessWidget {
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                     image: imgProvider,
-                                                    fit: BoxFit.contain,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                   borderRadius: const BorderRadius.only(
                                                     topLeft: Radius.circular(10.0),
@@ -1011,7 +1011,7 @@ class HomeFragment extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(5.0),
                                         image: DecorationImage(
                                           image: imgProvider,
-                                          fit: BoxFit.contain,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
@@ -1233,7 +1233,7 @@ class HomeFragment extends StatelessWidget {
                                                 decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                     image: imgProvider,
-                                                    fit: BoxFit.contain,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                   borderRadius: const BorderRadius.only(
                                                     topLeft: Radius.circular(10.0),

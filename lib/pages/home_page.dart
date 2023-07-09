@@ -40,6 +40,8 @@ class _HomePageState extends State<HomePage> {
   String? companyCode;
   String filterType = 'Tampilkan Semua';
 
+  DateTime? backPressed;
+
   TextEditingController searchController = TextEditingController();
 
   List<ProductData> productList = [];
@@ -687,7 +689,7 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: imgProvider,
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -1019,7 +1021,7 @@ class _HomePageState extends State<HomePage> {
       SnackBar(
         elevation: 0,
         content: Card(
-          color: SuccessColorStyles.successSurface(),
+          color: DangerColorStyles.dangerSurface(),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
@@ -1048,184 +1050,245 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: selectedMenu == 0 ? const Color(0xffff7a15) : Colors.white,
-      body: SafeArea(
-        child: activeFragment(),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 12.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        if(selectedMenu != 0) {
-                          setState(() {
-                            selectedMenu = 0;
-                          });
-                        }
-                      },
-                      customBorder: const CircleBorder(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.home,
-                              color: selectedMenu == 0 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Beranda',
-                              style: XSTextStyles.regular().copyWith(
-                                color: selectedMenu == 0 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 25.0,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        if(selectedMenu != 1) {
-                          setState(() {
-                            selectedMenu = 1;
-                          });
-                        }
-                      },
-                      customBorder: const CircleBorder(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: selectedMenu == 1 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Pencarian',
-                              style: XSTextStyles.regular().copyWith(
-                                color: selectedMenu == 1 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+  showExitToastMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        elevation: 0,
+        content: Card(
+          color: InfoColorStyles.infoSurface(),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info,
+                  color: InfoColorStyles.infoMain(),
                 ),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        if(selectedMenu != 2) {
-                          setState(() {
-                            selectedMenu = 2;
-                          });
-                        }
-                      },
-                      customBorder: const CircleBorder(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.newspaper,
-                              color: selectedMenu == 2 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Transaksi',
-                              style: XSTextStyles.regular().copyWith(
-                                color: selectedMenu == 2 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 25.0,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        if(selectedMenu != 3) {
-                          setState(() {
-                            selectedMenu = 3;
-                          });
-                        }
-                      },
-                      customBorder: const CircleBorder(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.person,
-                              color: selectedMenu == 3 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Profile',
-                              style: XSTextStyles.regular().copyWith(
-                                color: selectedMenu == 3 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                const SizedBox(
+                  width: 10.0,
                 ),
-              ),
-            ],
+                Text(
+                  'Tekan sekali lagi untuk menutup aplikasi!',
+                  style: XSTextStyles.medium().copyWith(
+                    color: InfoColorStyles.infoMain(),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
+        duration: const Duration(seconds: 3),
+        backgroundColor: Colors.transparent,
+        behavior: SnackBarBehavior.floating,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          MoveToPage(context: context, target: const SellerProductFormPage()).go();
-        },
-        backgroundColor: PrimaryColorStyles.primaryMain(),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
+    );
+  }
+
+  Future<bool> tryQuitApp() async {
+    if(backPressed == null) {
+      setState(() {
+        backPressed = DateTime.now();
+      });
+
+      showExitToastMessage();
+
+      return Future.value(false);
+    } else {
+      if(DateTime.now().difference(backPressed!).inSeconds >= 3) {
+        setState(() {
+          backPressed = DateTime.now();
+        });
+
+        showExitToastMessage();
+
+        return Future.value(false);
+      } else {
+        return Future.value(true);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: tryQuitApp,
+      child: Scaffold(
+        backgroundColor: selectedMenu == 0 ? const Color(0xffff7a15) : Colors.white,
+        body: SafeArea(
+          child: activeFragment(),
         ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 12.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if(selectedMenu != 0) {
+                            setState(() {
+                              selectedMenu = 0;
+                            });
+                          }
+                        },
+                        customBorder: const CircleBorder(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.home,
+                                color: selectedMenu == 0 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'Beranda',
+                                style: XSTextStyles.regular().copyWith(
+                                  color: selectedMenu == 0 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 25.0,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if(selectedMenu != 1) {
+                            setState(() {
+                              selectedMenu = 1;
+                            });
+                          }
+                        },
+                        customBorder: const CircleBorder(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: selectedMenu == 1 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'Pencarian',
+                                style: XSTextStyles.regular().copyWith(
+                                  color: selectedMenu == 1 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if(selectedMenu != 2) {
+                            setState(() {
+                              selectedMenu = 2;
+                            });
+                          }
+                        },
+                        customBorder: const CircleBorder(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.newspaper,
+                                color: selectedMenu == 2 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'Transaksi',
+                                style: XSTextStyles.regular().copyWith(
+                                  color: selectedMenu == 2 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 25.0,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if(selectedMenu != 3) {
+                            setState(() {
+                              selectedMenu = 3;
+                            });
+                          }
+                        },
+                        customBorder: const CircleBorder(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.person,
+                                color: selectedMenu == 3 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'Profile',
+                                style: XSTextStyles.regular().copyWith(
+                                  color: selectedMenu == 3 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral05(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            MoveToPage(context: context, target: const SellerProductFormPage()).go();
+          },
+          backgroundColor: PrimaryColorStyles.primaryMain(),
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/miscellaneous/separator_formatter.dart';
 import 'package:kenari_app/pages/company_address_selection_page.dart';
 import 'package:kenari_app/pages/seller_product_result_page.dart';
 import 'package:kenari_app/pages/variant_selection_page.dart';
@@ -50,6 +53,8 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
 
   Map variant = {};
   Map companyData = {};
+
+  var separatorFormatter = NumberFormat('#,###');
 
   @override
   void initState() {
@@ -105,13 +110,13 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
     if(variant.isNotEmpty) {
       for(int a = 0; a < variant['generated_data'].length; a++) {
         items.add({
-          'variant_type1_id': variant['generated_data'][a]['variant_type1_id'],
-          'name1': variant['generated_data'][a]['name1'],
-          'variant_type2_id': variant['generated_data'][a]['variant_type2_id'],
-          'name2': variant['generated_data'][a]['name2'],
-          'price': variant['inputted_data'][a]['price'],
-          'stock': variant['inputted_data'][a]['stock'],
-          'is_stock_always_available': variant['inputted_data'][a]['is_always_available'],
+          '"variant_type1_id"': '"${variant['generated_data'][a]['variant_type1_id']}"',
+          '"name1"': '"${variant['generated_data'][a]['name1']}"',
+          '"variant_type2_id"': '"${variant['generated_data'][a]['variant_type2_id']}"',
+          '"name2"': '"${variant['generated_data'][a]['name2']}"',
+          '"price"': '"${variant['inputted_data'][a]['price']}"',
+          '"stock"': '"${variant['inputted_data'][a]['stock']}"',
+          '"is_stock_always_available"': '"${variant['inputted_data'][a]['is_always_available']}"',
         });
       }
     }
@@ -121,8 +126,8 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
         name: productNameController.text,
         productCategoryId: '$categoryId',
         description: productDescriptionController.text,
-        price: productPriceController.text,
-        stock: productStockController.text,
+        price: productPriceController.text.replaceAll('.', ''),
+        stock: productStockController.text.replaceAll('.', ''),
         isAlwaysAvailable: isAlwaysAvailable,
         isPreorder: isPreOrder,
         addressId: companyData['selected_id'],
@@ -258,6 +263,13 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                   color: PrimaryColorStyles.primaryBorder(),
                                 ),
                                 borderRadius: BorderRadius.circular(5.0),
+                                image: index == 0 ? null :
+                                DecorationImage(
+                                  image: FileImage(
+                                    File(productImg[index-1].path),
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                               child: Material(
                                 color: Colors.transparent,
@@ -299,12 +311,13 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                   customBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
-                                  child: Column(
+                                  child: index == 0 ?
+                                  Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Icon(
-                                        index == 0 ? Icons.add : Icons.image,
+                                        Icons.add,
                                         color: PrimaryColorStyles.primaryMain(),
                                         size: 25.0,
                                       ),
@@ -312,13 +325,16 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                         height: 5.0,
                                       ),
                                       Text(
-                                        index == 0 ? 'Tambah\nFoto/Video' : '${productImg[index-1].name.substring(0, 10)}...',
+                                        'Tambah\nFoto/Video',
                                         style: XSTextStyles.regular().copyWith(
                                           color: PrimaryColorStyles.primaryMain(),
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
                                     ],
+                                  ) :
+                                  const Material(
+                                    color: Colors.transparent,
                                   ),
                                 ),
                               ),
@@ -444,6 +460,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
+                            ThousandsSeparatorInputFormatter(),
                           ],
                         ),
                         const SizedBox(
@@ -462,6 +479,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
+                            ThousandsSeparatorInputFormatter(),
                           ],
                         ),
                         const SizedBox(
@@ -634,6 +652,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                       keyboardType: TextInputType.number,
                                       inputFormatters: [
                                         FilteringTextInputFormatter.digitsOnly,
+                                        ThousandsSeparatorInputFormatter(),
                                       ],
                                     ),
                                   ),

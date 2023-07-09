@@ -175,7 +175,7 @@ class _CompanyAddressSelectionPageState extends State<CompanyAddressSelectionPag
                   );
                 },
               ) :
-              const Stack(),
+              Stack(),
             ),
           ],
         ),

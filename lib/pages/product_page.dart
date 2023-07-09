@@ -173,7 +173,7 @@ class _ProductPageState extends State<ProductPage> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imgProvider,
-                                fit: BoxFit.contain,
+                                fit: BoxFit.cover,
                               ),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
@@ -696,7 +696,7 @@ class _ProductPageState extends State<ProductPage> {
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: imgProvider,
-                                      fit: BoxFit.contain,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                   child: Column(

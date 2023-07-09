@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/miscellaneous/separator_formatter.dart';
 import 'package:kenari_app/services/api/models/variant_type_model.dart';
 import 'package:kenari_app/services/api/variant_services/api_variant_type_services.dart';
 import 'package:kenari_app/services/local/models/local_variant_data.dart';
@@ -713,16 +714,17 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                                     isDense: true,
                                     prefixIcon: Text("Rp "),
                                     prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
-                                    hintText: '0',
+                                    hintText: '10.000',
                                   ),
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
+                                    ThousandsSeparatorInputFormatter(),
                                   ],
                                   onChanged: (changedValue) {
                                     if(changedValue != '') {
                                       setState(() {
-                                        subvariantList[subvariantIndex]['price'] = int.parse(changedValue);
+                                        subvariantList[subvariantIndex]['price'] = int.parse(changedValue.replaceAll('.', ''));
                                       });
                                     } else {
                                       setState(() {
@@ -750,11 +752,12 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
+                                    ThousandsSeparatorInputFormatter(),
                                   ],
                                   onChanged: (changedValue) {
                                     if(changedValue != '') {
                                       setState(() {
-                                        subvariantList[subvariantIndex]['stock'] = int.parse(changedValue);
+                                        subvariantList[subvariantIndex]['stock'] = int.parse(changedValue.replaceAll('.', ''));
                                       });
                                     } else {
                                       setState(() {

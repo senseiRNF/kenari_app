@@ -61,7 +61,7 @@ class APITransactionServices {
           formData.fields.addAll({
             MapEntry('member_id', memberId ?? ''),
             const MapEntry('payment_method', 'Dpay'),
-            MapEntry('address_id', data[0].trolleyData.product != null ? data[0].trolleyData.product!.address ?? '' : ''),
+            MapEntry('address_id', data[0].trolleyData.product != null && data[0].trolleyData.product!.address != null ? data[0].trolleyData.product!.address!.sId ?? '' : ''),
           });
 
           if(data.isNotEmpty) {

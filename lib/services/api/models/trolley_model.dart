@@ -166,7 +166,7 @@ class Product {
   bool? isStockAlwaysAvailable;
   String? productCategory;
   String? company;
-  String? address;
+  Address? address;
   bool? isPreOrder;
   List<Varian>? varians;
   List<Images>? images;
@@ -213,7 +213,8 @@ class Product {
     isStockAlwaysAvailable = json['is_stock_always_available'];
     productCategory = json['productCategory'];
     company = json['company'];
-    address = json['address'];
+    address =
+    json['address'] != null ? Address.fromJson(json['address']) : null;
     isPreOrder = json['is_pre_order'];
     if (json['varians'] != null) {
       varians = <Varian>[];
@@ -253,7 +254,9 @@ class Product {
     data['is_stock_always_available'] = isStockAlwaysAvailable;
     data['productCategory'] = productCategory;
     data['company'] = company;
-    data['address'] = address;
+    if (address != null) {
+      data['address'] = address!.toJson();
+    }
     data['is_pre_order'] = isPreOrder;
     if (varians != null) {
       data['varians'] = varians!.map((v) => v.toJson()).toList();
@@ -272,6 +275,44 @@ class Product {
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
     data['promo_price'] = promoPrice;
+    return data;
+  }
+}
+
+class Address {
+  String? sId;
+  String? address;
+  String? company;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+
+  Address({
+    this.sId,
+    this.address,
+    this.company,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
+  });
+
+  Address.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    address = json['address'];
+    company = json['company'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['address'] = address;
+    data['company'] = company;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
     return data;
   }
 }
