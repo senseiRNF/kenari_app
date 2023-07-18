@@ -1,8 +1,9 @@
 class SellerProductModel {
   int? status;
   List<SellerProductData>? sellerProductData;
+  Pagination? pagination;
 
-  SellerProductModel({this.status, this.sellerProductData});
+  SellerProductModel({this.status, this.sellerProductData, this.pagination});
 
   SellerProductModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -12,6 +13,9 @@ class SellerProductModel {
         sellerProductData!.add(SellerProductData.fromJson(v));
       });
     }
+    pagination = json['pagination'] != null
+        ? Pagination.fromJson(json['pagination'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +23,9 @@ class SellerProductModel {
     data['status'] = status;
     if (sellerProductData != null) {
       data['data'] = sellerProductData!.map((v) => v.toJson()).toList();
+    }
+    if (pagination != null) {
+      data['pagination'] = pagination!.toJson();
     }
     return data;
   }
@@ -32,21 +39,23 @@ class SellerProductData {
   String? stock;
   bool? isStockAlwaysAvailable;
   ProductCategory? productCategory;
-  dynamic company;
-  dynamic address;
+  Company? company;
+  String? address;
   bool? isPreOrder;
   List<Varians>? varians;
   List<Images>? images;
-  List? tipeVarian;
+  // List<Null>? tipeVarian;
   bool? isCompleted;
   bool? status;
   bool? isPromo;
   bool? isRecomendation;
-  Member? member;
-  dynamic banner;
+  Members? member;
+  // Null? banner;
   String? createdAt;
   String? updatedAt;
   int? iV;
+  String? verifyAt;
+  String? verifyBy;
 
   SellerProductData({
     this.sId,
@@ -61,16 +70,18 @@ class SellerProductData {
     this.isPreOrder,
     this.varians,
     this.images,
-    this.tipeVarian,
+    // this.tipeVarian,
     this.isCompleted,
     this.status,
     this.isPromo,
     this.isRecomendation,
     this.member,
-    this.banner,
+    // this.banner,
     this.createdAt,
     this.updatedAt,
     this.iV,
+    this.verifyAt,
+    this.verifyBy
   });
 
   SellerProductData.fromJson(Map<String, dynamic> json) {
@@ -83,7 +94,8 @@ class SellerProductData {
     productCategory = json['productCategory'] != null
         ? ProductCategory.fromJson(json['productCategory'])
         : null;
-    company = json['company'];
+    company =
+    json['company'] != null ? Company.fromJson(json['company']) : null;
     address = json['address'];
     isPreOrder = json['is_pre_order'];
     if (json['varians'] != null) {
@@ -98,22 +110,24 @@ class SellerProductData {
         images!.add(Images.fromJson(v));
       });
     }
-    if (json['tipeVarian'] != null) {
-      tipeVarian = <Null>[];
-      json['tipeVarian'].forEach((v) {
-        tipeVarian!.add(v);
-      });
-    }
+    // if (json['tipeVarian'] != null) {
+    //   tipeVarian = <Null>[];
+    //   json['tipeVarian'].forEach((v) {
+    //     tipeVarian!.add(Null.fromJson(v));
+    //   });
+    // }
     isCompleted = json['is_completed'];
     status = json['status'];
     isPromo = json['is_promo'];
     isRecomendation = json['is_recomendation'];
     member =
-    json['member'] != null ? Member.fromJson(json['member']) : null;
-    banner = json['banner'];
+    json['member'] != null ? Members.fromJson(json['member']) : null;
+    // banner = json['banner'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    verifyAt = json['verify_at'];
+    verifyBy = json['verify_by'];
   }
 
   Map<String, dynamic> toJson() {
@@ -127,7 +141,9 @@ class SellerProductData {
     if (productCategory != null) {
       data['productCategory'] = productCategory!.toJson();
     }
-    data['company'] = company;
+    if (company != null) {
+      data['company'] = company!.toJson();
+    }
     data['address'] = address;
     data['is_pre_order'] = isPreOrder;
     if (varians != null) {
@@ -136,9 +152,9 @@ class SellerProductData {
     if (images != null) {
       data['images'] = images!.map((v) => v.toJson()).toList();
     }
-    if (tipeVarian != null) {
-      data['tipeVarian'] = tipeVarian!.map((v) => v.toJson()).toList();
-    }
+    // if (tipeVarian != null) {
+    //   data['tipeVarian'] = tipeVarian!.map((v) => v.toJson()).toList();
+    // }
     data['is_completed'] = isCompleted;
     data['status'] = status;
     data['is_promo'] = isPromo;
@@ -146,10 +162,12 @@ class SellerProductData {
     if (member != null) {
       data['member'] = member!.toJson();
     }
-    data['banner'] = banner;
+    // data['banner'] = banner;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
+    data['verify_at'] = verifyAt;
+    data['verify_by'] = verifyBy;
     return data;
   }
 }
@@ -168,7 +186,7 @@ class ProductCategory {
     this.status,
     this.createdAt,
     this.iV,
-    this.updatedAt
+    this.updatedAt,
   });
 
   ProductCategory.fromJson(Map<String, dynamic> json) {
@@ -192,69 +210,72 @@ class ProductCategory {
   }
 }
 
-class Varians {
+class Company {
   String? sId;
-  String? price;
-  String? promoPrice;
-  String? name1;
-  String? name2;
-  String? stock;
-  bool? isStockAlwaysAvailable;
-  String? varianType1;
-  String? varianType2;
+  String? name;
+  String? code;
+  String? totalMember;
+  bool? status;
+  List<Members>? members;
+  List<String>? addresses;
   String? createdAt;
   String? updatedAt;
   int? iV;
+  String? phone;
 
-  Varians({
+  Company({
     this.sId,
-    this.price,
-    this.promoPrice,
-    this.name1,
-    this.name2,
-    this.stock,
-    this.isStockAlwaysAvailable,
-    this.varianType1,
-    this.varianType2,
+    this.name,
+    this.code,
+    this.totalMember,
+    this.status,
+    this.members,
+    this.addresses,
     this.createdAt,
     this.updatedAt,
     this.iV,
+    this.phone,
   });
 
-  Varians.fromJson(Map<String, dynamic> json) {
+  Company.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    price = json['price'];
-    promoPrice = json['promo_price'];
-    name1 = json['name1'];
-    name2 = json['name2'];
-    stock = json['stock'];
-    isStockAlwaysAvailable = json['is_stock_always_available'];
-    varianType1 = json['varianType1'];
-    varianType2 = json['varianType2'];
+    name = json['name'];
+    code = json['code'];
+    totalMember = json['total_member'];
+    status = json['status'];
+    if (json['members'] != null) {
+      members = <Members>[];
+      json['members'].forEach((v) {
+        members!.add(Members.fromJson(v));
+      });
+    }
+    addresses = json['addresses'].cast<String>();
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    phone = json['phone'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
-    data['price'] = price;
-    data['promo_price'] = promoPrice;
-    data['name1'] = name1;
-    data['name2'] = name2;
-    data['stock'] = stock;
-    data['is_stock_always_available'] = isStockAlwaysAvailable;
-    data['varianType1'] = varianType1;
-    data['varianType2'] = varianType2;
+    data['name'] = name;
+    data['code'] = code;
+    data['total_member'] = totalMember;
+    data['status'] = status;
+    if (members != null) {
+      data['members'] = members!.map((v) => v.toJson()).toList();
+    }
+    data['addresses'] = addresses;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
+    data['phone'] = phone;
     return data;
   }
 }
 
-class Member {
+class Members {
   String? sId;
   String? name;
   String? phoneNumber;
@@ -267,7 +288,7 @@ class Member {
   String? updatedAt;
   int? iV;
 
-  Member({
+  Members({
     this.sId,
     this.name,
     this.phoneNumber,
@@ -281,7 +302,7 @@ class Member {
     this.iV,
   });
 
-  Member.fromJson(Map<String, dynamic> json) {
+  Members.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     name = json['name'];
     phoneNumber = json['phone_number'];
@@ -305,6 +326,60 @@ class Member {
     data['status'] = status;
     data['company'] = company;
     data['user'] = user;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    return data;
+  }
+}
+
+class Varians {
+  String? sId;
+  String? price;
+  String? promoPrice;
+  String? name1;
+  String? name2;
+  String? stock;
+  bool? isStockAlwaysAvailable;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+
+  Varians({
+    this.sId,
+    this.price,
+    this.promoPrice,
+    this.name1,
+    this.name2,
+    this.stock,
+    this.isStockAlwaysAvailable,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
+  });
+
+  Varians.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    price = json['price'];
+    promoPrice = json['promo_price'];
+    name1 = json['name1'];
+    name2 = json['name2'];
+    stock = json['stock'];
+    isStockAlwaysAvailable = json['is_stock_always_available'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['price'] = price;
+    data['promo_price'] = promoPrice;
+    data['name1'] = name1;
+    data['name2'] = name2;
+    data['stock'] = stock;
+    data['is_stock_always_available'] = isStockAlwaysAvailable;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
@@ -339,6 +414,31 @@ class Images {
     data['primary'] = primary;
     data['product'] = product;
     data['__v'] = iV;
+    return data;
+  }
+}
+
+class Pagination {
+  int? totalItems;
+  int? currentPage;
+  int? totalPages;
+  int? itemPerPage;
+
+  Pagination({this.totalItems, this.currentPage, this.totalPages, this.itemPerPage});
+
+  Pagination.fromJson(Map<String, dynamic> json) {
+    totalItems = json['total_items'];
+    currentPage = json['current_page'];
+    totalPages = json['total_pages'];
+    itemPerPage = json['item_per_page'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total_items'] = totalItems;
+    data['current_page'] = currentPage;
+    data['total_pages'] = totalPages;
+    data['item_per_page'] = itemPerPage;
     return data;
   }
 }

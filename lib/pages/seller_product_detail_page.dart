@@ -1,19 +1,26 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/services/api/models/seller_product_model.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class SellerProductDetailPage extends StatefulWidget {
-  const SellerProductDetailPage({super.key});
+  final SellerProductData sellerProductData;
+  
+  const SellerProductDetailPage({
+    super.key,
+    required this.sellerProductData,
+  });
 
   @override
   State<SellerProductDetailPage> createState() => _SellerProductDetailPageState();
 }
 
 class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
-  Map productData = {};
+  SellerProductData productData = SellerProductData();
 
   List priceList = [];
 
@@ -25,11 +32,11 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
     super.initState();
 
     setState(() {
-      priceList = productData['price'];
+      priceList.add(productData.price ?? '0');
 
       priceList.sort();
-      minPrice = priceList[0];
-      maxPrice = priceList[priceList.length - 1];
+      minPrice = int.parse(priceList[0] ?? '0');
+      maxPrice = int.parse(priceList[priceList.length - 1] ?? '0');
     });
   }
 
@@ -110,32 +117,28 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                             ),
                             itemCount: 3,
                             itemBuilder: (BuildContext imgContext, int index) {
-                              return Container(
-                                height: 80.0,
-                                decoration: BoxDecoration(
-                                  color: PrimaryColorStyles.primarySurface(),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                      productData['image'],
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {
-
-                                    },
-                                    onLongPress: () {
-
-                                    },
-                                    customBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                  ),
-                                ),
+                              return CachedNetworkImage(
+                                imageUrl: productData.images != null && productData.images!.isNotEmpty ? productData.images![0].url ?? '' : '',
+                                fit: BoxFit.contain,
+                                width: 110.0,
+                                height: 100.0,
+                                errorWidget: (errContext, url, error) {
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Icon(
+                                        Icons.broken_image_outlined,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
+                                      Text(
+                                        'Unable to load image',
+                                        style: XSTextStyles.medium(),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             },
                           ),
@@ -161,7 +164,7 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                             height: 10.0,
                           ),
                           Text(
-                            productData['title'],
+                            productData.name ?? '',
                             style: MTextStyles.regular().copyWith(
                               color: TextColorStyles.textPrimary(),
                             ),
@@ -177,7 +180,7 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                             height: 10.0,
                           ),
                           Text(
-                            productData['description'],
+                            productData.description ?? '',
                             style: MTextStyles.regular().copyWith(
                               color: TextColorStyles.textPrimary(),
                             ),
@@ -208,17 +211,10 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                           const SizedBox(
                             height: 10.0,
                           ),
-                          Text(
-                            productData['variant_stock']['variant'],
-                            style: LTextStyles.medium(),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
                           ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: productData['variant_stock']['subvariant'].length,
+                            itemCount: productData.varians != null ? productData.varians!.length : 0,
                             separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
                               return const SizedBox(
                                 height: 5.0,
@@ -230,11 +226,11 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    productData['variant_stock']['subvariant'][subvariantIndex]['name'],
+                                    "${productData.varians != null && productData.varians!.isNotEmpty ? productData.varians![0].name1 ?? '' : ''} ${productData.varians != null && productData.varians!.isNotEmpty ? productData.varians![0].name2 ?? '' : ''}",
                                     style: MTextStyles.regular(),
                                   ),
                                   Text(
-                                    productData['variant_stock']['subvariant'][subvariantIndex]['is_always_available'] == true ? 'Stok Selalu Ada' : "${productData['variant_stock']['subvariant'][subvariantIndex]['stock']}",
+                                    productData.varians![subvariantIndex].isStockAlwaysAvailable != null && productData.varians![subvariantIndex].isStockAlwaysAvailable == true ? 'Stok Selalu Ada' : productData.varians![subvariantIndex].stock ?? '0',
                                     style: MTextStyles.medium(),
                                   ),
                                 ],
@@ -252,21 +248,21 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                             height: 10.0,
                           ),
                           Text(
-                            productData['company']['name'],
+                            productData.company != null ? productData.company!.name ?? '' : '',
                             style: MTextStyles.medium(),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
-                            productData['company']['phone'],
+                            productData.company != null ? productData.company!.phone ?? '' : '',
                             style: MTextStyles.regular(),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
-                            productData['company']['address'],
+                            productData.company != null ? productData.company!.addresses != null && productData.company!.addresses!.isNotEmpty ? productData.company!.addresses![0] : '' : '',
                             style: MTextStyles.regular(),
                           ),
                         ],

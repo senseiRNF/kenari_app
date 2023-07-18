@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
@@ -17,9 +18,9 @@ class SellerProductAdjustmentFormPage extends StatefulWidget {
 class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmentFormPage> {
   int selectedTab = 0;
 
-  List waitingList = [];
-  List activeList = [];
-  List completedList = [];
+  List<SellerProductData> waitingList = [];
+  List<SellerProductData> activeList = [];
+  List<SellerProductData> completedList = [];
 
   List<SellerProductData> sellerProductDataList = [];
 
@@ -32,17 +33,33 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
 
   Future loadData() async {
     List<SellerProductData> tempSellerProductDataList = [];
+    List<SellerProductData> tempWaitingList = [];
+    List<SellerProductData> tempActiveList = [];
+    List<SellerProductData> tempCompletedList = [];
 
     await APISellerProductServices(context: context).call().then((callResult) {
       if(callResult != null && callResult.sellerProductData != null) {
         for(int i = 0; i < callResult.sellerProductData!.length; i++) {
           tempSellerProductDataList.add(callResult.sellerProductData![i]);
+
+          if(callResult.sellerProductData![i].verifyAt != null) {
+            if(callResult.sellerProductData![i].status == true) {
+              tempActiveList.add(callResult.sellerProductData![i]);
+            } else {
+              tempCompletedList.add(callResult.sellerProductData![i]);
+            }
+          } else {
+            tempWaitingList.add(callResult.sellerProductData![i]);
+          }
         }
       }
     });
 
     setState(() {
       sellerProductDataList = tempSellerProductDataList;
+      waitingList = tempWaitingList;
+      activeList = tempActiveList;
+      completedList = tempCompletedList;
     });
   }
 
@@ -55,7 +72,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
     switch(selectedTab) {
       case 0:
         if(waitingList.isNotEmpty) {
-          priceList = waitingList[0]['price'];
+          priceList.add(waitingList[0].price ?? '0');
 
           priceList.sort();
           minPrice = priceList[0];
@@ -63,9 +80,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
         }
 
         return RefreshIndicator(
-          onRefresh: () async {
-
-          },
+          onRefresh: () async => loadData(),
           child: waitingList.isNotEmpty ?
           ListView.builder(
             itemCount: waitingList.length,
@@ -81,18 +96,28 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 65.0,
-                            height: 65.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  waitingList[waitingIndex]['image'],
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          CachedNetworkImage(
+                            imageUrl: waitingList[waitingIndex].images != null && waitingList[waitingIndex].images!.isNotEmpty ? waitingList[waitingIndex].images![0].url ?? '' : '',
+                            fit: BoxFit.contain,
+                            width: 110.0,
+                            height: 100.0,
+                            errorWidget: (errContext, url, error) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Icon(
+                                    Icons.broken_image_outlined,
+                                    color: IconColorStyles.iconColor(),
+                                  ),
+                                  Text(
+                                    'Unable to load image',
+                                    style: XSTextStyles.medium(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                           const SizedBox(
                             width: 15.0,
@@ -102,7 +127,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  waitingList[waitingIndex]['title'],
+                                  waitingList[waitingIndex].name ?? '',
                                   style: MTextStyles.regular(),
                                 ),
                                 const SizedBox(
@@ -180,21 +205,19 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
         );
       case 1:
         if(activeList.isNotEmpty) {
-          priceList = activeList[0]['price'];
+          priceList.add(activeList[0].price ?? '0');
 
           priceList.sort();
-          minPrice = priceList[0];
-          maxPrice = priceList[priceList.length - 1];
+          minPrice = int.parse(priceList[0] ?? '0');
+          maxPrice = int.parse(priceList[priceList.length - 1] ?? '0');
         }
 
         return RefreshIndicator(
-          onRefresh: () async {
-
-          },
+          onRefresh: () async => loadData(),
           child: activeList.isNotEmpty ?
           ListView.builder(
             itemCount: activeList.length,
-            itemBuilder: (BuildContext waitingContext, int waitingIndex) {
+            itemBuilder: (BuildContext activeContext, int activeIndex) {
               return Container(
                 color: Colors.white,
                 child: Material(
@@ -203,11 +226,11 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                     onTap: () {
                       MoveToPage(
                         context: context,
-                        target: const SellerProductDetailPage(),
+                        target: SellerProductDetailPage(sellerProductData: activeList[activeIndex]),
                         callback: (callbackResult) {
                           if(callbackResult != null) {
                             if(callbackResult['status'] == false) {
-                              List tempList = activeList;
+                              List<SellerProductData> tempList = activeList;
 
                               setState(() {
                                 completedList = tempList;
@@ -226,18 +249,28 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 65.0,
-                            height: 65.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  activeList[waitingIndex]['image'],
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          CachedNetworkImage(
+                            imageUrl: activeList[activeIndex].images != null && activeList[activeIndex].images!.isNotEmpty ? activeList[activeIndex].images![0].url ?? '' : '',
+                            fit: BoxFit.contain,
+                            width: 110.0,
+                            height: 100.0,
+                            errorWidget: (errContext, url, error) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Icon(
+                                    Icons.broken_image_outlined,
+                                    color: IconColorStyles.iconColor(),
+                                  ),
+                                  Text(
+                                    'Unable to load image',
+                                    style: XSTextStyles.medium(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                           const SizedBox(
                             width: 15.0,
@@ -247,7 +280,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  activeList[waitingIndex]['title'],
+                                  activeList[activeIndex].name ?? '',
                                   style: MTextStyles.regular(),
                                 ),
                                 const SizedBox(
@@ -261,7 +294,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                                   height: 10.0,
                                 ),
                                 Text(
-                                  'Stok: Tersedia',
+                                  'Stok: ${activeList[activeIndex].isStockAlwaysAvailable != null && activeList[activeIndex].isStockAlwaysAvailable! == true ? 'Selalu Tersedia' : activeList[activeIndex].stock ?? '0'}',
                                   style: MTextStyles.regular(),
                                 ),
                               ],
@@ -322,7 +355,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
         );
       case 2:
         if(completedList.isNotEmpty) {
-          priceList = completedList[0]['price'];
+          priceList.add(completedList[0].price ?? '0');
 
           priceList.sort();
           minPrice = priceList[0];
@@ -330,13 +363,11 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
         }
 
         return RefreshIndicator(
-          onRefresh: () async {
-
-          },
+          onRefresh: () async => loadData(),
           child: completedList.isNotEmpty ?
           ListView.builder(
             itemCount: completedList.length,
-            itemBuilder: (BuildContext waitingContext, int waitingIndex) {
+            itemBuilder: (BuildContext completedContext, int completedIndex) {
               return Container(
                 color: Colors.white,
                 child: Material(
@@ -348,18 +379,28 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 65.0,
-                            height: 65.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  completedList[waitingIndex]['image'],
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          CachedNetworkImage(
+                            imageUrl: completedList[completedIndex].images != null && completedList[completedIndex].images!.isNotEmpty ? completedList[completedIndex].images![0].url ?? '' : '',
+                            fit: BoxFit.contain,
+                            width: 110.0,
+                            height: 100.0,
+                            errorWidget: (errContext, url, error) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Icon(
+                                    Icons.broken_image_outlined,
+                                    color: IconColorStyles.iconColor(),
+                                  ),
+                                  Text(
+                                    'Unable to load image',
+                                    style: XSTextStyles.medium(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                           const SizedBox(
                             width: 15.0,
@@ -369,7 +410,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  completedList[waitingIndex]['title'],
+                                  completedList[completedIndex].name ?? '',
                                   style: MTextStyles.regular(),
                                 ),
                                 const SizedBox(
