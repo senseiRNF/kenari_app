@@ -18,11 +18,9 @@ class SellerProductAdjustmentFormPage extends StatefulWidget {
 class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmentFormPage> {
   int selectedTab = 0;
 
-  List<SellerProductData> waitingList = [];
-  List<SellerProductData> activeList = [];
-  List<SellerProductData> completedList = [];
-
   List<SellerProductData> sellerProductDataList = [];
+  
+  String status = 'waiting';
 
   @override
   void initState() {
@@ -33,33 +31,17 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
 
   Future loadData() async {
     List<SellerProductData> tempSellerProductDataList = [];
-    List<SellerProductData> tempWaitingList = [];
-    List<SellerProductData> tempActiveList = [];
-    List<SellerProductData> tempCompletedList = [];
 
-    await APISellerProductServices(context: context).call().then((callResult) {
+    await APISellerProductServices(context: context).call(status).then((callResult) {
       if(callResult != null && callResult.sellerProductData != null) {
         for(int i = 0; i < callResult.sellerProductData!.length; i++) {
           tempSellerProductDataList.add(callResult.sellerProductData![i]);
-
-          if(callResult.sellerProductData![i].verifyAt != null) {
-            if(callResult.sellerProductData![i].status == true) {
-              tempActiveList.add(callResult.sellerProductData![i]);
-            } else {
-              tempCompletedList.add(callResult.sellerProductData![i]);
-            }
-          } else {
-            tempWaitingList.add(callResult.sellerProductData![i]);
-          }
         }
       }
     });
 
     setState(() {
       sellerProductDataList = tempSellerProductDataList;
-      waitingList = tempWaitingList;
-      activeList = tempActiveList;
-      completedList = tempCompletedList;
     });
   }
 
@@ -71,19 +53,19 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
 
     switch(selectedTab) {
       case 0:
-        if(waitingList.isNotEmpty) {
-          priceList.add(waitingList[0].price ?? '0');
+        if(sellerProductDataList.isNotEmpty) {
+          priceList.add(sellerProductDataList[0].price ?? '0');
 
           priceList.sort();
-          minPrice = priceList[0];
-          maxPrice = priceList[priceList.length - 1];
+          minPrice = int.parse(priceList[0]);
+          maxPrice = int.parse(priceList[priceList.length - 1]);
         }
 
         return RefreshIndicator(
           onRefresh: () async => loadData(),
-          child: waitingList.isNotEmpty ?
+          child: sellerProductDataList.isNotEmpty ?
           ListView.builder(
-            itemCount: waitingList.length,
+            itemCount: sellerProductDataList.length,
             itemBuilder: (BuildContext waitingContext, int waitingIndex) {
               return Container(
                 color: Colors.white,
@@ -97,7 +79,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
-                            imageUrl: waitingList[waitingIndex].images != null && waitingList[waitingIndex].images!.isNotEmpty ? waitingList[waitingIndex].images![0].url ?? '' : '',
+                            imageUrl: sellerProductDataList[waitingIndex].images != null && sellerProductDataList[waitingIndex].images!.isNotEmpty ? sellerProductDataList[waitingIndex].images![0].url ?? '' : '',
                             fit: BoxFit.contain,
                             width: 110.0,
                             height: 100.0,
@@ -127,7 +109,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  waitingList[waitingIndex].name ?? '',
+                                  sellerProductDataList[waitingIndex].name ?? '',
                                   style: MTextStyles.regular(),
                                 ),
                                 const SizedBox(
@@ -204,8 +186,8 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
           ),
         );
       case 1:
-        if(activeList.isNotEmpty) {
-          priceList.add(activeList[0].price ?? '0');
+        if(sellerProductDataList.isNotEmpty) {
+          priceList.add(sellerProductDataList[0].price ?? '0');
 
           priceList.sort();
           minPrice = int.parse(priceList[0] ?? '0');
@@ -214,9 +196,9 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
 
         return RefreshIndicator(
           onRefresh: () async => loadData(),
-          child: activeList.isNotEmpty ?
+          child: sellerProductDataList.isNotEmpty ?
           ListView.builder(
-            itemCount: activeList.length,
+            itemCount: sellerProductDataList.length,
             itemBuilder: (BuildContext activeContext, int activeIndex) {
               return Container(
                 color: Colors.white,
@@ -226,17 +208,11 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                     onTap: () {
                       MoveToPage(
                         context: context,
-                        target: SellerProductDetailPage(sellerProductData: activeList[activeIndex]),
-                        callback: (callbackResult) {
+                        target: SellerProductDetailPage(sellerProductData: sellerProductDataList[activeIndex]),
+                        callback: (callbackResult) async {
                           if(callbackResult != null) {
                             if(callbackResult['status'] == false) {
-                              List<SellerProductData> tempList = activeList;
-
-                              setState(() {
-                                completedList = tempList;
-
-                                activeList = [];
-                              });
+                              await loadData();
                             } else {
                               BackFromThisPage(context: context, callbackData: callbackResult).go();
                             }
@@ -250,7 +226,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
-                            imageUrl: activeList[activeIndex].images != null && activeList[activeIndex].images!.isNotEmpty ? activeList[activeIndex].images![0].url ?? '' : '',
+                            imageUrl: sellerProductDataList[activeIndex].images != null && sellerProductDataList[activeIndex].images!.isNotEmpty ? sellerProductDataList[activeIndex].images![0].url ?? '' : '',
                             fit: BoxFit.contain,
                             width: 110.0,
                             height: 100.0,
@@ -280,7 +256,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  activeList[activeIndex].name ?? '',
+                                  sellerProductDataList[activeIndex].name ?? '',
                                   style: MTextStyles.regular(),
                                 ),
                                 const SizedBox(
@@ -294,7 +270,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                                   height: 10.0,
                                 ),
                                 Text(
-                                  'Stok: ${activeList[activeIndex].isStockAlwaysAvailable != null && activeList[activeIndex].isStockAlwaysAvailable! == true ? 'Selalu Tersedia' : activeList[activeIndex].stock ?? '0'}',
+                                  'Stok: ${sellerProductDataList[activeIndex].isStockAlwaysAvailable != null && sellerProductDataList[activeIndex].isStockAlwaysAvailable! == true ? 'Selalu Tersedia' : sellerProductDataList[activeIndex].stock ?? '0'}',
                                   style: MTextStyles.regular(),
                                 ),
                               ],
@@ -354,19 +330,19 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
           ),
         );
       case 2:
-        if(completedList.isNotEmpty) {
-          priceList.add(completedList[0].price ?? '0');
+        if(sellerProductDataList.isNotEmpty) {
+          priceList.add(sellerProductDataList[0].price ?? '0');
 
           priceList.sort();
-          minPrice = priceList[0];
-          maxPrice = priceList[priceList.length - 1];
+          minPrice = int.parse(priceList[0]);
+          maxPrice = int.parse(priceList[priceList.length - 1]);
         }
 
         return RefreshIndicator(
           onRefresh: () async => loadData(),
-          child: completedList.isNotEmpty ?
+          child: sellerProductDataList.isNotEmpty ?
           ListView.builder(
-            itemCount: completedList.length,
+            itemCount: sellerProductDataList.length,
             itemBuilder: (BuildContext completedContext, int completedIndex) {
               return Container(
                 color: Colors.white,
@@ -380,7 +356,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
-                            imageUrl: completedList[completedIndex].images != null && completedList[completedIndex].images!.isNotEmpty ? completedList[completedIndex].images![0].url ?? '' : '',
+                            imageUrl: sellerProductDataList[completedIndex].images != null && sellerProductDataList[completedIndex].images!.isNotEmpty ? sellerProductDataList[completedIndex].images![0].url ?? '' : '',
                             fit: BoxFit.contain,
                             width: 110.0,
                             height: 100.0,
@@ -410,7 +386,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  completedList[completedIndex].name ?? '',
+                                  sellerProductDataList[completedIndex].name ?? '',
                                   style: MTextStyles.regular(),
                                 ),
                                 const SizedBox(
@@ -557,6 +533,23 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                     onTap: (index) {
                       setState(() {
                         selectedTab = index;
+
+                        switch(index) {
+                          case 0:
+                            status = 'waiting';
+                            break;
+                          case 1:
+                            status = 'verified';
+                            break;
+                          case 2:
+                            status = 'cancelled';
+                            break;
+                          default:
+                            status = 'waiting';
+                            break;
+                        }
+
+                        loadData();
                       });
                     },
                     tabs: [

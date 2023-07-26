@@ -13,7 +13,7 @@ class APISellerProductServices {
 
   APISellerProductServices({required this.context});
 
-  Future<SellerProductModel?> call() async {
+  Future<SellerProductModel?> call(String? status) async {
     SellerProductModel? result;
 
     await LocalSharedPrefs().readKey('token').then((token) async {
@@ -29,7 +29,10 @@ class APISellerProductServices {
                   'Authorization': 'Bearer $token',
                 },
               ),
-              queryParameters: {
+              queryParameters: status != null ? {
+                'member_id': memberId,
+                'verify_status': status,
+              } : {
                 'member_id': memberId,
               },
             ).then((getResult) {
@@ -118,6 +121,37 @@ class APISellerProductServices {
             ErrorHandler(context: context, dioExc: dioErr).handle();
           }
         });
+      });
+    });
+
+    return result;
+  }
+
+  Future<bool> dioCancel(String? id) async {
+    bool result = false;
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await APIOptions.init().then((dio) async {
+        LoadingDialog(context: context).show();
+
+        try {
+          await dio.get(
+            '/product/cancel-product/$id',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ),
+          ).then((getResult) {
+            result = true;
+
+            BackFromThisPage(context: context).go();
+          });
+        } on DioException catch(dioErr) {
+          BackFromThisPage(context: context).go();
+
+          ErrorHandler(context: context, dioExc: dioErr).handle();
+        }
       });
     });
 

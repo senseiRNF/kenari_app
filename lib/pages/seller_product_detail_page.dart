@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/models/seller_product_model.dart';
+import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -32,6 +33,8 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
     super.initState();
 
     setState(() {
+      productData = widget.sellerProductData;
+
       priceList.add(productData.price ?? '0');
 
       priceList.sort();
@@ -226,7 +229,7 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "${productData.varians != null && productData.varians!.isNotEmpty ? productData.varians![0].name1 ?? '' : ''} ${productData.varians != null && productData.varians!.isNotEmpty ? productData.varians![0].name2 ?? '' : ''}",
+                                    "${productData.varians != null && productData.varians!.isNotEmpty ? productData.varians![subvariantIndex].name1 ?? '' : ''} ${productData.varians != null && productData.varians!.isNotEmpty ? productData.varians![subvariantIndex].name2 ?? '' : ''}",
                                     style: MTextStyles.regular(),
                                   ),
                                   Text(
@@ -308,14 +311,18 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                           context: context,
                           title: 'Batalkan Titip Jual',
                           message: 'Produk ini akan dihapus secara permanen dan Anda tidak dapat mengaksesnya kembali. Lanjutkan?',
-                          yesFunction: () {
-                            BackFromThisPage(
-                              context: context,
-                              callbackData: {
-                                'status': false,
-                                'data': '',
-                              },
-                            ).go();
+                          yesFunction: () async {
+                            await APISellerProductServices(context: context).dioCancel(productData.sId).then((cancelResult) {
+                              if(cancelResult == true) {
+                                BackFromThisPage(
+                                  context: context,
+                                  callbackData: {
+                                    'status': false,
+                                    'data': '',
+                                  },
+                                ).go();
+                              }
+                            });
                           },
                           noFunction: () {
 
