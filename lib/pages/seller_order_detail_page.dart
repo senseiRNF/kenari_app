@@ -296,7 +296,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     ).show();
                   },
                   noText: 'Batal',
-                  noFunction: () {},
+                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(
@@ -332,7 +332,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     ).show();
                   },
                   noText: 'Batal',
-                  noFunction: () {},
+                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(
@@ -378,7 +378,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                     ).show();
                   },
                   noText: 'Batal',
-                  noFunction: () {},
+                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(

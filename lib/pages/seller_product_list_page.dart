@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/seller_product_detail_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/seller_product_model.dart';
 import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class SellerProductAdjustmentFormPage extends StatefulWidget {
-  const SellerProductAdjustmentFormPage({super.key});
+class SellerProductListPage extends StatefulWidget {
+  const SellerProductListPage({super.key});
 
   @override
-  State<SellerProductAdjustmentFormPage> createState() => _SellerProductAdjustmentFormPageState();
+  State<SellerProductListPage> createState() => _SellerProductListPageState();
 }
 
-class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmentFormPage> {
+class _SellerProductListPageState extends State<SellerProductListPage> {
   int selectedTab = 0;
 
   List<SellerProductData> sellerProductDataList = [];
@@ -46,21 +47,8 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
   }
 
   Widget activeTab() {
-    List priceList = [];
-
-    int minPrice = 0;
-    int maxPrice = 0;
-
     switch(selectedTab) {
       case 0:
-        if(sellerProductDataList.isNotEmpty) {
-          priceList.add(sellerProductDataList[0].price ?? '0');
-
-          priceList.sort();
-          minPrice = int.parse(priceList[0]);
-          maxPrice = int.parse(priceList[priceList.length - 1]);
-        }
-
         return RefreshIndicator(
           onRefresh: () async => loadData(),
           child: sellerProductDataList.isNotEmpty ?
@@ -79,10 +67,18 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
-                            imageUrl: sellerProductDataList[waitingIndex].images != null && sellerProductDataList[waitingIndex].images!.isNotEmpty ? sellerProductDataList[waitingIndex].images![0].url ?? '' : '',
-                            fit: BoxFit.contain,
+                            imageUrl: "$baseURL/${sellerProductDataList[waitingIndex].images != null && sellerProductDataList[waitingIndex].images!.isNotEmpty ? sellerProductDataList[waitingIndex].images![0].url ?? '' : ''}",
                             width: 110.0,
                             height: 100.0,
+                            imageBuilder: (context, imgProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imgProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
                             errorWidget: (errContext, url, error) {
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -116,7 +112,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                                   height: 5.0,
                                 ),
                                 Text(
-                                  'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp ${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}',
+                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(sellerProductDataList[waitingIndex].price ?? '0')).replaceAll(',', '.')}',
                                   style: MTextStyles.medium(),
                                 ),
                                 const SizedBox(
@@ -186,14 +182,6 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
           ),
         );
       case 1:
-        if(sellerProductDataList.isNotEmpty) {
-          priceList.add(sellerProductDataList[0].price ?? '0');
-
-          priceList.sort();
-          minPrice = int.parse(priceList[0] ?? '0');
-          maxPrice = int.parse(priceList[priceList.length - 1] ?? '0');
-        }
-
         return RefreshIndicator(
           onRefresh: () async => loadData(),
           child: sellerProductDataList.isNotEmpty ?
@@ -206,19 +194,17 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      MoveToPage(
-                        context: context,
-                        target: SellerProductDetailPage(sellerProductData: sellerProductDataList[activeIndex]),
-                        callback: (callbackResult) async {
-                          if(callbackResult != null) {
-                            if(callbackResult['status'] == false) {
+                      if(sellerProductDataList[activeIndex].sId != null) {
+                        MoveToPage(
+                          context: context,
+                          target: SellerProductDetailPage(productId: sellerProductDataList[activeIndex].sId!),
+                          callback: (callbackResult) async {
+                            if(callbackResult != null && callbackResult == true) {
                               await loadData();
-                            } else {
-                              BackFromThisPage(context: context, callbackData: callbackResult).go();
                             }
-                          }
-                        }
-                      ).go();
+                          },
+                        ).go();
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
@@ -226,10 +212,18 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
-                            imageUrl: sellerProductDataList[activeIndex].images != null && sellerProductDataList[activeIndex].images!.isNotEmpty ? sellerProductDataList[activeIndex].images![0].url ?? '' : '',
-                            fit: BoxFit.contain,
+                            imageUrl: "$baseURL/${sellerProductDataList[activeIndex].images != null && sellerProductDataList[activeIndex].images!.isNotEmpty ? sellerProductDataList[activeIndex].images![0].url ?? '' : ''}",
                             width: 110.0,
                             height: 100.0,
+                            imageBuilder: (context, imgProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imgProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
                             errorWidget: (errContext, url, error) {
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -263,7 +257,7 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                                   height: 5.0,
                                 ),
                                 Text(
-                                  'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp ${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}',
+                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(sellerProductDataList[activeIndex].price ?? '0')).replaceAll(',', '.')}',
                                   style: MTextStyles.medium(),
                                 ),
                                 const SizedBox(
@@ -330,14 +324,6 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
           ),
         );
       case 2:
-        if(sellerProductDataList.isNotEmpty) {
-          priceList.add(sellerProductDataList[0].price ?? '0');
-
-          priceList.sort();
-          minPrice = int.parse(priceList[0]);
-          maxPrice = int.parse(priceList[priceList.length - 1]);
-        }
-
         return RefreshIndicator(
           onRefresh: () async => loadData(),
           child: sellerProductDataList.isNotEmpty ?
@@ -356,10 +342,18 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CachedNetworkImage(
-                            imageUrl: sellerProductDataList[completedIndex].images != null && sellerProductDataList[completedIndex].images!.isNotEmpty ? sellerProductDataList[completedIndex].images![0].url ?? '' : '',
-                            fit: BoxFit.contain,
+                            imageUrl: "$baseURL/${sellerProductDataList[completedIndex].images != null && sellerProductDataList[completedIndex].images!.isNotEmpty ? sellerProductDataList[completedIndex].images![0].url ?? '' : ''}",
                             width: 110.0,
                             height: 100.0,
+                            imageBuilder: (context, imgProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imgProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
                             errorWidget: (errContext, url, error) {
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -393,13 +387,15 @@ class _SellerProductAdjustmentFormPageState extends State<SellerProductAdjustmen
                                   height: 5.0,
                                 ),
                                 Text(
-                                  'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp ${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}',
+                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(sellerProductDataList[completedIndex].price ?? '0')).replaceAll(',', '.')}',
                                   style: MTextStyles.medium(),
                                 ),
                                 const SizedBox(
                                   height: 10.0,
                                 ),
                                 Text(
+                                  sellerProductDataList[completedIndex].isStockAlwaysAvailable != null && sellerProductDataList[completedIndex].isStockAlwaysAvailable! == true ?
+                                  'Stok: Tidak Tersedia' :
                                   'Stok: Habis',
                                   style: MTextStyles.regular(),
                                 ),

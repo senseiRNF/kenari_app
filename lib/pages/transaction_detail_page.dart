@@ -238,7 +238,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     ).show();
                   },
                   noText: 'Batal',
-                  noFunction: () {},
+                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(
@@ -270,7 +270,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     ).show();
                   },
                   noText: 'Batal',
-                  noFunction: () {},
+                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(
@@ -312,7 +312,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     ).show();
                   },
                   noText: 'Batal',
-                  noFunction: () {},
+                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(

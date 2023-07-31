@@ -660,14 +660,18 @@ class HomeFragment extends StatelessWidget {
                               if(newProductList[index].varians == null || newProductList[index].varians!.isEmpty) {
                                 price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].price ?? '0')).replaceAll(',', '.')}';
                               } else {
-                                List sortedVariantPrice = newProductList[index].varians!;
+                                if(newProductList[index].varians!.length > 1) {
+                                  List sortedVariantPrice = newProductList[index].varians!;
 
-                                sortedVariantPrice.sort((a, b) => int.parse(a.price ?? '0').compareTo(int.parse(b.price ?? '0')));
+                                  sortedVariantPrice.sort((a, b) => int.parse(a.price ?? '0').compareTo(int.parse(b.price ?? '0')));
 
-                                int lowest = int.parse(sortedVariantPrice[0].price ?? '0');
-                                int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].price ?? '0');
+                                  int lowest = int.parse(sortedVariantPrice[0].price ?? '0');
+                                  int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].price ?? '0');
 
-                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
+                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
+                                } else {
+                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
+                                }
                               }
 
                               return Padding(

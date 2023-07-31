@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,19 +11,22 @@ import 'package:kenari_app/miscellaneous/separator_formatter.dart';
 import 'package:kenari_app/pages/company_address_selection_page.dart';
 import 'package:kenari_app/pages/seller_product_result_page.dart';
 import 'package:kenari_app/pages/variant_selection_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
+import 'package:kenari_app/services/api/models/company_model.dart';
+import 'package:kenari_app/services/api/models/seller_product_detail_model.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
-import 'package:kenari_app/services/local/models/local_variant_data.dart';
+import 'package:kenari_app/services/local/models/local_seller_product_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class SellerProductFormPage extends StatefulWidget {
-  final Map? updateData;
+  final String? productId;
 
   const SellerProductFormPage({
     super.key,
-    this.updateData,
+    this.productId,
   });
 
   @override
@@ -30,7 +34,7 @@ class SellerProductFormPage extends StatefulWidget {
 }
 
 class _SellerProductFormPageState extends State<SellerProductFormPage> {
-  List<CategoryData> categoryList = [];
+  SellerProductDetailData? sellerProductDetailData;
 
   TextEditingController productNameController = TextEditingController();
   TextEditingController productDescriptionController = TextEditingController();
@@ -39,7 +43,8 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
   TextEditingController productStockController = TextEditingController();
   TextEditingController preOrderDurationController = TextEditingController(text: '1');
 
-  List<XFile> productImg = [];
+  List<CategoryData> categoryList = [];
+  List<MediaProductData> productImg = [];
   List durationList = [
     'Hari',
     'Minggu',
@@ -54,29 +59,11 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
   Map variant = {};
   Map companyData = {};
 
-  var separatorFormatter = NumberFormat('#,###');
-
   @override
   void initState() {
     super.initState();
 
     loadData();
-
-    if(widget.updateData != null && widget.updateData!.isNotEmpty) {
-      setState(() {
-        productNameController.text = widget.updateData!['title'];
-        productDescriptionController.text = widget.updateData!['description'];
-
-        List priceTempList = widget.updateData!['price'];
-
-        priceTempList.sort();
-
-        int minPrice = priceTempList[0];
-        int maxPrice = priceTempList[priceTempList.length - 1];
-
-        productPriceController.text = 'Rp ${NumberFormat('#,###', 'en_id').format(minPrice).replaceAll(',', '.')} - Rp${NumberFormat('#,###', 'en_id').format(maxPrice).replaceAll(',', '.')}';
-      });
-    }
   }
 
   Future loadData() async {
@@ -85,6 +72,80 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
         setState(() {
           categoryList = categoryResult.categoryData!;
         });
+      }
+
+      if(widget.productId != null) {
+        SellerProductDetailData? tempSellerProductDetailData;
+
+        await APISellerProductServices(context: context).callById(widget.productId!).then((callResult) {
+          if(callResult != null && callResult.sellerProductDetailData != null) {
+            tempSellerProductDetailData = callResult.sellerProductDetailData;
+          }
+
+          setState(() {
+            sellerProductDetailData = tempSellerProductDetailData;
+          });
+        });
+
+        if(sellerProductDetailData != null) {
+          setState(() {
+            productNameController.text = sellerProductDetailData!.name ?? '';
+            productDescriptionController.text = sellerProductDetailData!.description ?? '';
+            productPriceController.text = NumberFormat('#,###', 'en_id').format(int.parse(sellerProductDetailData!.price ?? '0')).replaceAll(',', '.');
+            productStockController.text = NumberFormat('#,###', 'en_id').format(int.parse(sellerProductDetailData!.stock ?? '0')).replaceAll(',', '.');
+
+            if(sellerProductDetailData!.productCategory != null) {
+              categoryId = sellerProductDetailData!.productCategory!.sId;
+              productCategoryController.text = sellerProductDetailData!.productCategory!.name ?? '';
+            }
+
+            isAlwaysAvailable = sellerProductDetailData!.isStockAlwaysAvailable ?? false;
+            isPreOrder = sellerProductDetailData!.isPreOrder ?? false;
+
+            if(sellerProductDetailData!.images != null) {
+              List<MediaProductData> tempProductImg = [];
+
+              for(int i = 0; i < sellerProductDetailData!.images!.length; i++) {
+                if(sellerProductDetailData!.images![i].url != null) {
+                  tempProductImg.add(MediaProductData(url: sellerProductDetailData!.images![i].url!));
+                }
+              }
+
+              setState(() {
+                productImg = tempProductImg;
+              });
+            }
+
+            if(sellerProductDetailData!.varians != null) {
+              for(int x = 0; x < sellerProductDetailData!.varians!.length; x++) {
+                variant = {
+                  'generated_data': [
+                    {
+                      'name1': sellerProductDetailData!.varians![x].name1,
+                      'name2': sellerProductDetailData!.varians![x].name2,
+                      'price': sellerProductDetailData!.varians![x].price,
+                      'stock': sellerProductDetailData!.varians![x].stock,
+                      'is_stock_always_available': sellerProductDetailData!.varians![x].isStockAlwaysAvailable,
+                    },
+                  ],
+                };
+              }
+            }
+
+            if(sellerProductDetailData!.address != null && sellerProductDetailData!.company != null) {
+              companyData = {
+                'company_data': CompanyData(
+                  sId: sellerProductDetailData!.company!.sId,
+                  name: sellerProductDetailData!.company!.name,
+                  code: sellerProductDetailData!.company!.code,
+                  phone: sellerProductDetailData!.company!.phone != '' ? sellerProductDetailData!.company!.phone : null,
+                ),
+                'selected_id': sellerProductDetailData!.address!.sId,
+                'selected': sellerProductDetailData!.address!.address,
+              };
+            }
+          });
+        }
       }
     });
   }
@@ -97,7 +158,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
     await picker.pickImage(
       source: source,
       imageQuality: source == ImageSource.gallery ? 100 : 50,
-    ).then((pickResult) {
+    ).then((pickResult) async {
       result = pickResult;
     });
 
@@ -121,8 +182,8 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
       }
     }
 
-    await APISellerProductServices(context: context).dioUpdate(
-      UpdateVariantData(
+    await APISellerProductServices(context: context).dioCreate(
+      FormSellerProductData(
         name: productNameController.text,
         productCategoryId: '$categoryId',
         description: productDescriptionController.text,
@@ -147,6 +208,54 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
         ).go();
       }
     });
+  }
+
+  Future updateData() async {
+    if(widget.productId != null) {
+      List items = [];
+
+      if(variant.isNotEmpty) {
+        for(int a = 0; a < variant['generated_data'].length; a++) {
+          items.add({
+            '"variant_type1_id"': '"${variant['generated_data'][a]['variant_type1_id']}"',
+            '"name1"': '"${variant['generated_data'][a]['name1']}"',
+            '"variant_type2_id"': '"${variant['generated_data'][a]['variant_type2_id']}"',
+            '"name2"': '"${variant['generated_data'][a]['name2']}"',
+            '"price"': '"${variant['inputted_data'][a]['price']}"',
+            '"stock"': '"${variant['inputted_data'][a]['stock']}"',
+            '"is_stock_always_available"': '"${variant['inputted_data'][a]['is_always_available']}"',
+          });
+        }
+      }
+
+      await APISellerProductServices(context: context).dioUpdate(
+        widget.productId!,
+        FormSellerProductData(
+          name: productNameController.text,
+          productCategoryId: '$categoryId',
+          description: productDescriptionController.text,
+          price: productPriceController.text.replaceAll('.', ''),
+          stock: productStockController.text.replaceAll('.', ''),
+          isAlwaysAvailable: isAlwaysAvailable,
+          isPreorder: isPreOrder,
+          addressId: companyData['selected_id'],
+          items: items,
+          files: productImg,
+        ),
+      ).then((postResult) {
+        if(postResult == true) {
+          MoveToPage(
+            context: context,
+            target: const SellerProductResultPage(isSuccess: true),
+            callback: (callbackData) {
+              if(callbackData != null) {
+                BackFromThisPage(context: context, callbackData: callbackData).go();
+              }
+            },
+          ).go();
+        }
+      });
+    }
   }
 
   @override
@@ -185,7 +294,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         ),
                         Expanded(
                           child: Text(
-                            widget.updateData != null ? 'Ubah Detail' : 'Titip Produk',
+                            widget.productId != null ? 'Ubah Detail' : 'Titip Produk',
                             style: HeadingTextStyles.headingS(),
                           ),
                         ),
@@ -255,27 +364,20 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                           ),
                           itemCount: productImg.length + 1,
                           itemBuilder: (BuildContext imgContext, int index) {
-                            return Container(
-                              height: 60.0,
-                              decoration: BoxDecoration(
-                                color: PrimaryColorStyles.primarySurface(),
-                                border: Border.all(
-                                  color: PrimaryColorStyles.primaryBorder(),
-                                ),
-                                borderRadius: BorderRadius.circular(5.0),
-                                image: index == 0 ? null :
-                                DecorationImage(
-                                  image: FileImage(
-                                    File(productImg[index-1].path),
+                            if(index == 0) {
+                              return Container(
+                                height: 60.0,
+                                decoration: BoxDecoration(
+                                  color: PrimaryColorStyles.primarySurface(),
+                                  border: Border.all(
+                                    color: PrimaryColorStyles.primaryBorder(),
                                   ),
-                                  fit: BoxFit.cover,
+                                  borderRadius: BorderRadius.circular(5.0),
                                 ),
-                              ),
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {
-                                    if(index == 0) {
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () {
                                       SourceSelectionDialog(
                                         context: context,
                                         title: 'Tambah Gambar',
@@ -283,62 +385,160 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                         cameraFunction: () async {
                                           await pickingImage(ImageSource.camera).then((pickResult) {
                                             if(pickResult != null) {
-                                              setState(() {
-                                                productImg.add(pickResult);
-                                              });
+                                              int bytesFile = File(pickResult.path).lengthSync();
+
+                                              if(bytesFile <= 3200000) {
+                                                setState(() {
+                                                  productImg.add(MediaProductData(xFile: pickResult));
+                                                });
+                                              } else {
+                                                OkDialog(
+                                                  context: context,
+                                                  message: 'Ukuran file terlalu besar (max: 3MB)',
+                                                  showIcon: false,
+                                                ).show();
+                                              }
                                             }
                                           });
                                         },
                                         galleryFunction: () async {
                                           await pickingImage(ImageSource.gallery).then((pickResult) {
                                             if(pickResult != null) {
-                                              setState(() {
-                                                productImg.add(pickResult);
-                                              });
+                                              int bytesFile = File(pickResult.path).lengthSync();
+
+                                              if(bytesFile <= 3200000) {
+                                                setState(() {
+                                                  productImg.add(MediaProductData(xFile: pickResult));
+                                                });
+                                              } else {
+                                                OkDialog(
+                                                  context: context,
+                                                  message: 'Ukuran file terlalu besar (max: 3MB)',
+                                                  showIcon: false,
+                                                ).show();
+                                              }
                                             }
                                           });
                                         },
                                       ).show();
-                                    }
-                                  },
-                                  onLongPress: () {
-                                    if(index != 0) {
+                                    },
+                                    customBorder: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Icon(
+                                          Icons.add,
+                                          color: PrimaryColorStyles.primaryMain(),
+                                          size: 25.0,
+                                        ),
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Text(
+                                          'Tambah\nFoto/Video',
+                                          style: XSTextStyles.regular().copyWith(
+                                            color: PrimaryColorStyles.primaryMain(),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return productImg[index-1].xFile != null ?
+                              Container(
+                                height: 60.0,
+                                decoration: BoxDecoration(
+                                  color: PrimaryColorStyles.primarySurface(),
+                                  border: Border.all(
+                                    color: PrimaryColorStyles.primaryBorder(),
+                                  ),
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  image: DecorationImage(
+                                    image: FileImage(
+                                      File(productImg[index-1].xFile!.path),
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onLongPress: () {
                                       setState(() {
                                         productImg.removeAt(index - 1);
                                       });
-                                    }
-                                  },
-                                  customBorder: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: index == 0 ?
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Icon(
-                                        Icons.add,
-                                        color: PrimaryColorStyles.primaryMain(),
-                                        size: 25.0,
-                                      ),
-                                      const SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Text(
-                                        'Tambah\nFoto/Video',
-                                        style: XSTextStyles.regular().copyWith(
-                                          color: PrimaryColorStyles.primaryMain(),
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ) :
-                                  const Material(
-                                    color: Colors.transparent,
+                                    },
+                                    customBorder: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    child: const Material(
+                                      color: Colors.transparent,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
+                              ) :
+                              CachedNetworkImage(
+                                imageUrl: "$baseURL/${productImg[index-1].url ?? ''}",
+                                imageBuilder: (context, imgProvider) {
+                                  return Container(
+                                    height: 60.0,
+                                    decoration: BoxDecoration(
+                                      color: PrimaryColorStyles.primarySurface(),
+                                      border: Border.all(
+                                        color: PrimaryColorStyles.primaryBorder(),
+                                      ),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      image: DecorationImage(
+                                        image: imgProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        // onLongPress: () {
+                                        //   setState(() {
+                                        //     productImg.removeAt(index - 1);
+                                        //   });
+                                        // },
+                                        customBorder: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5.0),
+                                        ),
+                                        child: const Material(
+                                          color: Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (errContext, url, error) {
+                                  return SizedBox(
+                                    height: 60.0,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Icon(
+                                          Icons.broken_image_outlined,
+                                          color: IconColorStyles.iconColor(),
+                                        ),
+                                        Text(
+                                          'Unable to load image',
+                                          style: XSTextStyles.medium(),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            }
                           },
                         ),
                       ],
@@ -797,7 +997,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               height: 10.0,
                             ),
                             Text(
-                              companyData['company_data'].phone ?? 'Unknown Phone',
+                              companyData['company_data'].phone ?? '(Nomor telepon tidak terdaftar)',
                               style: STextStyles.regular(),
                             ),
                             const SizedBox(
@@ -828,8 +1028,17 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    if(widget.updateData == null) {
-                      if(productImg.isNotEmpty && productNameController.text != '' && categoryId != null && productPriceController.text != '' && productStockController.text != '' && companyData.isNotEmpty) {
+                    if(productImg.isNotEmpty && productNameController.text != '' && categoryId != null && productPriceController.text != '' && productStockController.text != '' && companyData.isNotEmpty) {
+                      if(widget.productId != null) {
+                        OptionDialog(
+                          context: context,
+                          title: 'Ubah Produk',
+                          message: 'Pastikan semua detail Produk yang akan di submit sudah sesuai',
+                          yesText: 'Lanjutkan',
+                          yesFunction: () async => updateData(),
+                          noText: 'Batal',
+                        ).show();
+                      } else {
                         OptionDialog(
                           context: context,
                           title: 'Titip Produk',
@@ -837,9 +1046,6 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                           yesText: 'Lanjutkan',
                           yesFunction: () async => saveData(),
                           noText: 'Batal',
-                          noFunction: () {
-
-                          },
                         ).show();
                       }
                     }
@@ -850,7 +1056,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
-                      widget.updateData != null ? 'Simpan Perubahan' : 'Ajukan Penitipan',
+                      widget.productId != null ? 'Simpan Perubahan' : 'Ajukan Penitipan',
                       style: LTextStyles.medium().copyWith(
                         color: productImg.isNotEmpty && productNameController.text != '' && categoryId != null && productPriceController.text != '' && productStockController.text != '' && companyData.isNotEmpty ? Colors.white : Colors.black54,
                       ),

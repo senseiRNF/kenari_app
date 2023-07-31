@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:kenari_app/services/api/models/variant_type_model.dart';
 
 class Subvariant {
@@ -37,31 +36,5 @@ class CompleteVariant {
     required this.stockController,
     required this.stock,
     required this.isAlwaysAvailable,
-  });
-}
-
-class UpdateVariantData {
-  String name;
-  String productCategoryId;
-  String description;
-  String price;
-  String stock;
-  bool isAlwaysAvailable;
-  bool isPreorder;
-  String addressId;
-  List items;
-  List<XFile> files;
-
-  UpdateVariantData({
-    required this.name,
-    required this.productCategoryId,
-    required this.description,
-    required this.price,
-    required this.stock,
-    required this.isAlwaysAvailable,
-    required this.isPreorder,
-    required this.addressId,
-    required this.items,
-    required this.files,
   });
 }

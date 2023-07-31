@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/seller_order_list_page.dart';
-import 'package:kenari_app/pages/seller_product_adjustment_form_page.dart';
+import 'package:kenari_app/pages/seller_product_list_page.dart';
 import 'package:kenari_app/pages/seller_product_form_page.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -160,14 +160,14 @@ class SellerPage extends StatelessWidget {
                               onTap: () {
                                 MoveToPage(
                                   context: context,
-                                  target: const SellerProductAdjustmentFormPage(),
+                                  target: const SellerProductListPage(),
                                   callback: (callbackResult) {
                                     if(callbackResult != null) {
                                       if(callbackResult['status'] == true && callbackResult['data'].isNotEmpty) {
                                         MoveToPage(
                                           context: context,
                                           target: SellerProductFormPage(
-                                            updateData: callbackResult['data'],
+                                            productId: callbackResult['data'],
                                           ),
                                         ).go();
                                       }

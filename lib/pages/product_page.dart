@@ -682,6 +682,7 @@ class _ProductPageState extends State<ProductPage> {
                           CarouselSlider(
                             options: CarouselOptions(
                               height: 300,
+                              enableInfiniteScroll: detailProductData!.images!.length > 1 ? true : false,
                               viewportFraction: 1.0,
                               onPageChanged: (page, whyChanged) {
                                 setState(() {

@@ -133,7 +133,7 @@ class OptionDialog {
   String? yesText;
   Function yesFunction;
   String? noText;
-  Function noFunction;
+  Function? noFunction;
 
   OptionDialog({
     required this.context,
@@ -142,7 +142,7 @@ class OptionDialog {
     this.yesText,
     required this.yesFunction,
     this.noText,
-    required this.noFunction,
+    this.noFunction,
   });
 
   Future show() async {
@@ -196,7 +196,9 @@ class OptionDialog {
                         onPressed: () {
                           Navigator.of(context).pop();
 
-                          noFunction();
+                          if(noFunction != null) {
+                            noFunction!();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,

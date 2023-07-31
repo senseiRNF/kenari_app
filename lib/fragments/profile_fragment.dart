@@ -421,7 +421,7 @@ class ProfileFragment extends StatelessWidget {
                               yesFunction: () async {
                                 onLogout();
                               },
-                              noFunction: () {},
+                              
                             ).show();
                           },
                           customBorder: RoundedRectangleBorder(
