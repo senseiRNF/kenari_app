@@ -284,7 +284,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                           ),
                                         ),
                                         Text(
-                                          filteredData()[index].bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(filteredData()[index].bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
+                                          filteredData()[index].bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(filteredData()[index].bayarBulanan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                                           style: STextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
                                           ),
@@ -304,7 +304,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Text(
-                                        filteredData()[index].jatuhTempo != null ? "Jatuh tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredData()[index].jatuhTempo!))}" : 'Unknown',
+                                        filteredData()[index].jatuhTempo != null ? "Jatuh tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredData()[index].jatuhTempo!))}" : '(Tidak diketahui)',
                                         style: STextStyles.regular().copyWith(
                                           color: DangerColorStyles.dangerMain(),
                                         ),

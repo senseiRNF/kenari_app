@@ -642,7 +642,7 @@ class _HomePageState extends State<HomePage> {
         String? variant;
 
         if(product.varians != null && product.varians!.isNotEmpty) {
-          variant = product.varians![index].name1 ?? 'Unknown Variant';
+          variant = product.varians![index].name1 ?? '(Varian tidak diketahui)';
         }
 
         return StatefulBuilder(
@@ -730,7 +730,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              product.name ?? 'Unknown Product',
+                              product.name ?? '(Produk tidak diketahui)',
                               style: MTextStyles.medium().copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -840,7 +840,7 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () {
                                   stateSetter(() {
                                     index = itemIndex;
-                                    variant = product.varians![itemIndex].name1 ?? 'Unknown Variant';
+                                    variant = product.varians![itemIndex].name1 ?? '(Varian tidak diketahui)';
 
                                     if(product.isPromo != null && product.isPromo == true) {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
@@ -855,7 +855,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                   child: Text(
-                                    product.varians![itemIndex].name1 ?? 'Unknown Variant',
+                                    product.varians![itemIndex].name1 ?? '(Varian tidak diketahui)',
                                     textAlign: TextAlign.center,
                                   ),
                                 ),

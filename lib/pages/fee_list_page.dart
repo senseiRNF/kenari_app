@@ -223,7 +223,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      name ?? 'Unknown User',
+                                      name ?? '(Pengguna tidak diketahui)',
                                       style: STextStyles.medium().copyWith(
                                         color: TextColorStyles.textPrimary(),
                                       ),
@@ -232,7 +232,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                       height: 5.0,
                                     ),
                                     Text(
-                                      companyCode ?? 'Unknown Company',
+                                      companyCode ?? '(Nama perusahaan tidak terdaftar)',
                                       style: XSTextStyles.regular(),
                                     ),
                                   ],
@@ -356,7 +356,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
                                             Text(
-                                              phoneNumber ?? 'Unknown Phone',
+                                              phoneNumber ?? '(Nomor telepon tidak terdaftar)',
                                               style: STextStyles.medium().copyWith(
                                                 color: TextColorStyles.textPrimary(),
                                               ),
@@ -405,7 +405,7 @@ class _FeeListPageState extends State<FeeListPage> {
                               children: [
                                 index == 0 ?
                                 Text(
-                                  mandatoryFeeList[index].createdAt != null ? DateFormat('yyyy').format(DateTime.parse(mandatoryFeeList[index].createdAt!)) : 'Unknown Year',
+                                  mandatoryFeeList[index].createdAt != null ? DateFormat('yyyy').format(DateTime.parse(mandatoryFeeList[index].createdAt!)) : '(Tidak diketahui) Year',
                                   style: XSTextStyles.regular(),
                                 ) :
                                 const Material(),
@@ -431,7 +431,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                   ),
                                 ),
                                 Text(
-                                  mandatoryFeeList[index].createdAt != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(mandatoryFeeList[index].createdAt!)) : 'Unknown',
+                                  mandatoryFeeList[index].createdAt != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(mandatoryFeeList[index].createdAt!)) : '(Tidak diketahui)',
                                   style: STextStyles.regular(),
                                 ),
                                 const SizedBox(
@@ -578,7 +578,7 @@ class _FeeListPageState extends State<FeeListPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                               child: Text(
-                                filteredData()[index].tanggalMulai != null ? DateFormat('yyyy').format(DateTime.parse(filteredData()[index].tanggalMulai!)) : 'Unknown',
+                                filteredData()[index].tanggalMulai != null ? DateFormat('yyyy').format(DateTime.parse(filteredData()[index].tanggalMulai!)) : '(Tidak diketahui)',
                                 style: XSTextStyles.regular(),
                               ),
                             ) :
@@ -625,7 +625,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                           ),
                                         ),
                                         Text(
-                                          '${filteredData()[index].jangkaWaktu != null ? '${filteredData()[index].jangkaWaktu} Bulan' : 'Unknown'} (${filteredData()[index].imbalHasil != null ? '${filteredData()[index].imbalHasil}%' : 'Unknown'})',
+                                          '${filteredData()[index].jangkaWaktu != null ? '${filteredData()[index].jangkaWaktu} Bulan' : '(Tidak diketahui)'} (${filteredData()[index].imbalHasil != null ? '${filteredData()[index].imbalHasil}%' : '(Tidak diketahui)'})',
                                           style: STextStyles.regular(),
                                         ),
                                         const SizedBox(
@@ -640,7 +640,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                               style: STextStyles.regular(),
                                             ),
                                             Text(
-                                              filteredData()[index].tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(filteredData()[index].tanggalPencairan!)) : 'Unknown',
+                                              filteredData()[index].tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(filteredData()[index].tanggalPencairan!)) : '(Tidak diketahui)',
                                               style: STextStyles.medium(),
                                             ),
                                           ],

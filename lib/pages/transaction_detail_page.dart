@@ -409,7 +409,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                orderData.transactionNo ?? 'Unknown',
+                                orderData.transactionNo ?? '(Tidak diketahui)',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -426,7 +426,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                orderData.transactionDate != null ? DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(orderData.transactionDate!)) : 'Unknown Date',
+                                orderData.transactionDate != null ? DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(orderData.transactionDate!)) : '(Tidak diketahui) Date',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -443,7 +443,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                orderData.transactionDate != null ? DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(orderData.transactionDate!)) : 'Unknown Date',
+                                orderData.transactionDate != null ? DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(orderData.transactionDate!)) : '(Tidak diketahui) Date',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -470,7 +470,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                             height: 10.0,
                           ),
                           Text(
-                            orderData.address != null ? orderData.address!.address ?? 'Unknown Company' : 'Unknown Company',
+                            orderData.address != null ? orderData.address!.address ?? '(Nama perusahaan tidak terdaftar)' : '(Nama perusahaan tidak terdaftar)',
                             style: STextStyles.medium(),
                           ),
                         ],

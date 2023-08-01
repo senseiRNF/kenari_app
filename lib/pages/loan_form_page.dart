@@ -446,7 +446,7 @@ class _LoanFormPageState extends State<LoanFormPage> {
                               ),
                               Expanded(
                                 child: Text(
-                                  name ?? 'Unknown User',
+                                  name ?? '(Pengguna tidak diketahui)',
                                   style: STextStyles.medium(),
                                 ),
                               ),

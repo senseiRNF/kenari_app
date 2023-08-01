@@ -126,7 +126,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      name ?? 'Unknown User',
+                                      name ?? '(Pengguna tidak diketahui)',
                                       style: STextStyles.medium().copyWith(
                                         color: TextColorStyles.textPrimary(),
                                       ),
@@ -135,7 +135,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                       height: 5.0,
                                     ),
                                     Text(
-                                      companyCode ?? 'Unknown Company',
+                                      companyCode ?? '(Nama perusahaan tidak terdaftar)',
                                       style: XSTextStyles.regular(),
                                     ),
                                   ],
@@ -259,7 +259,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
                                             Text(
-                                              phoneNumber ?? 'Unknown Phone',
+                                              phoneNumber ?? '(Nomor telepon tidak terdaftar)',
                                               style: STextStyles.medium().copyWith(
                                                 color: TextColorStyles.textPrimary(),
                                               ),

@@ -151,7 +151,7 @@ class ProfileFragment extends StatelessWidget {
                               height: 5.0,
                             ),
                             Text(
-                              name ?? 'Unknown User',
+                              name ?? '(Pengguna tidak diketahui)',
                               style: MTextStyles.regular(),
                               textAlign: TextAlign.center,
                             ),
@@ -159,7 +159,7 @@ class ProfileFragment extends StatelessWidget {
                               height: 5.0,
                             ),
                             Text(
-                              companyCode ?? 'Unknown Code',
+                              companyCode ?? '(Kode tidak diketahui)',
                               style: XSTextStyles.regular(),
                               textAlign: TextAlign.center,
                             ),

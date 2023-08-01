@@ -253,7 +253,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               crossAxisAlignment: CrossAxisAlignment.stretch,
                                               children: [
                                                 Text(
-                                                  trolleyData[index].trolleyData.product != null && trolleyData[index].trolleyData.product!.name != null ? trolleyData[index].trolleyData.product!.name! : 'Unknown Product',
+                                                  trolleyData[index].trolleyData.product != null && trolleyData[index].trolleyData.product!.name != null ? trolleyData[index].trolleyData.product!.name! : '(Produk tidak diketahui)',
                                                   style: MTextStyles.medium(),
                                                 ),
                                                 trolleyData[index].trolleyData.varian != null ?
@@ -264,7 +264,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                       height: 10.0,
                                                     ),
                                                     Text(
-                                                      trolleyData[index].trolleyData.varian!.name1 ?? 'Unknown Variant',
+                                                      trolleyData[index].trolleyData.varian!.name1 ?? '(Varian tidak diketahui)',
                                                       style: STextStyles.regular(),
                                                     ),
                                                     const SizedBox(

@@ -129,7 +129,7 @@ class _ProductPageState extends State<ProductPage> {
         String? variant;
 
         if(product.varians != null && product.varians!.isNotEmpty) {
-          variant = product.varians![index].name1 ?? 'Unknown Variant';
+          variant = product.varians![index].name1 ?? '(Varian tidak diketahui)';
         }
 
         return StatefulBuilder(
@@ -213,7 +213,7 @@ class _ProductPageState extends State<ProductPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              product.name ?? 'Unknown Product',
+                              product.name ?? '(Produk tidak diketahui)',
                               style: MTextStyles.medium().copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -366,7 +366,7 @@ class _ProductPageState extends State<ProductPage> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                   child: Text(
-                                    product.varians![itemIndex].name1 ?? 'Unknown Variant',
+                                    product.varians![itemIndex].name1 ?? '(Varian tidak diketahui)',
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -768,7 +768,7 @@ class _ProductPageState extends State<ProductPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Text(
-                              detailProductData!.name ?? 'Unknown Product',
+                              detailProductData!.name ?? '(Produk tidak diketahui)',
                               style: LTextStyles.medium(),
                             ),
                           ),
@@ -818,7 +818,7 @@ class _ProductPageState extends State<ProductPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                                       child: Text(
-                                        detailProductData!.productCategory != null && detailProductData!.productCategory!.name != null ? detailProductData!.productCategory!.name! : 'Unknown Product',
+                                        detailProductData!.productCategory != null && detailProductData!.productCategory!.name != null ? detailProductData!.productCategory!.name! : '(Produk tidak diketahui)',
                                         style: XSTextStyles.regular(),
                                       ),
                                     ),
@@ -937,7 +937,7 @@ class _ProductPageState extends State<ProductPage> {
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                               child: Text(
-                                                detailProductData!.varians![itemIndex].name1 ?? 'Unknown Variant',
+                                                detailProductData!.varians![itemIndex].name1 ?? '(Varian tidak diketahui)',
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
@@ -974,7 +974,7 @@ class _ProductPageState extends State<ProductPage> {
                               height: 10.0,
                             ),
                             Text(
-                              detailProductData!.company != null && detailProductData!.company!.name != null ? detailProductData!.company!.name! : 'Unknown Company',
+                              detailProductData!.company != null && detailProductData!.company!.name != null ? detailProductData!.company!.name! : '(Nama perusahaan tidak terdaftar)',
                               style: STextStyles.medium().copyWith(
                                 color: TextColorStyles.textPrimary(),
                               ),
@@ -982,14 +982,14 @@ class _ProductPageState extends State<ProductPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5.0),
                               child: Text(
-                                detailProductData!.company != null && detailProductData!.company!.phone != null ? detailProductData!.company!.phone! : 'Unknown Phone Number',
+                                detailProductData!.company != null && detailProductData!.company!.phone != null ? detailProductData!.company!.phone! : '(Nomor telepon tidak terdaftar) Number',
                                 style: STextStyles.regular().copyWith(
                                   color: NeutralColorStyles.neutral08(),
                                 ),
                               ),
                             ),
                             Text(
-                              detailProductData!.address != null && detailProductData!.address!.address != null ? detailProductData!.address!.address! : 'Unknown Address',
+                              detailProductData!.address != null && detailProductData!.address!.address != null ? detailProductData!.address!.address! : '(Alamat tidak diketahui)',
                               style: STextStyles.regular().copyWith(
                                 color: NeutralColorStyles.neutral06(),
                               ),

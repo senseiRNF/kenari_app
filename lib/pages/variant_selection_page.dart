@@ -44,18 +44,6 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
     setState(() {
       variantList = tempVariantList;
     });
-
-    // if(widget.productVariant != null && widget.productVariant!.isNotEmpty) {
-    //   List<SelectedVariant> tempSelectedVariantList = [];
-    //
-    //   for(int i = 0; i < widget.productVariant!['variant_type_data'].length; i++) {
-    //     tempSelectedVariantList.add(widget.productVariant!['variant_type_data'][i]);
-    //   }
-    //
-    //   setState(() {
-    //     selectedVariantList = tempSelectedVariantList;
-    //   });
-    // }
   }
 
   Future<String?> showAddNewSubVariantBottomDialog(VariantTypeData data) async {
@@ -281,7 +269,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
-                                      variantData.name ?? 'Unknown',
+                                      variantData.name ?? '(Tidak diketahui)',
                                       style: selectedVariantList != null && selectedVariantList!.variantType.sId == variantData.sId ?
                                       MTextStyles.medium() :
                                       MTextStyles.regular(),
@@ -311,7 +299,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              selectedVariantList!.variantType.name ?? 'Unknown',
+                              selectedVariantList!.variantType.name ?? '(Tidak diketahui)',
                               style: LTextStyles.medium(),
                             ),
                             TextButton(

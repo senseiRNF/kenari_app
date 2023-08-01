@@ -127,7 +127,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Text(
-                            loanData != null && loanData!.bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
+                            loanData != null && loanData!.bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.bayarBulanan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                             style: LTextStyles.medium(),
                           ),
                         ),
@@ -217,7 +217,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                loanData != null && loanData!.jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : 'Unknown',
+                                loanData != null && loanData!.jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -234,7 +234,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                loanData != null && loanData!.biayaAdminAmount != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.biayaAdminAmount!)).replaceAll(',', '.')}" : 'Unknown',
+                                loanData != null && loanData!.biayaAdminAmount != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.biayaAdminAmount!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -251,7 +251,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                loanData != null && loanData!.jangkaWaktu != null ? '${loanData!.jangkaWaktu} Bulan' : 'Unknown',
+                                loanData != null && loanData!.jangkaWaktu != null ? '${loanData!.jangkaWaktu} Bulan' : '(Tidak diketahui)',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -268,7 +268,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                loanData != null && loanData!.jumlahPinjamanDiterima != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.jumlahPinjamanDiterima!)).replaceAll(',', '.')}" : 'Unknown',
+                                loanData != null && loanData!.jumlahPinjamanDiterima != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.jumlahPinjamanDiterima!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -285,7 +285,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                 style: STextStyles.regular(),
                               ),
                               Text(
-                                loanData != null && loanData!.bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.bayarBulanan!)).replaceAll(',', '.')}" : 'Unknown',
+                                loanData != null && loanData!.bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanData!.bayarBulanan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                                 style: STextStyles.medium(),
                               ),
                             ],
@@ -349,7 +349,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                                       width: 10.0,
                                     ),
                                     Text(
-                                      name ?? 'Unknown User',
+                                      name ?? '(Pengguna tidak diketahui)',
                                       style: STextStyles.medium(),
                                     ),
                                   ],

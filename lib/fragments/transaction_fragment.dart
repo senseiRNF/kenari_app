@@ -484,7 +484,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                 child: Text(
-                                  index == 0 ? 'Semua' : index == 1 ? 'Menunggu Konfirmasi Penjual' : index == 2 ? 'Diproses' : index == 3 ? 'Selesai' : index == 4 ? 'Gagal' : 'Unknown Status',
+                                  index == 0 ? 'Semua' : index == 1 ? 'Menunggu Konfirmasi Penjual' : index == 2 ? 'Diproses' : index == 3 ? 'Selesai' : index == 4 ? 'Gagal' : '(Tidak diketahui) Status',
                                   style: selectedStatus == index ? STextStyles.medium() : STextStyles.regular(),
                                 ),
                               ),
@@ -596,7 +596,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                     child: Text(
-                      filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : 'Unknown',
+                      filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
                       style: XSTextStyles.regular(),
                     ),
                   ),
@@ -621,7 +621,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : 'Unknown',
+                                    filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
                                     style: STextStyles.medium().copyWith(
                                       color: TextColorStyles.textPrimary(),
                                     ),
@@ -642,14 +642,14 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 height: 5.0,
                               ),
                               Text(
-                                companyCode ?? 'Unknown Company',
+                                companyCode ?? '(Nama perusahaan tidak terdaftar)',
                                 style: XSTextStyles.regular(),
                               ),
                               const SizedBox(
                                 height: 10.0,
                               ),
                               Text(
-                                'a.n ${name ?? 'Unknown User'}',
+                                'a.n ${name ?? '(Pengguna tidak diketahui)'}',
                                 style: XSTextStyles.regular(),
                               ),
                             ],
@@ -753,7 +753,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 ),
                               ),
                               Text(
-                                filterLoanData()[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filterLoanData()[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : 'Unknown',
+                                filterLoanData()[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filterLoanData()[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                                 style: STextStyles.medium().copyWith(
                                   color: TextColorStyles.textPrimary(),
                                 ),
@@ -768,7 +768,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                filterLoanData()[index].jangkaWaktu != null ? '${filterLoanData()[index].jangkaWaktu} Bulan' : 'Unknown',
+                                filterLoanData()[index].jangkaWaktu != null ? '${filterLoanData()[index].jangkaWaktu} Bulan' : '(Tidak diketahui)',
                                 style: STextStyles.regular(),
                               ),
                               filterLoanData()[index].status == false ?
@@ -901,7 +901,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   status = 'Menunggu Konfirmasi Penjual';
                   break;
                 default:
-                  status = 'Unknown';
+                  status = '(Tidak diketahui)';
                   break;
               }
 
@@ -923,7 +923,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             children: [
                               Expanded(
                                 child: Text(
-                                  transactionOrderList[index].transactionNo ?? 'Unknown',
+                                  transactionOrderList[index].transactionNo ?? '(Tidak diketahui)',
                                   style: STextStyles.medium().copyWith(
                                     color: TextColorStyles.textPrimary(),
                                   ),
@@ -999,7 +999,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.name != null ? transactionOrderList[index].orderDetails![0].product!.name! : 'Unknown Product',
+                                      transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.name != null ? transactionOrderList[index].orderDetails![0].product!.name! : '(Produk tidak diketahui)',
                                       style: MTextStyles.medium(),
                                     ),
                                     transactionOrderList[index].orderDetails![0].varianName != null ?
@@ -1010,7 +1010,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                           height: 10.0,
                                         ),
                                         Text(
-                                          transactionOrderList[index].orderDetails![0].varianName ?? 'Unknown Variant',
+                                          transactionOrderList[index].orderDetails![0].varianName ?? '(Varian tidak diketahui)',
                                           style: STextStyles.regular(),
                                         ),
                                         const SizedBox(

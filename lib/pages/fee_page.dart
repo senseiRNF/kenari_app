@@ -154,14 +154,14 @@ class _FeePageState extends State<FeePage> {
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
                                         Text(
-                                          name ?? 'Unknown User',
+                                          name ?? '(Pengguna tidak diketahui)',
                                           style: MTextStyles.regular(),
                                         ),
                                         const SizedBox(
                                           height: 10.0,
                                         ),
                                         Text(
-                                          companyCode ?? 'Unknown Code',
+                                          companyCode ?? '(Kode tidak diketahui)',
                                           style: XSTextStyles.regular(),
                                         ),
                                       ],

@@ -112,7 +112,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          companyModel!.companyData!.name ?? 'Unknown Company',
+                                          companyModel!.companyData!.name ?? '(Nama perusahaan tidak terdaftar)',
                                           style: MTextStyles.medium(),
                                         ),
                                       ),
@@ -142,14 +142,14 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                                     height: 10.0,
                                   ),
                                   Text(
-                                    companyModel!.companyData!.phone ?? 'Unknown Phone',
+                                    companyModel!.companyData!.phone ?? '(Nomor telepon tidak terdaftar)',
                                     style: STextStyles.regular(),
                                   ),
                                   const SizedBox(
                                     height: 10.0,
                                   ),
                                   Text(
-                                    companyModel!.companyData!.addresses![index].address ?? 'Unknown Address',
+                                    companyModel!.companyData!.addresses![index].address ?? '(Alamat tidak diketahui)',
                                     style: STextStyles.regular(),
                                   ),
                                 ],

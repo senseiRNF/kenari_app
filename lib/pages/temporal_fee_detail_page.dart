@@ -183,7 +183,7 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                 style: MTextStyles.regular(),
                               ),
                               Text(
-                                temporalFeeData != null && temporalFeeData!.jangkaWaktu != null ? '${temporalFeeData!.jangkaWaktu} Bulan' : 'Unknown',
+                                temporalFeeData != null && temporalFeeData!.jangkaWaktu != null ? '${temporalFeeData!.jangkaWaktu} Bulan' : '(Tidak diketahui)',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -199,7 +199,7 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                 style: MTextStyles.regular(),
                               ),
                               Text(
-                                temporalFeeData != null &&  temporalFeeData!.imbalHasil != null ? '${temporalFeeData!.imbalHasil}%' : 'Unknown',
+                                temporalFeeData != null &&  temporalFeeData!.imbalHasil != null ? '${temporalFeeData!.imbalHasil}%' : '(Tidak diketahui)',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -215,7 +215,7 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                 style: MTextStyles.regular(),
                               ),
                               Text(
-                                temporalFeeData != null && temporalFeeData!.tanggalMulai != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(temporalFeeData!.tanggalMulai!)) : 'Unknown',
+                                temporalFeeData != null && temporalFeeData!.tanggalMulai != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(temporalFeeData!.tanggalMulai!)) : '(Tidak diketahui)',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -231,7 +231,7 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                 style: MTextStyles.regular(),
                               ),
                               Text(
-                                temporalFeeData != null && temporalFeeData!.tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(temporalFeeData!.tanggalPencairan!)) : 'Unknown',
+                                temporalFeeData != null && temporalFeeData!.tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(temporalFeeData!.tanggalPencairan!)) : '(Tidak diketahui)',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -313,11 +313,11 @@ class _TemporalFeeDetailPageState extends State<TemporalFeeDetailPage> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      temporalFeeData != null && temporalFeeData!.member != null && temporalFeeData!.member!.phoneNumber != null ? temporalFeeData!.member!.phoneNumber! : 'Unknown',
+                                      temporalFeeData != null && temporalFeeData!.member != null && temporalFeeData!.member!.phoneNumber != null ? temporalFeeData!.member!.phoneNumber! : '(Tidak diketahui)',
                                       style: STextStyles.medium(),
                                     ),
                                     Text(
-                                      temporalFeeData != null && temporalFeeData!.member != null && temporalFeeData!.member!.name != null ? 'a/n ${temporalFeeData!.member!.name!}' : 'Unknown',
+                                      temporalFeeData != null && temporalFeeData!.member != null && temporalFeeData!.member!.name != null ? 'a/n ${temporalFeeData!.member!.name!}' : '(Tidak diketahui)',
                                       style: STextStyles.medium(),
                                     ),
                                   ],

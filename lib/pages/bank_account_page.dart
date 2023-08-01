@@ -101,21 +101,21 @@ class _BankAccountPageState extends State<BankAccountPage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                bankModel!.bankData![index].bank!.name ?? 'Unknown Bank',
+                                bankModel!.bankData![index].bank!.name ?? '(Bank tidak diketahui)',
                                 style: MTextStyles.medium(),
                               ),
                               const SizedBox(
                                 height: 5.0,
                               ),
                               Text(
-                                bankModel!.bankData![index].accountNo ?? 'Unknown Account Number',
+                                bankModel!.bankData![index].accountNo ?? '(Nomor rekening tidak diketahui)',
                                 style: STextStyles.regular(),
                               ),
                               const SizedBox(
                                 height: 10.0,
                               ),
                               Text(
-                                'a.n ${bankModel!.bankData![index].accountName ?? 'Unknown Name'}',
+                                'a.n ${bankModel!.bankData![index].accountName ?? '(Nama pemilik rekening tidak diketahui)'}',
                                 style: STextStyles.regular(),
                               ),
                               const SizedBox(

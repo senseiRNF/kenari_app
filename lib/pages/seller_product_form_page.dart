@@ -628,7 +628,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                                     child: Text(
-                                      value.name ?? 'Unknown Category',
+                                      value.name ?? '(Kategori tidak diketahui)',
                                       style: STextStyles.regular(),
                                     ),
                                   ),
@@ -990,7 +990,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              companyData['company_data'].name ?? 'Unknown Company',
+                              companyData['company_data'].name ?? '(Nama perusahaan tidak terdaftar)',
                               style: MTextStyles.medium(),
                             ),
                             const SizedBox(
@@ -1004,7 +1004,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               height: 10.0,
                             ),
                             Text(
-                              companyData['selected'] ?? 'Unknown Address',
+                              companyData['selected'] ?? '(Alamat tidak diketahui)',
                               style: STextStyles.regular(),
                             ),
                           ],

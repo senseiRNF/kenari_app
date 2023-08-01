@@ -157,7 +157,7 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
                                     child: Text(
-                                      value.name ?? 'Unknown Bank',
+                                      value.name ?? '(Bank tidak diketahui)',
                                       style: STextStyles.regular(),
                                     ),
                                   ),

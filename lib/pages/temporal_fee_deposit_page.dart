@@ -192,7 +192,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                                             height: 5.0,
                                           ),
                                           Text(
-                                            name ?? 'Unknown User',
+                                            name ?? '(Pengguna tidak diketahui)',
                                             style: STextStyles.medium().copyWith(
                                               color: TextColorStyles.textPrimary(),
                                             ),

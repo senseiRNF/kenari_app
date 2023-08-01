@@ -1236,7 +1236,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                           width: 20.0,
                         ),
                         Text(
-                          widget.companyName ?? 'Unknown Company',
+                          widget.companyName ?? '(Nama perusahaan tidak terdaftar)',
                           style: HeadingTextStyles.headingS().copyWith(
                             color: Colors.white,
                           ),

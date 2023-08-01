@@ -739,7 +739,7 @@ class HomeFragment extends StatelessWidget {
                                                   child: Padding(
                                                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                     child: Text(
-                                                      newProductList[index].name ?? 'Unknown Product',
+                                                      newProductList[index].name ?? '(Produk tidak diketahui)',
                                                       style: STextStyles.medium(),
                                                     ),
                                                   ),
@@ -949,7 +949,7 @@ class HomeFragment extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(10.0),
                                           child: Text(
-                                            categoryList[categoryIndex].name ?? 'Unknown Category',
+                                            categoryList[categoryIndex].name ?? '(Kategori tidak diketahui)',
                                             style: MTextStyles.regular(),
                                           ),
                                         ),
@@ -1049,7 +1049,7 @@ class HomeFragment extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
                                         Text(
-                                          popularProductList[index].name ?? 'Unknown Product',
+                                          popularProductList[index].name ?? '(Produk tidak diketahui)',
                                           style: STextStyles.medium(),
                                         ),
                                         const SizedBox(
@@ -1067,7 +1067,7 @@ class HomeFragment extends StatelessWidget {
                                               child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                                 child: Text(
-                                                  popularProductList[index].productCategory != null && popularProductList[index].productCategory!.name != null ? popularProductList[index].productCategory!.name! : 'Unknown Category',
+                                                  popularProductList[index].productCategory != null && popularProductList[index].productCategory!.name != null ? popularProductList[index].productCategory!.name! : '(Kategori tidak diketahui)',
                                                   style: XSTextStyles.regular(),
                                                 ),
                                               ),
@@ -1271,7 +1271,7 @@ class HomeFragment extends StatelessWidget {
                                                 Padding(
                                                   padding: const EdgeInsets.all(10.0),
                                                   child: Text(
-                                                    discountProductList[index].productCategory != null && discountProductList[index].productCategory!.name != null ? discountProductList[index].productCategory!.name! : 'Unknown Category',
+                                                    discountProductList[index].productCategory != null && discountProductList[index].productCategory!.name != null ? discountProductList[index].productCategory!.name! : '(Kategori tidak diketahui)',
                                                     style: XSTextStyles.regular(),
                                                   ),
                                                 ),
@@ -1279,7 +1279,7 @@ class HomeFragment extends StatelessWidget {
                                                   child: Padding(
                                                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                     child: Text(
-                                                      discountProductList[index].name ?? 'Unknown Product',
+                                                      discountProductList[index].name ?? '(Produk tidak diketahui)',
                                                       style: STextStyles.medium(),
                                                     ),
                                                   ),

@@ -130,7 +130,7 @@ class SearchFragment extends StatelessWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Text(
-                                      categoryList[categoryIndex].name ?? 'Unknown Category',
+                                      categoryList[categoryIndex].name ?? '(Kategori tidak diketahui)',
                                       style: MTextStyles.regular().copyWith(
                                         color: selectedCategory != null && selectedCategory!.sId == categoryList[categoryIndex].sId ? PrimaryColorStyles.primaryMain() : MTextStyles.regular().color,
                                       ),
@@ -274,7 +274,7 @@ class SearchFragment extends StatelessWidget {
                                           crossAxisAlignment: CrossAxisAlignment.stretch,
                                           children: [
                                             Text(
-                                              productList[index].name ?? 'Unknown Product',
+                                              productList[index].name ?? '(Produk tidak diketahui)',
                                               style: STextStyles.medium(),
                                             ),
                                             const SizedBox(
@@ -292,7 +292,7 @@ class SearchFragment extends StatelessWidget {
                                                   child: Padding(
                                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                                     child: Text(
-                                                      productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : 'Unknown Category',
+                                                      productList[index].productCategory != null && productList[index].productCategory!.name != null ? productList[index].productCategory!.name! : '(Kategori tidak diketahui)',
                                                       style: XSTextStyles.regular(),
                                                     ),
                                                   ),

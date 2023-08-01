@@ -271,7 +271,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                productList[index].name ?? 'Unknown Product',
+                                productList[index].name ?? '(Produk tidak diketahui)',
                                 style: STextStyles.medium(),
                               ),
                               const SizedBox(

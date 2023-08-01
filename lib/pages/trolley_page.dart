@@ -765,7 +765,7 @@ class ItemListWithAnimation extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.name != null ? trolleyProduct.trolleyData.product!.name! : 'Unknown Product',
+                          trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.name != null ? trolleyProduct.trolleyData.product!.name! : '(Produk tidak diketahui)',
                           style: MTextStyles.medium(),
                         ),
                         trolleyProduct.trolleyData.varian != null ?
@@ -776,7 +776,7 @@ class ItemListWithAnimation extends StatelessWidget {
                               height: 15.0,
                             ),
                             Text(
-                              trolleyProduct.trolleyData.varian!.name1 ?? 'Unknown Variant',
+                              trolleyProduct.trolleyData.varian!.name1 ?? '(Varian tidak diketahui)',
                               style: STextStyles.regular(),
                             ),
                           ],
