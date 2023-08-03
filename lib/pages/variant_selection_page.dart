@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/miscellaneous/separator_formatter.dart';
@@ -10,7 +11,7 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class VariantSelectionPage extends StatefulWidget {
-  final Map? productVariant;
+  final LocalTypeVariant? productVariant;
 
   const VariantSelectionPage({
     super.key,
@@ -23,7 +24,8 @@ class VariantSelectionPage extends StatefulWidget {
 
 class _VariantSelectionPageState extends State<VariantSelectionPage> {
   List<VariantTypeData> variantList = [];
-  SelectedVariant? selectedVariantList;
+
+  LocalTypeVariant? selectedVariant;
 
   @override
   void initState() {
@@ -44,9 +46,25 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
     setState(() {
       variantList = tempVariantList;
     });
+
+    if(widget.productVariant != null) {
+      List<LocalVariantData> tempVariantData = [];
+
+      for(int i = 0; i < widget.productVariant!.variantData.length; i++) {
+        tempVariantData.add(widget.productVariant!.variantData[i]);
+      }
+
+      setState(() {
+        selectedVariant = LocalTypeVariant(
+          typeVariantId: widget.productVariant!.typeVariantId,
+          typeVariantName: widget.productVariant!.typeVariantName,
+          variantData: tempVariantData,
+        );
+      });
+    }
   }
 
-  Future<String?> showAddNewSubVariantBottomDialog(VariantTypeData data) async {
+  Future<String?> showAddNewSubVariantBottomDialog(LocalTypeVariant data) async {
     String? subvariant;
     TextEditingController subVariantNameController = TextEditingController();
 
@@ -82,7 +100,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
-                      'Tambah ${data.name}',
+                      'Tambah ${data.typeVariantName}',
                       style: LTextStyles.medium().copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -95,7 +113,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(
-                      'Nama ${data.name}',
+                      'Nama ${data.typeVariantName}',
                       style: STextStyles.medium(),
                     ),
                   ),
@@ -104,7 +122,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                     child: TextField(
                       controller: subVariantNameController,
                       decoration: InputDecoration(
-                        hintText: 'Masukan nama ${data.name}',
+                        hintText: 'Masukan nama ${data.typeVariantName}',
                       ),
                       textCapitalization: TextCapitalization.words,
                     ),
@@ -216,10 +234,6 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                         const SizedBox(
                           height: 5.0,
                         ),
-                        // Text(
-                        //   'Pilih maksimum 2 tipe varian produk',
-                        //   style: STextStyles.regular(),
-                        // ),
                         Text(
                           'Pilih tipe varian produk',
                           style: STextStyles.regular(),
@@ -237,7 +251,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                             children: variantList.asMap().map((variantIndex, variantData) => MapEntry(variantIndex, Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: selectedVariantList != null && selectedVariantList!.variantType.sId == variantData.sId ?
+                                  color: selectedVariant != null && selectedVariant!.typeVariantId == variantData.sId ?
                                   PrimaryColorStyles.primaryMain() :
                                   BorderColorStyles.borderStrokes(),
                                 ),
@@ -250,17 +264,20 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                 ),
                                 child: InkWell(
                                   onTap: () {
-                                    if(selectedVariantList != null && selectedVariantList!.variantType.sId == variantData.sId) {
+                                    if(selectedVariant != null && selectedVariant!.typeVariantId == variantData.sId) {
                                       setState(() {
-                                        selectedVariantList = null;
+                                        selectedVariant = null;
                                       });
                                     } else {
-                                      setState(() {
-                                        selectedVariantList = SelectedVariant(
-                                          variantType: variantData,
-                                          subvariantList: [],
-                                        );
-                                      });
+                                      if(variantData.sId != null && variantData.name != null) {
+                                        setState(() {
+                                          selectedVariant = LocalTypeVariant(
+                                            typeVariantId: variantData.sId!,
+                                            typeVariantName: variantData.name!,
+                                            variantData: [],
+                                          );
+                                        });
+                                      }
                                     }
                                   },
                                   customBorder: RoundedRectangleBorder(
@@ -270,7 +287,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                     child: Text(
                                       variantData.name ?? '(Tidak diketahui)',
-                                      style: selectedVariantList != null && selectedVariantList!.variantType.sId == variantData.sId ?
+                                      style: selectedVariant != null && selectedVariant!.typeVariantId == variantData.sId ?
                                       MTextStyles.medium() :
                                       MTextStyles.regular(),
                                     ),
@@ -287,7 +304,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                   const SizedBox(
                     height: 10.0,
                   ),
-                  selectedVariantList != null ?
+                  selectedVariant != null ?
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical:  15.0),
                     color: Colors.white,
@@ -299,18 +316,20 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              selectedVariantList!.variantType.name ?? '(Tidak diketahui)',
+                              selectedVariant!.typeVariantName,
                               style: LTextStyles.medium(),
                             ),
                             TextButton(
                               onPressed: () {
-                                showAddNewSubVariantBottomDialog(selectedVariantList!.variantType).then((subvariantResult) {
+                                showAddNewSubVariantBottomDialog(selectedVariant!).then((subvariantResult) {
                                   if(subvariantResult != null && subvariantResult != '') {
                                     setState(() {
-                                      selectedVariantList!.subvariantList.add(
-                                        Subvariant(
+                                      selectedVariant!.variantData.add(
+                                        LocalVariantData(
                                           name: subvariantResult,
-                                          isSelected: true,
+                                          price: 0,
+                                          stock: 0,
+                                          isAlwaysAvailable: false,
                                         ),
                                       );
                                     });
@@ -326,41 +345,48 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                             ),
                           ],
                         ),
-                        selectedVariantList!.subvariantList.isNotEmpty ?
-                        ListView.builder(
+                        selectedVariant!.variantData.isNotEmpty ?
+                        ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: selectedVariantList!.subvariantList.length,
+                          itemCount: selectedVariant!.variantData.length,
+                          separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10.0),
+                              child: Divider(
+                                height: 1.0,
+                                thickness: 1.0,
+                                color: Colors.black54,
+                              ),
+                            );
+                          },
                           itemBuilder: (BuildContext subvariantContext, int subvariantIndex) {
-                            return Column(
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        selectedVariantList!.subvariantList[subvariantIndex].name,
-                                        style: MTextStyles.regular(),
+                                Expanded(
+                                  child: Text(
+                                    selectedVariant!.variantData[subvariantIndex].name,
+                                    style: MTextStyles.regular(),
+                                  ),
+                                ),
+                                Material(
+                                  shape: const CircleBorder(),
+                                  child: InkWell(
+                                    onTap: () => setState(() {
+                                      selectedVariant!.variantData.removeAt(subvariantIndex);
+                                    }),
+                                    customBorder: const CircleBorder(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Icon(
+                                        Icons.clear,
+                                        color: DangerColorStyles.dangerMain(),
+                                        size: 15.0,
                                       ),
                                     ),
-                                    Checkbox(
-                                      value: selectedVariantList!.subvariantList[subvariantIndex].isSelected,
-                                      activeColor: PrimaryColorStyles.primaryMain(),
-                                      onChanged: (newValue) {
-                                        if(newValue != null) {
-                                          setState(() {
-                                            selectedVariantList!.subvariantList[subvariantIndex].isSelected = newValue;
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                                const Divider(
-                                  height: 1.0,
-                                  thickness: 1.0,
-                                  color: Colors.black54,
-                                )
                               ],
                             );
                           },
@@ -379,50 +405,34 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    List tempListSubvariant = [];
+                    if(selectedVariant != null && selectedVariant!.variantData.isNotEmpty) {
+                      MoveToPage(
+                        context: context,
+                        target: SubVariantSelectionPage(localTypeVariantData: selectedVariant!),
+                        callback: (callbackResult) {
+                          if(callbackResult != null) {
+                            setState(() {
+                              selectedVariant!.variantData = callbackResult;
+                            });
 
-                    for(int i = 0; i < selectedVariantList!.subvariantList.length; i++) {
-                      if(selectedVariantList!.subvariantList[i].isSelected == true) {
-                        tempListSubvariant.add({
-                          'variant_type1_id': selectedVariantList!.variantType.sId,
-                          'name1': selectedVariantList!.subvariantList[i].name,
-                          'variant_type2_id': '',
-                          'name2': '',
-                        });
-                      }
-                    }
-
-                    MoveToPage(
-                      context: context,
-                      target: SubVariantSelectionPage(
-                        variantData: {
-                          'variant_type_data': selectedVariantList,
-                          'generated_data': tempListSubvariant,
+                            BackFromThisPage(
+                              context: context,
+                              callbackData: selectedVariant,
+                            ).go();
+                          }
                         },
-                      ),
-                      callback: (callbackResult) {
-                        if(callbackResult != null) {
-                          BackFromThisPage(
-                            context: context,
-                            callbackData: {
-                              'variant_type_data': selectedVariantList,
-                              'generated_data': tempListSubvariant,
-                              'inputted_data': callbackResult,
-                            },
-                          ).go();
-                        }
-                      },
-                    ).go();
+                      ).go();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedVariantList != null ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
+                    backgroundColor: selectedVariant != null && selectedVariant!.variantData.isNotEmpty ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Lanjutkan',
                       style: LTextStyles.medium().copyWith(
-                        color: selectedVariantList != null ? Colors.white : Colors.black54,
+                        color: selectedVariant != null && selectedVariant!.variantData.isNotEmpty ? Colors.white : Colors.black54,
                       ),
                     ),
                   ),
@@ -437,11 +447,11 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
 }
 
 class SubVariantSelectionPage extends StatefulWidget {
-  final Map variantData;
+  final LocalTypeVariant localTypeVariantData;
 
   const SubVariantSelectionPage({
     super.key,
-    required this.variantData,
+    required this.localTypeVariantData,
   });
 
   @override
@@ -449,7 +459,7 @@ class SubVariantSelectionPage extends StatefulWidget {
 }
 
 class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
-  List subvariantList = [];
+  List<LocalSubVariantData> subvariantList = [];
 
   @override
   void initState() {
@@ -459,16 +469,16 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
   }
 
   Future loadData() async {
-    if(widget.variantData['generated_data'] != null) {
-      for(int i = 0; i < widget.variantData['generated_data'].length; i++) {
-        subvariantList.add({
-          'title': "${widget.variantData['generated_data'][i]['name1']}${widget.variantData['generated_data'][i]['name2'] != '' ? ' - ${widget.variantData['generated_data'][i]['name2']}' : ''}",
-          'price': 0,
-          'price_controller': TextEditingController(),
-          'stock': 0,
-          'stock_controller': TextEditingController(),
-          'is_always_available': false,
-        });
+    if(widget.localTypeVariantData.variantData.isNotEmpty) {
+      for(int i = 0; i < widget.localTypeVariantData.variantData.length; i++) {
+
+        subvariantList.add(
+          LocalSubVariantData(
+            variantData: widget.localTypeVariantData.variantData[i],
+            priceController: TextEditingController(text: widget.localTypeVariantData.variantData[i].price != 0 ? NumberFormat('#,###').format(widget.localTypeVariantData.variantData[i].price).replaceAll(',', '.') : ''),
+            stockController: TextEditingController(text: widget.localTypeVariantData.variantData[i].stock != 0 ? NumberFormat('#,###').format(widget.localTypeVariantData.variantData[i].stock).replaceAll(',', '.') : ''),
+          ),
+        );
       }
     }
   }
@@ -477,7 +487,7 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
     bool result = true;
 
     for(int i = 0; i < subvariantList.length; i++) {
-      if(subvariantList[i]['price_controller'].text == '' || subvariantList[i]['stock_controller'].text == '') {
+      if(subvariantList[i].priceController.text == '' || subvariantList[i].stockController.text == '') {
         result = false;
 
         break;
@@ -505,9 +515,7 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -556,20 +564,23 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                           onPressed: () {
                             MoveToPage(
                               context: context,
-                              target: UpdateAllVariantPage(data: subvariantList),
+                              target: UpdateAllVariantPage(subvariant: subvariantList),
                               callback: (callbackResult) {
                                 if(callbackResult != null) {
-                                  for(int i = 0; i < subvariantList.length; i++) {
-                                    if(callbackResult['updated_data'][i]['is_updated'] == true) {
-                                      setState(() {
-                                        subvariantList[i]['price'] = int.parse(callbackResult['updated_price']);
-                                        subvariantList[i]['price_controller'].text = callbackResult['updated_price'];
-                                        subvariantList[i]['stock'] = int.parse(callbackResult['updated_stock']);
-                                        subvariantList[i]['stock_controller'].text = callbackResult['updated_stock'];
-                                        subvariantList[i]['is_always_available'] = callbackResult['updated_availability'];
-                                      });
+                                  List<LocalSubVariantData> tempSubvariantList = [];
+                                  List<Map<LocalSubVariantData, bool>> tempResultList = callbackResult;
+
+                                  for(int i = 0; i < tempResultList.length; i++) {
+                                    if(tempResultList[i].values.first == true) {
+                                      tempSubvariantList.add(tempResultList[i].keys.first);
+                                    } else {
+                                      tempSubvariantList.add(subvariantList[i]);
                                     }
                                   }
+
+                                  setState(() {
+                                    subvariantList = tempSubvariantList;
+                                  });
                                 }
                               },
                             ).go();
@@ -614,7 +625,7 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  '${subvariantList[subvariantIndex]['title']}',
+                                  subvariantList[subvariantIndex].variantData.name,
                                   style: MTextStyles.medium().copyWith(
                                     color: TextColorStyles.textPrimary(),
                                   ),
@@ -629,7 +640,7 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                                   ),
                                 ),
                                 TextField(
-                                  controller: subvariantList[subvariantIndex]['price_controller'],
+                                  controller: subvariantList[subvariantIndex].priceController,
                                   decoration: const InputDecoration(
                                     isDense: true,
                                     prefixIcon: Text("Rp "),
@@ -644,11 +655,11 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                                   onChanged: (changedValue) {
                                     if(changedValue != '') {
                                       setState(() {
-                                        subvariantList[subvariantIndex]['price'] = int.parse(changedValue.replaceAll('.', ''));
+                                        subvariantList[subvariantIndex].variantData.price = int.parse(changedValue.replaceAll('.', ''));
                                       });
                                     } else {
                                       setState(() {
-                                        subvariantList[subvariantIndex]['price'] = 0;
+                                        subvariantList[subvariantIndex].variantData.price = 0;
                                       });
                                     }
                                   },
@@ -663,12 +674,12 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                                   ),
                                 ),
                                 TextField(
-                                  controller: subvariantList[subvariantIndex]['stock_controller'],
+                                  controller: subvariantList[subvariantIndex].stockController,
                                   decoration: const InputDecoration(
                                     isDense: true,
                                     hintText: '0',
                                   ),
-                                  enabled: subvariantList[subvariantIndex]['is_always_available'] == true ? false : true,
+                                  enabled: subvariantList[subvariantIndex].variantData.isAlwaysAvailable == true ? false : true,
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
@@ -677,11 +688,11 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                                   onChanged: (changedValue) {
                                     if(changedValue != '') {
                                       setState(() {
-                                        subvariantList[subvariantIndex]['stock'] = int.parse(changedValue.replaceAll('.', ''));
+                                        subvariantList[subvariantIndex].variantData.stock = int.parse(changedValue.replaceAll('.', ''));
                                       });
                                     } else {
                                       setState(() {
-                                        subvariantList[subvariantIndex]['stock'] = 0;
+                                        subvariantList[subvariantIndex].variantData.stock = 0;
                                       });
                                     }
                                   },
@@ -696,16 +707,16 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                                       width: 20.0,
                                       height: 20.0,
                                       child: Checkbox(
-                                        value: subvariantList[subvariantIndex]['is_always_available'],
+                                        value: subvariantList[subvariantIndex].variantData.isAlwaysAvailable,
                                         activeColor: PrimaryColorStyles.primaryMain(),
                                         onChanged: (newValue) {
                                           if(newValue != null) {
                                             setState(() {
-                                              subvariantList[subvariantIndex]['is_always_available'] = newValue;
+                                              subvariantList[subvariantIndex].variantData.isAlwaysAvailable = newValue;
 
-                                              if(subvariantList[subvariantIndex]['is_always_available'] == true) {
-                                                subvariantList[subvariantIndex]['stock'] = 1;
-                                                subvariantList[subvariantIndex]['stock_controller'].text = '1';
+                                              if(subvariantList[subvariantIndex].variantData.isAlwaysAvailable == true) {
+                                                subvariantList[subvariantIndex].variantData.stock = 1;
+                                                subvariantList[subvariantIndex].stockController.text = '1';
                                               }
                                             });
                                           }
@@ -719,11 +730,11 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                                       child: InkWell(
                                         onTap: () {
                                           setState(() {
-                                            subvariantList[subvariantIndex]['is_always_available'] = !subvariantList[subvariantIndex]['is_always_available'];
+                                            subvariantList[subvariantIndex].variantData.isAlwaysAvailable = !subvariantList[subvariantIndex].variantData.isAlwaysAvailable;
 
-                                            if(subvariantList[subvariantIndex]['is_always_available'] == true) {
-                                              subvariantList[subvariantIndex]['stock'] = 1;
-                                              subvariantList[subvariantIndex]['stock_controller'].text = '1';
+                                            if(subvariantList[subvariantIndex].variantData.isAlwaysAvailable == true) {
+                                              subvariantList[subvariantIndex].variantData.stock = 1;
+                                              subvariantList[subvariantIndex].stockController.text = '1';
                                             }
                                           });
                                         },
@@ -754,9 +765,15 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     if(checkingIfUpdatedSomething() != false) {
+                      List<LocalVariantData> callbackDataList = [];
+
+                      for(int i = 0; i < subvariantList.length; i++) {
+                        callbackDataList.add(subvariantList[i].variantData);
+                      }
+
                       BackFromThisPage(
                         context: context,
-                        callbackData: subvariantList,
+                        callbackData: callbackDataList,
                       ).go();
                     }
                   },
@@ -783,11 +800,11 @@ class _SubVariantSelectionPageState extends State<SubVariantSelectionPage> {
 }
 
 class UpdateAllVariantPage extends StatefulWidget {
-  final List data;
+  final List<LocalSubVariantData> subvariant;
 
   const UpdateAllVariantPage({
     super.key,
-    required this.data,
+    required this.subvariant,
   });
 
   @override
@@ -801,21 +818,25 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
   bool isAlwaysAvailable = false;
   bool isCheckedAll = false;
 
-  List subvariantList = [];
-  List updatedData = [];
+  List<Map<LocalSubVariantData, bool>> subvariantList = [];
 
   @override
   void initState() {
     super.initState();
 
-    setState(() {
-      subvariantList = widget.data;
-    });
+    if(widget.subvariant.isNotEmpty) {
+      List<Map<LocalSubVariantData, bool>> tempSubvariantList = [];
 
-    for(int i = 0; i < subvariantList.length; i++) {
-      updatedData.add({
-        'is_updated': false,
-        'data': subvariantList[i],
+      LocalSubVariantData tempSubvariantData;
+
+      for(int i = 0; i < widget.subvariant.length; i++) {
+        tempSubvariantData = widget.subvariant[i];
+
+        tempSubvariantList.add({tempSubvariantData: false});
+      }
+
+      setState(() {
+        subvariantList = tempSubvariantList;
       });
     }
   }
@@ -823,8 +844,8 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
   bool checkingIfCheckedAll() {
     bool result = true;
 
-    for(int i = 0; i < updatedData.length; i++) {
-      if(updatedData[i]['is_updated'] == false) {
+    for(int i = 0; i < subvariantList.length; i++) {
+      if(subvariantList[i].values.first == false) {
         result = false;
 
         break;
@@ -837,8 +858,8 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
   bool checkingIfUpdatedSomething() {
     bool result = false;
 
-    for(int i = 0; i < updatedData.length; i++) {
-      if(updatedData[i]['is_updated'] == true) {
+    for(int i = 0; i < subvariantList.length; i++) {
+      if(subvariantList[i].values.first == true) {
         result = true;
 
         break;
@@ -918,10 +939,12 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
                           value: checkingIfCheckedAll(),
                           activeColor: PrimaryColorStyles.primaryMain(),
                           onChanged: (newValue) {
-                            for(int i = 0; i < updatedData.length; i++) {
-                              setState(() {
-                                updatedData[i]['is_updated'] = newValue;
-                              });
+                            if(newValue != null) {
+                              for(int i = 0; i < subvariantList.length; i++) {
+                                setState(() {
+                                  subvariantList[i].update(subvariantList[i].keys.first, (value) => newValue);
+                                });
+                              }
                             }
                           },
                         ),
@@ -944,7 +967,7 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: updatedData.length,
+                    itemCount: subvariantList.length,
                     itemBuilder: (BuildContext subvariantListContext, int subvariantIndex) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -952,17 +975,19 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Checkbox(
-                              value: updatedData[subvariantIndex]['is_updated'],
+                              value: subvariantList[subvariantIndex].values.first,
                               activeColor: PrimaryColorStyles.primaryMain(),
                               onChanged: (newValue) {
-                                setState(() {
-                                  updatedData[subvariantIndex]['is_updated'] = newValue;
-                                });
+                                if(newValue != null) {
+                                  setState(() {
+                                    subvariantList[subvariantIndex].update(subvariantList[subvariantIndex].keys.first, (value) => newValue);
+                                  });
+                                }
                               },
                             ),
                             Expanded(
                               child: Text(
-                                updatedData[subvariantIndex]['data']['title'],
+                                subvariantList[subvariantIndex].keys.first.variantData.name,
                                 style: MTextStyles.regular(),
                               ),
                             ),
@@ -996,6 +1021,7 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
+                            ThousandsSeparatorInputFormatter(),
                           ],
                           onChanged: (_) {
                             setState(() {});
@@ -1020,6 +1046,7 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
                           keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
+                            ThousandsSeparatorInputFormatter(),
                           ],
                           onChanged: (_) {
                             setState(() {});
@@ -1090,14 +1117,19 @@ class _UpdateAllVariantPageState extends State<UpdateAllVariantPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     if(checkingIfUpdatedSomething() != false && priceController.text != '' && stockController.text != '') {
+                      for(int i = 0; i < subvariantList.length; i++) {
+                        if(subvariantList[i].values.first == true) {
+                          subvariantList[i].keys.first.priceController.text = priceController.text;
+                          subvariantList[i].keys.first.stockController.text = stockController.text;
+                          subvariantList[i].keys.first.variantData.price = int.parse(priceController.text.replaceAll('.', ''));
+                          subvariantList[i].keys.first.variantData.stock = int.parse(stockController.text.replaceAll('.', ''));
+                          subvariantList[i].keys.first.variantData.isAlwaysAvailable = isAlwaysAvailable;
+                        }
+                      }
+
                       BackFromThisPage(
                         context: context,
-                        callbackData: {
-                          'updated_data': updatedData,
-                          'updated_price': priceController.text,
-                          'updated_stock': stockController.text,
-                          'updated_availability': isAlwaysAvailable,
-                        },
+                        callbackData: subvariantList,
                       ).go();
                     }
                   },

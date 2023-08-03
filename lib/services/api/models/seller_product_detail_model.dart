@@ -371,6 +371,7 @@ class Varians {
   String? name2;
   String? stock;
   bool? isStockAlwaysAvailable;
+  VarianType1? varianType1;
   String? createdAt;
   String? updatedAt;
   int? iV;
@@ -383,6 +384,7 @@ class Varians {
     this.name2,
     this.stock,
     this.isStockAlwaysAvailable,
+    this.varianType1,
     this.createdAt,
     this.updatedAt,
     this.iV,
@@ -396,6 +398,9 @@ class Varians {
     name2 = json['name2'];
     stock = json['stock'];
     isStockAlwaysAvailable = json['is_stock_always_available'];
+    varianType1 = json['varianType1'] != null
+        ? VarianType1.fromJson(json['varianType1'])
+        : null;
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
@@ -410,6 +415,43 @@ class Varians {
     data['name2'] = name2;
     data['stock'] = stock;
     data['is_stock_always_available'] = isStockAlwaysAvailable;
+    if (varianType1 != null) {
+      data['varianType1'] = varianType1!.toJson();
+    }
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    return data;
+  }
+}
+
+class VarianType1 {
+  String? sId;
+  String? name;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+
+  VarianType1({
+    this.sId,
+    this.name,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
+  });
+
+  VarianType1.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    name = json['name'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['name'] = name;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;

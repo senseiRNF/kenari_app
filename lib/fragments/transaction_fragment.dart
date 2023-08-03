@@ -34,7 +34,9 @@ class TransactionFragment extends StatefulWidget {
 
 class _TransactionFragmentState extends State<TransactionFragment> with TickerProviderStateMixin {
   int selectedTab = 0;
-  int selectedStatus = 0;
+  int feeTabIndex = 0;
+  int loanTabIndex = 0;
+  int orderTabIndex = 0;
 
   String? name;
   String? companyCode;
@@ -137,27 +139,11 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
     });
   }
 
-  List<LoanData> filterLoanData() {
-    List<LoanData> result = [];
-
-    bool isActiveStatus = selectedStatus == 0 ? true : false;
-
-    if(loanList.isNotEmpty) {
-      for(int i = 0; i < loanList.length; i++) {
-        if(loanList[i].status == !isActiveStatus) {
-          result.add(loanList[i]);
-        }
-      }
-    }
-
-    return result;
-  }
-
   List<Map> filteredFeeData() {
     List<Map> result = [];
 
-    bool temporalFeeStatus = selectedStatus == 0 ? true : false;
-    bool mandatoryFeeStatus = selectedStatus == 0 ? true : false;
+    bool temporalFeeStatus = feeTabIndex == 0 ? true : false;
+    bool mandatoryFeeStatus = feeTabIndex == 0 ? true : false;
 
     if(feeList.isNotEmpty) {
       for(int i = 0; i < feeList.length; i++) {
@@ -174,6 +160,54 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
               'type': feeList[i]['type'],
               'data': feeList[i]['data'],
             });
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
+  List<LoanData> filteredLoanData() {
+    List<LoanData> result = [];
+
+    bool isActiveStatus = feeTabIndex == 0 ? true : false;
+
+    if(loanList.isNotEmpty) {
+      for(int i = 0; i < loanList.length; i++) {
+        if(loanList[i].status == !isActiveStatus) {
+          result.add(loanList[i]);
+        }
+      }
+    }
+
+    return result;
+  }
+
+  List<TransactionOrderData> filteredOrderData() {
+    List<TransactionOrderData> result = [];
+
+    if(transactionOrderList.isNotEmpty) {
+      for(int i = 0; i < transactionOrderList.length; i++) {
+        if(transactionOrderList[i].status != null) {
+          if(orderTabIndex == 0) {
+            result.add(transactionOrderList[i]);
+          } else if(orderTabIndex == 1) {
+            if(transactionOrderList[i].status == 'waiting') {
+              result.add(transactionOrderList[i]);
+            }
+          } else if (orderTabIndex == 2) {
+            if(transactionOrderList[i].status == 'processed') {
+              result.add(transactionOrderList[i]);
+            }
+          } else if (orderTabIndex == 3) {
+            if(transactionOrderList[i].status == 'completed') {
+              result.add(transactionOrderList[i]);
+            }
+          } else if (orderTabIndex == 4) {
+            if(transactionOrderList[i].status == 'cancelled') {
+              result.add(transactionOrderList[i]);
+            }
           }
         }
       }
@@ -283,12 +317,6 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   Widget activeTabWidget() {
     switch(selectedTab) {
       case 0:
-        if(selectedStatus > 2) {
-          setState(() {
-            selectedStatus = 0;
-          });
-        }
-
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
           child: Row(
@@ -296,17 +324,17 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: selectedStatus == 0 ? Colors.white : null,
+                    color: feeTabIndex == 0 ? Colors.white : null,
                     border: Border.all(
-                      color: selectedStatus == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                      color: feeTabIndex == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                     ),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: InkWell(
                     onTap: () {
-                      if(selectedStatus != 0) {
+                      if(feeTabIndex != 0) {
                         setState(() {
-                          selectedStatus = 0;
+                          feeTabIndex = 0;
                         });
                       }
                     },
@@ -317,7 +345,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
                         'Aktif',
-                        style: selectedStatus == 0 ? STextStyles.medium() : STextStyles.regular(),
+                        style: feeTabIndex == 0 ? STextStyles.medium() : STextStyles.regular(),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -330,17 +358,17 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: selectedStatus == 1 ? Colors.white : null,
+                    color: feeTabIndex == 1 ? Colors.white : null,
                     border: Border.all(
-                      color: selectedStatus == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                      color: feeTabIndex == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                     ),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: InkWell(
                     onTap: () {
-                      if(selectedStatus != 1) {
+                      if(feeTabIndex != 1) {
                         setState(() {
-                          selectedStatus = 1;
+                          feeTabIndex = 1;
                         });
                       }
                     },
@@ -351,7 +379,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
                         'Selesai',
-                        style: selectedStatus == 1 ? STextStyles.medium() : STextStyles.regular(),
+                        style: feeTabIndex == 1 ? STextStyles.medium() : STextStyles.regular(),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -362,12 +390,6 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ),
         );
       case 1:
-        if(selectedStatus > 2) {
-          setState(() {
-            selectedStatus = 0;
-          });
-        }
-
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
           child: Row(
@@ -375,17 +397,17 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: selectedStatus == 0 ? Colors.white : null,
+                    color: loanTabIndex == 0 ? Colors.white : null,
                     border: Border.all(
-                      color: selectedStatus == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                      color: loanTabIndex == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                     ),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: InkWell(
                     onTap: () {
-                      if(selectedStatus != 0) {
+                      if(loanTabIndex != 0) {
                         setState(() {
-                          selectedStatus = 0;
+                          loanTabIndex = 0;
                         });
                       }
                     },
@@ -396,7 +418,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
                         'Aktif',
-                        style: selectedStatus == 0 ? STextStyles.medium() : STextStyles.regular(),
+                        style: loanTabIndex == 0 ? STextStyles.medium() : STextStyles.regular(),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -409,17 +431,17 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: selectedStatus == 1 ? Colors.white : null,
+                    color: loanTabIndex == 1 ? Colors.white : null,
                     border: Border.all(
-                      color: selectedStatus == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                      color: loanTabIndex == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                     ),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: InkWell(
                     onTap: () {
-                      if(selectedStatus != 1) {
+                      if(loanTabIndex != 1) {
                         setState(() {
-                          selectedStatus = 1;
+                          loanTabIndex = 1;
                         });
                       }
                     },
@@ -430,7 +452,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
                         'Selesai',
-                        style: selectedStatus == 1 ? STextStyles.medium() : STextStyles.regular(),
+                        style: loanTabIndex == 1 ? STextStyles.medium() : STextStyles.regular(),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -441,10 +463,6 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ),
         );
       case 2:
-        setState(() {
-          selectedStatus = 0;
-        });
-
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
           child: Row(
@@ -463,9 +481,9 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                     itemBuilder: (BuildContext listContext, int index) {
                       return Container(
                         decoration: BoxDecoration(
-                          color: selectedStatus == index ? Colors.white : null,
+                          color: orderTabIndex == index ? Colors.white : null,
                           border: Border.all(
-                            color: selectedStatus == index ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                            color: orderTabIndex == index ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                           ),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -474,7 +492,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                selectedStatus = index;
+                                orderTabIndex = index;
                               });
                             },
                             customBorder: RoundedRectangleBorder(
@@ -485,7 +503,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                 child: Text(
                                   index == 0 ? 'Semua' : index == 1 ? 'Menunggu Konfirmasi Penjual' : index == 2 ? 'Diproses' : index == 3 ? 'Selesai' : index == 4 ? 'Gagal' : '(Tidak diketahui) Status',
-                                  style: selectedStatus == index ? STextStyles.medium() : STextStyles.regular(),
+                                  style: orderTabIndex == index ? STextStyles.medium() : STextStyles.regular(),
                                 ),
                               ),
                             ),
@@ -500,10 +518,6 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ),
         );
       default:
-        setState(() {
-          selectedStatus = 0;
-        });
-
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
           child: Row(
@@ -511,17 +525,17 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: selectedStatus == 0 ? Colors.white : null,
+                    color: feeTabIndex == 0 ? Colors.white : null,
                     border: Border.all(
-                      color: selectedStatus == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                      color: feeTabIndex == 0 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                     ),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: InkWell(
                     onTap: () {
-                      if(selectedStatus != 0) {
+                      if(feeTabIndex != 0) {
                         setState(() {
-                          selectedStatus = 0;
+                          feeTabIndex = 0;
                         });
                       }
                     },
@@ -532,7 +546,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
                         'Aktif',
-                        style: selectedStatus == 0 ? STextStyles.medium() : STextStyles.regular(),
+                        style: feeTabIndex == 0 ? STextStyles.medium() : STextStyles.regular(),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -545,17 +559,17 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: selectedStatus == 1 ? Colors.white : null,
+                    color: feeTabIndex == 1 ? Colors.white : null,
                     border: Border.all(
-                      color: selectedStatus == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
+                      color: feeTabIndex == 1 ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                     ),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: InkWell(
                     onTap: () {
-                      if(selectedStatus != 1) {
+                      if(feeTabIndex != 1) {
                         setState(() {
-                          selectedStatus = 1;
+                          feeTabIndex = 1;
                         });
                       }
                     },
@@ -566,7 +580,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
                         'Selesai',
-                        style: selectedStatus == 1 ? STextStyles.medium() : STextStyles.regular(),
+                        style: feeTabIndex == 1 ? STextStyles.medium() : STextStyles.regular(),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -703,13 +717,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ],
         );
       case 1:
-        return filterLoanData().isNotEmpty ?
+        return filteredLoanData().isNotEmpty ?
         RefreshIndicator(
           onRefresh: () async {
             loadLoanData();
           },
           child: ListView.separated(
-            itemCount: filterLoanData().length,
+            itemCount: filteredLoanData().length,
             separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -726,11 +740,11 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      if(filterLoanData()[index].sId != null) {
+                      if(filteredLoanData()[index].sId != null) {
                         MoveToPage(
                           context: context,
                           target: LoanDetailPage(
-                            loanId: filterLoanData()[index].sId!,
+                            loanId: filteredLoanData()[index].sId!,
                           ),
                           callback: (callback) {
                             widget.onCallbackFromLoanPage(callback);
@@ -753,7 +767,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 ),
                               ),
                               Text(
-                                filterLoanData()[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filterLoanData()[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
+                                filteredLoanData()[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredLoanData()[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                                 style: STextStyles.medium().copyWith(
                                   color: TextColorStyles.textPrimary(),
                                 ),
@@ -768,10 +782,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                filterLoanData()[index].jangkaWaktu != null ? '${filterLoanData()[index].jangkaWaktu} Bulan' : '(Tidak diketahui)',
+                                filteredLoanData()[index].jangkaWaktu != null ? '${filteredLoanData()[index].jangkaWaktu} Bulan' : '(Tidak diketahui)',
                                 style: STextStyles.regular(),
                               ),
-                              filterLoanData()[index].status == false ?
+                              filteredLoanData()[index].status == false ?
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                                 decoration: BoxDecoration(
@@ -806,23 +820,23 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               ),
                             ],
                           ),
-                          filterLoanData()[index].status == false ?
+                          filteredLoanData()[index].status == false ?
                           Padding(
                             padding: const EdgeInsets.only(top: 20.0),
-                            child: filterLoanData()[index].jatuhTempo != null ?
+                            child: filteredLoanData()[index].jatuhTempo != null ?
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                DateTime.now().isBefore(DateTime.parse(filterLoanData()[index].jatuhTempo!)) || DateTime.now().isAtSameMomentAs(DateTime.parse(filterLoanData()[index].jatuhTempo!)) == true ?
+                                DateTime.now().isBefore(DateTime.parse(filteredLoanData()[index].jatuhTempo!)) || DateTime.now().isAtSameMomentAs(DateTime.parse(filteredLoanData()[index].jatuhTempo!)) == true ?
                                 Text(
-                                  'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
+                                  'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredLoanData()[index].jatuhTempo!))}',
                                   style: XSTextStyles.medium().copyWith(
                                     color: DangerColorStyles.dangerMain(),
                                   ),
                                 ) :
                                 Text(
-                                  'Terlambat ${DateFormat('dd MMM yyyy').format(DateTime.parse(filterLoanData()[index].jatuhTempo!))}',
+                                  'Terlambat ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredLoanData()[index].jatuhTempo!))}',
                                   style: XSTextStyles.medium().copyWith(
                                     color: DangerColorStyles.dangerMain(),
                                   ),
@@ -881,13 +895,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ],
         );
       case 2:
-        return transactionOrderList.isNotEmpty ?
+        return filteredOrderData().isNotEmpty ?
         RefreshIndicator(
           onRefresh: () async {
             loadTransactionData();
           },
           child: ListView.separated(
-            itemCount: transactionOrderList.length,
+            itemCount: filteredOrderData().length,
             separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
               return const SizedBox(
                 height: 10.0,
@@ -896,7 +910,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
             itemBuilder: (BuildContext listContext, int index) {
               late String status;
 
-              switch(transactionOrderList[index].status) {
+              switch(filteredOrderData()[index].status) {
                 case 'waiting':
                   status = 'Menunggu Konfirmasi Penjual';
                   break;
@@ -923,7 +937,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             children: [
                               Expanded(
                                 child: Text(
-                                  transactionOrderList[index].transactionNo ?? '(Tidak diketahui)',
+                                  filteredOrderData()[index].transactionNo ?? '(Tidak diketahui)',
                                   style: STextStyles.medium().copyWith(
                                     color: TextColorStyles.textPrimary(),
                                   ),
@@ -950,12 +964,12 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           const SizedBox(
                             height: 15.0,
                           ),
-                          transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails!.isNotEmpty ?
+                          filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails!.isNotEmpty ?
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
-                                imageUrl: "$baseURL/${transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.images != null && transactionOrderList[index].orderDetails![0].product!.images!.isNotEmpty && transactionOrderList[index].orderDetails![0].product!.images![0].url != null ? transactionOrderList[index].orderDetails![0].product!.images![0].url! : ''}",
+                                imageUrl: "$baseURL/${filteredOrderData()[index].orderDetails![0].product != null && filteredOrderData()[index].orderDetails![0].product!.images != null && filteredOrderData()[index].orderDetails![0].product!.images!.isNotEmpty && filteredOrderData()[index].orderDetails![0].product!.images![0].url != null ? filteredOrderData()[index].orderDetails![0].product!.images![0].url! : ''}",
                                 imageBuilder: (context, imgProvider) {
                                   return Container(
                                     width: 65.0,
@@ -999,10 +1013,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.name != null ? transactionOrderList[index].orderDetails![0].product!.name! : '(Produk tidak diketahui)',
+                                      filteredOrderData()[index].orderDetails![0].product != null && filteredOrderData()[index].orderDetails![0].product!.name != null ? filteredOrderData()[index].orderDetails![0].product!.name! : '(Produk tidak diketahui)',
                                       style: MTextStyles.medium(),
                                     ),
-                                    transactionOrderList[index].orderDetails![0].varianName != null ?
+                                    filteredOrderData()[index].orderDetails![0].varianName != null ?
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
@@ -1010,7 +1024,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                           height: 10.0,
                                         ),
                                         Text(
-                                          transactionOrderList[index].orderDetails![0].varianName ?? '(Varian tidak diketahui)',
+                                          filteredOrderData()[index].orderDetails![0].varianName ?? '(Varian tidak diketahui)',
                                           style: STextStyles.regular(),
                                         ),
                                         const SizedBox(
@@ -1025,13 +1039,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].price != null && transactionOrderList[index].orderDetails![0].price != '' ? transactionOrderList[index].orderDetails![0].price! : '0')).replaceAll(',', '.')}',
+                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails![0].price != null && filteredOrderData()[index].orderDetails![0].price != '' ? filteredOrderData()[index].orderDetails![0].price! : '0')).replaceAll(',', '.')}',
                                           style: MTextStyles.medium().copyWith(
                                             color: PrimaryColorStyles.primaryMain(),
                                           ),
                                         ),
                                         Text(
-                                          '${transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].qty != null && transactionOrderList[index].orderDetails![0].qty != '' ? transactionOrderList[index].orderDetails![0].qty : '0'}x',
+                                          '${filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails![0].qty != null && filteredOrderData()[index].orderDetails![0].qty != '' ? filteredOrderData()[index].orderDetails![0].qty : '0'}x',
                                           style: MTextStyles.regular(),
                                           textAlign: TextAlign.end,
                                         ),
@@ -1055,11 +1069,11 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                '${transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails!.isNotEmpty ? transactionOrderList[index].orderDetails!.length : '0'} Produk',
+                                '${filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails!.isNotEmpty ? filteredOrderData()[index].orderDetails!.length : '0'} Produk',
                                 style: MTextStyles.medium(),
                               ),
                               Text(
-                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails!.isNotEmpty && transactionOrderList[index].orderDetails![0].total != null && transactionOrderList[index].orderDetails![0].total != '' ? transactionOrderList[index].orderDetails![0].total! : '0')).replaceAll(',', '.')}',
+                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails!.isNotEmpty && filteredOrderData()[index].orderDetails![0].total != null && filteredOrderData()[index].orderDetails![0].total != '' ? filteredOrderData()[index].orderDetails![0].total! : '0')).replaceAll(',', '.')}',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -1113,7 +1127,126 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ],
         );
       default:
-        return const Material();
+        return filteredFeeData().isNotEmpty ?
+        RefreshIndicator(
+          onRefresh: () async {
+            loadFeeData();
+          },
+          child: ListView.builder(
+            itemCount: filteredFeeData().length,
+            itemBuilder: (BuildContext listContext, int index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+                    child: Text(
+                      filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
+                      style: XSTextStyles.regular(),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          if(filteredFeeData()[index]['type'] == 'temporal') {
+                            MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: filteredFeeData()[index]['data'].sId!)).go();
+                          } else if(filteredFeeData()[index]['type'] == 'mandatory') {
+                            MoveToPage(context: context, target: MandatoryFeeDetailPage(mandatoryFeeId: filteredFeeData()[index]['data'].sId!)).go();
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
+                                    style: STextStyles.medium().copyWith(
+                                      color: TextColorStyles.textPrimary(),
+                                    ),
+                                  ),
+                                  Text(
+                                    filteredFeeData()[index]['type'] == 'temporal' ?
+                                    filteredFeeData()[index]['data'].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index]['data'].jumlahIuran!))}' : 'Rp 0' :
+                                    filteredFeeData()[index]['type'] == 'mandatory' ?
+                                    filteredFeeData()[index]['data'].amount != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index]['data'].amount!))}' : 'Rp 0' :
+                                    'Rp 0',
+                                    style: STextStyles.medium().copyWith(
+                                      color: TextColorStyles.textPrimary(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                companyCode ?? '(Nama perusahaan tidak terdaftar)',
+                                style: XSTextStyles.regular(),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Text(
+                                'a.n ${name ?? '(Pengguna tidak diketahui)'}',
+                                style: XSTextStyles.regular(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ) :
+        Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 70.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Image.asset(
+                    'assets/images/icon_transaction_empty.png',
+                    fit: BoxFit.fitWidth,
+                  ),
+                  const SizedBox(
+                    height: 25.0,
+                  ),
+                  Text(
+                    'Belum Ada Transaksi',
+                    style: HeadingTextStyles.headingS(),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    'Yuk mulai transaksi Iuranmu\nmelalui aplikasi Kenari!',
+                    style: MTextStyles.regular(),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            RefreshIndicator(
+              onRefresh: () async {
+                loadFeeData();
+              },
+              child: ListView(),
+            ),
+          ],
+        );
     }
   }
 }

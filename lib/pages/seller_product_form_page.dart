@@ -18,6 +18,7 @@ import 'package:kenari_app/services/api/models/seller_product_detail_model.dart'
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
 import 'package:kenari_app/services/local/models/local_seller_product_data.dart';
+import 'package:kenari_app/services/local/models/local_variant_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -56,7 +57,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
   String? categoryId;
   String durationSelected = 'Hari';
 
-  Map variant = {};
+  LocalTypeVariant? variant;
   Map companyData = {};
 
   @override
@@ -107,7 +108,12 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
 
               for(int i = 0; i < sellerProductDetailData!.images!.length; i++) {
                 if(sellerProductDetailData!.images![i].url != null) {
-                  tempProductImg.add(MediaProductData(url: sellerProductDetailData!.images![i].url!));
+                  tempProductImg.add(
+                    MediaProductData(
+                      url: sellerProductDetailData!.images![i].url!,
+                      sId: sellerProductDetailData!.images![i].sId,
+                    ),
+                  );
                 }
               }
 
@@ -117,19 +123,32 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
             }
 
             if(sellerProductDetailData!.varians != null) {
+              List<LocalVariantData> tempVariantData = [];
+              LocalTypeVariant? tempTypeVariant;
+
               for(int x = 0; x < sellerProductDetailData!.varians!.length; x++) {
-                variant = {
-                  'generated_data': [
-                    {
-                      'name1': sellerProductDetailData!.varians![x].name1,
-                      'name2': sellerProductDetailData!.varians![x].name2,
-                      'price': sellerProductDetailData!.varians![x].price,
-                      'stock': sellerProductDetailData!.varians![x].stock,
-                      'is_stock_always_available': sellerProductDetailData!.varians![x].isStockAlwaysAvailable,
-                    },
-                  ],
-                };
+                if(sellerProductDetailData!.varians![x].sId != null && sellerProductDetailData!.varians![x].name1 != null) {
+                  tempVariantData.add(
+                    LocalVariantData(
+                      variantId: sellerProductDetailData!.varians![x].sId,
+                      name: sellerProductDetailData!.varians![x].name1!,
+                      price: int.parse(sellerProductDetailData!.varians![x].price ?? '0'),
+                      stock: int.parse(sellerProductDetailData!.varians![x].stock ?? '0'),
+                      isAlwaysAvailable: sellerProductDetailData!.varians![x].isStockAlwaysAvailable!,
+                    ),
+                  );
+                }
+
+                if(sellerProductDetailData!.varians![x].varianType1 != null && sellerProductDetailData!.varians![x].varianType1!.sId != null && sellerProductDetailData!.varians![x].varianType1!.name != null) {
+                  tempTypeVariant = LocalTypeVariant(
+                    typeVariantId: sellerProductDetailData!.varians![x].varianType1!.sId!,
+                    typeVariantName: sellerProductDetailData!.varians![x].varianType1!.name!,
+                    variantData: tempVariantData,
+                  );
+                }
               }
+
+              variant = tempTypeVariant;
             }
 
             if(sellerProductDetailData!.address != null && sellerProductDetailData!.company != null) {
@@ -154,7 +173,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
     XFile? result;
 
     ImagePicker picker = ImagePicker();
-    
+
     await picker.pickImage(
       source: source,
       imageQuality: source == ImageSource.gallery ? 100 : 50,
@@ -168,16 +187,16 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
   Future saveData() async {
     List items = [];
 
-    if(variant.isNotEmpty) {
-      for(int a = 0; a < variant['generated_data'].length; a++) {
+    if(variant != null && variant!.variantData.isNotEmpty) {
+      for(int a = 0; a < variant!.variantData.length; a++) {
         items.add({
-          '"variant_type1_id"': '"${variant['generated_data'][a]['variant_type1_id']}"',
-          '"name1"': '"${variant['generated_data'][a]['name1']}"',
-          '"variant_type2_id"': '"${variant['generated_data'][a]['variant_type2_id']}"',
-          '"name2"': '"${variant['generated_data'][a]['name2']}"',
-          '"price"': '"${variant['inputted_data'][a]['price']}"',
-          '"stock"': '"${variant['inputted_data'][a]['stock']}"',
-          '"is_stock_always_available"': '"${variant['inputted_data'][a]['is_always_available']}"',
+          '"varian_type1_id"': '"${variant!.typeVariantId}"',
+          '"name1"': '"${variant!.variantData[a].name}"',
+          '"varian_type2_id"': '""',
+          '"name2"': '""',
+          '"price"': '"${variant!.variantData[a].price}"',
+          '"stock"': '"${variant!.variantData[a].stock}"',
+          '"is_stock_always_available"': '"${variant!.variantData[a].isAlwaysAvailable}"',
         });
       }
     }
@@ -214,17 +233,30 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
     if(widget.productId != null) {
       List items = [];
 
-      if(variant.isNotEmpty) {
-        for(int a = 0; a < variant['generated_data'].length; a++) {
-          items.add({
-            '"variant_type1_id"': '"${variant['generated_data'][a]['variant_type1_id']}"',
-            '"name1"': '"${variant['generated_data'][a]['name1']}"',
-            '"variant_type2_id"': '"${variant['generated_data'][a]['variant_type2_id']}"',
-            '"name2"': '"${variant['generated_data'][a]['name2']}"',
-            '"price"': '"${variant['inputted_data'][a]['price']}"',
-            '"stock"': '"${variant['inputted_data'][a]['stock']}"',
-            '"is_stock_always_available"': '"${variant['inputted_data'][a]['is_always_available']}"',
-          });
+      if(variant != null && variant!.variantData.isNotEmpty) {
+        for(int a = 0; a < variant!.variantData.length; a++) {
+          if(variant!.variantData[a].variantId != null) {
+            items.add({
+              '"varian_id"': '"${variant!.variantData[a].variantId}"',
+              '"varian_type1_id"': '"${variant!.typeVariantId}"',
+              '"name1"': '"${variant!.variantData[a].name}"',
+              '"varian_type2_id"': '""',
+              '"name2"': '""',
+              '"price"': '"${variant!.variantData[a].price}"',
+              '"stock"': '"${variant!.variantData[a].stock}"',
+              '"is_stock_always_available"': '"${variant!.variantData[a].isAlwaysAvailable}"',
+            });
+          } else {
+            items.add({
+              '"varian_type1_id"': '"${variant!.typeVariantId}"',
+              '"name1"': '"${variant!.variantData[a].name}"',
+              '"varian_type2_id"': '""',
+              '"name2"': '""',
+              '"price"': '"${variant!.variantData[a].price}"',
+              '"stock"': '"${variant!.variantData[a].stock}"',
+              '"is_stock_always_available"': '"${variant!.variantData[a].isAlwaysAvailable}"',
+            });
+          }
         }
       }
 
@@ -502,11 +534,21 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                     child: Material(
                                       color: Colors.transparent,
                                       child: InkWell(
-                                        // onLongPress: () {
-                                        //   setState(() {
-                                        //     productImg.removeAt(index - 1);
-                                        //   });
-                                        // },
+                                        onLongPress: () {
+                                          OptionDialog(
+                                            context: context,
+                                            message: 'Hapus gambar yang telah tersimpan, Anda yakin?',
+                                            yesFunction: () async {
+                                              await APISellerProductServices(context: context).dioRemoveImage(productImg[index-1].sId).then((removeResult) {
+                                                if(removeResult == true) {
+                                                  setState(() {
+                                                    productImg.removeAt(index - 1);
+                                                  });
+                                                }
+                                              });
+                                            },
+                                          ).show();
+                                        },
                                         customBorder: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(5.0),
                                         ),
@@ -891,10 +933,12 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                             ),
                             TextButton(
                               onPressed: () {
+                                LocalTypeVariant? tempVariant = variant;
+
                                 MoveToPage(
                                   context: context,
                                   target: VariantSelectionPage(
-                                    productVariant: variant,
+                                    productVariant: tempVariant,
                                   ),
                                   callback: (callbackData) {
                                     if(callbackData != null) {
@@ -917,12 +961,12 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                         const SizedBox(
                           height: 10.0,
                         ),
-                        variant.isNotEmpty ?
+                        variant != null && variant!.variantData.isNotEmpty ?
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              '${variant['generated_data'].length} Varian',
+                              '${variant!.variantData.length} Varian',
                               style: STextStyles.medium(),
                             ),
                             const SizedBox(

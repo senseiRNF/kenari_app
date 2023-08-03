@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:kenari_app/services/api/models/variant_type_model.dart';
 
-class Subvariant {
-  String name;
-  bool isSelected;
+class LocalTypeVariant {
+  String typeVariantId;
+  String typeVariantName;
+  List<LocalVariantData> variantData;
 
-  Subvariant({
-    required this.name,
-    required this.isSelected,
+  LocalTypeVariant({
+    required this.typeVariantId,
+    required this.typeVariantName,
+    required this.variantData,
   });
 }
 
-class SelectedVariant {
-  VariantTypeData variantType;
-  List<Subvariant> subvariantList;
-
-  SelectedVariant({
-    required this.variantType,
-    required this.subvariantList,
-  });
-}
-
-class CompleteVariant {
+class LocalVariantData {
+  String? variantId;
   String name;
-  TextEditingController priceController;
   int price;
-  TextEditingController stockController;
   int stock;
   bool isAlwaysAvailable;
 
-  CompleteVariant({
+  LocalVariantData({
+    this.variantId,
     required this.name,
-    required this.priceController,
     required this.price,
-    required this.stockController,
     required this.stock,
     required this.isAlwaysAvailable,
+  });
+}
+
+class LocalSubVariantData {
+  LocalVariantData variantData;
+  TextEditingController priceController;
+  TextEditingController stockController;
+
+  LocalSubVariantData({
+    required this.variantData,
+    required this.priceController,
+    required this.stockController,
   });
 }

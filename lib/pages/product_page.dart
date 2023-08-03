@@ -6,7 +6,7 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/detail_product_model.dart';
-import 'package:kenari_app/services/api/models/trolley_model.dart';
+import 'package:kenari_app/services/api/models/trolley_model.dart' as trolley_mdl;
 import 'package:kenari_app/services/api/product_services/api_product_services.dart';
 import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
 import 'package:kenari_app/services/local/models/local_trolley_product.dart';
@@ -26,7 +26,7 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  List<TrolleyData> trolleyList = [];
+  List<trolley_mdl.TrolleyData> trolleyList = [];
 
   TextEditingController searchController = TextEditingController();
 
@@ -70,24 +70,36 @@ class _ProductPageState extends State<ProductPage> {
     product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice : product.varians![index].price :
     product.isPromo != null && product.isPromo == true ? product.promoPrice : product.price;
 
+    trolley_mdl.VarianType1? varType1;
+
+    if(product.varians![index].varianType1 != null) {
+      varType1 = trolley_mdl.VarianType1(
+        sId: product.varians![index].varianType1!.sId,
+        name: product.varians![index].varianType1!.name,
+        createdAt: product.varians![index].varianType1!.createdAt,
+        updatedAt: product.varians![index].varianType1!.updatedAt,
+        iV: product.varians![index].varianType1!.iV,
+      );
+    }
+
     await APITrolleyServices(context: context).update(
       LocalTrolleyProduct(
         isSelected: true,
-        trolleyData: TrolleyData(
+        trolleyData: trolley_mdl.TrolleyData(
           price: price,
           varian: product.varians != null && product.varians!.isNotEmpty ?
-          Varian(
+          trolley_mdl.Varian(
             sId: product.varians![index].sId,
             price: product.varians![index].price,
             name1: product.varians![index].name1,
             stock: product.varians![index].stock,
             isStockAlwaysAvailable: product.varians![index].isStockAlwaysAvailable,
-            varianType1: product.varians![index].varianType1,
+            varianType1: varType1,
             promoPrice: product.varians![index].promoPrice,
             isPromo: product.varians![index].isPromo,
           ) :
           null,
-          product: Product(
+          product: trolley_mdl.Product(
             sId: product.sId,
           ),
         ),
@@ -778,7 +790,7 @@ class _ProductPageState extends State<ProductPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Text(
-                              'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(detailProductData!.isPromo != null && detailProductData!.isPromo == true ? detailProductData!.promoPrice ?? '0' : detailProductData!.price ?? '0'))}',
+                              'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(detailProductData!.isPromo != null && detailProductData!.isPromo == true ? detailProductData!.promoPrice ?? '0' : detailProductData!.price ?? '0')).replaceAll(',', '.')}',
                               style: LTextStyles.medium().copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
                               ),

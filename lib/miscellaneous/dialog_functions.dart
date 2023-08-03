@@ -289,25 +289,52 @@ class ErrorHandler {
 
   void handle() {
     int? errCode;
-    String errMessage = 'Unknown Error.\n\nTerjadi kesalahan yang tak diketahui, silahkan hubungi Admin untuk informasi lebih lanjut.';
+    String? serverErrMessage;
+    String? errMessage;
 
     if(dioExc.response != null) {
       errCode = dioExc.response!.statusCode;
 
+      if(dioExc.response!.data != null && dioExc.response!.data['message'] != null && dioExc.response!.data['message'] != '') {
+        serverErrMessage = dioExc.response!.data['message'];
+      }
+
       switch(errCode) {
         case 401:
-          errMessage = 'Unauthorized.\n\nAnda tidak memiliki hak untuk mengakses konten, silahkan hubungi Admin untuk informasi lebih lanjut.';
+          if(serverErrMessage != null) {
+            errMessage = 'Unauthorized.\n\n$serverErrMessage';
+          } else {
+            errMessage = 'Unauthorized.\n\nAnda tidak memiliki hak untuk mengakses konten, silahkan hubungi Admin untuk informasi lebih lanjut.';
+          }
           break;
         case 422:
-          errMessage = 'Unprocessable Entity.\n\nTerdapat kesalahan pada data yang hendak Anda kirim, mohon periksa kembali data Anda dan coba lagi.';
+          if(serverErrMessage != null) {
+            errMessage = 'Unprocessable Entity.\n\n$serverErrMessage';
+          } else {
+            errMessage = 'Unprocessable Entity.\n\nTerdapat kesalahan pada data yang hendak Anda kirim, mohon periksa kembali data Anda dan coba lagi.';
+          }
           break;
         case 404:
-          errMessage = 'Not Found.\n\nPermintaan tidak ditemukan, silahkan hubungi Admin untuk informasi lebih lanjut.';
+          if(serverErrMessage != null) {
+            errMessage = 'Not Found.\n\n$serverErrMessage';
+          } else {
+            errMessage = 'Not Found.\n\nPermintaan tidak ditemukan, silahkan hubungi Admin untuk informasi lebih lanjut.';
+          }
+
           break;
         case 500:
-          errMessage = 'Internal Server Error.\n\nTerjadi kesalahan pada server, silahkan hubungi Admin untuk informasi lebih lanjut.';
+          if(serverErrMessage != null) {
+            errMessage = 'Internal Server Error.\n\n$serverErrMessage';
+          } else {
+            errMessage = 'Internal Server Error.\n\nTerjadi kesalahan pada server, silahkan hubungi Admin untuk informasi lebih lanjut.';
+          }
           break;
         default:
+          if(serverErrMessage != null) {
+            errMessage = 'Unknown Error.\n\n$serverErrMessage';
+          } else {
+            errMessage = 'Unknown Error.\n\nTerjadi kesalahan yang tak diketahui, silahkan hubungi Admin untuk informasi lebih lanjut.';
+          }
           break;
       }
     }

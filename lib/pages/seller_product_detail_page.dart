@@ -12,10 +12,12 @@ import 'package:kenari_app/styles/text_styles.dart';
 
 class SellerProductDetailPage extends StatefulWidget {
   final String productId;
+  final bool isActive;
   
   const SellerProductDetailPage({
     super.key,
     required this.productId,
+    required this.isActive,
   });
 
   @override
@@ -358,7 +360,7 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                 ],
               ),
             ),
-            sellerProductDetailData != null ?
+            sellerProductDetailData != null && widget.isActive == true ?
             Container(
               color: Colors.white,
               child: Padding(
@@ -372,6 +374,9 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                         target: SellerProductFormPage(
                           productId: sellerProductDetailData!.sId,
                         ),
+                        callback: (callbackResult) async {
+                          await loadData();
+                        },
                       ).go(),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PrimaryColorStyles.primaryMain(),

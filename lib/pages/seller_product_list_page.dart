@@ -60,7 +60,17 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      if(sellerProductDataList[waitingIndex].sId != null) {
+                        MoveToPage(
+                          context: context,
+                          target: SellerProductDetailPage(productId: sellerProductDataList[waitingIndex].sId!, isActive: false),
+                          callback: (callbackResult) async {
+                            await loadData();
+                          },
+                        ).go();
+                      }
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                       child: Row(
@@ -197,11 +207,9 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                       if(sellerProductDataList[activeIndex].sId != null) {
                         MoveToPage(
                           context: context,
-                          target: SellerProductDetailPage(productId: sellerProductDataList[activeIndex].sId!),
+                          target: SellerProductDetailPage(productId: sellerProductDataList[activeIndex].sId!, isActive: true),
                           callback: (callbackResult) async {
-                            if(callbackResult != null && callbackResult == true) {
-                              await loadData();
-                            }
+                            await loadData();
                           },
                         ).go();
                       }
@@ -335,7 +343,17 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      if(sellerProductDataList[completedIndex].sId != null) {
+                        MoveToPage(
+                          context: context,
+                          target: SellerProductDetailPage(productId: sellerProductDataList[completedIndex].sId!, isActive: false),
+                          callback: (callbackResult) async {
+                            await loadData();
+                          },
+                        ).go();
+                      }
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                       child: Row(

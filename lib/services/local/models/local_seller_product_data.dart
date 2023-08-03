@@ -2,10 +2,12 @@ import 'package:image_picker/image_picker.dart';
 
 class MediaProductData {
   String? url;
+  String? sId;
   XFile? xFile;
 
   MediaProductData({
     this.url,
+    this.sId,
     this.xFile,
   });
 }
