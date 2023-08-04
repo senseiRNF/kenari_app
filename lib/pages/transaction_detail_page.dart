@@ -230,15 +230,12 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   message: 'Setelah pesanan diterima, silahkan siapkan produk yang di pesan.',
                   yesText: 'Konfirmasi',
                   yesFunction: () {
-                    OkDialog(
+                    SuccessDialog(
                       context: context,
                       message: 'Pesanan Berhasil di Terima',
-                      showIcon: true,
-                      hideButton: true,
                     ).show();
                   },
                   noText: 'Batal',
-                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(
@@ -262,15 +259,12 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   message: 'Anda yakin untuk menolak Pesanan ini?',
                   yesText: 'Konfirmasi',
                   yesFunction: () {
-                    OkDialog(
+                    SuccessDialog(
                       context: context,
                       message: 'Pesanan Berhasil di Batalkan',
-                      showIcon: true,
-                      hideButton: true,
                     ).show();
                   },
                   noText: 'Batal',
-                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(
@@ -304,15 +298,12 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   message: 'Konfirmasi bahwa produk ini telah selesai disiapkan, dan produk siap di ambil oleh pembeli.',
                   yesText: 'Konfirmasi',
                   yesFunction: () {
-                    OkDialog(
+                    SuccessDialog(
                       context: context,
                       message: 'Pesanan Siap diambil Pembeli',
-                      showIcon: true,
-                      hideButton: true,
                     ).show();
                   },
                   noText: 'Batal',
-                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(

@@ -72,7 +72,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
-  Future<void> showImageSourceBottomDialog() async {
+  Future showImageSourceBottomDialog() async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(

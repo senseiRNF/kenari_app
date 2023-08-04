@@ -24,7 +24,7 @@ class OkDialog {
     this.hideButton,
   });
 
-  Future<void> show() async {
+  Future show() async {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -422,7 +422,7 @@ class SourceSelectionDialog {
     required this.galleryFunction,
   });
 
-  Future<void> show() async {
+  Future show() async {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -513,5 +513,61 @@ class SourceSelectionDialog {
         );
       },
     );
+  }
+}
+
+class SuccessDialog {
+  BuildContext context;
+  String message;
+  Function? okFunction;
+
+  SuccessDialog({
+    required this.context,
+    required this.message,
+    this.okFunction,
+  });
+
+  Future show() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 80.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 25.0),
+                      child: Text(
+                        message,
+                        style: HeadingTextStyles.headingS(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((_) {
+      if(okFunction != null) {
+        okFunction!();
+      }
+    });
   }
 }

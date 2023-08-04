@@ -116,7 +116,7 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
-  Future<void> showProductBottomDialog(DetailProductData product, int selectedIndex) async {
+  Future showProductBottomDialog(DetailProductData product, int selectedIndex) async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(

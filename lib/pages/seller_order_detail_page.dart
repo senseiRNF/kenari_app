@@ -288,15 +288,12 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                       orderData['status'] = 'Segera Siapkan Pesanan';
                     });
 
-                    OkDialog(
+                    SuccessDialog(
                       context: context,
                       message: 'Pesanan Berhasil di Terima',
-                      showIcon: true,
-                      hideButton: true,
                     ).show();
                   },
                   noText: 'Batal',
-                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(
@@ -324,15 +321,12 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                       orderData['status'] = 'Pesanan Dibatalkan';
                     });
 
-                    OkDialog(
+                    SuccessDialog(
                       context: context,
                       message: 'Pesanan Berhasil di Batalkan',
-                      showIcon: true,
-                      hideButton: true,
                     ).show();
                   },
                   noText: 'Batal',
-                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(
@@ -370,15 +364,12 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                       orderData['status'] = 'Siap diambil Pembeli';
                     });
 
-                    OkDialog(
+                    SuccessDialog(
                       context: context,
                       message: 'Pesanan Siap diambil Pembeli',
-                      showIcon: true,
-                      hideButton: true,
                     ).show();
                   },
                   noText: 'Batal',
-                  
                 ).show();
               },
               style: ElevatedButton.styleFrom(

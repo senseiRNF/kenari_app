@@ -45,7 +45,7 @@ class _ProductListPageState extends State<ProductListPage> {
     loadData();
   }
 
-  Future<void> loadData() async {
+  Future loadData() async {
     await APICategoryServices(context: context).call().then((result) async {
       if(result != null && result.categoryData != null) {
         setState(() {

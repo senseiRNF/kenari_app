@@ -276,15 +276,13 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
         ),
       ).then((postResult) {
         if(postResult == true) {
-          MoveToPage(
+          SuccessDialog(
             context: context,
-            target: const SellerProductResultPage(isSuccess: true),
-            callback: (callbackData) {
-              if(callbackData != null) {
-                BackFromThisPage(context: context, callbackData: callbackData).go();
-              }
+            message: 'Perubahan di Simpan',
+            okFunction: () {
+              BackFromThisPage(context: context).go();
             },
-          ).go();
+          ).show();
         }
       });
     }
@@ -938,6 +936,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                 MoveToPage(
                                   context: context,
                                   target: VariantSelectionPage(
+                                    isUpdate: widget.productId != null ? true : null,
                                     productVariant: tempVariant,
                                   ),
                                   callback: (callbackData) {

@@ -417,7 +417,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> showAllMenuBottomDialog() async {
+  Future showAllMenuBottomDialog() async {
     List<Map> menuBottom = [
       {
         'title': 'Keuangan',
@@ -635,7 +635,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> showProductBottomDialog(ProductData product) async {
+  Future showProductBottomDialog(ProductData product) async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(

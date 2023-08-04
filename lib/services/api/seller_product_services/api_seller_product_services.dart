@@ -299,4 +299,35 @@ class APISellerProductServices {
 
     return result;
   }
+
+  Future<bool> dioRemoveVariant(String? id) async {
+    bool result = false;
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await APIOptions.init().then((dio) async {
+        LoadingDialog(context: context).show();
+
+        try {
+          await dio.delete(
+            '/varian/$id',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ),
+          ).then((deleteResult) {
+            result = true;
+
+            BackFromThisPage(context: context).go();
+          });
+        } on DioException catch(dioErr) {
+          BackFromThisPage(context: context).go();
+
+          ErrorHandler(context: context, dioExc: dioErr).handle();
+        }
+      });
+    });
+
+    return result;
+  }
 }

@@ -502,7 +502,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
     );
   }
 
-  Future<void> showFeeDetailBottomDialog() async {
+  Future showFeeDetailBottomDialog() async {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
