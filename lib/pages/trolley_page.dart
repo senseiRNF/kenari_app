@@ -13,7 +13,7 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class TrolleyPage extends StatefulWidget {
-  const TrolleyPage({super.key,});
+  const TrolleyPage({super.key});
 
   @override
   State<TrolleyPage> createState() => _TrolleyPageState();
@@ -79,7 +79,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
             name1: product.trolleyData.varian!.name1,
             stock: product.trolleyData.varian!.stock,
             isStockAlwaysAvailable: product.trolleyData.varian!.isStockAlwaysAvailable,
-            varianType1: product.trolleyData.varian!.varianType1,
+            // varianType1: product.trolleyData.varian!.varianType1,
             promoPrice: product.trolleyData.varian!.promoPrice,
             isPromo: product.trolleyData.varian!.isPromo,
           ) :

@@ -98,7 +98,7 @@ class Varian {
   String? name2;
   String? stock;
   bool? isStockAlwaysAvailable;
-  VarianType1? varianType1;
+  // VarianType1? varianType1;
   // String? varianType2;
   String? createdAt;
   String? updatedAt;
@@ -113,7 +113,7 @@ class Varian {
     this.name2,
     this.stock,
     this.isStockAlwaysAvailable,
-    this.varianType1,
+    // this.varianType1,
     // this.varianType2,
     this.createdAt,
     this.updatedAt,
@@ -129,9 +129,9 @@ class Varian {
     name2 = json['name2'];
     stock = json['stock'];
     isStockAlwaysAvailable = json['is_stock_always_available'];
-    varianType1 = json['varianType1'] != null
-        ? VarianType1.fromJson(json['varianType1'])
-        : null;
+    // varianType1 = json['varianType1'] != null
+    //     ? VarianType1.fromJson(json['varianType1'])
+    //     : null;
     // varianType2 = json['varianType2'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -148,9 +148,9 @@ class Varian {
     data['name2'] = name2;
     data['stock'] = stock;
     data['is_stock_always_available'] = isStockAlwaysAvailable;
-    if (varianType1 != null) {
-      data['varianType1'] = varianType1!.toJson();
-    }
+    // if (varianType1 != null) {
+    //   data['varianType1'] = varianType1!.toJson();
+    // }
     // data['varianType2'] = varianType2;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;

@@ -371,17 +371,17 @@ class _HomePageState extends State<HomePage> {
     product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice : product.varians![index].price :
     product.isPromo != null && product.isPromo == true ? product.promoPrice : product.price;
 
-    trolley_mdl.VarianType1? varType1;
+    // trolley_mdl.VarianType1? varType1;
 
-    if(product.varians![index].varianType1 != null) {
-      varType1 = trolley_mdl.VarianType1(
-        sId: product.varians![index].varianType1!.sId,
-        name: product.varians![index].varianType1!.name,
-        createdAt: product.varians![index].varianType1!.createdAt,
-        updatedAt: product.varians![index].varianType1!.updatedAt,
-        iV: product.varians![index].varianType1!.iV,
-      );
-    }
+    // if(product.varians![index].varianType1 != null) {
+    //   varType1 = trolley_mdl.VarianType1(
+    //     sId: product.varians![index].varianType1!.sId,
+    //     name: product.varians![index].varianType1!.name,
+    //     createdAt: product.varians![index].varianType1!.createdAt,
+    //     updatedAt: product.varians![index].varianType1!.updatedAt,
+    //     iV: product.varians![index].varianType1!.iV,
+    //   );
+    // }
 
     await APITrolleyServices(context: context).update(
       LocalTrolleyProduct(
@@ -395,7 +395,7 @@ class _HomePageState extends State<HomePage> {
             name1: product.varians![index].name1,
             stock: product.varians![index].stock,
             isStockAlwaysAvailable: product.varians![index].isStockAlwaysAvailable,
-            varianType1: varType1,
+            // varianType1: varType1,
             promoPrice: product.varians![index].promoPrice,
             isPromo: product.varians![index].isPromo,
           ) :
@@ -647,9 +647,15 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext modalBottomContext) {
         int index = 0;
         int qty = 1;
-        int stock = product.stock != null && product.stock != '' ? int.parse(product.stock!) : 0;
+        int stock = product.varians != null && product.varians!.isNotEmpty ?
+        product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
+        product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
 
-        String price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+        String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].isPromo != null && product.varians![index].isPromo == true ?
+        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}' :
+        product.isPromo != null && product.isPromo == true ?
+        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+
         String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
         String? variant;
 
@@ -852,12 +858,35 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () {
                                   stateSetter(() {
                                     index = itemIndex;
+
                                     variant = product.varians![itemIndex].name1 ?? '(Varian tidak diketahui)';
 
-                                    if(product.isPromo != null && product.isPromo == true) {
-                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
+                                    if(product.varians != null && product.varians!.isNotEmpty) {
+                                      if(product.varians![index].isPromo != null && product.varians![index].isPromo == true) {
+                                        price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                                      } else {
+                                        price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}';
+                                      }
                                     } else {
-                                      price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+                                      if(product.isPromo != null && product.isPromo == true) {
+                                        price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
+                                      } else {
+                                        price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+                                      }
+                                    }
+
+                                    if(product.varians != null && product.varians!.isNotEmpty) {
+                                      if(product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true) {
+                                        stock = 1;
+                                      } else {
+                                        stock = int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0');
+                                      }
+                                    } else {
+                                      if(product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true) {
+                                        stock = 1;
+                                      } else {
+                                        stock = int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
+                                      }
                                     }
                                   });
                                 },

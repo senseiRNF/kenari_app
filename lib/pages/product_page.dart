@@ -70,17 +70,17 @@ class _ProductPageState extends State<ProductPage> {
     product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice : product.varians![index].price :
     product.isPromo != null && product.isPromo == true ? product.promoPrice : product.price;
 
-    trolley_mdl.VarianType1? varType1;
+    // trolley_mdl.VarianType1? varType1;
 
-    if(product.varians![index].varianType1 != null) {
-      varType1 = trolley_mdl.VarianType1(
-        sId: product.varians![index].varianType1!.sId,
-        name: product.varians![index].varianType1!.name,
-        createdAt: product.varians![index].varianType1!.createdAt,
-        updatedAt: product.varians![index].varianType1!.updatedAt,
-        iV: product.varians![index].varianType1!.iV,
-      );
-    }
+    // if(product.varians![index].varianType1 != null) {
+    //   varType1 = trolley_mdl.VarianType1(
+    //     sId: product.varians![index].varianType1!.sId,
+    //     name: product.varians![index].varianType1!.name,
+    //     createdAt: product.varians![index].varianType1!.createdAt,
+    //     updatedAt: product.varians![index].varianType1!.updatedAt,
+    //     iV: product.varians![index].varianType1!.iV,
+    //   );
+    // }
 
     await APITrolleyServices(context: context).update(
       LocalTrolleyProduct(
@@ -94,7 +94,7 @@ class _ProductPageState extends State<ProductPage> {
             name1: product.varians![index].name1,
             stock: product.varians![index].stock,
             isStockAlwaysAvailable: product.varians![index].isStockAlwaysAvailable,
-            varianType1: varType1,
+            // varianType1: varType1,
             promoPrice: product.varians![index].promoPrice,
             isPromo: product.varians![index].isPromo,
           ) :
