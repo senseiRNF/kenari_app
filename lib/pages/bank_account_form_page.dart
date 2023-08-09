@@ -242,10 +242,9 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                               ),
                             ).then((createResult) {
                               if(createResult == true) {
-                                OkDialog(
+                                SuccessDialog(
                                   context: context,
                                   message: 'Sukses menambahkan data rekening baru',
-                                  okText: 'Oke',
                                   okFunction: () {
                                     BackFromThisPage(context: context, callbackData: true).go();
                                   },
@@ -265,6 +264,10 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                               ),
                             ).then((updateResult) {
                               if(updateResult == true) {
+                                SuccessDialog(
+                                  context: context,
+                                  message: '',
+                                ).show();
                                 OkDialog(
                                   context: context,
                                   message: 'Sukses memperbaharui data rekening',

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
@@ -6,19 +7,22 @@ import 'package:kenari_app/pages/change_password_page.dart';
 import 'package:kenari_app/pages/company_address_page.dart';
 import 'package:kenari_app/pages/dipay_activation_page.dart';
 import 'package:kenari_app/pages/edit_profile_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class ProfileFragment extends StatelessWidget {
   final String? name;
-  final String? companyCode;
+  final String? companyName;
+  final String? imgUrl;
   final Function refreshPage;
   final Function onLogout;
 
   const ProfileFragment({
     super.key,
     required this.name,
-    required this.companyCode,
+    required this.companyName,
+    this.imgUrl,
     required this.refreshPage,
     required this.onLogout,
   });
@@ -80,21 +84,29 @@ class ProfileFragment extends StatelessWidget {
                             Stack(
                               children: [
                                 Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                    child: Container(
-                                      width: 70.0,
-                                      height: 70.0,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white,
+                                  child: CachedNetworkImage(
+                                    imageUrl: "$baseURL/${imgUrl ?? ''}",
+                                    width: 70.0,
+                                    height: 70.0,
+                                    imageBuilder: (context, imgProvider) => Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            image: imgProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                                       ),
-                                      child: Icon(
+                                    ),
+                                    errorWidget: (errContext, url, err) {
+                                      return Icon(
                                         Icons.person,
                                         size: 40.0,
                                         color: IconColorStyles.iconColor(),
-                                      ),
-                                    ),
+                                      );
+                                    },
                                   ),
                                 ),
                                 Row(
@@ -159,7 +171,7 @@ class ProfileFragment extends StatelessWidget {
                               height: 5.0,
                             ),
                             Text(
-                              companyCode ?? '(Kode tidak diketahui)',
+                              companyName ?? '(Kode tidak diketahui)',
                               style: XSTextStyles.regular(),
                               textAlign: TextAlign.center,
                             ),

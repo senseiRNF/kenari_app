@@ -11,6 +11,7 @@ import 'package:kenari_app/pages/product_list_page.dart';
 import 'package:kenari_app/pages/seller_page.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
+import 'package:kenari_app/services/api/models/banner_model.dart' as banner_mdl;
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/models/product_model.dart';
 import 'package:kenari_app/services/api/models/trolley_model.dart';
@@ -26,6 +27,7 @@ class HomeFragment extends StatelessWidget {
   final List<ProductData> discountProductList;
   final List<CategoryData> categoryList;
   final List<TrolleyData> trolleyList;
+  final List<banner_mdl.BannerData> bannerList;
   final Function onChangeSelectedPage;
   final Function onShowAllMenuBottomDialog;
   final Function onShowProductBottomDialog;
@@ -48,6 +50,7 @@ class HomeFragment extends StatelessWidget {
     required this.discountProductList,
     required this.categoryList,
     required this.trolleyList,
+    required this.bannerList,
     required this.onChangeSelectedPage,
     required this.onShowAllMenuBottomDialog,
     required this.onShowProductBottomDialog,
@@ -663,10 +666,10 @@ class HomeFragment extends StatelessWidget {
                                 if(newProductList[index].varians!.length > 1) {
                                   List sortedVariantPrice = newProductList[index].varians!;
 
-                                  sortedVariantPrice.sort((a, b) => int.parse(a.price ?? '0').compareTo(int.parse(b.price ?? '0')));
+                                  sortedVariantPrice.sort((a, b) => a.promoPrice != null ? int.parse(a.promoPrice ?? '0').compareTo(int.parse(b.promoPrice ?? '0')) : int.parse(a.price ?? '0').compareTo(int.parse(b.price ?? '0')));
 
-                                  int lowest = int.parse(sortedVariantPrice[0].price ?? '0');
-                                  int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].price ?? '0');
+                                  int lowest = int.parse(sortedVariantPrice[0].promoPrice ?? sortedVariantPrice[0].price ?? '0');
+                                  int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].promoPrice ?? sortedVariantPrice[sortedVariantPrice.length - 1].price ?? '0');
 
                                   price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
                                 } else {
@@ -715,7 +718,7 @@ class HomeFragment extends StatelessWidget {
                                                       color: IconColorStyles.iconColor(),
                                                     ),
                                                     Text(
-                                                      'Unable to load image',
+                                                      'Tidak dapat memuat gambar',
                                                       style: XSTextStyles.medium(),
                                                       textAlign: TextAlign.center,
                                                     ),
@@ -814,8 +817,8 @@ class HomeFragment extends StatelessWidget {
                       enableInfiniteScroll: true,
                       viewportFraction: 0.9,
                     ),
-                    items: [
-                      Padding(
+                    items: bannerList.map((e) {
+                      return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: InkWell(
                           onTap: () {
@@ -838,56 +841,56 @@ class HomeFragment extends StatelessWidget {
                           customBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              image: const DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/banner_discount.png',
+                          child: e.image != null ?
+                          CachedNetworkImage(
+                            imageUrl: "$baseURL/${e.image!.url ?? ''}",
+                            imageBuilder: (context, imgProvider) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  image: DecorationImage(
+                                    image: imgProvider,
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
-                                fit: BoxFit.contain,
+                              );
+                            },
+                            errorWidget: (errContext, url, error) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Icon(
+                                    Icons.broken_image_outlined,
+                                    color: IconColorStyles.iconColor(),
+                                  ),
+                                  Text(
+                                    'Tidak dapat memuat gambar',
+                                    style: XSTextStyles.medium(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              );
+                            },
+                          ) :
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Icon(
+                                Icons.broken_image_outlined,
+                                color: IconColorStyles.iconColor(),
                               ),
-                            ),
+                              Text(
+                                'Tidak dapat memuat gambar',
+                                style: XSTextStyles.medium(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: InkWell(
-                          onTap: () {
-                            MoveToPage(
-                              context: context,
-                              target: ProductListBannerPage(
-                                productList: productList,
-                                bannerType: 'clothes',
-                                filterList: filterList,
-                              ),
-                              callback: (callbackResult) {
-                                onReloadTrolley();
-
-                                if(callbackResult != null) {
-                                  onCallbackFromProductListPage(callbackResult);
-                                }
-                              },
-                            ).go();
-                          },
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              image: const DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/banner_new_collection.png',
-                                ),
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(
                     height: 30.0,
@@ -1032,7 +1035,7 @@ class HomeFragment extends StatelessWidget {
                                               color: IconColorStyles.iconColor(),
                                             ),
                                             Text(
-                                              'Unable to load image',
+                                              'Tidak dapat memuat gambar',
                                               style: XSTextStyles.medium(),
                                               textAlign: TextAlign.center,
                                             ),
@@ -1255,7 +1258,7 @@ class HomeFragment extends StatelessWidget {
                                                       color: IconColorStyles.iconColor(),
                                                     ),
                                                     Text(
-                                                      'Unable to load image',
+                                                      'Tidak dapat memuat gambar',
                                                       style: XSTextStyles.medium(),
                                                       textAlign: TextAlign.center,
                                                     ),

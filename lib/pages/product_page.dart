@@ -6,7 +6,7 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/trolley_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/detail_product_model.dart';
-import 'package:kenari_app/services/api/models/trolley_model.dart' as trolley_mdl;
+import 'package:kenari_app/services/api/models/trolley_model.dart';
 import 'package:kenari_app/services/api/product_services/api_product_services.dart';
 import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
 import 'package:kenari_app/services/local/models/local_trolley_product.dart';
@@ -26,7 +26,7 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  List<trolley_mdl.TrolleyData> trolleyList = [];
+  List<TrolleyData> trolleyList = [];
 
   TextEditingController searchController = TextEditingController();
 
@@ -70,25 +70,13 @@ class _ProductPageState extends State<ProductPage> {
     product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice : product.varians![index].price :
     product.isPromo != null && product.isPromo == true ? product.promoPrice : product.price;
 
-    // trolley_mdl.VarianType1? varType1;
-
-    // if(product.varians![index].varianType1 != null) {
-    //   varType1 = trolley_mdl.VarianType1(
-    //     sId: product.varians![index].varianType1!.sId,
-    //     name: product.varians![index].varianType1!.name,
-    //     createdAt: product.varians![index].varianType1!.createdAt,
-    //     updatedAt: product.varians![index].varianType1!.updatedAt,
-    //     iV: product.varians![index].varianType1!.iV,
-    //   );
-    // }
-
     await APITrolleyServices(context: context).update(
       LocalTrolleyProduct(
         isSelected: true,
-        trolleyData: trolley_mdl.TrolleyData(
+        trolleyData: TrolleyData(
           price: price,
           varian: product.varians != null && product.varians!.isNotEmpty ?
-          trolley_mdl.Varian(
+          Varian(
             sId: product.varians![index].sId,
             price: product.varians![index].price,
             name1: product.varians![index].name1,
@@ -99,7 +87,7 @@ class _ProductPageState extends State<ProductPage> {
             isPromo: product.varians![index].isPromo,
           ) :
           null,
-          product: trolley_mdl.Product(
+          product: Product(
             sId: product.sId,
           ),
         ),
@@ -117,6 +105,24 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   Future showProductBottomDialog(DetailProductData product, int selectedIndex) async {
+    int index = selectedIndex;
+    int qty = 1;
+    int stock = product.varians != null && product.varians!.isNotEmpty ?
+    product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
+    product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
+
+    String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].isPromo != null && product.varians![index].isPromo == true ?
+    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}' :
+    product.isPromo != null && product.isPromo == true ?
+    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+
+    String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
+    String? variant;
+
+    if(product.varians != null && product.varians!.isNotEmpty) {
+      variant = product.varians![index].name1 ?? '(Varian tidak diketahui)';
+    }
+
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -126,24 +132,6 @@ class _ProductPageState extends State<ProductPage> {
         ),
       ),
       builder: (BuildContext modalBottomContext) {
-        int index = selectedIndex;
-        int qty = 1;
-        int stock = product.varians != null && product.varians!.isNotEmpty ?
-        product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
-        product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
-
-        String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].isPromo != null && product.varians![index].isPromo == true ?
-        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}' :
-        product.isPromo != null && product.isPromo == true ?
-        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
-
-        String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
-        String? variant;
-
-        if(product.varians != null && product.varians!.isNotEmpty) {
-          variant = product.varians![index].name1 ?? '(Varian tidak diketahui)';
-        }
-
         return StatefulBuilder(
           builder: (BuildContext modalContext, stateSetter) {
             return Column(
@@ -208,7 +196,7 @@ class _ProductPageState extends State<ProductPage> {
                                   color: IconColorStyles.iconColor(),
                                 ),
                                 Text(
-                                  'Unable to load image',
+                                  'Tidak dapat memuat gambar',
                                   style: XSTextStyles.medium(),
                                   textAlign: TextAlign.center,
                                 ),
@@ -342,6 +330,7 @@ class _ProductPageState extends State<ProductPage> {
                                 onTap: () {
                                   stateSetter(() {
                                     index = itemIndex;
+                                    qty = 1;
 
                                     if(product.varians != null && product.varians!.isNotEmpty) {
                                       if(product.varians![index].isPromo != null && product.varians![index].isPromo == true) {
@@ -436,16 +425,30 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         child: InkWell(
                           onTap: () {
-                            if(product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false) {
-                              if(qty < stock) {
+                            if(product.varians != null && product.varians!.isNotEmpty && product.varians![index].isStockAlwaysAvailable != null) {
+                              if(product.varians![index].isStockAlwaysAvailable == null || product.varians![index].isStockAlwaysAvailable! == false) {
+                                if(qty < stock) {
+                                  stateSetter(() {
+                                    qty = qty + 1;
+                                  });
+                                }
+                              } else {
                                 stateSetter(() {
                                   qty = qty + 1;
                                 });
                               }
                             } else {
-                              stateSetter(() {
-                                qty = qty + 1;
-                              });
+                              if(product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false) {
+                                if(qty < stock) {
+                                  stateSetter(() {
+                                    qty = qty + 1;
+                                  });
+                                }
+                              } else {
+                                stateSetter(() {
+                                  qty = qty + 1;
+                                });
+                              }
                             }
                           },
                           customBorder: RoundedRectangleBorder(
@@ -453,7 +456,17 @@ class _ProductPageState extends State<ProductPage> {
                           ),
                           child: Icon(
                             Icons.add,
-                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
+                            color: product.varians != null && product.varians!.isNotEmpty && product.varians![index].isStockAlwaysAvailable != null ?
+                            product.varians![index].isStockAlwaysAvailable == null || product.varians![index].isStockAlwaysAvailable! == false ?
+                            qty == stock ?
+                            NeutralColorStyles.neutral04() :
+                            IconColorStyles.iconColor() :
+                            IconColorStyles.iconColor() :
+                            product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ?
+                            qty == stock ?
+                            NeutralColorStyles.neutral04() :
+                            IconColorStyles.iconColor() :
+                            IconColorStyles.iconColor(),
                           ),
                         ),
                       ),
@@ -743,7 +756,7 @@ class _ProductPageState extends State<ProductPage> {
                                         color: IconColorStyles.iconColor(),
                                       ),
                                       Text(
-                                        'Unable to load image',
+                                        'Tidak dapat memuat gambar',
                                         style: XSTextStyles.medium(),
                                         textAlign: TextAlign.center,
                                       ),

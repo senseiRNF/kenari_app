@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/miscellaneous/status_color_functions.dart';
 import 'package:kenari_app/pages/loan_detail_page.dart';
 import 'package:kenari_app/pages/mandatory_fee_detail_page.dart';
 import 'package:kenari_app/pages/temporal_fee_detail_page.dart';
+import 'package:kenari_app/pages/transaction_detail_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/fee_services/api_mandatory_fee_services.dart';
 import 'package:kenari_app/services/api/fee_services/api_temporal_fee_services.dart';
@@ -92,7 +94,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   Future loadFeeData() async {
     List<Map> tempFeeList = [];
 
-    await APITemporalFeeServices(context: context).callAll().then((temporalCallResult) async {
+    await APITemporalFeeServices(context: context).callAll(feeTabIndex).then((temporalCallResult) async {
       if(temporalCallResult != null && temporalCallResult.temporalFeeData != null) {
         for(int i = 0; i < temporalCallResult.temporalFeeData!.length; i++) {
           tempFeeList.add({
@@ -102,7 +104,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
         }
       }
 
-      await APIMandatoryFeeServices(context: context).callAll().then((mandatoryCallResult) {
+      await APIMandatoryFeeServices(context: context).callAll(feeTabIndex).then((mandatoryCallResult) {
         if(mandatoryCallResult != null && mandatoryCallResult.mandatoryFeeData != null) {
           for(int x = 0; x < mandatoryCallResult.mandatoryFeeData!.length; x++) {
             tempFeeList.add({
@@ -120,7 +122,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   }
 
   Future loadLoanData() async {
-    await APILoanServices(context: context).callAll().then((callResult) {
+    await APILoanServices(context: context).callAll(loanTabIndex).then((callResult) {
       if(callResult != null) {
         setState(() {
           loanList = callResult.loanData ?? [];
@@ -130,90 +132,36 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   }
 
   Future loadTransactionData() async {
-    await APITransactionServices(context: context).callAll().then((callResult) {
+    String? status;
+
+    switch(orderTabIndex) {
+      case 0:
+        status = null;
+        break;
+      case 1:
+        status = 'waiting';
+        break;
+      case 2:
+        status = 'on proccess';
+        break;
+      case 3:
+        status = 'done';
+        break;
+      case 4:
+        status = 'canceled';
+        break;
+      default:
+        status = null;
+        break;
+    }
+
+    await APITransactionServices(context: context).callAll(status).then((callResult) {
       if(callResult != null) {
         setState(() {
           transactionOrderList = callResult.transactionOrderData ?? [];
         });
       }
     });
-  }
-
-  List<Map> filteredFeeData() {
-    List<Map> result = [];
-
-    bool temporalFeeStatus = feeTabIndex == 0 ? true : false;
-    bool mandatoryFeeStatus = feeTabIndex == 0 ? true : false;
-
-    if(feeList.isNotEmpty) {
-      for(int i = 0; i < feeList.length; i++) {
-        if(feeList[i]['type'] == 'mandatory') {
-          if(feeList[i]['data'].status == !mandatoryFeeStatus) {
-            result.add({
-              'type': feeList[i]['type'],
-              'data': feeList[i]['data'],
-            });
-          }
-        } else if(feeList[i]['type'] == 'temporal') {
-          if(feeList[i]['data'].statusPencairan == !temporalFeeStatus) {
-            result.add({
-              'type': feeList[i]['type'],
-              'data': feeList[i]['data'],
-            });
-          }
-        }
-      }
-    }
-
-    return result;
-  }
-
-  List<LoanData> filteredLoanData() {
-    List<LoanData> result = [];
-
-    bool isActiveStatus = feeTabIndex == 0 ? true : false;
-
-    if(loanList.isNotEmpty) {
-      for(int i = 0; i < loanList.length; i++) {
-        if(loanList[i].status == !isActiveStatus) {
-          result.add(loanList[i]);
-        }
-      }
-    }
-
-    return result;
-  }
-
-  List<TransactionOrderData> filteredOrderData() {
-    List<TransactionOrderData> result = [];
-
-    if(transactionOrderList.isNotEmpty) {
-      for(int i = 0; i < transactionOrderList.length; i++) {
-        if(transactionOrderList[i].status != null) {
-          if(orderTabIndex == 0) {
-            result.add(transactionOrderList[i]);
-          } else if(orderTabIndex == 1) {
-            if(transactionOrderList[i].status == 'waiting') {
-              result.add(transactionOrderList[i]);
-            }
-          } else if (orderTabIndex == 2) {
-            if(transactionOrderList[i].status == 'processed') {
-              result.add(transactionOrderList[i]);
-            }
-          } else if (orderTabIndex == 3) {
-            if(transactionOrderList[i].status == 'completed') {
-              result.add(transactionOrderList[i]);
-            }
-          } else if (orderTabIndex == 4) {
-            if(transactionOrderList[i].status == 'cancelled') {
-              result.add(transactionOrderList[i]);
-            }
-          }
-        }
-      }
-    }
-
-    return result;
   }
 
   @override
@@ -336,6 +284,8 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         setState(() {
                           feeTabIndex = 0;
                         });
+
+                        loadFeeData();
                       }
                     },
                     customBorder: RoundedRectangleBorder(
@@ -370,6 +320,8 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         setState(() {
                           feeTabIndex = 1;
                         });
+
+                        loadFeeData();
                       }
                     },
                     customBorder: RoundedRectangleBorder(
@@ -409,6 +361,8 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         setState(() {
                           loanTabIndex = 0;
                         });
+
+                        loadLoanData();
                       }
                     },
                     customBorder: RoundedRectangleBorder(
@@ -443,6 +397,8 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         setState(() {
                           loanTabIndex = 1;
                         });
+
+                        loadLoanData();
                       }
                     },
                     customBorder: RoundedRectangleBorder(
@@ -494,6 +450,8 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               setState(() {
                                 orderTabIndex = index;
                               });
+
+                              loadTransactionData();
                             },
                             customBorder: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -596,13 +554,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   Widget activeMainWidget() {
     switch(selectedTab) {
       case 0:
-        return filteredFeeData().isNotEmpty ?
+        return feeList.isNotEmpty ?
         RefreshIndicator(
           onRefresh: () async {
             loadFeeData();
           },
           child: ListView.builder(
-            itemCount: filteredFeeData().length,
+            itemCount: feeList.length,
             itemBuilder: (BuildContext listContext, int index) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -610,7 +568,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                     child: Text(
-                      filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
+                      feeList[index]['type'] == 'temporal' ? 'Iuran Berjangka' : feeList[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
                       style: XSTextStyles.regular(),
                     ),
                   ),
@@ -620,10 +578,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          if(filteredFeeData()[index]['type'] == 'temporal') {
-                            MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: filteredFeeData()[index]['data'].sId!)).go();
-                          } else if(filteredFeeData()[index]['type'] == 'mandatory') {
-                            MoveToPage(context: context, target: MandatoryFeeDetailPage(mandatoryFeeId: filteredFeeData()[index]['data'].sId!)).go();
+                          if(feeList[index]['type'] == 'temporal') {
+                            MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: feeList[index]['data'].sId!)).go();
+                          } else if(feeList[index]['type'] == 'mandatory') {
+                            MoveToPage(context: context, target: MandatoryFeeDetailPage(mandatoryFeeId: feeList[index]['data'].sId!)).go();
                           }
                         },
                         child: Padding(
@@ -635,16 +593,16 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
+                                    feeList[index]['type'] == 'temporal' ? 'Iuran Berjangka' : feeList[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
                                     style: STextStyles.medium().copyWith(
                                       color: TextColorStyles.textPrimary(),
                                     ),
                                   ),
                                   Text(
-                                    filteredFeeData()[index]['type'] == 'temporal' ?
-                                    filteredFeeData()[index]['data'].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index]['data'].jumlahIuran!))}' : 'Rp 0' :
-                                    filteredFeeData()[index]['type'] == 'mandatory' ?
-                                    filteredFeeData()[index]['data'].amount != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index]['data'].amount!))}' : 'Rp 0' :
+                                    feeList[index]['type'] == 'temporal' ?
+                                    feeList[index]['data'].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(feeList[index]['data'].jumlahIuran!))}' : 'Rp 0' :
+                                    feeList[index]['type'] == 'mandatory' ?
+                                    feeList[index]['data'].amount != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(feeList[index]['data'].amount!))}' : 'Rp 0' :
                                     'Rp 0',
                                     style: STextStyles.medium().copyWith(
                                       color: TextColorStyles.textPrimary(),
@@ -717,13 +675,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ],
         );
       case 1:
-        return filteredLoanData().isNotEmpty ?
+        return loanList.isNotEmpty ?
         RefreshIndicator(
           onRefresh: () async {
             loadLoanData();
           },
           child: ListView.separated(
-            itemCount: filteredLoanData().length,
+            itemCount: loanList.length,
             separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -740,11 +698,11 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      if(filteredLoanData()[index].sId != null) {
+                      if(loanList[index].sId != null) {
                         MoveToPage(
                           context: context,
                           target: LoanDetailPage(
-                            loanId: filteredLoanData()[index].sId!,
+                            loanId: loanList[index].sId!,
                           ),
                           callback: (callback) {
                             widget.onCallbackFromLoanPage(callback);
@@ -767,7 +725,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 ),
                               ),
                               Text(
-                                filteredLoanData()[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredLoanData()[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
+                                loanList[index].jumlahPinjamanPengajuan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanList[index].jumlahPinjamanPengajuan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                                 style: STextStyles.medium().copyWith(
                                   color: TextColorStyles.textPrimary(),
                                 ),
@@ -782,10 +740,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                filteredLoanData()[index].jangkaWaktu != null ? '${filteredLoanData()[index].jangkaWaktu} Bulan' : '(Tidak diketahui)',
+                                loanList[index].jangkaWaktu != null ? '${loanList[index].jangkaWaktu} Bulan' : '(Tidak diketahui)',
                                 style: STextStyles.regular(),
                               ),
-                              filteredLoanData()[index].status == false ?
+                              loanList[index].status == false ?
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                                 decoration: BoxDecoration(
@@ -820,23 +778,23 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               ),
                             ],
                           ),
-                          filteredLoanData()[index].status == false ?
+                          loanList[index].status == false ?
                           Padding(
                             padding: const EdgeInsets.only(top: 20.0),
-                            child: filteredLoanData()[index].jatuhTempo != null ?
+                            child: loanList[index].jatuhTempo != null ?
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                DateTime.now().isBefore(DateTime.parse(filteredLoanData()[index].jatuhTempo!)) || DateTime.now().isAtSameMomentAs(DateTime.parse(filteredLoanData()[index].jatuhTempo!)) == true ?
+                                DateTime.now().isBefore(DateTime.parse(loanList[index].jatuhTempo!)) || DateTime.now().isAtSameMomentAs(DateTime.parse(loanList[index].jatuhTempo!)) == true ?
                                 Text(
-                                  'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredLoanData()[index].jatuhTempo!))}',
+                                  'Jatuh Tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(loanList[index].jatuhTempo!))}',
                                   style: XSTextStyles.medium().copyWith(
                                     color: DangerColorStyles.dangerMain(),
                                   ),
                                 ) :
                                 Text(
-                                  'Terlambat ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredLoanData()[index].jatuhTempo!))}',
+                                  'Terlambat ${DateFormat('dd MMM yyyy').format(DateTime.parse(loanList[index].jatuhTempo!))}',
                                   style: XSTextStyles.medium().copyWith(
                                     color: DangerColorStyles.dangerMain(),
                                   ),
@@ -895,38 +853,25 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ],
         );
       case 2:
-        return filteredOrderData().isNotEmpty ?
+        return transactionOrderList.isNotEmpty ?
         RefreshIndicator(
           onRefresh: () async {
             loadTransactionData();
           },
           child: ListView.separated(
-            itemCount: filteredOrderData().length,
+            itemCount: transactionOrderList.length,
             separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
               return const SizedBox(
                 height: 10.0,
               );
             },
             itemBuilder: (BuildContext listContext, int index) {
-              late String status;
-
-              switch(filteredOrderData()[index].status) {
-                case 'waiting':
-                  status = 'Menunggu Konfirmasi Penjual';
-                  break;
-                default:
-                  status = '(Tidak diketahui)';
-                  break;
-              }
-
               return Container(
                 color: Colors.white,
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {
-
-                    },
+                    onTap: () => MoveToPage(context: context, target: TransactionDetailPage(transactionId: transactionOrderList[index].sId,)).go(),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                       child: Column(
@@ -937,7 +882,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             children: [
                               Expanded(
                                 child: Text(
-                                  filteredOrderData()[index].transactionNo ?? '(Tidak diketahui)',
+                                  transactionOrderList[index].transactionNo ?? '(Tidak diketahui)',
                                   style: STextStyles.medium().copyWith(
                                     color: TextColorStyles.textPrimary(),
                                   ),
@@ -946,16 +891,16 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
                                 decoration: BoxDecoration(
-                                  color: WarningColorStyles.warningSurface(),
+                                  color: checkStatusColor(transactionOrderList[index].status).surface,
                                   border: Border.all(
-                                    color: WarningColorStyles.warningBorder(),
+                                    color: checkStatusColor(transactionOrderList[index].status).border,
                                   ),
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 child: Text(
-                                  status,
+                                  transactionOrderList[index].remark ?? '(Tidak diketahui)',
                                   style: STextStyles.medium().copyWith(
-                                    color: WarningColorStyles.warningMain(),
+                                    color: checkStatusColor(transactionOrderList[index].status).main,
                                   ),
                                 ),
                               ),
@@ -964,12 +909,12 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           const SizedBox(
                             height: 15.0,
                           ),
-                          filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails!.isNotEmpty ?
+                          transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails!.isNotEmpty ?
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CachedNetworkImage(
-                                imageUrl: "$baseURL/${filteredOrderData()[index].orderDetails![0].product != null && filteredOrderData()[index].orderDetails![0].product!.images != null && filteredOrderData()[index].orderDetails![0].product!.images!.isNotEmpty && filteredOrderData()[index].orderDetails![0].product!.images![0].url != null ? filteredOrderData()[index].orderDetails![0].product!.images![0].url! : ''}",
+                                imageUrl: "$baseURL/${transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.images != null && transactionOrderList[index].orderDetails![0].product!.images!.isNotEmpty && transactionOrderList[index].orderDetails![0].product!.images![0].url != null ? transactionOrderList[index].orderDetails![0].product!.images![0].url! : ''}",
                                 imageBuilder: (context, imgProvider) {
                                   return Container(
                                     width: 65.0,
@@ -996,7 +941,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                           color: IconColorStyles.iconColor(),
                                         ),
                                         Text(
-                                          'Unable to load image',
+                                          'Tidak dapat memuat gambar',
                                           style: XSTextStyles.medium(),
                                           textAlign: TextAlign.center,
                                         ),
@@ -1013,10 +958,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
-                                      filteredOrderData()[index].orderDetails![0].product != null && filteredOrderData()[index].orderDetails![0].product!.name != null ? filteredOrderData()[index].orderDetails![0].product!.name! : '(Produk tidak diketahui)',
+                                      transactionOrderList[index].orderDetails![0].product != null && transactionOrderList[index].orderDetails![0].product!.name != null ? transactionOrderList[index].orderDetails![0].product!.name! : '(Produk tidak diketahui)',
                                       style: MTextStyles.medium(),
                                     ),
-                                    filteredOrderData()[index].orderDetails![0].varianName != null ?
+                                    transactionOrderList[index].orderDetails![0].varianName != null ?
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
@@ -1024,28 +969,26 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                           height: 10.0,
                                         ),
                                         Text(
-                                          filteredOrderData()[index].orderDetails![0].varianName ?? '(Varian tidak diketahui)',
+                                          transactionOrderList[index].orderDetails![0].varianName ?? '(Varian tidak diketahui)',
                                           style: STextStyles.regular(),
-                                        ),
-                                        const SizedBox(
-                                          height: 5.0,
                                         ),
                                       ],
                                     ) :
+                                    const Material(),
                                     const SizedBox(
-                                      height: 25.0,
+                                      height: 5.0,
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails![0].price != null && filteredOrderData()[index].orderDetails![0].price != '' ? filteredOrderData()[index].orderDetails![0].price! : '0')).replaceAll(',', '.')}',
+                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].price != null && transactionOrderList[index].orderDetails![0].price != '' ? transactionOrderList[index].orderDetails![0].price! : '0')).replaceAll(',', '.')}',
                                           style: MTextStyles.medium().copyWith(
                                             color: PrimaryColorStyles.primaryMain(),
                                           ),
                                         ),
                                         Text(
-                                          '${filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails![0].qty != null && filteredOrderData()[index].orderDetails![0].qty != '' ? filteredOrderData()[index].orderDetails![0].qty : '0'}x',
+                                          '${transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails![0].qty != null && transactionOrderList[index].orderDetails![0].qty != '' ? transactionOrderList[index].orderDetails![0].qty : '0'}x',
                                           style: MTextStyles.regular(),
                                           textAlign: TextAlign.end,
                                         ),
@@ -1069,11 +1012,11 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                '${filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails!.isNotEmpty ? filteredOrderData()[index].orderDetails!.length : '0'} Produk',
+                                '${transactionOrderList[index].orderDetails != null && transactionOrderList[index].orderDetails != null ? transactionOrderList[index].orderDetails!.length : '0'} Produk',
                                 style: MTextStyles.medium(),
                               ),
                               Text(
-                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredOrderData()[index].orderDetails != null && filteredOrderData()[index].orderDetails!.isNotEmpty && filteredOrderData()[index].orderDetails![0].total != null && filteredOrderData()[index].orderDetails![0].total != '' ? filteredOrderData()[index].orderDetails![0].total! : '0')).replaceAll(',', '.')}',
+                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(transactionOrderList[index].totalAmount != null ? transactionOrderList[index].totalAmount! : '0')).replaceAll(',', '.')}',
                                 style: MTextStyles.medium(),
                               ),
                             ],
@@ -1127,13 +1070,13 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
           ],
         );
       default:
-        return filteredFeeData().isNotEmpty ?
+        return feeList.isNotEmpty ?
         RefreshIndicator(
           onRefresh: () async {
             loadFeeData();
           },
           child: ListView.builder(
-            itemCount: filteredFeeData().length,
+            itemCount: feeList.length,
             itemBuilder: (BuildContext listContext, int index) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1141,7 +1084,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                     child: Text(
-                      filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
+                      feeList[index]['type'] == 'temporal' ? 'Iuran Berjangka' : feeList[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
                       style: XSTextStyles.regular(),
                     ),
                   ),
@@ -1151,10 +1094,10 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          if(filteredFeeData()[index]['type'] == 'temporal') {
-                            MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: filteredFeeData()[index]['data'].sId!)).go();
-                          } else if(filteredFeeData()[index]['type'] == 'mandatory') {
-                            MoveToPage(context: context, target: MandatoryFeeDetailPage(mandatoryFeeId: filteredFeeData()[index]['data'].sId!)).go();
+                          if(feeList[index]['type'] == 'temporal') {
+                            MoveToPage(context: context, target: TemporalFeeDetailPage(temporalFeeId: feeList[index]['data'].sId!)).go();
+                          } else if(feeList[index]['type'] == 'mandatory') {
+                            MoveToPage(context: context, target: MandatoryFeeDetailPage(mandatoryFeeId: feeList[index]['data'].sId!)).go();
                           }
                         },
                         child: Padding(
@@ -1166,16 +1109,16 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    filteredFeeData()[index]['type'] == 'temporal' ? 'Iuran Berjangka' : filteredFeeData()[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
+                                    feeList[index]['type'] == 'temporal' ? 'Iuran Berjangka' : feeList[index]['type'] == 'mandatory' ? 'Iuran Wajib' : '(Tidak diketahui)',
                                     style: STextStyles.medium().copyWith(
                                       color: TextColorStyles.textPrimary(),
                                     ),
                                   ),
                                   Text(
-                                    filteredFeeData()[index]['type'] == 'temporal' ?
-                                    filteredFeeData()[index]['data'].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index]['data'].jumlahIuran!))}' : 'Rp 0' :
-                                    filteredFeeData()[index]['type'] == 'mandatory' ?
-                                    filteredFeeData()[index]['data'].amount != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredFeeData()[index]['data'].amount!))}' : 'Rp 0' :
+                                    feeList[index]['type'] == 'temporal' ?
+                                    feeList[index]['data'].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(feeList[index]['data'].jumlahIuran!))}' : 'Rp 0' :
+                                    feeList[index]['type'] == 'mandatory' ?
+                                    feeList[index]['data'].amount != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(feeList[index]['data'].amount!))}' : 'Rp 0' :
                                     'Rp 0',
                                     style: STextStyles.medium().copyWith(
                                       color: TextColorStyles.textPrimary(),

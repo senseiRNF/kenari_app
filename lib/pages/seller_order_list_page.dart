@@ -1,7 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/miscellaneous/status_color_functions.dart';
 import 'package:kenari_app/pages/seller_order_detail_page.dart';
+import 'package:kenari_app/services/api/api_options.dart';
+import 'package:kenari_app/services/api/models/seller_order_model.dart';
+import 'package:kenari_app/services/api/seller_order_services/api_seller_order_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -15,7 +20,7 @@ class SellerOrderListPage extends StatefulWidget {
 class _SellerOrderListPageState extends State<SellerOrderListPage> {
   int selectedTab = 0;
 
-  List sellerOrderList = [];
+  List<SellerOrderData> sellerOrderList = [];
 
   @override
   void initState() {
@@ -24,80 +29,43 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
     loadData();
   }
 
-  List loadData() {
-    List result = [];
+  Future loadData() async {
+    String? status;
 
     switch(selectedTab) {
       case 0:
-        result = sellerOrderList;
-        return result;
+        status = null;
+        break;
       case 1:
-        for(int i = 0; i < sellerOrderList.length; i++) {
-          if(sellerOrderList[i]['status'] == 'Konfirmasi Pesanan' || sellerOrderList[i]['status'] == 'Segera Siapkan Pesanan') {
-            result.add(sellerOrderList[i]);
-          }
-        }
-
-        return result;
+        status = 'waiting';
+        break;
       case 2:
-        for(int i = 0; i < sellerOrderList.length; i++) {
-          if(sellerOrderList[i]['status'] == 'Siap diambil Pembeli') {
-            result.add(sellerOrderList[i]);
-          }
-        }
-
-        return result;
+        status = 'ready to pickup';
+        break;
       case 3:
-        for(int i = 0; i < sellerOrderList.length; i++) {
-          if(sellerOrderList[i]['status'] == 'Selesai') {
-            result.add(sellerOrderList[i]);
-          }
-        }
-
-        return result;
+        status = 'done';
+        break;
       case 4:
-        for(int i = 0; i < sellerOrderList.length; i++) {
-          if(sellerOrderList[i]['status'].toString().contains('Dibatalkan')) {
-            result.add(sellerOrderList[i]);
-          }
+        status = 'canceled';
+        break;
+      default:
+        status = null;
+        break;
+    }
+
+    await APISellerOrderServices(context: context).callAll(status).then((callResult) {
+      if(callResult != null && callResult.sellerOrderData != null) {
+        List<SellerOrderData> tempSellerOrderList = [];
+
+        for(int i = 0; i < callResult.sellerOrderData!.length; i++) {
+          tempSellerOrderList.add(callResult.sellerOrderData![i]);
         }
 
-        return result;
-      default:
-        return result;
-    }
-  }
-
-  Map checkStatusColor(String status) {
-    Map result = {};
-
-    if(status == 'Konfirmasi Pesanan' || status == 'Segera Siapkan Pesanan') {
-      result = {
-        'surface': WarningColorStyles.warningSurface(),
-        'border': WarningColorStyles.warningBorder(),
-        'main': WarningColorStyles.warningMain(),
-      };
-    } else if(status == 'Siap diambil Pembeli') {
-      result = {
-        'surface': InfoColorStyles.infoSurface(),
-        'border': InfoColorStyles.infoBorder(),
-        'main': InfoColorStyles.infoMain(),
-      };
-    } else if(status == 'Selesai') {
-      result = {
-        'surface': SuccessColorStyles.successSurface(),
-        'border': SuccessColorStyles.successBorder(),
-        'main': SuccessColorStyles.successMain(),
-      };
-    } else {
-      result = {
-        'surface': DangerColorStyles.dangerSurface(),
-        'border': DangerColorStyles.dangerBorder(),
-        'main': DangerColorStyles.dangerMain(),
-      };
-    }
-
-    return result;
+        setState(() {
+          sellerOrderList = tempSellerOrderList;
+        });
+      }
+    });
   }
 
   @override
@@ -168,6 +136,8 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                     setState(() {
                       selectedTab = index;
                     });
+
+                    loadData();
                   },
                   padding: const EdgeInsets.only(left: 25.0),
                   tabs: [
@@ -221,12 +191,10 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
             ),
             Expanded(
               child: RefreshIndicator(
-                onRefresh: () async {
-
-                },
-                child: loadData().isNotEmpty ?
+                onRefresh: () async => loadData(),
+                child: sellerOrderList.isNotEmpty ?
                 ListView.builder(
-                  itemCount: loadData().length,
+                  itemCount: sellerOrderList.length,
                   itemBuilder: (BuildContext newOrderContext, int newOrderIndex) {
                     return Container(
                       color: Colors.white,
@@ -236,11 +204,9 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                           onTap: () {
                             MoveToPage(
                               context: context,
-                              target: SellerOrderDetailPage(orderData: loadData()[newOrderIndex]),
+                              target: SellerOrderDetailPage(sellerOrderId: sellerOrderList[newOrderIndex].sId),
                               callback: (callbackResult) {
-                                setState(() {
-
-                                });
+                                loadData();
                               },
                             ).go();
                           },
@@ -254,22 +220,22 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      loadData()[newOrderIndex]['order_no'],
+                                      sellerOrderList[newOrderIndex].transactionNo ?? '(Nomor tidak diketahui)',
                                       style: STextStyles.medium(),
                                     ),
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
                                       decoration: BoxDecoration(
-                                        color: checkStatusColor(loadData()[newOrderIndex]['status'])['surface'],
+                                        color: checkStatusColor(sellerOrderList[newOrderIndex].status).surface,
                                         border: Border.all(
-                                          color: checkStatusColor(loadData()[newOrderIndex]['status'])['border'],
+                                          color: checkStatusColor(sellerOrderList[newOrderIndex].status).border,
                                         ),
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
                                       child: Text(
-                                        loadData()[newOrderIndex]['status'],
+                                        sellerOrderList[newOrderIndex].remark ?? '(Status tidak diketahui)',
                                         style: STextStyles.medium().copyWith(
-                                          color: checkStatusColor(loadData()[newOrderIndex]['status'])['main'],
+                                          color: checkStatusColor(sellerOrderList[newOrderIndex].status).main,
                                         ),
                                       ),
                                     ),
@@ -278,21 +244,52 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                 const SizedBox(
                                   height: 15.0,
                                 ),
+                                sellerOrderList[newOrderIndex].orderDetails != null && sellerOrderList[newOrderIndex].orderDetails!.isNotEmpty ?
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Container(
-                                      width: 65.0,
-                                      height: 65.0,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                            loadData()[newOrderIndex]['image'],
+                                    CachedNetworkImage(
+                                      imageUrl: "$baseURL/${sellerOrderList[newOrderIndex].orderDetails != null &&
+                                          sellerOrderList[newOrderIndex].orderDetails!.isNotEmpty &&
+                                          sellerOrderList[newOrderIndex].orderDetails![0].product != null &&
+                                          sellerOrderList[newOrderIndex].orderDetails![0].product!.images != null &&
+                                          sellerOrderList[newOrderIndex].orderDetails![0].product!.images!.isNotEmpty ?
+                                      sellerOrderList[newOrderIndex].orderDetails![0].product!.images![0].url ?? '' : ''
+                                      }",
+                                      imageBuilder: (context, imgProvider) {
+                                        return Container(
+                                          width: 65.0,
+                                          height: 65.0,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                            image: DecorationImage(
+                                              image: imgProvider,
+                                              fit: BoxFit.contain,
+                                            ),
                                           ),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                        );
+                                      },
+                                      errorWidget: (context, url, error) {
+                                        return SizedBox(
+                                          width: 65.0,
+                                          height: 65.0,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Icon(
+                                                Icons.broken_image_outlined,
+                                                color: IconColorStyles.iconColor(),
+                                              ),
+                                              Text(
+                                                'Tidak dapat memuat gambar',
+                                                style: XSTextStyles.medium(),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
                                     ),
                                     const SizedBox(
                                       width: 15.0,
@@ -302,14 +299,14 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: [
                                           Text(
-                                            loadData()[newOrderIndex]['title'],
+                                            sellerOrderList[newOrderIndex].orderDetails![0].product != null ? sellerOrderList[newOrderIndex].orderDetails![0].product!.name ?? '(Produk tidak diketahui)' : '(Produk tidak diketahui)',
                                             style: MTextStyles.regular(),
                                           ),
                                           const SizedBox(
                                             height: 5.0,
                                           ),
                                           Text(
-                                            loadData()[newOrderIndex]['variant'],
+                                            sellerOrderList[newOrderIndex].orderDetails![0].varianName ?? '',
                                             style: XSTextStyles.regular(),
                                           ),
                                           const SizedBox(
@@ -319,11 +316,11 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                'Rp ${NumberFormat('#,###', 'en_id').format(loadData()[newOrderIndex]['price']).replaceAll(',', '.')}',
+                                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(sellerOrderList[newOrderIndex].totalAmount ?? '0')).replaceAll(',', '.')}',
                                                 style: MTextStyles.medium(),
                                               ),
                                               Text(
-                                                'x${loadData()[newOrderIndex]['qty']}',
+                                                'x${sellerOrderList[newOrderIndex].orderDetails!.length}',
                                                 style: MTextStyles.regular(),
                                               ),
                                             ],
@@ -332,7 +329,8 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                       ),
                                     ),
                                   ],
-                                ),
+                                ) :
+                                const Material(),
                                 const SizedBox(
                                   height: 10.0,
                                 ),
@@ -350,7 +348,7 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                         style: STextStyles.regular(),
                                       ),
                                       Text(
-                                        '${loadData()[newOrderIndex]['respond_limit']} Hari',
+                                        '- Hari',
                                         style: STextStyles.medium().copyWith(
                                           color: InfoColorStyles.infoMain(),
                                         ),
@@ -374,7 +372,7 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                       style: MTextStyles.regular(),
                                     ),
                                     Text(
-                                      'Rp ${NumberFormat('#,###', 'en_id').format(loadData()[newOrderIndex]['price'] * loadData()[newOrderIndex]['qty']).replaceAll(',', '.')}',
+                                      'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(sellerOrderList[newOrderIndex].totalAmount ?? '0')).replaceAll(',', '.')}',
                                       style: MTextStyles.medium(),
                                     ),
                                   ],

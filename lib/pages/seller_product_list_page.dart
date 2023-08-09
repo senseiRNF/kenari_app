@@ -99,7 +99,7 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                                     color: IconColorStyles.iconColor(),
                                   ),
                                   Text(
-                                    'Unable to load image',
+                                    'Tidak dapat memuat gambar',
                                     style: XSTextStyles.medium(),
                                     textAlign: TextAlign.center,
                                   ),
@@ -242,7 +242,7 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                                     color: IconColorStyles.iconColor(),
                                   ),
                                   Text(
-                                    'Unable to load image',
+                                    'Tidak dapat memuat gambar',
                                     style: XSTextStyles.medium(),
                                     textAlign: TextAlign.center,
                                   ),
@@ -382,7 +382,7 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                                     color: IconColorStyles.iconColor(),
                                   ),
                                   Text(
-                                    'Unable to load image',
+                                    'Tidak dapat memuat gambar',
                                     style: XSTextStyles.medium(),
                                     textAlign: TextAlign.center,
                                   ),

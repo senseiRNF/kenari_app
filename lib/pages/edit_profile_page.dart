@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/services/api/api_options.dart';
+import 'package:kenari_app/services/api/models/profile_model.dart';
 import 'package:kenari_app/services/api/profile_services/api_profile_services.dart';
-import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/services/local/models/local_profile_form_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -24,8 +27,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-  String? companyId;
-  String? memberId;
+  ProfileData? profileData;
+  MediaProfileData? profileImage;
 
   @override
   void initState() {
@@ -35,39 +38,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future initLoad() async {
-    await LocalSharedPrefs().readKey('name').then((nameResult) async {
+    await APIProfileServices(context: context).showProfile().then((profileResult) {
       setState(() {
-        nameController.text = nameResult ?? '';
-      });
+        profileData = profileResult;
 
-      await LocalSharedPrefs().readKey('phone').then((phoneResult) async {
-        setState(() {
-          phoneController.text = phoneResult ?? '';
-        });
+        if(profileResult != null) {
+          nameController.text = profileResult.name ?? '';
+          phoneController.text = profileResult.phoneNumber ?? '';
+          emailController.text = profileResult.email ?? '';
 
-        await LocalSharedPrefs().readKey('email').then((emailResult) async {
-          setState(() {
-            emailController.text = emailResult ?? '';
-          });
+          if(profileResult.company != null) {
+            companyCodeController.text = "${profileResult.company!.code ?? ''} - ${profileResult.company!.name ?? ''}";
+          }
 
-          await LocalSharedPrefs().readKey('company_code').then((companyCodeResult) async {
-            setState(() {
-              companyCodeController.text = companyCodeResult ?? '';
-            });
-
-            await LocalSharedPrefs().readKey('company_id').then((companyIdResult) async {
-              setState(() {
-                companyId = companyIdResult;
-              });
-
-              await LocalSharedPrefs().readKey('member_id').then((memberIdResult) {
-                setState(() {
-                  memberId = memberIdResult;
-                });
-              });
-            });
-          });
-        });
+          if(profileResult.image != null) {
+            profileImage = MediaProfileData(
+              url: profileResult.image!.url,
+            );
+          }
+        }
       });
     });
   }
@@ -113,9 +102,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: InkWell(
-                onTap: () {
-
-                },
+                onTap: () => BackFromThisPage(context: context, callbackData: 'gallery').go(),
                 customBorder: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
@@ -131,19 +118,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      child: InkWell(
-                        onTap: () {
-
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.image,
-                            color: PrimaryColorStyles.primaryMain(),
-                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Icon(
+                          Icons.image,
+                          color: PrimaryColorStyles.primaryMain(),
                         ),
                       ),
                     ),
@@ -166,9 +145,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: InkWell(
-                onTap: () {
-
-                },
+                onTap: () => BackFromThisPage(context: context, callbackData: 'camera').go(),
                 customBorder: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
@@ -184,19 +161,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      child: InkWell(
-                        onTap: () {
-
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.camera_alt,
-                            color: PrimaryColorStyles.primaryMain(),
-                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: PrimaryColorStyles.primaryMain(),
                         ),
                       ),
                     ),
@@ -219,9 +188,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: InkWell(
-                onTap: () {
-
-                },
+                onTap: () => BackFromThisPage(context: context, callbackData: 'delete').go(),
                 customBorder: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
@@ -237,19 +204,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      child: InkWell(
-                        onTap: () {
-
-                        },
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.delete,
-                            color: PrimaryColorStyles.primaryMain(),
-                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Icon(
+                          Icons.delete,
+                          color: PrimaryColorStyles.primaryMain(),
                         ),
                       ),
                     ),
@@ -272,7 +231,77 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ],
         );
       },
-    );
+    ).then((dialogResult) async {
+      if(dialogResult != null) {
+        if(dialogResult != 'delete') {
+          ImageSource source = dialogResult == 'camera' ? ImageSource.camera : ImageSource.gallery;
+
+          await pickingImage(source).then((pickResult) {
+            if(pickResult != null) {
+              int bytesFile = File(pickResult.path).lengthSync();
+
+              if(bytesFile <= 3200000) {
+                setState(() {
+                  profileImage = MediaProfileData(
+                    xFile: pickResult,
+                  );
+                });
+              } else {
+                OkDialog(
+                  context: context,
+                  message: 'Ukuran file terlalu besar (max: 3MB)',
+                  showIcon: false,
+                ).show();
+              }
+            }
+          });    
+        } else {
+          OptionDialog(
+            context: context,
+            message: 'Hapus foto tersimpan, Anda yakin?',
+            yesFunction: () => removeProfileImage(),
+          ).show();
+        }
+      }
+    });
+  }
+
+  Future<XFile?> pickingImage(ImageSource source) async {
+    XFile? result;
+
+    ImagePicker picker = ImagePicker();
+
+    await picker.pickImage(
+      source: source,
+      imageQuality: source == ImageSource.gallery ? 100 : 50,
+    ).then((pickResult) async {
+      result = pickResult;
+    });
+
+    return result;
+  }
+
+  Future updateProfile() async {
+    await APIProfileServices(context: context).updateProfile(
+      LocalProfileFormData(
+        name: nameController.text,
+        email: emailController.text,
+        phone: phoneController.text,
+        profileImage: profileImage,
+      ),
+    ).then((result) {
+      if(result == true) {
+        SuccessDialog(
+          context: context,
+          message: 'Sukses Memperbaharui Data',
+          okFunction: () => BackFromThisPage(context: context, callbackData: true).go(),
+        ).show();
+      }
+    });
+  }
+
+  Future removeProfileImage() async {
+
   }
 
   @override
@@ -335,12 +364,53 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
                       children: [
+                        profileImage != null ?
+                        profileImage!.xFile != null ?
+                        Container(
+                          width: 70.0,
+                          height: 70.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: FileImage(
+                                File(profileImage!.xFile!.path),
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: const Material(
+                            color: Colors.transparent,
+                          ),
+                        ) :
+                        CachedNetworkImage(
+                          imageUrl: "$baseURL/${profileImage!.url ?? ''}",
+                          width: 70.0,
+                          height: 70.0,
+                          imageBuilder: (context, imgProvider) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: imgProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          errorWidget: (errContext, url, err) {
+                            return Icon(
+                              Icons.person,
+                              size: 40.0,
+                              color: IconColorStyles.iconColor(),
+                            );
+                          },
+                        ) :
                         Container(
                           width: 70.0,
                           height: 70.0,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white,
                           ),
                           child: Icon(
                             Icons.person,
@@ -472,28 +542,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    APIProfileServices(context: context).updateProfile(
-                      memberId,
-                      LocalProfileFormData(
-                        companyId: companyId,
-                        name: nameController.text,
-                        email: emailController.text,
-                        phone: phoneController.text,
-                      ),
-                    ).then((result) {
-                      if(result == true) {
-                        OkDialog(
-                          context: context,
-                          message: 'Sukses memperbaharui data',
-                          okText: 'Oke',
-                          okFunction: () {
-                            BackFromThisPage(context: context, callbackData: true).go();
-                          },
-                        ).show();
-                      }
-                    });
-                  },
+                  onPressed: () => updateProfile(),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(

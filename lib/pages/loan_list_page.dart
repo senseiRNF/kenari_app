@@ -29,7 +29,9 @@ class _LoanListPageState extends State<LoanListPage> {
   }
 
   Future loadData() async {
-    await APILoanServices(context: context).callAll().then((callResult) {
+    int status = isNotPaidOff ? 0 : 1;
+
+    await APILoanServices(context: context).callAll(status).then((callResult) {
       if(callResult != null) {
         setState(() {
           loanList = callResult.loanData ?? [];
@@ -50,20 +52,6 @@ class _LoanListPageState extends State<LoanListPage> {
         }
       }
     });
-  }
-
-  List<LoanData> filteredData() {
-    List<LoanData> result = [];
-
-    if(loanList.isNotEmpty) {
-      for(int i = 0; i < loanList.length; i++) {
-        if(loanList[i].status == !isNotPaidOff) {
-          result.add(loanList[i]);
-        }
-      }
-    }
-
-    return result;
   }
 
   @override
@@ -160,6 +148,8 @@ class _LoanListPageState extends State<LoanListPage> {
                                 setState(() {
                                   isNotPaidOff = true;
                                 });
+
+                                loadData();
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.0),
@@ -192,6 +182,8 @@ class _LoanListPageState extends State<LoanListPage> {
                                 setState(() {
                                   isNotPaidOff = false;
                                 });
+
+                                loadData();
                               },
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.0),
@@ -217,13 +209,13 @@ class _LoanListPageState extends State<LoanListPage> {
               ),
             ),
             Expanded(
-              child: filteredData().isNotEmpty ?
+              child: loanList.isNotEmpty ?
               ListView.separated(
-                itemCount: filteredData().length,
+                itemCount: loanList.length,
                 separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
                   return Container(
                     color: Colors.white,
-                    child: filteredData()[separatorIndex].status != null && filteredData()[separatorIndex].status == false ?
+                    child: loanList[separatorIndex].status != null && loanList[separatorIndex].status == false ?
                     Divider(
                       height: 1.0,
                       indent: 25.0,
@@ -236,9 +228,9 @@ class _LoanListPageState extends State<LoanListPage> {
                 itemBuilder: (BuildContext listContext, int index) {
                   int countPaid = 0;
 
-                  if(filteredData()[index].peminjamanDetails != null) {
-                    for(int i = 0; i < filteredData()[index].peminjamanDetails!.length; i++) {
-                      if(filteredData()[index].peminjamanDetails![i].status == true) {
+                  if(loanList[index].peminjamanDetails != null) {
+                    for(int i = 0; i < loanList[index].peminjamanDetails!.length; i++) {
+                      if(loanList[index].peminjamanDetails![i].status == true) {
                         countPaid = countPaid + 1;
                       }
                     }
@@ -247,7 +239,7 @@ class _LoanListPageState extends State<LoanListPage> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      index == 0 || index > 0 && filteredData()[index].createdAt != null && DateFormat('yyyy').format(DateTime.parse(filteredData()[index].createdAt!)) != DateFormat('yyyy').format(DateTime.parse(filteredData()[index - 1].createdAt!)) ?
+                      index == 0 || index > 0 && loanList[index].createdAt != null && DateFormat('yyyy').format(DateTime.parse(loanList[index].createdAt!)) != DateFormat('yyyy').format(DateTime.parse(loanList[index - 1].createdAt!)) ?
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                         child: Text(
@@ -284,7 +276,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                           ),
                                         ),
                                         Text(
-                                          filteredData()[index].bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(filteredData()[index].bayarBulanan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
+                                          loanList[index].bayarBulanan != null ? "Rp ${NumberFormat('#,###', 'en_id').format(double.parse(loanList[index].bayarBulanan!)).replaceAll(',', '.')}" : '(Tidak diketahui)',
                                           style: STextStyles.medium().copyWith(
                                             color: TextColorStyles.textPrimary(),
                                           ),
@@ -293,7 +285,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                     ),
                                   ),
                                   Text(
-                                    '$countPaid/${filteredData()[index].jangkaWaktu} Telah dibayar',
+                                    '$countPaid/${loanList[index].jangkaWaktu} Telah dibayar',
                                     style: STextStyles.regular(),
                                   ),
                                   const SizedBox(
@@ -304,7 +296,7 @@ class _LoanListPageState extends State<LoanListPage> {
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Text(
-                                        filteredData()[index].jatuhTempo != null ? "Jatuh tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(filteredData()[index].jatuhTempo!))}" : '(Tidak diketahui)',
+                                        loanList[index].jatuhTempo != null ? "Jatuh tempo ${DateFormat('dd MMM yyyy').format(DateTime.parse(loanList[index].jatuhTempo!))}" : '(Tidak diketahui)',
                                         style: STextStyles.regular().copyWith(
                                           color: DangerColorStyles.dangerMain(),
                                         ),

@@ -1,30 +1,25 @@
-class TransactionOrderModel {
+class TransactionOrderDetailModel {
   int? status;
-  List<TransactionOrderData>? transactionOrderData;
+  TransactionOrderDetailData? transactionOrderDetailData;
 
-  TransactionOrderModel({this.status, this.transactionOrderData});
+  TransactionOrderDetailModel({this.status, this.transactionOrderDetailData});
 
-  TransactionOrderModel.fromJson(Map<String, dynamic> json) {
+  TransactionOrderDetailModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    if (json['data'] != null) {
-      transactionOrderData = <TransactionOrderData>[];
-      json['data'].forEach((v) {
-        transactionOrderData!.add(TransactionOrderData.fromJson(v));
-      });
-    }
+    transactionOrderDetailData = json['data'] != null ? TransactionOrderDetailData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
-    if (transactionOrderData != null) {
-      data['data'] = transactionOrderData!.map((v) => v.toJson()).toList();
+    if (transactionOrderDetailData != null) {
+      data['data'] = transactionOrderDetailData!.toJson();
     }
     return data;
   }
 }
 
-class TransactionOrderData {
+class TransactionOrderDetailData {
   String? sId;
   String? transactionNo;
   String? paymentMethod;
@@ -37,10 +32,8 @@ class TransactionOrderData {
   String? createdAt;
   String? updatedAt;
   int? iV;
-  String? cancelledDate;
-  String? remark;
 
-  TransactionOrderData({
+  TransactionOrderDetailData({
     this.sId,
     this.transactionNo,
     this.paymentMethod,
@@ -52,12 +45,10 @@ class TransactionOrderData {
     this.totalAmount,
     this.createdAt,
     this.updatedAt,
-    this.iV,
-    this.cancelledDate,
-    this.remark,
+    this.iV
   });
 
-  TransactionOrderData.fromJson(Map<String, dynamic> json) {
+  TransactionOrderDetailData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     transactionNo = json['transaction_no'];
     paymentMethod = json['payment_method'];
@@ -77,8 +68,6 @@ class TransactionOrderData {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    cancelledDate = json['cancelled_date'];
-    remark = json['remark'];
   }
 
   Map<String, dynamic> toJson() {
@@ -101,8 +90,6 @@ class TransactionOrderData {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
-    data['cancelled_date'] = cancelledDate;
-    data['remark'] = remark;
     return data;
   }
 }
@@ -280,8 +267,8 @@ class Product {
   String? stock;
   bool? isStockAlwaysAvailable;
   String? productCategory;
-  String? company;
-  String? address;
+  Company? company;
+  Address? address;
   bool? isPreOrder;
   List<Varians>? varians;
   List<Images>? images;
@@ -290,10 +277,12 @@ class Product {
   bool? status;
   bool? isPromo;
   bool? isRecomendation;
+  // Null? member;
+  String? verifyAt;
+  String? verifyBy;
   String? createdAt;
   String? updatedAt;
   int? iV;
-  String? promoPrice;
 
   Product({
     this.sId,
@@ -313,10 +302,12 @@ class Product {
     this.status,
     this.isPromo,
     this.isRecomendation,
+    // this.member,
+    this.verifyAt,
+    this.verifyBy,
     this.createdAt,
     this.updatedAt,
     this.iV,
-    this.promoPrice,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -327,8 +318,10 @@ class Product {
     stock = json['stock'];
     isStockAlwaysAvailable = json['is_stock_always_available'];
     productCategory = json['productCategory'];
-    company = json['company'];
-    address = json['address'];
+    company =
+    json['company'] != null ? Company.fromJson(json['company']) : null;
+    address =
+    json['address'] != null ? Address.fromJson(json['address']) : null;
     isPreOrder = json['is_pre_order'];
     if (json['varians'] != null) {
       varians = <Varians>[];
@@ -352,10 +345,12 @@ class Product {
     status = json['status'];
     isPromo = json['is_promo'];
     isRecomendation = json['is_recomendation'];
+    // member = json['member'];
+    verifyAt = json['verify_at'];
+    verifyBy = json['verify_by'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    promoPrice = json['promo_price'];
   }
 
   Map<String, dynamic> toJson() {
@@ -367,8 +362,12 @@ class Product {
     data['stock'] = stock;
     data['is_stock_always_available'] = isStockAlwaysAvailable;
     data['productCategory'] = productCategory;
-    data['company'] = company;
-    data['address'] = address;
+    if (company != null) {
+      data['company'] = company!.toJson();
+    }
+    if (address != null) {
+      data['address'] = address!.toJson();
+    }
     data['is_pre_order'] = isPreOrder;
     if (varians != null) {
       data['varians'] = varians!.map((v) => v.toJson()).toList();
@@ -383,76 +382,124 @@ class Product {
     data['status'] = status;
     data['is_promo'] = isPromo;
     data['is_recomendation'] = isRecomendation;
+    // data['member'] = member;
+    data['verify_at'] = verifyAt;
+    data['verify_by'] = verifyBy;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
-    data['promo_price'] = promoPrice;
+    return data;
+  }
+}
+
+class Company {
+  String? sId;
+  String? name;
+  String? code;
+  String? totalMember;
+  bool? status;
+  List<String>? members;
+  List<String>? addresses;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+  String? phone;
+
+  Company({
+    this.sId,
+    this.name,
+    this.code,
+    this.totalMember,
+    this.status,
+    this.members,
+    this.addresses,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
+    this.phone,
+  });
+
+  Company.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    name = json['name'];
+    code = json['code'];
+    totalMember = json['total_member'];
+    status = json['status'];
+    members = json['members'].cast<String>();
+    addresses = json['addresses'].cast<String>();
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+    phone = json['phone'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['name'] = name;
+    data['code'] = code;
+    data['total_member'] = totalMember;
+    data['status'] = status;
+    data['members'] = members;
+    data['addresses'] = addresses;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    data['phone'] = phone;
     return data;
   }
 }
 
 class Varians {
   String? sId;
+  String? createdAt;
   String? price;
-  String? name1;
-  String? name2;
   String? stock;
   bool? isStockAlwaysAvailable;
   String? varianType1;
-  String? varianType2;
-  String? createdAt;
+  String? name1;
+  String? promoPrice;
   String? updatedAt;
   int? iV;
-  String? promoPrice;
-  bool? isPromo;
 
   Varians({
     this.sId,
+    this.createdAt,
     this.price,
-    this.name1,
-    this.name2,
     this.stock,
     this.isStockAlwaysAvailable,
     this.varianType1,
-    this.varianType2,
-    this.createdAt,
+    this.name1,
+    this.promoPrice,
     this.updatedAt,
     this.iV,
-    this.promoPrice,
-    this.isPromo,
   });
 
   Varians.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
+    createdAt = json['createdAt'];
     price = json['price'];
-    name1 = json['name1'];
-    name2 = json['name2'];
     stock = json['stock'];
     isStockAlwaysAvailable = json['is_stock_always_available'];
     varianType1 = json['varianType1'];
-    varianType2 = json['varianType2'];
-    createdAt = json['createdAt'];
+    name1 = json['name1'];
+    promoPrice = json['promo_price'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    promoPrice = json['promo_price'];
-    isPromo = json['is_promo'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
+    data['createdAt'] = createdAt;
     data['price'] = price;
-    data['name1'] = name1;
-    data['name2'] = name2;
     data['stock'] = stock;
     data['is_stock_always_available'] = isStockAlwaysAvailable;
     data['varianType1'] = varianType1;
-    data['varianType2'] = varianType2;
-    data['createdAt'] = createdAt;
+    data['name1'] = name1;
+    data['promo_price'] = promoPrice;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
-    data['promo_price'] = promoPrice;
-    data['is_promo'] = isPromo;
     return data;
   }
 }
@@ -465,14 +512,7 @@ class Images {
   String? product;
   int? iV;
 
-  Images({
-    this.sId,
-    this.filename,
-    this.url,
-    this.primary,
-    this.product,
-    this.iV,
-  });
+  Images({this.sId, this.filename, this.url, this.primary, this.product, this.iV});
 
   Images.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

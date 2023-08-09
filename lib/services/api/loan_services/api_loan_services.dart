@@ -15,7 +15,7 @@ class APILoanServices {
     required this.context,
   });
 
-  Future<LoanModel?> callAll() async {
+  Future<LoanModel?> callAll(int? status) async {
     LoanModel? result;
 
     await LocalSharedPrefs().readKey('token').then((token) async {
@@ -26,7 +26,11 @@ class APILoanServices {
           try {
             await dio.get(
               '/peminjaman',
-              queryParameters: {
+              queryParameters: status != null ?
+              {
+                'member_id': memberId,
+                'status': status,
+              } : {
                 'member_id': memberId,
               },
               options: Options(

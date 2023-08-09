@@ -59,15 +59,15 @@ class _FeeListPageState extends State<FeeListPage> {
             phoneNumber = phoneResult;
           });
 
-          loadActiveData();
+          loadFeeData();
         });
       });
     });
   }
 
-  Future loadActiveData() async {
+  Future loadFeeData() async {
     if(selectedTab == 0) {
-      await APIMandatoryFeeServices(context: context).callAll().then((callResult) {
+      await APIMandatoryFeeServices(context: context).callAll(null).then((callResult) {
         if(callResult != null) {
           setState(() {
             mandatoryFeeList = callResult.mandatoryFeeData ?? [];
@@ -75,7 +75,9 @@ class _FeeListPageState extends State<FeeListPage> {
         }
       });
     } else {
-      await APITemporalFeeServices(context: context).callAll().then((callResult) {
+      int status = isActiveStatus ? 0 : 1;
+
+      await APITemporalFeeServices(context: context).callAll(status).then((callResult) {
         if(callResult != null) {
           setState(() {
             temporalFeeList = callResult.temporalFeeData ?? [];
@@ -83,20 +85,6 @@ class _FeeListPageState extends State<FeeListPage> {
         }
       });
     }
-  }
-
-  List<TemporalFeeData> filteredData() {
-    List<TemporalFeeData> result = [];
-
-    if(temporalFeeList.isNotEmpty) {
-      for(int i = 0; i < temporalFeeList.length; i++) {
-        if(temporalFeeList[i].statusPencairan == !isActiveStatus) {
-          result.add(temporalFeeList[i]);
-        }
-      }
-    }
-
-    return result;
   }
 
   @override
@@ -168,7 +156,7 @@ class _FeeListPageState extends State<FeeListPage> {
                       setState(() {
                         selectedTab = index;
 
-                        loadActiveData();
+                        loadFeeData();
                       });
                     },
                     tabs: [
@@ -497,6 +485,8 @@ class _FeeListPageState extends State<FeeListPage> {
                                       setState(() {
                                         isActiveStatus = true;
                                       });
+                                      
+                                      loadFeeData();
                                     },
                                     customBorder: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(100.0),
@@ -529,6 +519,8 @@ class _FeeListPageState extends State<FeeListPage> {
                                       setState(() {
                                         isActiveStatus = false;
                                       });
+                                      
+                                      loadFeeData();
                                     },
                                     customBorder: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(100.0),
@@ -554,13 +546,13 @@ class _FeeListPageState extends State<FeeListPage> {
                     ),
                   ),
                   Expanded(
-                    child: filteredData().isNotEmpty ?
+                    child: temporalFeeList.isNotEmpty ?
                     ListView.separated(
-                      itemCount: filteredData().length,
+                      itemCount: temporalFeeList.length,
                       separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
                         return Container(
                           color: Colors.white,
-                          child: separatorIndex < filteredData().length - 1 ?
+                          child: separatorIndex < temporalFeeList.length - 1 ?
                           Divider(
                             height: 1.0,
                             indent: 25.0,
@@ -578,7 +570,7 @@ class _FeeListPageState extends State<FeeListPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                               child: Text(
-                                filteredData()[index].tanggalMulai != null ? DateFormat('yyyy').format(DateTime.parse(filteredData()[index].tanggalMulai!)) : '(Tidak diketahui)',
+                                temporalFeeList[index].tanggalMulai != null ? DateFormat('yyyy').format(DateTime.parse(temporalFeeList[index].tanggalMulai!)) : '(Tidak diketahui)',
                                 style: XSTextStyles.regular(),
                               ),
                             ) :
@@ -589,11 +581,11 @@ class _FeeListPageState extends State<FeeListPage> {
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: () {
-                                    if(filteredData()[index].sId != null) {
+                                    if(temporalFeeList[index].sId != null) {
                                       MoveToPage(
                                         context: context,
                                         target: TemporalFeeDetailPage(
-                                          temporalFeeId: filteredData()[index].sId!,
+                                          temporalFeeId: temporalFeeList[index].sId!,
                                         ),
                                       ).go();
                                     }
@@ -616,7 +608,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                                 ),
                                               ),
                                               Text(
-                                                filteredData()[index].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(filteredData()[index].jumlahIuran!)).replaceAll(',', '.')}' : 'Rp 0',
+                                                temporalFeeList[index].jumlahIuran != null ? 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(temporalFeeList[index].jumlahIuran!)).replaceAll(',', '.')}' : 'Rp 0',
                                                 style: STextStyles.medium().copyWith(
                                                   color: TextColorStyles.textPrimary(),
                                                 ),
@@ -625,7 +617,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                           ),
                                         ),
                                         Text(
-                                          '${filteredData()[index].jangkaWaktu != null ? '${filteredData()[index].jangkaWaktu} Bulan' : '(Tidak diketahui)'} (${filteredData()[index].imbalHasil != null ? '${filteredData()[index].imbalHasil}%' : '(Tidak diketahui)'})',
+                                          '${temporalFeeList[index].jangkaWaktu != null ? '${temporalFeeList[index].jangkaWaktu} Bulan' : '(Tidak diketahui)'} (${temporalFeeList[index].imbalHasil != null ? '${temporalFeeList[index].imbalHasil}%' : '(Tidak diketahui)'})',
                                           style: STextStyles.regular(),
                                         ),
                                         const SizedBox(
@@ -640,7 +632,7 @@ class _FeeListPageState extends State<FeeListPage> {
                                               style: STextStyles.regular(),
                                             ),
                                             Text(
-                                              filteredData()[index].tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(filteredData()[index].tanggalPencairan!)) : '(Tidak diketahui)',
+                                              temporalFeeList[index].tanggalPencairan != null ? DateFormat('dd MMMM yyyy').format(DateTime.parse(temporalFeeList[index].tanggalPencairan!)) : '(Tidak diketahui)',
                                               style: STextStyles.medium(),
                                             ),
                                           ],

@@ -277,7 +277,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                                   if(tempRemovedProduct[x].canBeUpdated == true) {
                                                     if(tempRemovedProduct[x].trolleyData.product != null) {
                                                       if(tempRemovedProduct[x].trolleyData.varian != null) {
-                                                        if(tempRemovedProduct[x].qty < int.parse(tempRemovedProduct[x].trolleyData.varian!.stock ?? '0')) {
+                                                        if(tempRemovedProduct[x].trolleyData.varian!.isStockAlwaysAvailable != null && tempRemovedProduct[x].trolleyData.varian!.isStockAlwaysAvailable == true) {
                                                           setState(() {
                                                             tempRemovedProduct[x].canBeUpdated = false;
                                                           });
@@ -291,10 +291,8 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                                               }
                                                             });
                                                           });
-                                                        }
-                                                      } else {
-                                                        if(tempRemovedProduct[x].trolleyData.product!.stock != null && tempRemovedProduct[x].trolleyData.product!.stock != '') {
-                                                          if(tempRemovedProduct[x].qty < int.parse(tempRemovedProduct[x].trolleyData.product!.stock ?? '0')) {
+                                                        } else {
+                                                          if(tempRemovedProduct[x].qty < int.parse(tempRemovedProduct[x].trolleyData.varian!.stock ?? '0')) {
                                                             setState(() {
                                                               tempRemovedProduct[x].canBeUpdated = false;
                                                             });
@@ -308,6 +306,40 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                                                 }
                                                               });
                                                             });
+                                                          }
+                                                        }
+                                                      } else {
+                                                        if(tempRemovedProduct[x].trolleyData.product!.isStockAlwaysAvailable != null && tempRemovedProduct[x].trolleyData.product!.isStockAlwaysAvailable == true) {
+                                                          setState(() {
+                                                            tempRemovedProduct[x].canBeUpdated = false;
+                                                          });
+
+                                                          await updateCart(tempRemovedProduct[x], 1).then((updateResult) {
+                                                            setState(() {
+                                                              tempRemovedProduct[x].canBeUpdated = true;
+
+                                                              if(updateResult == true) {
+                                                                tempRemovedProduct[x].qty = tempRemovedProduct[x].qty + 1;
+                                                              }
+                                                            });
+                                                          });
+                                                        } else {
+                                                          if(tempRemovedProduct[x].trolleyData.product!.stock != null && tempRemovedProduct[x].trolleyData.product!.stock != '') {
+                                                            if(tempRemovedProduct[x].qty < int.parse(tempRemovedProduct[x].trolleyData.product!.stock ?? '0')) {
+                                                              setState(() {
+                                                                tempRemovedProduct[x].canBeUpdated = false;
+                                                              });
+
+                                                              await updateCart(tempRemovedProduct[x], 1).then((updateResult) {
+                                                                setState(() {
+                                                                  tempRemovedProduct[x].canBeUpdated = true;
+
+                                                                  if(updateResult == true) {
+                                                                    tempRemovedProduct[x].qty = tempRemovedProduct[x].qty + 1;
+                                                                  }
+                                                                });
+                                                              });
+                                                            }
                                                           }
                                                         }
                                                       }
@@ -398,7 +430,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                                     if(tempList.canBeUpdated == true) {
                                                       if(tempList.trolleyData.product != null) {
                                                         if(tempList.trolleyData.varian != null) {
-                                                          if(tempList.qty < int.parse(tempList.trolleyData.varian!.stock ?? '0')) {
+                                                          if(tempList.trolleyData.varian!.isStockAlwaysAvailable != null && tempList.trolleyData.varian!.isStockAlwaysAvailable == true) {
                                                             setState(() {
                                                               tempList.canBeUpdated = false;
                                                             });
@@ -412,10 +444,8 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                                                 }
                                                               });
                                                             });
-                                                          }
-                                                        } else {
-                                                          if(tempList.trolleyData.product!.stock != null && tempList.trolleyData.product!.stock != '') {
-                                                            if(tempList.qty < int.parse(tempList.trolleyData.product!.stock ?? '0')) {
+                                                          } else {
+                                                            if(tempList.qty < int.parse(tempList.trolleyData.varian!.stock ?? '0')) {
                                                               setState(() {
                                                                 tempList.canBeUpdated = false;
                                                               });
@@ -429,6 +459,40 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                                                   }
                                                                 });
                                                               });
+                                                            }
+                                                          }
+                                                        } else {
+                                                          if(tempList.trolleyData.product!.isStockAlwaysAvailable != null && tempList.trolleyData.product!.isStockAlwaysAvailable == true) {
+                                                            setState(() {
+                                                              tempList.canBeUpdated = false;
+                                                            });
+
+                                                            await updateCart(tempList, 1).then((updateResult) {
+                                                              setState(() {
+                                                                tempList.canBeUpdated = true;
+
+                                                                if(updateResult == true) {
+                                                                  tempList.qty = tempList.qty + 1;
+                                                                }
+                                                              });
+                                                            });
+                                                          } else {
+                                                            if(tempList.trolleyData.product!.stock != null && tempList.trolleyData.product!.stock != '') {
+                                                              if(tempList.qty < int.parse(tempList.trolleyData.product!.stock ?? '0')) {
+                                                                setState(() {
+                                                                  tempList.canBeUpdated = false;
+                                                                });
+
+                                                                await updateCart(tempList, 1).then((updateResult) {
+                                                                  setState(() {
+                                                                    tempList.canBeUpdated = true;
+
+                                                                    if(updateResult == true) {
+                                                                      tempList.qty = tempList.qty + 1;
+                                                                    }
+                                                                  });
+                                                                });
+                                                              }
                                                             }
                                                           }
                                                         }
@@ -483,7 +547,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                 if(trolleyData[index].canBeUpdated == true) {
                                   if(trolleyData[index].trolleyData.product != null) {
                                     if(trolleyData[index].trolleyData.varian != null) {
-                                      if(trolleyData[index].qty < int.parse(trolleyData[index].trolleyData.varian!.stock ?? '0')) {
+                                      if(trolleyData[index].trolleyData.varian!.isStockAlwaysAvailable != null && trolleyData[index].trolleyData.varian!.isStockAlwaysAvailable == true) {
                                         setState(() {
                                           trolleyData[index].canBeUpdated = false;
                                         });
@@ -497,10 +561,8 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                             }
                                           });
                                         });
-                                      }
-                                    } else {
-                                      if(trolleyData[index].trolleyData.product!.stock != null && trolleyData[index].trolleyData.product!.stock != '') {
-                                        if(trolleyData[index].qty < int.parse(trolleyData[index].trolleyData.product!.stock ?? '0')) {
+                                      } else {
+                                        if(trolleyData[index].qty < int.parse(trolleyData[index].trolleyData.varian!.stock ?? '0')) {
                                           setState(() {
                                             trolleyData[index].canBeUpdated = false;
                                           });
@@ -514,6 +576,40 @@ class _TrolleyPageState extends State<TrolleyPage> {
                                               }
                                             });
                                           });
+                                        }
+                                      }
+                                    } else {
+                                      if(trolleyData[index].trolleyData.product!.isStockAlwaysAvailable != null && trolleyData[index].trolleyData.product!.isStockAlwaysAvailable == true) {
+                                        setState(() {
+                                          trolleyData[index].canBeUpdated = false;
+                                        });
+
+                                        await updateCart(trolleyData[index], 1).then((updateResult) {
+                                          setState(() {
+                                            trolleyData[index].canBeUpdated = true;
+
+                                            if(updateResult == true) {
+                                              trolleyData[index].qty = trolleyData[index].qty + 1;
+                                            }
+                                          });
+                                        });
+                                      } else {
+                                        if(trolleyData[index].trolleyData.product!.stock != null && trolleyData[index].trolleyData.product!.stock != '') {
+                                          if(trolleyData[index].qty < int.parse(trolleyData[index].trolleyData.product!.stock ?? '0')) {
+                                            setState(() {
+                                              trolleyData[index].canBeUpdated = false;
+                                            });
+
+                                            await updateCart(trolleyData[index], 1).then((updateResult) {
+                                              setState(() {
+                                                trolleyData[index].canBeUpdated = true;
+
+                                                if(updateResult == true) {
+                                                  trolleyData[index].qty = trolleyData[index].qty + 1;
+                                                }
+                                              });
+                                            });
+                                          }
                                         }
                                       }
                                     }
@@ -748,7 +844,7 @@ class ItemListWithAnimation extends StatelessWidget {
                               color: IconColorStyles.iconColor(),
                             ),
                             Text(
-                              'Unable to load image',
+                              'Tidak dapat memuat gambar',
                               style: XSTextStyles.medium(),
                               textAlign: TextAlign.center,
                             ),
@@ -842,7 +938,17 @@ class ItemListWithAnimation extends StatelessWidget {
                                 ),
                                 child: Icon(
                                   Icons.add,
-                                  color: IconColorStyles.iconColor(),
+                                  color: trolleyProduct.trolleyData.varian != null ?
+                                  trolleyProduct.trolleyData.varian!.isStockAlwaysAvailable != null && trolleyProduct.trolleyData.varian!.isStockAlwaysAvailable == true ?
+                                  IconColorStyles.iconColor() :
+                                  int.parse(trolleyProduct.trolleyData.varian!.stock ?? '0') > trolleyProduct.qty ?
+                                  IconColorStyles.iconColor() :
+                                  NeutralColorStyles.neutral03() :
+                                  trolleyProduct.trolleyData.product != null && trolleyProduct.trolleyData.product!.isStockAlwaysAvailable != null && trolleyProduct.trolleyData.product!.isStockAlwaysAvailable == true ?
+                                  IconColorStyles.iconColor() :
+                                  trolleyProduct.trolleyData.product != null && int.parse(trolleyProduct.trolleyData.product!.stock ?? '0') > trolleyProduct.qty ?
+                                  IconColorStyles.iconColor() :
+                                  NeutralColorStyles.neutral03(),
                                 ),
                               ),
                             ),

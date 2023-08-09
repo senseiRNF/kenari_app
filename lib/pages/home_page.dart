@@ -13,11 +13,15 @@ import 'package:kenari_app/pages/seller_page.dart';
 import 'package:kenari_app/pages/seller_product_form_page.dart';
 import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
+import 'package:kenari_app/services/api/models/banner_model.dart' as banner_mdl;
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/models/product_model.dart';
-import 'package:kenari_app/services/api/models/trolley_model.dart' as trolley_mdl;
+import 'package:kenari_app/services/api/models/profile_model.dart' as profile_mdl;
+import 'package:kenari_app/services/api/models/trolley_model.dart';
+import 'package:kenari_app/services/api/product_services/api_banner_services.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/services/api/product_services/api_product_services.dart';
+import 'package:kenari_app/services/api/profile_services/api_profile_services.dart';
 import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/services/local/models/local_trolley_product.dart';
@@ -36,8 +40,6 @@ class _HomePageState extends State<HomePage> {
   int selectedCard = 0;
   int openMenuFromPage = 0;
 
-  String? name;
-  String? companyCode;
   String filterType = 'Tampilkan Semua';
 
   DateTime? backPressed;
@@ -48,7 +50,9 @@ class _HomePageState extends State<HomePage> {
 
   List<CategoryData> categoryList = [];
 
-  List<trolley_mdl.TrolleyData> trolleyList = [];
+  List<TrolleyData> trolleyList = [];
+
+  List<banner_mdl.BannerData> bannerList = [];
 
   List<String> filterList = [
     'Tampilkan Semua',
@@ -61,6 +65,8 @@ class _HomePageState extends State<HomePage> {
 
   CategoryData? selectedCategory;
 
+  profile_mdl.ProfileData? profileData;
+
   @override
   void initState() {
     super.initState();
@@ -69,21 +75,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future loadData() async {
-    await LocalSharedPrefs().readKey('name').then((nameResult) async {
-      setState(() {
-        name = nameResult;
-      });
-
-      await LocalSharedPrefs().readKey('company_code').then((companyCodeResult) async {
-        setState(() {
-          companyCode = companyCodeResult;
-        });
-
-        await loadCategory().then((_) async {
-          await loadProduct().then((_) async {
+    await loadProfile().then((_) async {
+      await loadCategory().then((_) async {
+        await loadProduct().then((_) async {
+          await loadBanner().then((_) async {
             await loadTrolley();
           });
         });
+      });
+    });
+  }
+
+  Future loadProfile() async {
+    await APIProfileServices(context: context).showProfile().then((callResult) {
+      setState(() {
+        profileData = callResult;
       });
     });
   }
@@ -113,6 +119,16 @@ class _HomePageState extends State<HomePage> {
       if(trolleyResult != null && trolleyResult.trolleyData != null) {
         setState(() {
           trolleyList = trolleyResult.trolleyData!;
+        });
+      }
+    });
+  }
+
+  Future loadBanner() async {
+    await APIBannerServices(context: context).call().then((bannerResult) {
+      if(bannerResult != null && bannerResult.bannerData != null) {
+        setState(() {
+          bannerList = bannerResult.bannerData!;
         });
       }
     });
@@ -150,6 +166,7 @@ class _HomePageState extends State<HomePage> {
           discountProductList: discountProductList,
           categoryList: categoryList,
           trolleyList: trolleyList,
+          bannerList: bannerList,
           onChangeSelectedPage: (int page) {
             setState(() {
               selectedCard = page;
@@ -161,7 +178,7 @@ class _HomePageState extends State<HomePage> {
               context: context,
               target: ProductPage(productId: product.sId!),
               callback: (callback) {
-                loadTrolley();
+                loadData();
 
                 if(callback != null) {
                   if(callback == true) {
@@ -178,6 +195,8 @@ class _HomePageState extends State<HomePage> {
               },
             ).go(),
           onCallbackFromFeePage: (dynamic callback) {
+            loadData();
+
             if(callback != null) {
               if(callback == true) {
                 setState(() {
@@ -192,6 +211,8 @@ class _HomePageState extends State<HomePage> {
             }
           },
           onCallbackFromLoanPage: (dynamic callback) {
+            loadData();
+
             if(callback != null) {
               if(callback == true) {
                 setState(() {
@@ -206,6 +227,8 @@ class _HomePageState extends State<HomePage> {
             }
           },
           onCallbackFromSellerPage: (dynamic callback) {
+            loadData();
+
             if(callback != null) {
               if(callback == true) {
                 setState(() {
@@ -220,6 +243,8 @@ class _HomePageState extends State<HomePage> {
             }
           },
           onCallbackFromTrolleyPage: (dynamic callback) {
+            loadData();
+
             if(callback != null) {
               if(callback == true) {
                 setState(() {
@@ -234,6 +259,8 @@ class _HomePageState extends State<HomePage> {
             }
           },
           onCallbackFromProductListPage: (dynamic callback) {
+            loadData();
+
             if(callback != null) {
               if(callback == true) {
                 setState(() {
@@ -334,8 +361,9 @@ class _HomePageState extends State<HomePage> {
         );
       case 3:
         return ProfileFragment(
-          name: name,
-          companyCode: companyCode,
+          name: profileData != null ? profileData!.name ?? '(Pengguna tidak dikenal)' : '(Pengguna tidak dikenal)',
+          companyName: profileData != null && profileData!.company != null ? profileData!.company!.name ?? '(Perusahaan tidak dikenal)' : '(Perusahaan tidak dikenal)',
+          imgUrl: profileData != null && profileData!.image != null ? profileData!.image!.url : null,
           refreshPage: () => loadData(),
           onLogout: () async => await LocalSharedPrefs().removeAllKey().then((removeResult) {
             if(removeResult == true) {
@@ -371,25 +399,13 @@ class _HomePageState extends State<HomePage> {
     product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice : product.varians![index].price :
     product.isPromo != null && product.isPromo == true ? product.promoPrice : product.price;
 
-    // trolley_mdl.VarianType1? varType1;
-
-    // if(product.varians![index].varianType1 != null) {
-    //   varType1 = trolley_mdl.VarianType1(
-    //     sId: product.varians![index].varianType1!.sId,
-    //     name: product.varians![index].varianType1!.name,
-    //     createdAt: product.varians![index].varianType1!.createdAt,
-    //     updatedAt: product.varians![index].varianType1!.updatedAt,
-    //     iV: product.varians![index].varianType1!.iV,
-    //   );
-    // }
-
     await APITrolleyServices(context: context).update(
       LocalTrolleyProduct(
         isSelected: true,
-        trolleyData: trolley_mdl.TrolleyData(
+        trolleyData: TrolleyData(
           price: price,
           varian: product.varians != null && product.varians!.isNotEmpty ?
-          trolley_mdl.Varian(
+          Varian(
             sId: product.varians![index].sId,
             price: product.varians![index].price,
             name1: product.varians![index].name1,
@@ -400,7 +416,7 @@ class _HomePageState extends State<HomePage> {
             isPromo: product.varians![index].isPromo,
           ) :
           null,
-          product: trolley_mdl.Product(
+          product: Product(
             sId: product.sId,
           ),
         ),
@@ -636,6 +652,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future showProductBottomDialog(ProductData product) async {
+    int index = 0;
+    int qty = 1;
+    int stock = product.varians != null && product.varians!.isNotEmpty ?
+    product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
+    product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
+
+    String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].isPromo != null && product.varians![index].isPromo == true ?
+    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}' :
+    product.isPromo != null && product.isPromo == true ?
+    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+
+    String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
+    String? variant;
+
+    if(product.varians != null && product.varians!.isNotEmpty) {
+      variant = product.varians![index].name1 ?? '(Varian tidak diketahui)';
+    }
+
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -645,24 +679,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       builder: (BuildContext modalBottomContext) {
-        int index = 0;
-        int qty = 1;
-        int stock = product.varians != null && product.varians!.isNotEmpty ?
-        product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
-        product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
-
-        String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].isPromo != null && product.varians![index].isPromo == true ?
-        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}' :
-        product.isPromo != null && product.isPromo == true ?
-        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
-
-        String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
-        String? variant;
-
-        if(product.varians != null && product.varians!.isNotEmpty) {
-          variant = product.varians![index].name1 ?? '(Varian tidak diketahui)';
-        }
-
         return StatefulBuilder(
           builder: (BuildContext modalContext, stateSetter) {
             return Column(
@@ -730,7 +746,7 @@ class _HomePageState extends State<HomePage> {
                                     color: IconColorStyles.iconColor(),
                                   ),
                                   Text(
-                                    'Unable to load image',
+                                    'Tidak dapat memuat gambar',
                                     style: XSTextStyles.medium(),
                                     textAlign: TextAlign.center,
                                   ),
@@ -798,6 +814,13 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   width: 5.0,
                                 ),
+                                product.varians != null && product.varians!.isNotEmpty ?
+                                Expanded(
+                                  child: Text(
+                                    product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable! == true ? 'Selalu ada' : stock.toString(),
+                                    style: STextStyles.medium(),
+                                  ),
+                                ) :
                                 Expanded(
                                   child: Text(
                                     product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 'Selalu ada' : stock.toString(),
@@ -858,6 +881,7 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () {
                                   stateSetter(() {
                                     index = itemIndex;
+                                    qty = 1;
 
                                     variant = product.varians![itemIndex].name1 ?? '(Varian tidak diketahui)';
 
@@ -954,16 +978,30 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: InkWell(
                           onTap: () {
-                            if(product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false) {
-                              if(qty < stock) {
+                            if(product.varians != null && product.varians!.isNotEmpty && product.varians![index].isStockAlwaysAvailable != null) {
+                              if(product.varians![index].isStockAlwaysAvailable == null || product.varians![index].isStockAlwaysAvailable! == false) {
+                                if(qty < stock) {
+                                  stateSetter(() {
+                                    qty = qty + 1;
+                                  });
+                                }
+                              } else {
                                 stateSetter(() {
                                   qty = qty + 1;
                                 });
                               }
                             } else {
-                              stateSetter(() {
-                                qty = qty + 1;
-                              });
+                              if(product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false) {
+                                if(qty < stock) {
+                                  stateSetter(() {
+                                    qty = qty + 1;
+                                  });
+                                }
+                              } else {
+                                stateSetter(() {
+                                  qty = qty + 1;
+                                });
+                              }
                             }
                           },
                           customBorder: RoundedRectangleBorder(
@@ -971,7 +1009,17 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Icon(
                             Icons.add,
-                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock ? NeutralColorStyles.neutral04() : IconColorStyles.iconColor() : IconColorStyles.iconColor(),
+                            color: product.varians != null && product.varians!.isNotEmpty && product.varians![index].isStockAlwaysAvailable != null ?
+                            product.varians![index].isStockAlwaysAvailable == null || product.varians![index].isStockAlwaysAvailable! == false ?
+                            qty == stock ?
+                            NeutralColorStyles.neutral04() :
+                            IconColorStyles.iconColor() :
+                            IconColorStyles.iconColor() :
+                            product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ?
+                            qty == stock ?
+                            NeutralColorStyles.neutral04() :
+                            IconColorStyles.iconColor() :
+                            IconColorStyles.iconColor(),
                           ),
                         ),
                       ),

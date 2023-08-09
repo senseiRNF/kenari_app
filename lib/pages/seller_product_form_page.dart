@@ -560,20 +560,43 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                                 errorWidget: (errContext, url, error) {
                                   return SizedBox(
                                     height: 60.0,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: [
-                                        Icon(
-                                          Icons.broken_image_outlined,
-                                          color: IconColorStyles.iconColor(),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onLongPress: () {
+                                          OptionDialog(
+                                            context: context,
+                                            message: 'Hapus gambar yang telah tersimpan, Anda yakin?',
+                                            yesFunction: () async {
+                                              await APISellerProductServices(context: context).dioRemoveImage(productImg[index-1].sId).then((removeResult) {
+                                                if(removeResult == true) {
+                                                  setState(() {
+                                                    productImg.removeAt(index - 1);
+                                                  });
+                                                }
+                                              });
+                                            },
+                                          ).show();
+                                        },
+                                        customBorder: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5.0),
                                         ),
-                                        Text(
-                                          'Unable to load image',
-                                          style: XSTextStyles.medium(),
-                                          textAlign: TextAlign.center,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            Icon(
+                                              Icons.broken_image_outlined,
+                                              color: IconColorStyles.iconColor(),
+                                            ),
+                                            Text(
+                                              'Tidak dapat memuat gambar',
+                                              style: XSTextStyles.medium(),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   );
                                 },

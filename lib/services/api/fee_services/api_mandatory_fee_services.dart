@@ -11,7 +11,7 @@ class APIMandatoryFeeServices {
 
   APIMandatoryFeeServices({required this.context});
 
-  Future<MandatoryFeeModel?> callAll() async {
+  Future<MandatoryFeeModel?> callAll(int? status) async {
     MandatoryFeeModel? result;
 
     await LocalSharedPrefs().readKey('token').then((token) async {
@@ -22,7 +22,12 @@ class APIMandatoryFeeServices {
           try {
             await dio.get(
               '/iuran-wajib',
-              queryParameters: {
+              queryParameters: status != null ?
+              {
+                'member_id': memberId,
+                'status': status,
+              } :
+              {
                 'member_id': memberId,
               },
               options: Options(

@@ -363,7 +363,7 @@ class ErrorHandler {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: Text(
-                  '(${errCode ?? '-'}) $errMessage',
+                  '(${errCode ?? 'Network Issue'}) ${errMessage ?? ''}',
                   style: MTextStyles.regular(),
                 ),
               ),

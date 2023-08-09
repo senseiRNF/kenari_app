@@ -1,30 +1,37 @@
-class TransactionOrderModel {
+class SellerOrderModel {
   int? status;
-  List<TransactionOrderData>? transactionOrderData;
+  List<SellerOrderData>? sellerOrderData;
+  Pagination? pagination;
 
-  TransactionOrderModel({this.status, this.transactionOrderData});
+  SellerOrderModel({this.status, this.sellerOrderData, this.pagination});
 
-  TransactionOrderModel.fromJson(Map<String, dynamic> json) {
+  SellerOrderModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      transactionOrderData = <TransactionOrderData>[];
+      sellerOrderData = <SellerOrderData>[];
       json['data'].forEach((v) {
-        transactionOrderData!.add(TransactionOrderData.fromJson(v));
+        sellerOrderData!.add(SellerOrderData.fromJson(v));
       });
     }
+    pagination = json['pagination'] != null
+        ? Pagination.fromJson(json['pagination'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
-    if (transactionOrderData != null) {
-      data['data'] = transactionOrderData!.map((v) => v.toJson()).toList();
+    if (sellerOrderData != null) {
+      data['data'] = sellerOrderData!.map((v) => v.toJson()).toList();
+    }
+    if (pagination != null) {
+      data['pagination'] = pagination!.toJson();
     }
     return data;
   }
 }
 
-class TransactionOrderData {
+class SellerOrderData {
   String? sId;
   String? transactionNo;
   String? paymentMethod;
@@ -37,10 +44,9 @@ class TransactionOrderData {
   String? createdAt;
   String? updatedAt;
   int? iV;
-  String? cancelledDate;
   String? remark;
 
-  TransactionOrderData({
+  SellerOrderData({
     this.sId,
     this.transactionNo,
     this.paymentMethod,
@@ -53,11 +59,10 @@ class TransactionOrderData {
     this.createdAt,
     this.updatedAt,
     this.iV,
-    this.cancelledDate,
     this.remark,
   });
 
-  TransactionOrderData.fromJson(Map<String, dynamic> json) {
+  SellerOrderData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     transactionNo = json['transaction_no'];
     paymentMethod = json['payment_method'];
@@ -77,7 +82,6 @@ class TransactionOrderData {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    cancelledDate = json['cancelled_date'];
     remark = json['remark'];
   }
 
@@ -101,7 +105,6 @@ class TransactionOrderData {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
-    data['cancelled_date'] = cancelledDate;
     data['remark'] = remark;
     return data;
   }
@@ -290,10 +293,12 @@ class Product {
   bool? status;
   bool? isPromo;
   bool? isRecomendation;
+  // Null? member;
+  String? verifyAt;
+  String? verifyBy;
   String? createdAt;
   String? updatedAt;
   int? iV;
-  String? promoPrice;
 
   Product({
     this.sId,
@@ -313,10 +318,12 @@ class Product {
     this.status,
     this.isPromo,
     this.isRecomendation,
+    // this.member,
+    this.verifyAt,
+    this.verifyBy,
     this.createdAt,
     this.updatedAt,
     this.iV,
-    this.promoPrice,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -352,10 +359,12 @@ class Product {
     status = json['status'];
     isPromo = json['is_promo'];
     isRecomendation = json['is_recomendation'];
+    // member = json['member'];
+    verifyAt = json['verify_at'];
+    verifyBy = json['verify_by'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    promoPrice = json['promo_price'];
   }
 
   Map<String, dynamic> toJson() {
@@ -383,76 +392,66 @@ class Product {
     data['status'] = status;
     data['is_promo'] = isPromo;
     data['is_recomendation'] = isRecomendation;
+    // data['member'] = member;
+    data['verify_at'] = verifyAt;
+    data['verify_by'] = verifyBy;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
-    data['promo_price'] = promoPrice;
     return data;
   }
 }
 
 class Varians {
   String? sId;
+  String? createdAt;
   String? price;
-  String? name1;
-  String? name2;
   String? stock;
   bool? isStockAlwaysAvailable;
   String? varianType1;
-  String? varianType2;
-  String? createdAt;
+  String? name1;
+  String? promoPrice;
   String? updatedAt;
   int? iV;
-  String? promoPrice;
-  bool? isPromo;
 
   Varians({
     this.sId,
+    this.createdAt,
     this.price,
-    this.name1,
-    this.name2,
     this.stock,
     this.isStockAlwaysAvailable,
     this.varianType1,
-    this.varianType2,
-    this.createdAt,
+    this.name1,
+    this.promoPrice,
     this.updatedAt,
     this.iV,
-    this.promoPrice,
-    this.isPromo,
   });
 
   Varians.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
+    createdAt = json['createdAt'];
     price = json['price'];
-    name1 = json['name1'];
-    name2 = json['name2'];
     stock = json['stock'];
     isStockAlwaysAvailable = json['is_stock_always_available'];
     varianType1 = json['varianType1'];
-    varianType2 = json['varianType2'];
-    createdAt = json['createdAt'];
+    name1 = json['name1'];
+    promoPrice = json['promo_price'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    promoPrice = json['promo_price'];
-    isPromo = json['is_promo'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
+    data['createdAt'] = createdAt;
     data['price'] = price;
-    data['name1'] = name1;
-    data['name2'] = name2;
     data['stock'] = stock;
     data['is_stock_always_available'] = isStockAlwaysAvailable;
     data['varianType1'] = varianType1;
-    data['varianType2'] = varianType2;
-    data['createdAt'] = createdAt;
+    data['name1'] = name1;
+    data['promo_price'] = promoPrice;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
-    data['promo_price'] = promoPrice;
-    data['is_promo'] = isPromo;
     return data;
   }
 }
@@ -465,14 +464,7 @@ class Images {
   String? product;
   int? iV;
 
-  Images({
-    this.sId,
-    this.filename,
-    this.url,
-    this.primary,
-    this.product,
-    this.iV,
-  });
+  Images({this.sId, this.filename, this.url, this.primary, this.product, this.iV});
 
   Images.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -491,6 +483,31 @@ class Images {
     data['primary'] = primary;
     data['product'] = product;
     data['__v'] = iV;
+    return data;
+  }
+}
+
+class Pagination {
+  int? totalItems;
+  int? currentPage;
+  int? totalPages;
+  int? itemPerPage;
+
+  Pagination({this.totalItems, this.currentPage, this.totalPages, this.itemPerPage});
+
+  Pagination.fromJson(Map<String, dynamic> json) {
+    totalItems = json['total_items'];
+    currentPage = json['current_page'];
+    totalPages = json['total_pages'];
+    itemPerPage = json['item_per_page'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total_items'] = totalItems;
+    data['current_page'] = currentPage;
+    data['total_pages'] = totalPages;
+    data['item_per_page'] = itemPerPage;
     return data;
   }
 }

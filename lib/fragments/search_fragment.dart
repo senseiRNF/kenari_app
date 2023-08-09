@@ -258,7 +258,7 @@ class SearchFragment extends StatelessWidget {
                                                 color: IconColorStyles.iconColor(),
                                               ),
                                               Text(
-                                                'Unable to load image',
+                                                'Tidak dapat memuat gambar',
                                                 style: XSTextStyles.medium(),
                                                 textAlign: TextAlign.center,
                                               ),

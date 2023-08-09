@@ -17,7 +17,7 @@ class APITemporalFeeServices {
     required this.context,
   });
 
-  Future<TemporalFeeModel?> callAll() async {
+  Future<TemporalFeeModel?> callAll(int? status) async {
     TemporalFeeModel? result;
 
     await LocalSharedPrefs().readKey('token').then((token) async {
@@ -28,7 +28,12 @@ class APITemporalFeeServices {
           try {
             await dio.get(
               '/iuran-berjangka',
-              queryParameters: {
+              queryParameters: status != null ?
+              {
+                'member_id': memberId,
+                'status': status,
+              } :
+              {
                 'member_id': memberId,
               },
               options: Options(

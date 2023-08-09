@@ -32,7 +32,7 @@ class _LoanPageState extends State<LoanPage> {
   }
 
   Future loadData() async {
-    await APILoanServices(context: context).callAll().then((callResult) {
+    await APILoanServices(context: context).callAll(null).then((callResult) {
       if(callResult != null) {
         double tempTotalLoan = 0;
 
