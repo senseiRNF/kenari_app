@@ -49,9 +49,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -122,17 +120,15 @@ class _BankAccountPageState extends State<BankAccountPage> {
                                 height: 10.0,
                               ),
                               TextButton(
-                                onPressed: () {
-                                  MoveToPage(
-                                    context: context,
-                                    target: BankAccountFormPage(editData: bankModel!.bankData![index]),
-                                    callback: (callback) {
-                                      if(callback != null && callback == true) {
-                                        loadData();
-                                      }
-                                    },
-                                  ).go();
-                                },
+                                onPressed: () => MoveToPage(
+                                  context: context,
+                                  target: BankAccountFormPage(editData: bankModel!.bankData![index]),
+                                  callback: (callback) {
+                                    if(callback != null && callback == true) {
+                                      loadData();
+                                    }
+                                  },
+                                ).go(),
                                 child: Text(
                                   'Ubah Rekening',
                                   style: MTextStyles.medium().copyWith(
@@ -184,17 +180,15 @@ class _BankAccountPageState extends State<BankAccountPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    MoveToPage(
-                      context: context,
-                      target: const BankAccountFormPage(),
-                      callback: (callback) {
-                        if(callback != null && callback == true) {
-                          loadData();
-                        }
-                      },
-                    ).go();
-                  },
+                  onPressed: () => MoveToPage(
+                    context: context,
+                    target: const BankAccountFormPage(),
+                    callback: (callback) {
+                      if(callback != null && callback == true) {
+                        loadData();
+                      }
+                    },
+                  ).go(),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(

@@ -72,9 +72,7 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -470,17 +468,15 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    MoveToPage(
-                      context: context,
-                      target: LoanPaymentPage(loanData: loanData!),
-                      callback: (callback) {
-                        if(callback != null) {
-                          BackFromThisPage(context: context, callbackData: callback).go();
-                        }
-                      },
-                    ).go();
-                  },
+                  onPressed: () => MoveToPage(
+                    context: context,
+                    target: LoanPaymentPage(loanData: loanData!),
+                    callback: (callback) {
+                      if(callback != null) {
+                        BackFromThisPage(context: context, callbackData: callback).go();
+                      }
+                    },
+                  ).go(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PrimaryColorStyles.primaryMain(),
                   ),

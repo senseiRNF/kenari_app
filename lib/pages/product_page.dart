@@ -1108,9 +1108,7 @@ class _ProductPageState extends State<ProductPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    showProductBottomDialog(detailProductData!, 0);
-                  },
+                  onPressed: () => showProductBottomDialog(detailProductData!, 0),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PrimaryColorStyles.primaryMain(),
                   ),

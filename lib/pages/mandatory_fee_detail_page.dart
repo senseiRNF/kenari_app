@@ -69,9 +69,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -352,9 +350,7 @@ class _MandatoryFeeDetailPageState extends State<MandatoryFeeDetailPage> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                       child: ElevatedButton(
-                        onPressed: () {
-
-                        },
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: NeutralColorStyles.neutral04(),
                         ),

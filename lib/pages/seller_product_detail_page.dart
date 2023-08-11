@@ -66,9 +66,7 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -392,23 +390,21 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        OptionDialog(
-                          context: context,
-                          title: 'Batalkan Titip Jual',
-                          message: 'Produk ini akan dihapus secara permanen dan Anda tidak dapat mengaksesnya kembali. Lanjutkan?',
-                          yesFunction: () async {
-                            await APISellerProductServices(context: context).dioCancel(sellerProductDetailData!.sId).then((cancelResult) {
-                              if(cancelResult == true) {
-                                BackFromThisPage(
-                                  context: context,
-                                  callbackData: true,
-                                ).go();
-                              }
-                            });
-                          },
-                        ).show();
-                      },
+                      onPressed: () => OptionDialog(
+                        context: context,
+                        title: 'Batalkan Titip Jual',
+                        message: 'Produk ini akan dihapus secara permanen dan Anda tidak dapat mengaksesnya kembali. Lanjutkan?',
+                        yesFunction: () async {
+                          await APISellerProductServices(context: context).dioCancel(sellerProductDetailData!.sId).then((cancelResult) {
+                            if(cancelResult == true) {
+                              BackFromThisPage(
+                                context: context,
+                                callbackData: true,
+                              ).go();
+                            }
+                          });
+                        },
+                      ).show(),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PrimaryColorStyles.primarySurface(),
                       ),

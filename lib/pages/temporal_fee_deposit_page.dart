@@ -110,9 +110,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -693,9 +691,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
             Padding(
               padding: const EdgeInsets.all(25.0),
               child: ElevatedButton(
-                onPressed: () {
-                  BackFromThisPage(context: context, callbackData: true).go();
-                },
+                onPressed: () => BackFromThisPage(context: context, callbackData: true).go(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: PrimaryColorStyles.primaryMain(),
                 ),

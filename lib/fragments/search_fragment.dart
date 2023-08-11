@@ -1,37 +1,99 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kenari_app/miscellaneous/dialog_functions.dart';
+import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/pages/product_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/category_model.dart';
 import 'package:kenari_app/services/api/models/product_model.dart';
+import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class SearchFragment extends StatelessWidget {
-  final TextEditingController searchController;
-  final List<ProductData> productList;
-  final List<CategoryData> categoryList;
-  final List filterList;
-  final String? filterType;
-  final Function onCategoryChange;
-  final Function onFilterChange;
-  final Function onRefreshPage;
-  final Function onProductSelected;
-  final CategoryData? selectedCategory;
+class SearchFragment extends StatefulWidget {
+  const SearchFragment({super.key});
 
-  const SearchFragment({
-    super.key,
-    required this.searchController,
-    required this.productList,
-    required this.categoryList,
-    required this.filterList,
-    this.filterType,
-    required this.onCategoryChange,
-    required this.onFilterChange,
-    required this.onRefreshPage,
-    required this.onProductSelected,
-    required this.selectedCategory,
-  });
+  @override
+  State<SearchFragment> createState() => _SearchFragmentState();
+}
+
+class _SearchFragmentState extends State<SearchFragment> {
+  TextEditingController searchController = TextEditingController();
+
+  List<String> filterList = [
+    'Tampilkan Semua',
+    'Terbaru',
+    'Terlaris',
+    'Diskon',
+    'Harga Terendah',
+    'Harga Tertinggi',
+  ];
+
+  List<ProductData> productList = [];
+
+  List<CategoryData> categoryList = [];
+
+  CategoryData? selectedCategory;
+
+  String filterType = 'Tampilkan Semua';
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadData();
+  }
+
+  Future loadData() async {
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await APIOptions.init().then((dio) async {
+        LoadingDialog(context: context).show();
+
+        try {
+          await dio.get(
+            '/product-category',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ),
+          ).then((getResult) async {
+            CategoryModel? tempCategoryModel = CategoryModel.fromJson(getResult.data);
+
+            try {
+              await dio.get(
+                '/transaction/product',
+                options: Options(
+                  headers: {
+                    'Authorization': 'Bearer $token',
+                  },
+                ),
+              ).then((getResult) async {
+                ProductModel? tempProductModel = ProductModel.fromJson(getResult.data);
+
+                setState(() {
+                  categoryList = tempCategoryModel.categoryData ?? [];
+                  productList = tempProductModel.productData ?? [];
+                });
+
+                BackFromThisPage(context: context).go();
+              });
+            } on DioException catch(dioExc) {
+              BackFromThisPage(context: context).go();
+
+              ErrorHandler(context: context, dioExc: dioExc).handle();
+            }
+          });
+        } on DioException catch(dioExc) {
+          BackFromThisPage(context: context).go();
+
+          ErrorHandler(context: context, dioExc: dioExc).handle();
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,14 +175,14 @@ class SearchFragment extends StatelessWidget {
                               color: Colors.transparent,
                               child: InkWell(
                                 onTap: () {
-                                  if(selectedCategory != null) {
-                                    if(selectedCategory!.sId != categoryList[categoryIndex].sId) {
-                                      onCategoryChange(categoryList[categoryIndex]);
-                                    } else {
-                                      onCategoryChange(null);
-                                    }
+                                  if(selectedCategory != null && selectedCategory!.sId == categoryList[categoryIndex].sId) {
+                                    setState(() {
+                                      selectedCategory = null;
+                                    });
                                   } else {
-                                    onCategoryChange(categoryList[categoryIndex]);
+                                    setState(() {
+                                      selectedCategory = categoryList[categoryIndex];
+                                    });
                                   }
                                 },
                                 customBorder: RoundedRectangleBorder(
@@ -175,7 +237,7 @@ class SearchFragment extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    filterType ?? '',
+                                    filterType,
                                     style: STextStyles.regular(),
                                   ),
                                 ),
@@ -188,7 +250,11 @@ class SearchFragment extends StatelessWidget {
                           ),
                           DropdownButton(
                             onChanged: (newValue) {
-                              onFilterChange(newValue);
+                              if(newValue != null) {
+                                setState(() {
+                                  filterType = newValue;
+                                });
+                              }
                             },
                             borderRadius: BorderRadius.circular(10.0),
                             isExpanded: true,
@@ -217,7 +283,7 @@ class SearchFragment extends StatelessWidget {
                   Expanded(
                     child: productList.isNotEmpty ?
                     RefreshIndicator(
-                      onRefresh: () async => onRefreshPage(),
+                      onRefresh: () async => loadData(),
                       child: ListView.separated(
                         shrinkWrap: true,
                         itemCount: productList.length,
@@ -237,7 +303,10 @@ class SearchFragment extends StatelessWidget {
                             child: Material(
                               color: Colors.transparent,
                               child: InkWell(
-                                onTap: () => onProductSelected(productList[index]),
+                                onTap: () => MoveToPage(
+                                  context: context,
+                                  target: ProductPage(productId: productList[index].sId!),
+                                ).go(),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                                   child: Row(
@@ -387,7 +456,7 @@ class SearchFragment extends StatelessWidget {
                           ],
                         ),
                         RefreshIndicator(
-                          onRefresh: () async => onRefreshPage(),
+                          onRefresh: () async => loadData(),
                           child: ListView(),
                         ),
                       ],

@@ -257,9 +257,7 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
-                          BackFromThisPage(context: context, callbackData: true).go();
-                        },
+                        onPressed: () => BackFromThisPage(context: context, callbackData: true).go(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: PrimaryColorStyles.primaryMain(),
                         ),
@@ -274,9 +272,7 @@ class _FeePaymentResultPageState extends State<FeePaymentResultPage> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          BackFromThisPage(context: context, callbackData: false).go();
-                        },
+                        onPressed: () => BackFromThisPage(context: context, callbackData: false).go(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: PrimaryColorStyles.primarySurface(),
                         ),

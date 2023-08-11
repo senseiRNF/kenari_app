@@ -306,9 +306,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -1026,19 +1024,17 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {
-                                MoveToPage(
-                                  context: context,
-                                  target: const CompanyAddressSelectionPage(),
-                                  callback: (callbackData) {
-                                    if(callbackData != null) {
-                                      setState(() {
-                                        companyData = callbackData;
-                                      });
-                                    }
-                                  },
-                                ).go();
-                              },
+                              onPressed: () => MoveToPage(
+                                context: context,
+                                target: const CompanyAddressSelectionPage(),
+                                callback: (callbackData) {
+                                  if(callbackData != null) {
+                                    setState(() {
+                                      companyData = callbackData;
+                                    });
+                                  }
+                                },
+                              ).go(),
                               child: Text(
                                 'Pilih Alamat',
                                 style: MTextStyles.medium().copyWith(

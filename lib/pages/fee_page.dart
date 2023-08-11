@@ -77,9 +77,7 @@ class _FeePageState extends State<FeePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -255,17 +253,15 @@ class _FeePageState extends State<FeePage> {
                               color: Colors.transparent,
                               borderRadius: BorderRadius.circular(10.0),
                               child: InkWell(
-                                onTap: () {
-                                  MoveToPage(
-                                    context: context,
-                                    target: const TemporalFeeDepositPage(),
-                                    callback: (callbackResult) {
-                                      if(callbackResult != null) {
-                                        BackFromThisPage(context: context, callbackData: callbackResult).go();
-                                      }
-                                    },
-                                  ).go();
-                                },
+                                onTap: () => MoveToPage(
+                                  context: context,
+                                  target: const TemporalFeeDepositPage(),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null) {
+                                      BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                    }
+                                  },
+                                ).go(),
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
@@ -333,28 +329,26 @@ class _FeePageState extends State<FeePage> {
                               color: Colors.transparent,
                               borderRadius: BorderRadius.circular(10.0),
                               child: InkWell(
-                                onTap: () {
-                                  MoveToPage(
-                                      context: context,
-                                      target: FeeListPage(
-                                        mandatoryFeeAmount: mandatoryFeeAmount,
-                                        temporalFeeAmount: temporalFeeAmount,
-                                      ),
-                                      callback: (callbackResult) {
-                                        if(callbackResult != null && callbackResult == true) {
-                                          MoveToPage(
-                                            context: context,
-                                            target: const TemporalFeeDepositPage(),
-                                            callback: (callbackResult) {
-                                              if(callbackResult != null) {
-                                                BackFromThisPage(context: context, callbackData: callbackResult).go();
-                                              }
-                                            },
-                                          ).go();
-                                        }
+                                onTap: () => MoveToPage(
+                                    context: context,
+                                    target: FeeListPage(
+                                      mandatoryFeeAmount: mandatoryFeeAmount,
+                                      temporalFeeAmount: temporalFeeAmount,
+                                    ),
+                                    callback: (callbackResult) {
+                                      if(callbackResult != null && callbackResult == true) {
+                                        MoveToPage(
+                                          context: context,
+                                          target: const TemporalFeeDepositPage(),
+                                          callback: (callbackResult) {
+                                            if(callbackResult != null) {
+                                              BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                            }
+                                          },
+                                        ).go();
                                       }
-                                  ).go();
-                                },
+                                    }
+                                ).go(),
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
@@ -422,9 +416,7 @@ class _FeePageState extends State<FeePage> {
                               color: Colors.transparent,
                               borderRadius: BorderRadius.circular(10.0),
                               child: InkWell(
-                                onTap: () {
-                                  BackFromThisPage(context: context, callbackData: false).go();
-                                },
+                                onTap: () => BackFromThisPage(context: context, callbackData: false).go(),
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),

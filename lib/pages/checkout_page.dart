@@ -94,9 +94,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -366,11 +364,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     'Rp ${NumberFormat('#,###', 'en_id').format(5000000).replaceAll(',', '.')}',
                                   ) :
                                   InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        isDipayActivated = !isDipayActivated;
-                                      });
-                                    },
+                                    onTap: () => setState(() {
+                                      isDipayActivated = !isDipayActivated;
+                                    }),
                                     customBorder: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5.0),
                                     ),

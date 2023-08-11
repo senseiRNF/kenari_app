@@ -1447,9 +1447,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
-                onPressed: () {
-                  checkForm();
-                },
+                onPressed: () => checkForm(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: nameController.text != '' && phoneController.text != '' && emailController.text != '' && passwordController.text != '' && confirmPasswordController.text != '' ?
                   PrimaryColorStyles.primaryMain() :

@@ -15,27 +15,32 @@ class APIBannerServices {
     BannerModel? result;
 
     await LocalSharedPrefs().readKey('token').then((token) async {
-      await APIOptions.init().then((dio) async {
-        LoadingDialog(context: context).show();
+      await LocalSharedPrefs().readKey('company_id').then((companyId) async {
+        await APIOptions.init().then((dio) async {
+          LoadingDialog(context: context).show();
 
-        try {
-          await dio.get(
-            '/transaction/product',
-            options: Options(
-              headers: {
-                'Authorization': 'Bearer $token',
+          try {
+            await dio.get(
+              '/banner',
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer $token',
+                },
+              ),
+              queryParameters: {
+                'company_id': companyId,
               },
-            ),
-          ).then((getResult) {
-            result = BannerModel.fromJson(getResult.data);
+            ).then((getResult) {
+              result = BannerModel.fromJson(getResult.data);
 
+              BackFromThisPage(context: context).go();
+            });
+          } on DioException catch(dioExc) {
             BackFromThisPage(context: context).go();
-          });
-        } on DioException catch(dioExc) {
-          BackFromThisPage(context: context).go();
 
-          ErrorHandler(context: context, dioExc: dioExc).handle();
-        }
+            ErrorHandler(context: context, dioExc: dioExc).handle();
+          }
+        });
       });
     });
 

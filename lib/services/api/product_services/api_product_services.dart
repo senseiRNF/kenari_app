@@ -29,6 +29,9 @@ class APIProductServices {
                 'Authorization': 'Bearer $token',
               },
             ),
+            queryParameters: {
+
+            },
           ).then((getResult) {
             result = ProductModel.fromJson(getResult.data);
 
@@ -75,6 +78,89 @@ class APIProductServices {
             ErrorHandler(context: context, dioExc: dioExc).handle();
           }
         });
+      });
+    });
+
+    return result;
+  }
+
+  Future<Map<String, ProductModel?>> multipleCall() async {
+    Map<String, ProductModel> result = {};
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await APIOptions.init().then((dio) async {
+        LoadingDialog(context: context).show();
+
+        try {
+          await dio.get(
+            '/transaction/product',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ),
+            queryParameters: {
+              'take': '5',
+              'filter_by': 'new_product',
+            },
+          ).then((getResult) async {
+            result.addEntries({
+              MapEntry('newProduct', ProductModel.fromJson(getResult.data)),
+            });
+
+            try {
+              await dio.get(
+                '/transaction/product',
+                options: Options(
+                  headers: {
+                    'Authorization': 'Bearer $token',
+                  },
+                ),
+                queryParameters: {
+                  'take': '3',
+                  'filter_by': 'best_seller',
+                },
+              ).then((getResult) async {
+                result.addEntries({
+                  MapEntry('recommendedProduct', ProductModel.fromJson(getResult.data)),
+                });
+
+                try {
+                  await dio.get(
+                    '/transaction/product',
+                    options: Options(
+                      headers: {
+                        'Authorization': 'Bearer $token',
+                      },
+                    ),
+                    queryParameters: {
+                      'take': '5',
+                      'filter_by': 'discount',
+                    },
+                  ).then((getResult) async {
+                    result.addEntries({
+                      MapEntry('discountProduct', ProductModel.fromJson(getResult.data)),
+                    });
+
+                    BackFromThisPage(context: context).go();
+                  });
+                } on DioException catch(dioExc) {
+                  BackFromThisPage(context: context).go();
+
+                  ErrorHandler(context: context, dioExc: dioExc).handle();
+                }
+              });
+            } on DioException catch(dioExc) {
+              BackFromThisPage(context: context).go();
+
+              ErrorHandler(context: context, dioExc: dioExc).handle();
+            }
+          });
+        } on DioException catch(dioExc) {
+          BackFromThisPage(context: context).go();
+
+          ErrorHandler(context: context, dioExc: dioExc).handle();
+        }
       });
     });
 

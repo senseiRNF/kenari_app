@@ -102,9 +102,7 @@ class OkDialog {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
-                          BackFromThisPage(context: context).go();
-                        },
+                        onPressed: () => BackFromThisPage(context: context).go(),
                         child: Text(
                           okText ?? 'Mengerti',
                         ),
@@ -194,7 +192,7 @@ class OptionDialog {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          BackFromThisPage(context: context).go();
 
                           if(noFunction != null) {
                             noFunction!();
@@ -215,7 +213,7 @@ class OptionDialog {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          BackFromThisPage(context: context).go();
 
                           yesFunction();
                         },
@@ -382,9 +380,7 @@ class ErrorHandler {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
-                          BackFromThisPage(context: context).go();
-                        },
+                        onPressed: () => BackFromThisPage(context: context).go(),
                         child: const Text(
                           'OK',
                         ),
@@ -471,7 +467,7 @@ class SourceSelectionDialog {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          BackFromThisPage(context: context).go();
 
                           galleryFunction();
                         },
@@ -490,7 +486,7 @@ class SourceSelectionDialog {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          BackFromThisPage(context: context).go();
 
                           cameraFunction();
                         },

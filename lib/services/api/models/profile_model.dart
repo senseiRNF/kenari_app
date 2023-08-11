@@ -32,7 +32,7 @@ class ProfileData {
   String? updatedAt;
   String? deletedAt;
   int? iV;
-  Image? image;
+  ProfileImage? profileImage;
 
   ProfileData({
     this.sId,
@@ -47,7 +47,7 @@ class ProfileData {
     this.updatedAt,
     this.deletedAt,
     this.iV,
-    this.image,
+    this.profileImage,
   });
 
   ProfileData.fromJson(Map<String, dynamic> json) {
@@ -64,7 +64,7 @@ class ProfileData {
     updatedAt = json['updatedAt'];
     deletedAt = json['deletedAt'];
     iV = json['__v'];
-    image = json['image'] != null ? Image.fromJson(json['image']) : null;
+    profileImage = json['image'] != null ? ProfileImage.fromJson(json['image']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -85,8 +85,8 @@ class ProfileData {
     data['updatedAt'] = updatedAt;
     data['deletedAt'] = deletedAt;
     data['__v'] = iV;
-    if (image != null) {
-      data['image'] = image!.toJson();
+    if (profileImage != null) {
+      data['image'] = profileImage!.toJson();
     }
     return data;
   }
@@ -273,7 +273,7 @@ class User {
   }
 }
 
-class Image {
+class ProfileImage {
   String? sId;
   String? filename;
   String? url;
@@ -281,7 +281,7 @@ class Image {
   String? deletedAt;
   int? iV;
 
-  Image({
+  ProfileImage({
     this.sId,
     this.filename,
     this.url,
@@ -290,7 +290,7 @@ class Image {
     this.iV,
   });
 
-  Image.fromJson(Map<String, dynamic> json) {
+  ProfileImage.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     filename = json['filename'];
     url = json['url'];
@@ -300,7 +300,7 @@ class Image {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
     data['filename'] = filename;
     data['url'] = url;

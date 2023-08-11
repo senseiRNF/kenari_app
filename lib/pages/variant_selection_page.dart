@@ -210,9 +210,7 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -350,22 +348,20 @@ class _VariantSelectionPageState extends State<VariantSelectionPage> {
                               style: LTextStyles.medium(),
                             ),
                             TextButton(
-                              onPressed: () {
-                                showAddNewSubVariantBottomDialog(selectedVariant!).then((subvariantResult) {
-                                  if(subvariantResult != null && subvariantResult != '') {
-                                    setState(() {
-                                      selectedVariant!.variantData.add(
-                                        LocalVariantData(
-                                          name: subvariantResult,
-                                          price: 0,
-                                          stock: 0,
-                                          isAlwaysAvailable: false,
-                                        ),
-                                      );
-                                    });
-                                  }
-                                });
-                              },
+                              onPressed: () => showAddNewSubVariantBottomDialog(selectedVariant!).then((subvariantResult) {
+                                if(subvariantResult != null && subvariantResult != '') {
+                                  setState(() {
+                                    selectedVariant!.variantData.add(
+                                      LocalVariantData(
+                                        name: subvariantResult,
+                                        price: 0,
+                                        stock: 0,
+                                        isAlwaysAvailable: false,
+                                      ),
+                                    );
+                                  });
+                                }
+                              }),
                               child: Text(
                                 'Tambah',
                                 style: MTextStyles.medium().copyWith(

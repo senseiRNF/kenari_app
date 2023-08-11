@@ -135,9 +135,7 @@ class TransactionResultPage extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          BackFromThisPage(context: context, callbackData: true).go();
-                        },
+                        onPressed: () => BackFromThisPage(context: context, callbackData: true).go(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: PrimaryColorStyles.primarySurface(),
                         ),

@@ -63,9 +63,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -113,11 +111,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           decoration: InputDecoration(
                             hintText: 'Masukkan kata sandi lama',
                             suffixIcon: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  obscureOldPassword = !obscureOldPassword;
-                                });
-                              },
+                              onTap: () => setState(() {
+                                obscureOldPassword = !obscureOldPassword;
+                              }),
                               customBorder: const CircleBorder(),
                               child: Padding(
                                 padding: const EdgeInsets.all(0.0),
@@ -151,11 +147,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           decoration: InputDecoration(
                             hintText: 'Masukkan kata sandi baru',
                             suffixIcon: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  obscureNewPassword = !obscureNewPassword;
-                                });
-                              },
+                              onTap: () => setState(() {
+                                obscureNewPassword = !obscureNewPassword;
+                              }),
                               customBorder: const CircleBorder(),
                               child: Padding(
                                 padding: const EdgeInsets.all(0.0),
@@ -189,11 +183,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           decoration: InputDecoration(
                             hintText: 'Masukkan kembali kata sandi baru',
                             suffixIcon: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  obscureConfNewPassword = !obscureConfNewPassword;
-                                });
-                              },
+                              onTap: () => setState(() {
+                                obscureConfNewPassword = !obscureConfNewPassword;
+                              }),
                               customBorder: const CircleBorder(),
                               child: Padding(
                                 padding: const EdgeInsets.all(0.0),
@@ -223,9 +215,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
-                onPressed: () {
-
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: oldPasswordController.text != '' && newPasswordController.text != '' && confNewPasswordController.text != '' ?
                   PrimaryColorStyles.primaryMain() :

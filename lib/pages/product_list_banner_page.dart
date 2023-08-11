@@ -9,14 +9,10 @@ import 'package:kenari_app/styles/text_styles.dart';
 
 class ProductListBannerPage extends StatefulWidget {
   final String bannerType;
-  final List<ProductData> productList;
-  final List<String> filterList;
 
   const ProductListBannerPage({
     super.key,
     required this.bannerType,
-    required this.productList,
-    required this.filterList,
   });
 
   @override
@@ -24,46 +20,24 @@ class ProductListBannerPage extends StatefulWidget {
 }
 
 class _ProductListBannerPageState extends State<ProductListBannerPage> {
-  late String filterType;
-
   TextEditingController searchController = TextEditingController();
 
   List<ProductData> productList = [];
 
-  List<String> filterList = [];
+  List<String> filterList = [
+    'Tampilkan Semua',
+    'Terbaru',
+    'Terlaris',
+    'Diskon',
+    'Harga Terendah',
+    'Harga Tertinggi',
+  ];
+
+  String filterType = 'Tampilkan Semua';
 
   @override
   void initState() {
     super.initState();
-
-    List<ProductData> tempProductList = [];
-
-    if(widget.bannerType == 'discount') {
-      setState(() {
-        filterType = 'Diskon';
-      });
-
-      for(int i = 0; i < widget.productList.length; i++) {
-        if(widget.productList[i].isPromo == true) {
-          tempProductList.add(widget.productList[i]);
-        }
-      }
-    } else {
-      setState(() {
-        filterType = 'Terbaru';
-      });
-
-      for(int i = 0; i < widget.productList.length; i++) {
-        if(widget.productList[i].productCategory != null && widget.productList[i].productCategory!.name != null && widget.productList[i].productCategory!.name! == 'Outfit') {
-          tempProductList.add(widget.productList[i]);
-        }
-      }
-    }
-
-    setState(() {
-      filterList = widget.filterList;
-      productList = tempProductList;
-    });
   }
 
   @override
@@ -79,9 +53,7 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () {
-                      BackFromThisPage(context: context).go();
-                    },
+                    onTap: () => BackFromThisPage(context: context).go(),
                     customBorder: const CircleBorder(),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),

@@ -38,7 +38,7 @@ class BannerData {
   bool? status;
   List<Products>? products;
   String? createdAt;
-  Image? image;
+  BannerImage? bannerImage;
   String? updatedAt;
   String? deletedAt;
   int? iV;
@@ -50,7 +50,7 @@ class BannerData {
     this.status,
     this.products,
     this.createdAt,
-    this.image,
+    this.bannerImage,
     this.updatedAt,
     this.iV,
     this.deletedAt,
@@ -68,7 +68,7 @@ class BannerData {
       });
     }
     createdAt = json['createdAt'];
-    image = json['image'] != null ? Image.fromJson(json['image']) : null;
+    bannerImage = json['image'] != null ? BannerImage.fromJson(json['image']) : null;
     updatedAt = json['updatedAt'];
     deletedAt = json['deletedAt'];
     iV = json['__v'];
@@ -84,8 +84,8 @@ class BannerData {
       data['products'] = products!.map((v) => v.toJson()).toList();
     }
     data['createdAt'] = createdAt;
-    if (image != null) {
-      data['image'] = image!.toJson();
+    if (bannerImage != null) {
+      data['image'] = bannerImage!.toJson();
     }
     data['updatedAt'] = updatedAt;
     data['deletedAt'] = deletedAt;
@@ -264,7 +264,7 @@ class Images {
   }
 }
 
-class Image {
+class BannerImage {
   String? sId;
   String? filename;
   String? url;
@@ -273,7 +273,7 @@ class Image {
   String? deletedAt;
   int? iV;
 
-  Image({
+  BannerImage({
     this.sId,
     this.filename,
     this.url,
@@ -283,7 +283,7 @@ class Image {
     this.iV,
   });
 
-  Image.fromJson(Map<String, dynamic> json) {
+  BannerImage.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     filename = json['filename'];
     url = json['url'];

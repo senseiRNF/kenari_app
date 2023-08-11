@@ -51,9 +51,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -99,9 +97,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: () {
-
-                            },
+                            onTap: () {},
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                               child: Column(

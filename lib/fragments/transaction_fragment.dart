@@ -19,16 +19,7 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class TransactionFragment extends StatefulWidget {
-  final int openMenu;
-  final Function changeTab;
-  final Function onCallbackFromLoanPage;
-
-  const TransactionFragment({
-    super.key,
-    required this.openMenu,
-    required this.changeTab,
-    required this.onCallbackFromLoanPage,
-  });
+  const TransactionFragment({super.key});
 
   @override
   State<TransactionFragment> createState() => _TransactionFragmentState();
@@ -61,32 +52,17 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   }
 
   Future loadData() async {
-    setState(() {
-      selectedTab = widget.openMenu;
-      tabController.animateTo(widget.openMenu);
-
-      if(widget.openMenu == 0) {
-        loadFeeData();
-      }
-
-      if(widget.openMenu == 1) {
-        loadLoanData();
-      }
-
-      if(widget.openMenu == 2) {
-        loadTransactionData();
-      }
-    });
-
     await LocalSharedPrefs().readKey('name').then((nameResult) async {
       setState(() {
         name = nameResult;
       });
 
-      await LocalSharedPrefs().readKey('company_code').then((codeResult) {
+      await LocalSharedPrefs().readKey('company_code').then((codeResult) async {
         setState(() {
           companyCode = codeResult;
         });
+
+        await loadFeeData();
       });
     });
   }
@@ -206,7 +182,9 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                         }
                       });
 
-                      widget.changeTab(index);
+                      setState(() {
+                        selectedTab = index;
+                      });
                     },
                     tabs: [
                       Tab(
@@ -704,9 +682,6 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                           target: LoanDetailPage(
                             loanId: loanList[index].sId!,
                           ),
-                          callback: (callback) {
-                            widget.onCallbackFromLoanPage(callback);
-                          },
                         ).go();
                       }
                     },

@@ -51,9 +51,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             companyCodeController.text = "${profileResult.company!.code ?? ''} - ${profileResult.company!.name ?? ''}";
           }
 
-          if(profileResult.image != null) {
+          if(profileResult.profileImage != null) {
             profileImage = MediaProfileData(
-              url: profileResult.image!.url,
+              url: profileResult.profileImage!.url,
             );
           }
         }
@@ -322,9 +322,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -422,9 +420,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           width: 10.0,
                         ),
                         InkWell(
-                          onTap: () {
-                            showImageSourceBottomDialog();
-                          },
+                          onTap: () => showImageSourceBottomDialog(),
                           customBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),

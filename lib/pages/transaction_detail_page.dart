@@ -241,21 +241,19 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  OptionDialog(
-                    context: context,
-                    title: 'Terima Pesanan?',
-                    message: 'Setelah pesanan diterima, silahkan siapkan produk yang di pesan.',
-                    yesText: 'Konfirmasi',
-                    yesFunction: () {
-                      SuccessDialog(
-                        context: context,
-                        message: 'Pesanan Berhasil di Terima',
-                      ).show();
-                    },
-                    noText: 'Batal',
-                  ).show();
-                },
+                onPressed: () => OptionDialog(
+                  context: context,
+                  title: 'Terima Pesanan?',
+                  message: 'Setelah pesanan diterima, silahkan siapkan produk yang di pesan.',
+                  yesText: 'Konfirmasi',
+                  yesFunction: () {
+                    SuccessDialog(
+                      context: context,
+                      message: 'Pesanan Berhasil di Terima',
+                    ).show();
+                  },
+                  noText: 'Batal',
+                ).show(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: PrimaryColorStyles.primaryMain(),
                 ),
@@ -270,21 +268,19 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  OptionDialog(
-                    context: context,
-                    title: 'Batalkan Pesanan?',
-                    message: 'Anda yakin untuk menolak Pesanan ini?',
-                    yesText: 'Konfirmasi',
-                    yesFunction: () {
-                      SuccessDialog(
-                        context: context,
-                        message: 'Pesanan Berhasil di Batalkan',
-                      ).show();
-                    },
-                    noText: 'Batal',
-                  ).show();
-                },
+                onPressed: () => OptionDialog(
+                  context: context,
+                  title: 'Batalkan Pesanan?',
+                  message: 'Anda yakin untuk menolak Pesanan ini?',
+                  yesText: 'Konfirmasi',
+                  yesFunction: () {
+                    SuccessDialog(
+                      context: context,
+                      message: 'Pesanan Berhasil di Batalkan',
+                    ).show();
+                  },
+                  noText: 'Batal',
+                ).show(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: PrimaryColorStyles.primarySurface(),
                 ),
@@ -309,21 +305,19 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  OptionDialog(
-                    context: context,
-                    title: 'Siap diambil Pembeli',
-                    message: 'Konfirmasi bahwa produk ini telah selesai disiapkan, dan produk siap di ambil oleh pembeli.',
-                    yesText: 'Konfirmasi',
-                    yesFunction: () {
-                      SuccessDialog(
-                        context: context,
-                        message: 'Pesanan Siap diambil Pembeli',
-                      ).show();
-                    },
-                    noText: 'Batal',
-                  ).show();
-                },
+                onPressed: () => OptionDialog(
+                  context: context,
+                  title: 'Siap diambil Pembeli',
+                  message: 'Konfirmasi bahwa produk ini telah selesai disiapkan, dan produk siap di ambil oleh pembeli.',
+                  yesText: 'Konfirmasi',
+                  yesFunction: () {
+                    SuccessDialog(
+                      context: context,
+                      message: 'Pesanan Siap diambil Pembeli',
+                    ).show();
+                  },
+                  noText: 'Batal',
+                ).show(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: PrimaryColorStyles.primaryMain(),
                 ),
@@ -366,9 +360,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),

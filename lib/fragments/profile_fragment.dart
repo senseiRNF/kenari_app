@@ -7,25 +7,50 @@ import 'package:kenari_app/pages/change_password_page.dart';
 import 'package:kenari_app/pages/company_address_page.dart';
 import 'package:kenari_app/pages/dipay_activation_page.dart';
 import 'package:kenari_app/pages/edit_profile_page.dart';
+import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
+import 'package:kenari_app/services/api/models/profile_model.dart';
+import 'package:kenari_app/services/api/profile_services/api_profile_services.dart';
+import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
-class ProfileFragment extends StatelessWidget {
-  final String? name;
-  final String? companyName;
-  final String? imgUrl;
-  final Function refreshPage;
-  final Function onLogout;
+class ProfileFragment extends StatefulWidget {
+  const ProfileFragment({super.key});
 
-  const ProfileFragment({
-    super.key,
-    required this.name,
-    required this.companyName,
-    this.imgUrl,
-    required this.refreshPage,
-    required this.onLogout,
-  });
+  @override
+  State<ProfileFragment> createState() => _ProfileFragmentState();
+}
+
+class _ProfileFragmentState extends State<ProfileFragment> {
+  ProfileData? profileData;
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadData();
+  }
+
+  Future loadData() async {
+    await loadProfile();
+  }
+
+  Future loadProfile() async {
+    await APIProfileServices(context: context).showProfile().then((callResult) {
+      setState(() {
+        profileData = callResult;
+      });
+    });
+  }
+
+  Future logoutSession() async {
+    await LocalSharedPrefs().removeAllKey().then((removeResult) {
+      if(removeResult == true) {
+        RedirectToPage(context: context, target: const SplashPage()).go();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +109,9 @@ class ProfileFragment extends StatelessWidget {
                             Stack(
                               children: [
                                 Center(
-                                  child: CachedNetworkImage(
-                                    imageUrl: "$baseURL/${imgUrl ?? ''}",
+                                  child: profileData != null && profileData!.profileImage != null ?
+                                  CachedNetworkImage(
+                                    imageUrl: "$baseURL/${profileData!.profileImage!.url ?? ''}",
                                     width: 70.0,
                                     height: 70.0,
                                     imageBuilder: (context, imgProvider) => Padding(
@@ -101,12 +127,35 @@ class ProfileFragment extends StatelessWidget {
                                       ),
                                     ),
                                     errorWidget: (errContext, url, err) {
-                                      return Icon(
-                                        Icons.person,
-                                        size: 40.0,
-                                        color: IconColorStyles.iconColor(),
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black54,
+                                          ),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.person,
+                                          size: 40.0,
+                                          color: IconColorStyles.iconColor(),
+                                        ),
                                       );
                                     },
+                                  ) :
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                        color: Colors.black54,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 40.0,
+                                      color: IconColorStyles.iconColor(),
+                                    ),
                                   ),
                                 ),
                                 Row(
@@ -117,17 +166,15 @@ class ProfileFragment extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
                                         child: InkWell(
-                                          onTap: () {
-                                            MoveToPage(
-                                              context: context,
-                                              target: const EditProfilePage(),
-                                              callback: (callback) {
-                                                if(callback != null && callback == true) {
-                                                  refreshPage();
-                                                }
-                                              },
-                                            ).go();
-                                          },
+                                          onTap: () => MoveToPage(
+                                            context: context,
+                                            target: const EditProfilePage(),
+                                            callback: (callback) {
+                                              if(callback != null && callback == true) {
+                                                loadData();
+                                              }
+                                            },
+                                          ).go(),
                                           customBorder: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(5.0),
                                           ),
@@ -163,7 +210,7 @@ class ProfileFragment extends StatelessWidget {
                               height: 5.0,
                             ),
                             Text(
-                              name ?? '(Pengguna tidak diketahui)',
+                              profileData != null ? profileData!.name ?? '(Pengguna tidak diketahui)' : '(Pengguna tidak diketahui)',
                               style: MTextStyles.regular(),
                               textAlign: TextAlign.center,
                             ),
@@ -171,7 +218,7 @@ class ProfileFragment extends StatelessWidget {
                               height: 5.0,
                             ),
                             Text(
-                              companyName ?? '(Kode tidak diketahui)',
+                              profileData != null && profileData!.company != null ? profileData!.company!.name ?? '(Kode tidak diketahui)' : '(Kode tidak diketahui)',
                               style: XSTextStyles.regular(),
                               textAlign: TextAlign.center,
                             ),
@@ -201,9 +248,7 @@ class ProfileFragment extends StatelessWidget {
                                         ),
                                       ),
                                       InkWell(
-                                        onTap: () {
-                                          MoveToPage(context: context, target: const DipayActivationPage()).go();
-                                        },
+                                        onTap: () => MoveToPage(context: context, target: const DipayActivationPage()).go(),
                                         customBorder: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(5.0),
                                         ),
@@ -312,9 +357,7 @@ class ProfileFragment extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                               child: InkWell(
-                                onTap: () {
-                                  MoveToPage(context: context, target: const ChangePasswordPage()).go();
-                                },
+                                onTap: () => MoveToPage(context: context, target: const ChangePasswordPage()).go(),
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
@@ -348,9 +391,7 @@ class ProfileFragment extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 10.0),
                               child: InkWell(
-                                onTap: () {
-                                  MoveToPage(context: context, target: const CompanyAddressPage()).go();
-                                },
+                                onTap: () => MoveToPage(context: context, target: const CompanyAddressPage()).go(),
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
@@ -384,9 +425,7 @@ class ProfileFragment extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                               child: InkWell(
-                                onTap: () {
-                                  MoveToPage(context: context, target: const BankAccountPage()).go();
-                                },
+                                onTap: () => MoveToPage(context: context, target: const BankAccountPage()).go(),
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
@@ -426,16 +465,11 @@ class ProfileFragment extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: InkWell(
-                          onTap: () {
-                            OptionDialog(
-                              context: context,
-                              message: 'Keluar dari sesi, Anda yakin?',
-                              yesFunction: () async {
-                                onLogout();
-                              },
-                              
-                            ).show();
-                          },
+                          onTap: () => OptionDialog(
+                            context: context,
+                            message: 'Keluar dari sesi, Anda yakin?',
+                            yesFunction: () => logoutSession(),
+                          ).show(),
                           customBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),

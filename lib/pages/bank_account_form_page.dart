@@ -75,9 +75,7 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -299,27 +297,25 @@ class _BankAccountFormPageState extends State<BankAccountFormPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            OptionDialog(
-                              context: context,
-                              message: 'Hapus data rekening, Anda yakin?',
-                              yesFunction: () async {
-                                await APIBankServices(context: context).deleteBankData(widget.editData!.sId).then((deleteResult) {
-                                  if(deleteResult == true) {
-                                    OkDialog(
-                                      context: context,
-                                      message: 'Sukses menghapus data rekening',
-                                      okText: 'Oke',
-                                      okFunction: () {
-                                        BackFromThisPage(context: context, callbackData: true).go();
-                                      },
-                                    ).show();
-                                  }
-                                });
-                              },
-                              
-                            ).show();
-                          },
+                          onPressed: () => OptionDialog(
+                            context: context,
+                            message: 'Hapus data rekening, Anda yakin?',
+                            yesFunction: () async {
+                              await APIBankServices(context: context).deleteBankData(widget.editData!.sId).then((deleteResult) {
+                                if(deleteResult == true) {
+                                  OkDialog(
+                                    context: context,
+                                    message: 'Sukses menghapus data rekening',
+                                    okText: 'Oke',
+                                    okFunction: () {
+                                      BackFromThisPage(context: context, callbackData: true).go();
+                                    },
+                                  ).show();
+                                }
+                              });
+                            },
+
+                          ).show(),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: PrimaryColorStyles.primarySurface(),
                           ),

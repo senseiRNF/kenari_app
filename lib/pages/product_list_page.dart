@@ -13,12 +13,10 @@ import 'package:kenari_app/styles/text_styles.dart';
 
 class ProductListPage extends StatefulWidget {
   final String? filterType;
-  final List<String> filterList;
 
   const ProductListPage({
     super.key,
     this.filterType,
-    required this.filterList,
   });
 
   @override
@@ -83,10 +81,6 @@ class _ProductListPageState extends State<ProductListPage> {
         }
       });
     }
-
-    setState(() {
-      filterList = widget.filterList;
-    });
   }
 
   void applyAnyFilter() {
@@ -111,9 +105,7 @@ class _ProductListPageState extends State<ProductListPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),

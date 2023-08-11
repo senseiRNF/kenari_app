@@ -78,9 +78,7 @@ class _RegisterResultPageState extends State<RegisterResultPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
-                onPressed: () {
-                  BackFromThisPage(context: context).go();
-                },
+                onPressed: () => BackFromThisPage(context: context).go(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: PrimaryColorStyles.primaryMain(),
                 ),

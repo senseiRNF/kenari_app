@@ -151,9 +151,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -746,9 +744,7 @@ class _TrolleyPageState extends State<TrolleyPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    BackFromThisPage(context: context).go();
-                  },
+                  onPressed: () => BackFromThisPage(context: context).go(),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(

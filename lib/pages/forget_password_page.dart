@@ -58,9 +58,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {
-                            BackFromThisPage(context: context).go();
-                          },
+                          onTap: () => BackFromThisPage(context: context).go(),
                           customBorder: const CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -141,9 +139,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
-                onPressed: () {
-                  checkEmail();
-                },
+                onPressed: () => checkEmail(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: emailController.text != '' ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
                 ),

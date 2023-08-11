@@ -120,9 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {
-                          MoveToPage(context: context, target: const ForgetPasswordPage()).go();
-                        },
+                        onPressed: () => MoveToPage(context: context, target: const ForgetPasswordPage()).go(),
                         child: Text(
                           'Lupa password?',
                           style: MTextStyles.medium().copyWith(
@@ -195,9 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 10.0,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      MoveToPage(context: context, target: const RegisterCompanyCodePage()).go();
-                    },
+                    onPressed: () => MoveToPage(context: context, target: const RegisterCompanyCodePage()).go(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: PrimaryColorStyles.primarySurface(),
                     ),
