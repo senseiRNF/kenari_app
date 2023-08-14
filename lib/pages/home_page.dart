@@ -17,15 +17,47 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedMenu = 0;
+  int? selectedTranscationTab;
 
   Widget activeFragment() {
     switch(selectedMenu) {
       case 0:
-        return const HomeFragment();
+        return HomeFragment(
+          onFeePageCallback: (callbackResult) {
+            if(callbackResult != null) {
+              if(callbackResult['target'] == 'transaction') {
+                setState(() {
+                  selectedMenu = 2;
+                  selectedTranscationTab = callbackResult['index'];
+                });
+              }
+            }
+          },
+          onLoanPageCallback: (callbackResult) {
+            if(callbackResult != null) {
+              if(callbackResult['target'] == 'transaction') {
+                setState(() {
+                  selectedMenu = 2;
+                  selectedTranscationTab = callbackResult['index'];
+                });
+              }
+            }
+          },
+          onTransactionPageCallback: (callbackResult) {
+            if(callbackResult != null) {
+              if(callbackResult['target'] == 'transaction') {
+                selectedMenu = 2;
+                selectedTranscationTab = callbackResult['index'];
+              }
+            }
+          },
+        );
       case 1:
         return const SearchFragment();
       case 2:
-        return const TransactionFragment();
+        return TransactionFragment(
+          tabSelected: selectedTranscationTab,
+        );
       case 3:
         return const ProfileFragment();
       default:
@@ -74,6 +106,7 @@ class _HomePageState extends State<HomePage> {
                         if(selectedMenu != 0) {
                           setState(() {
                             selectedMenu = 0;
+                            selectedTranscationTab = null;
                           });
                         }
                       },
@@ -109,6 +142,7 @@ class _HomePageState extends State<HomePage> {
                         if(selectedMenu != 1) {
                           setState(() {
                             selectedMenu = 1;
+                            selectedTranscationTab = null;
                           });
                         }
                       },
@@ -149,6 +183,7 @@ class _HomePageState extends State<HomePage> {
                         if(selectedMenu != 2) {
                           setState(() {
                             selectedMenu = 2;
+                            selectedTranscationTab = null;
                           });
                         }
                       },
@@ -184,6 +219,7 @@ class _HomePageState extends State<HomePage> {
                         if(selectedMenu != 3) {
                           setState(() {
                             selectedMenu = 3;
+                            selectedTranscationTab = null;
                           });
                         }
                       },

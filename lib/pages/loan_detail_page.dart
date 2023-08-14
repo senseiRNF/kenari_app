@@ -471,9 +471,9 @@ class _LoanDetailPageState extends State<LoanDetailPage> {
                   onPressed: () => MoveToPage(
                     context: context,
                     target: LoanPaymentPage(loanData: loanData!),
-                    callback: (callback) {
-                      if(callback != null) {
-                        BackFromThisPage(context: context, callbackData: callback).go();
+                    callback: (callbackResult) {
+                      if(callbackResult != null) {
+                        BackFromThisPage(context: context, callbackData: callbackResult).go();
                       }
                     },
                   ).go(),

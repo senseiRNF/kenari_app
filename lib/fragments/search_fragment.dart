@@ -47,6 +47,29 @@ class _SearchFragmentState extends State<SearchFragment> {
   }
 
   Future loadData() async {
+    String? filter;
+
+    switch(filterType) {
+      case 'Tampilkan Semua':
+        filter = null;
+        break;
+      case 'Terbaru':
+        filter = 'new_product';
+        break;
+      case 'Terlaris':
+        filter = 'best_seller';
+        break;
+      case 'Diskon':
+        filter = 'discount';
+        break;
+      case 'Harga Terendah':
+        filter = 'lower_price';
+        break;
+      case 'Harga Tertinggi':
+        filter = 'higher_price';
+        break;
+    }
+
     await LocalSharedPrefs().readKey('token').then((token) async {
       await APIOptions.init().then((dio) async {
         LoadingDialog(context: context).show();
@@ -70,6 +93,11 @@ class _SearchFragmentState extends State<SearchFragment> {
                     'Authorization': 'Bearer $token',
                   },
                 ),
+                queryParameters: {
+                  'category_id': selectedCategory != null ? selectedCategory!.sId : null,
+                  'filter_by': filter,
+                  'keyword': searchController.text,
+                },
               ).then((getResult) async {
                 ProductModel? tempProductModel = ProductModel.fromJson(getResult.data);
 
@@ -129,9 +157,7 @@ class _SearchFragmentState extends State<SearchFragment> {
                         ),
                         textCapitalization: TextCapitalization.words,
                         textInputAction: TextInputAction.done,
-                        onSubmitted: (query) {
-
-                        },
+                        onSubmitted: (_) => loadData(),
                       ),
                     ),
                   ],
@@ -184,6 +210,8 @@ class _SearchFragmentState extends State<SearchFragment> {
                                       selectedCategory = categoryList[categoryIndex];
                                     });
                                   }
+
+                                  loadData();
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -254,6 +282,8 @@ class _SearchFragmentState extends State<SearchFragment> {
                                 setState(() {
                                   filterType = newValue;
                                 });
+
+                                loadData();
                               }
                             },
                             borderRadius: BorderRadius.circular(10.0),
@@ -433,9 +463,7 @@ class _SearchFragmentState extends State<SearchFragment> {
                     ) :
                     Stack(
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        ListView(
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 80.0),

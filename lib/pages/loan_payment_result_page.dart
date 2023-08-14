@@ -245,7 +245,12 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ElevatedButton(
-                        onPressed: () => BackFromThisPage(context: context, callbackData: true).go(),
+                        onPressed: () => BackFromThisPage(
+                          context: context,
+                          callbackData: {
+                            'target': 'home',
+                          },
+                        ).go(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: PrimaryColorStyles.primaryMain(),
                         ),
@@ -260,7 +265,13 @@ class _LoanPaymentResultPageState extends State<LoanPaymentResultPage> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () => BackFromThisPage(context: context, callbackData: false).go(),
+                        onPressed: () => BackFromThisPage(
+                          context: context,
+                          callbackData: {
+                            'target': 'transaction',
+                            'index': 1,
+                          },
+                        ).go(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: PrimaryColorStyles.primarySurface(),
                         ),

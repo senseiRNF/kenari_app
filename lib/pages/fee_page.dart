@@ -416,7 +416,13 @@ class _FeePageState extends State<FeePage> {
                               color: Colors.transparent,
                               borderRadius: BorderRadius.circular(10.0),
                               child: InkWell(
-                                onTap: () => BackFromThisPage(context: context, callbackData: false).go(),
+                                onTap: () => BackFromThisPage(
+                                  context: context,
+                                  callbackData: {
+                                    'target': 'transaction',
+                                    'index': 0,
+                                  },
+                                ).go(),
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),

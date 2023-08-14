@@ -65,8 +65,12 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                         MoveToPage(
                           context: context,
                           target: SellerProductDetailPage(productId: sellerProductDataList[waitingIndex].sId!, isActive: false),
-                          callback: (callbackResult) async {
-                            await loadData();
+                          callback: (callbackResult) {
+                            if(callbackResult['target'] == 'home') {
+                              BackFromThisPage(context: context, callbackData: callbackResult).go();
+                            } else {
+                              loadData();
+                            }
                           },
                         ).go();
                       }
@@ -208,8 +212,12 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                         MoveToPage(
                           context: context,
                           target: SellerProductDetailPage(productId: sellerProductDataList[activeIndex].sId!, isActive: true),
-                          callback: (callbackResult) async {
-                            await loadData();
+                          callback: (callbackResult) {
+                            if(callbackResult['target'] == 'home') {
+                              BackFromThisPage(context: context, callbackData: callbackResult).go();
+                            } else {
+                              loadData();
+                            }
                           },
                         ).go();
                       }
@@ -348,8 +356,12 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                         MoveToPage(
                           context: context,
                           target: SellerProductDetailPage(productId: sellerProductDataList[completedIndex].sId!, isActive: false),
-                          callback: (callbackResult) async {
-                            await loadData();
+                          callback: (callbackResult) {
+                            if(callbackResult['target'] == 'home') {
+                              BackFromThisPage(context: context, callbackData: callbackResult).go();
+                            } else {
+                              loadData();
+                            }
                           },
                         ).go();
                       }

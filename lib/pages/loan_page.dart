@@ -658,9 +658,13 @@ class _LoanPageState extends State<LoanPage> {
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(10.0),
                             child: InkWell(
-                              onTap: () {
-                                BackFromThisPage(context: context, callbackData: false).go();
-                              },
+                              onTap: () => BackFromThisPage(
+                                context: context,
+                                callbackData: {
+                                  'target': 'transaction',
+                                  'index': 1,
+                                },
+                              ).go(),
                               customBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),

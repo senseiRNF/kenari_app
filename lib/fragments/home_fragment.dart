@@ -25,7 +25,16 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class HomeFragment extends StatefulWidget {
-  const HomeFragment({super.key});
+  final Function onFeePageCallback;
+  final Function onLoanPageCallback;
+  final Function onTransactionPageCallback;
+
+  const HomeFragment({
+    super.key,
+    required this.onFeePageCallback,
+    required this.onLoanPageCallback,
+    required this.onTransactionPageCallback,
+  });
 
   @override
   State<HomeFragment> createState() => _HomeFragmentState();
@@ -216,8 +225,8 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Future updateTrolley(int index, ProductData product, int qty) async {
     String? price = product.varians != null && product.varians!.isNotEmpty ?
-    product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice : product.varians![index].price :
-    product.isPromo != null && product.isPromo == true ? product.promoPrice : product.price;
+    product.varians![index].promoPrice != null && product.varians![index].promoPrice != '0' ? product.varians![index].promoPrice : product.varians![index].price :
+    product.promoPrice != null && product.promoPrice != '0' ? product.promoPrice : product.price;
 
     await APITrolleyServices(context: context).update(
       LocalTrolleyProduct(
@@ -266,7 +275,13 @@ class _HomeFragmentState extends State<HomeFragment> {
               MoveToPage(
                 context: context,
                 target: const FeePage(),
-                callback: (_) => loadData(),
+                callback: (callbackResult) {
+                  if(callbackResult != null) {
+                    widget.onFeePageCallback(callbackResult);
+                  } else {
+                    loadData();
+                  }
+                },
               ).go();
             },
           },
@@ -278,7 +293,13 @@ class _HomeFragmentState extends State<HomeFragment> {
               MoveToPage(
                 context: context,
                 target: const LoanPage(),
-                callback: (_) => loadData(),
+                callback: (callbackResult) {
+                  if(callbackResult != null) {
+                    widget.onLoanPageCallback(callbackResult);
+                  } else {
+                    loadData();
+                  }
+                },
               ).go();
             },
           },
@@ -447,7 +468,11 @@ class _HomeFragmentState extends State<HomeFragment> {
           ),
         );
       },
-    );
+    ).then((dialogResult) {
+      if(dialogResult != null) {
+
+      }
+    });
   }
 
   Future showProductBottomDialog(ProductData product) async {
@@ -457,9 +482,9 @@ class _HomeFragmentState extends State<HomeFragment> {
     product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
     product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
 
-    String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].isPromo != null && product.varians![index].isPromo == true ?
+    String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].promoPrice != null && product.varians![index].promoPrice != '0' ?
     'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}' :
-    product.isPromo != null && product.isPromo == true ?
+    product.promoPrice != null && product.promoPrice != '0' ?
     'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
 
     String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
@@ -684,13 +709,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                                   variant = product.varians![itemIndex].name1 ?? '(Varian tidak diketahui)';
 
                                   if(product.varians != null && product.varians!.isNotEmpty) {
-                                    if(product.varians![index].isPromo != null && product.varians![index].isPromo == true) {
+                                    if(product.varians![index].promoPrice != null && product.varians![index].promoPrice != '0') {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}';
                                     } else {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}';
                                     }
                                   } else {
-                                    if(product.isPromo != null && product.isPromo == true) {
+                                    if(product.promoPrice != null && product.promoPrice != '0') {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
                                     } else {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
@@ -1020,7 +1045,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                     onTap: () => MoveToPage(
                       context: context,
                       target: const TrolleyPage(),
-                      callback: (_) => loadTrolley(),
+                      callback: (callbackResult) {
+                        if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                          widget.onTransactionPageCallback(callbackResult);
+                        } else {
+                          loadTrolley();
+                        }
+                      },
                     ).go(),
                     customBorder: const CircleBorder(),
                     child: Padding(
@@ -1332,7 +1363,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                                   onTap: () => MoveToPage(
                                     context: context,
                                     target: const FeePage(),
-                                    callback: (_) => loadData(),
+                                    callback: (callbackResult) {
+                                      if(callbackResult != null) {
+                                        widget.onFeePageCallback(callbackResult);
+                                      } else {
+                                        loadData();
+                                      }
+                                    },
                                   ).go(),
                                   customBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12.0),
@@ -1375,7 +1412,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                                   onTap: () => MoveToPage(
                                     context: context,
                                     target: const LoanPage(),
-                                    callback: (_) => loadData(),
+                                    callback: (callbackResult) {
+                                      if(callbackResult != null) {
+                                        widget.onLoanPageCallback(callbackResult);
+                                      } else {
+                                        loadData();
+                                      }
+                                    },
                                   ).go(),
                                   customBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12.0),
@@ -1499,7 +1542,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                           onPressed: () => MoveToPage(
                             context: context,
                             target: const ProductListPage(
-                              filterType: 'new_product',
+                              filterType: 'Terbaru',
                             ),
                             callback: (_) => loadData(),
                           ).go(),
@@ -1688,23 +1731,23 @@ class _HomeFragmentState extends State<HomeFragment> {
                       enableInfiniteScroll: true,
                       viewportFraction: 0.9,
                     ),
-                    items: bannerList.map((e) {
+                    items: bannerList.map((bannerData) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: InkWell(
                           onTap: () => MoveToPage(
                             context: context,
-                            target: const ProductListBannerPage(
-                              bannerType: 'discount',
+                            target: ProductListBannerPage(
+                              bannerData: bannerData,
                             ),
                             callback: (_) => loadData(),
                           ).go(),
                           customBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          child: e.bannerImage != null ?
+                          child: bannerData.bannerImage != null ?
                           CachedNetworkImage(
-                            imageUrl: "$baseURL/${e.bannerImage!.url ?? ''}",
+                            imageUrl: "$baseURL/${bannerData.bannerImage!.url ?? ''}",
                             imageBuilder: (context, imgProvider) {
                               return Container(
                                 decoration: BoxDecoration(
@@ -1794,6 +1837,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                         context: context,
                                         target: ProductListPage(
                                           filterType: 'Kategori_${categoryList[categoryIndex].name}',
+                                          categoryData: categoryList[categoryIndex],
                                         ),
                                         callback: (_) => loadData(),
                                       ).go(),
@@ -1937,7 +1981,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                           crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
                                             Expanded(
-                                              child: popularProductList[index].isPromo != null && popularProductList[index].isPromo == true ?
+                                              child: popularProductList[index].promoPrice != null && popularProductList[index].promoPrice != '0' ?
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                                 children: [
@@ -2030,7 +2074,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                           onPressed: () => MoveToPage(
                             context: context,
                             target: const ProductListPage(
-                              filterType: 'discount',
+                              filterType: 'Diskon',
                             ),
                             callback: (_) => loadData(),
                           ).go(),

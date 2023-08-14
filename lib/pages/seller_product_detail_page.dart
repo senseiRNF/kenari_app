@@ -13,7 +13,7 @@ import 'package:kenari_app/styles/text_styles.dart';
 class SellerProductDetailPage extends StatefulWidget {
   final String productId;
   final bool isActive;
-  
+
   const SellerProductDetailPage({
     super.key,
     required this.productId,
@@ -372,8 +372,8 @@ class _SellerProductDetailPageState extends State<SellerProductDetailPage> {
                         target: SellerProductFormPage(
                           productId: sellerProductDetailData!.sId,
                         ),
-                        callback: (callbackResult) async {
-                          await loadData();
+                        callback: (callbackResult) {
+                          BackFromThisPage(context: context, callbackData: callbackResult).go();
                         },
                       ).go(),
                       style: ElevatedButton.styleFrom(

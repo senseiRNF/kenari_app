@@ -24,7 +24,7 @@ class _LoanListPageState extends State<LoanListPage> {
   @override
   void initState() {
     super.initState();
-    
+
     loadData();
   }
 
@@ -253,7 +253,15 @@ class _LoanListPageState extends State<LoanListPage> {
                           child: InkWell(
                             onTap: () {
                               if(loanList[index].sId != null) {
-                                MoveToPage(context: context, target: LoanDetailPage(loanId: loanList[index].sId!)).go();
+                                MoveToPage(
+                                  context: context,
+                                  target: LoanDetailPage(loanId: loanList[index].sId!),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null) {
+                                      BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                    }
+                                  },
+                                ).go();
                               }
                             },
                             child: Padding(

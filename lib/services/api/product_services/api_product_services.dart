@@ -14,7 +14,7 @@ class APIProductServices {
     required this.context,
   });
 
-  Future<ProductModel?> call() async {
+  Future<ProductModel?> call(Map<String, dynamic>? query) async {
     ProductModel? result;
 
     await LocalSharedPrefs().readKey('token').then((token) async {
@@ -29,9 +29,7 @@ class APIProductServices {
                 'Authorization': 'Bearer $token',
               },
             ),
-            queryParameters: {
-
-            },
+            queryParameters: query,
           ).then((getResult) {
             result = ProductModel.fromJson(getResult.data);
 

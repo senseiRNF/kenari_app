@@ -271,8 +271,10 @@ class _LoanPaymentPageState extends State<LoanPaymentPage> {
                       MoveToPage(
                         context: context,
                         target: const LoanPaymentResultPage(),
-                        callback: (callback) {
-                          BackFromThisPage(context: context, callbackData: callback).go();
+                        callback: (callbackResult) {
+                          if(callbackResult != null) {
+                            BackFromThisPage(context: context, callbackData: callbackResult).go();
+                          }
                         },
                       ).go();
                     }

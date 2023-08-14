@@ -19,7 +19,12 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class TransactionFragment extends StatefulWidget {
-  const TransactionFragment({super.key});
+  final int? tabSelected;
+
+  const TransactionFragment({
+    super.key,
+    this.tabSelected,
+  });
 
   @override
   State<TransactionFragment> createState() => _TransactionFragmentState();
@@ -32,7 +37,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
   int orderTabIndex = 0;
 
   String? name;
-  String? companyCode;
+  String? companyName;
 
   List<Map> feeList = [];
   List<LoanData> loanList = [];
@@ -57,12 +62,34 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
         name = nameResult;
       });
 
-      await LocalSharedPrefs().readKey('company_code').then((codeResult) async {
+      await LocalSharedPrefs().readKey('company_name').then((codeResult) async {
         setState(() {
-          companyCode = codeResult;
+          companyName = codeResult;
         });
 
-        await loadFeeData();
+        if(widget.tabSelected != null) {
+          setState(() {
+            selectedTab = widget.tabSelected!;
+            tabController.index = selectedTab;
+          });
+
+          switch(selectedTab) {
+            case 0:
+              loadFeeData();
+              break;
+            case 1:
+              loadLoanData();
+              break;
+            case 2:
+              loadTransactionData();
+              break;
+            default:
+              loadFeeData();
+              break;
+          }
+        } else {
+          await loadFeeData();
+        }
       });
     });
   }
@@ -592,7 +619,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 height: 5.0,
                               ),
                               Text(
-                                companyCode ?? '(Nama perusahaan tidak terdaftar)',
+                                companyName ?? '(Nama perusahaan tidak terdaftar)',
                                 style: XSTextStyles.regular(),
                               ),
                               const SizedBox(
@@ -1105,7 +1132,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                                 height: 5.0,
                               ),
                               Text(
-                                companyCode ?? '(Nama perusahaan tidak terdaftar)',
+                                companyName ?? '(Nama perusahaan tidak terdaftar)',
                                 style: XSTextStyles.regular(),
                               ),
                               const SizedBox(

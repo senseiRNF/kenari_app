@@ -1,65 +1,56 @@
-class BannerModel {
+class BannerDetailModel {
   int? status;
-  List<BannerData>? bannerData;
-  Pagination? pagination;
+  BannerDetailData? bannerDetailData;
 
-  BannerModel({this.status, this.bannerData, this.pagination});
+  BannerDetailModel({this.status, this.bannerDetailData});
 
-  BannerModel.fromJson(Map<String, dynamic> json) {
+  BannerDetailModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    if (json['data'] != null) {
-      bannerData = <BannerData>[];
-      json['data'].forEach((v) {
-        bannerData!.add(BannerData.fromJson(v));
-      });
-    }
-    pagination = json['pagination'] != null
-        ? Pagination.fromJson(json['pagination'])
-        : null;
+    bannerDetailData = json['data'] != null ? BannerDetailData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
-    if (bannerData != null) {
-      data['data'] = bannerData!.map((v) => v.toJson()).toList();
-    }
-    if (pagination != null) {
-      data['pagination'] = pagination!.toJson();
+    if (bannerDetailData != null) {
+      data['data'] = bannerDetailData!.toJson();
     }
     return data;
   }
 }
 
-class BannerData {
+class BannerDetailData {
   String? sId;
   String? title;
   String? type;
+  String? textAnnouncement;
   bool? status;
   List<Products>? products;
   String? createdAt;
-  BannerImage? bannerImage;
+  BannerDetailImage? bannerDetailImage;
   String? updatedAt;
   String? deletedAt;
   int? iV;
 
-  BannerData({
+  BannerDetailData({
     this.sId,
     this.title,
     this.type,
+    this.textAnnouncement,
     this.status,
     this.products,
     this.createdAt,
-    this.bannerImage,
+    this.bannerDetailImage,
     this.updatedAt,
-    this.iV,
     this.deletedAt,
+    this.iV,
   });
 
-  BannerData.fromJson(Map<String, dynamic> json) {
+  BannerDetailData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     title = json['title'];
     type = json['type'];
+    textAnnouncement = json['text_announcement'];
     status = json['status'];
     if (json['products'] != null) {
       products = <Products>[];
@@ -68,7 +59,7 @@ class BannerData {
       });
     }
     createdAt = json['createdAt'];
-    bannerImage = json['image'] != null ? BannerImage.fromJson(json['image']) : null;
+    bannerDetailImage = json['image'] != null ? BannerDetailImage.fromJson(json['image']) : null;
     updatedAt = json['updatedAt'];
     deletedAt = json['deletedAt'];
     iV = json['__v'];
@@ -79,13 +70,14 @@ class BannerData {
     data['_id'] = sId;
     data['title'] = title;
     data['type'] = type;
+    data['text_announcement'] = textAnnouncement;
     data['status'] = status;
     if (products != null) {
       data['products'] = products!.map((v) => v.toJson()).toList();
     }
     data['createdAt'] = createdAt;
-    if (bannerImage != null) {
-      data['image'] = bannerImage!.toJson();
+    if (bannerDetailImage != null) {
+      data['image'] = bannerDetailImage!.toJson();
     }
     data['updatedAt'] = updatedAt;
     data['deletedAt'] = deletedAt;
@@ -106,7 +98,7 @@ class Products {
   String? address;
   bool? isPreOrder;
   List<String>? varians;
-  List<BannerProductImages>? bannerProductImages;
+  List<Images>? images;
   // List<Null>? tipeVarian;
   bool? isCompleted;
   bool? status;
@@ -120,6 +112,8 @@ class Products {
   String? deletedAt;
   int? iV;
   String? promoPrice;
+  int? totalDiscount;
+  int? totalSell;
 
   Products({
     this.sId,
@@ -133,7 +127,7 @@ class Products {
     this.address,
     this.isPreOrder,
     this.varians,
-    this.bannerProductImages,
+    this.images,
     // this.tipeVarian,
     this.isCompleted,
     this.status,
@@ -144,9 +138,11 @@ class Products {
     this.verifyBy,
     this.createdAt,
     this.updatedAt,
+    this.deletedAt,
     this.iV,
     this.promoPrice,
-    this.deletedAt,
+    this.totalDiscount,
+    this.totalSell,
   });
 
   Products.fromJson(Map<String, dynamic> json) {
@@ -162,9 +158,9 @@ class Products {
     isPreOrder = json['is_pre_order'];
     varians = json['varians'].cast<String>();
     if (json['images'] != null) {
-      bannerProductImages = <BannerProductImages>[];
+      images = <Images>[];
       json['images'].forEach((v) {
-        bannerProductImages!.add(BannerProductImages.fromJson(v));
+        images!.add(Images.fromJson(v));
       });
     }
     // if (json['tipeVarian'] != null) {
@@ -185,6 +181,8 @@ class Products {
     deletedAt = json['deletedAt'];
     iV = json['__v'];
     promoPrice = json['promo_price'];
+    totalDiscount = json['total_discount'];
+    totalSell = json['total_sell'];
   }
 
   Map<String, dynamic> toJson() {
@@ -200,8 +198,8 @@ class Products {
     data['address'] = address;
     data['is_pre_order'] = isPreOrder;
     data['varians'] = varians;
-    if (bannerProductImages != null) {
-      data['images'] = bannerProductImages!.map((v) => v.toJson()).toList();
+    if (images != null) {
+      data['images'] = images!.map((v) => v.toJson()).toList();
     }
     // if (tipeVarian != null) {
     //   data['tipeVarian'] = tipeVarian!.map((v) => v.toJson()).toList();
@@ -218,11 +216,13 @@ class Products {
     data['deletedAt'] = deletedAt;
     data['__v'] = iV;
     data['promo_price'] = promoPrice;
+    data['total_discount'] = totalDiscount;
+    data['total_sell'] = totalSell;
     return data;
   }
 }
 
-class BannerProductImages {
+class Images {
   String? sId;
   String? filename;
   String? url;
@@ -231,7 +231,7 @@ class BannerProductImages {
   String? deletedAt;
   int? iV;
 
-  BannerProductImages({
+  Images({
     this.sId,
     this.filename,
     this.url,
@@ -241,7 +241,7 @@ class BannerProductImages {
     this.iV,
   });
 
-  BannerProductImages.fromJson(Map<String, dynamic> json) {
+  Images.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     filename = json['filename'];
     url = json['url'];
@@ -264,31 +264,28 @@ class BannerProductImages {
   }
 }
 
-class BannerImage {
+class BannerDetailImage {
   String? sId;
   String? filename;
   String? url;
   bool? primary;
-  String? banner;
   String? deletedAt;
   int? iV;
 
-  BannerImage({
+  BannerDetailImage({
     this.sId,
     this.filename,
     this.url,
     this.primary,
-    this.banner,
     this.deletedAt,
     this.iV,
   });
 
-  BannerImage.fromJson(Map<String, dynamic> json) {
+  BannerDetailImage.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     filename = json['filename'];
     url = json['url'];
     primary = json['primary'];
-    banner = json['banner'];
     deletedAt = json['deletedAt'];
     iV = json['__v'];
   }
@@ -299,34 +296,8 @@ class BannerImage {
     data['filename'] = filename;
     data['url'] = url;
     data['primary'] = primary;
-    data['banner'] = banner;
     data['deletedAt'] = deletedAt;
     data['__v'] = iV;
-    return data;
-  }
-}
-
-class Pagination {
-  int? totalItems;
-  int? currentPage;
-  int? totalPages;
-  int? itemPerPage;
-
-  Pagination({this.totalItems, this.currentPage, this.totalPages, this.itemPerPage});
-
-  Pagination.fromJson(Map<String, dynamic> json) {
-    totalItems = json['total_items'];
-    currentPage = json['current_page'];
-    totalPages = json['total_pages'];
-    itemPerPage = json['item_per_page'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['total_items'] = totalItems;
-    data['current_page'] = currentPage;
-    data['total_pages'] = totalPages;
-    data['item_per_page'] = itemPerPage;
     return data;
   }
 }

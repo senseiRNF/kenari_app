@@ -83,7 +83,7 @@ class SellerPage extends StatelessWidget {
                                   target: const SellerProductFormPage(),
                                   callback: (callbackResult) {
                                     if(callbackResult != null) {
-                                      if(callbackResult == true) {
+                                      if(callbackResult['target'] == 'home') {
                                         BackFromThisPage(context: context, callbackData: callbackResult).go();
                                       } else {
                                         MoveToPage(
@@ -166,6 +166,11 @@ class SellerPage extends StatelessWidget {
                                 MoveToPage(
                                   context: context,
                                   target: const SellerProductListPage(),
+                                  callback: (callbackResult) {
+                                    if(callbackResult['target'] == 'home') {
+                                      BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                    }
+                                  },
                                 ).go();
                               },
                               customBorder: RoundedRectangleBorder(
