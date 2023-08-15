@@ -133,4 +133,66 @@ class APITransactionServices {
 
     return result;
   }
+
+  Future<bool> cancelOrderByBuyer(String? id) async {
+    bool result = false;
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await APIOptions.init().then((dio) async {
+        LoadingDialog(context: context).show();
+
+        try {
+          await dio.get(
+            '/transaction/order/cancel/$id',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ),
+          ).then((getResult) {
+            result = true;
+
+            BackFromThisPage(context: context).go();
+          });
+        } on DioException catch(dioExc) {
+          BackFromThisPage(context: context).go();
+
+          ErrorHandler(context: context, dioExc: dioExc).handle();
+        }
+      });
+    });
+
+    return result;
+  }
+
+  Future<bool> completeOrder(String? id) async {
+    bool result = false;
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await APIOptions.init().then((dio) async {
+        LoadingDialog(context: context).show();
+
+        try {
+          await dio.get(
+            '/transaction/order/pickup/$id',
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ),
+          ).then((getResult) {
+            result = true;
+
+            BackFromThisPage(context: context).go();
+          });
+        } on DioException catch(dioExc) {
+          BackFromThisPage(context: context).go();
+
+          ErrorHandler(context: context, dioExc: dioExc).handle();
+        }
+      });
+    });
+
+    return result;
+  }
 }

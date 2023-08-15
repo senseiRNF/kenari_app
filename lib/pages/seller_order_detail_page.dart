@@ -70,7 +70,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
   }
 
   Future cancelOrder() async {
-    await APISellerOrderServices(context: context).cancelOrder(widget.sellerOrderId).then((confirmResult) {
+    await APISellerOrderServices(context: context).cancelOrderBySeller(widget.sellerOrderId).then((confirmResult) {
       if(confirmResult == true) {
         SuccessDialog(
           context: context,
@@ -146,7 +146,7 @@ class _SellerOrderDetailPageState extends State<SellerOrderDetailPage> {
                         style: STextStyles.regular(),
                       ),
                       Text(
-                        '- Hari',
+                        '1 Hari',
                         style: STextStyles.medium().copyWith(
                           color: InfoColorStyles.infoMain(),
                         ),

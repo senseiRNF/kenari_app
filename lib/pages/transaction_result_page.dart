@@ -15,7 +15,12 @@ class TransactionResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Future<bool> onBackPressed() async {
       if(isSuccess == true) {
-        BackFromThisPage(context: context, callbackData: true).go();
+        BackFromThisPage(
+          context: context,
+          callbackData: {
+            'target': 'home',
+          },
+        ).go();
       } else {
         BackFromThisPage(context: context).go();
       }
@@ -120,7 +125,7 @@ class TransactionResultPage extends StatelessWidget {
                               context: context,
                               callbackData: {
                                 'target': 'transaction',
-                                'index': 3,
+                                'index': 2,
                               },
                             ).go();
                           } else {

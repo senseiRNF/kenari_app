@@ -419,7 +419,7 @@ class _ProductPageState extends State<ProductPage> {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
+                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock || stock == 0 ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
                           ),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -458,12 +458,12 @@ class _ProductPageState extends State<ProductPage> {
                             Icons.add,
                             color: product.varians != null && product.varians!.isNotEmpty && product.varians![index].isStockAlwaysAvailable != null ?
                             product.varians![index].isStockAlwaysAvailable == null || product.varians![index].isStockAlwaysAvailable! == false ?
-                            qty == stock ?
+                            qty == stock || stock == 0 ?
                             NeutralColorStyles.neutral04() :
                             IconColorStyles.iconColor() :
                             IconColorStyles.iconColor() :
                             product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ?
-                            qty == stock ?
+                            qty == stock || stock == 0 ?
                             NeutralColorStyles.neutral04() :
                             IconColorStyles.iconColor() :
                             IconColorStyles.iconColor(),
@@ -476,12 +476,14 @@ class _ProductPageState extends State<ProductPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            BackFromThisPage(context: context).go();
+                            if(stock > 0) {
+                              BackFromThisPage(context: context).go();
 
-                            updateTrolley(index, product, qty);
+                              updateTrolley(index, product, qty);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: PrimaryColorStyles.primaryMain(),
+                            backgroundColor: stock > 0 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -489,9 +491,9 @@ class _ProductPageState extends State<ProductPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.shopping_cart,
-                                  color: Colors.white,
+                                  color: stock > 0 ? Colors.white : NeutralColorStyles.neutral06(),
                                 ),
                                 const SizedBox(
                                   width: 5.0,
@@ -499,7 +501,7 @@ class _ProductPageState extends State<ProductPage> {
                                 Text(
                                   'Tambah ke Troli',
                                   style: LTextStyles.medium().copyWith(
-                                    color: Colors.white,
+                                    color: stock > 0 ? Colors.white : NeutralColorStyles.neutral06(),
                                   ),
                                 ),
                               ],

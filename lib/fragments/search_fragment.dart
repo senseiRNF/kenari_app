@@ -13,7 +13,12 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class SearchFragment extends StatefulWidget {
-  const SearchFragment({super.key});
+  final Function onTransactionPageCallback;
+
+  const SearchFragment({
+    super.key,
+    required this.onTransactionPageCallback,
+  });
 
   @override
   State<SearchFragment> createState() => _SearchFragmentState();
@@ -336,6 +341,13 @@ class _SearchFragmentState extends State<SearchFragment> {
                                 onTap: () => MoveToPage(
                                   context: context,
                                   target: ProductPage(productId: productList[index].sId!),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                      widget.onTransactionPageCallback(callbackResult);
+                                    } else {
+                                      loadData();
+                                    }
+                                  },
                                 ).go(),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 15.0),

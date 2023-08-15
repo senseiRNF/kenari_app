@@ -794,7 +794,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
+                            color: product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ? qty == stock || stock == 0 ? NeutralColorStyles.neutral03() : NeutralColorStyles.neutral04() : NeutralColorStyles.neutral04(),
                           ),
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -833,12 +833,12 @@ class _HomeFragmentState extends State<HomeFragment> {
                             Icons.add,
                             color: product.varians != null && product.varians!.isNotEmpty && product.varians![index].isStockAlwaysAvailable != null ?
                             product.varians![index].isStockAlwaysAvailable == null || product.varians![index].isStockAlwaysAvailable! == false ?
-                            qty == stock ?
+                            qty == stock || stock == 0 ?
                             NeutralColorStyles.neutral04() :
                             IconColorStyles.iconColor() :
                             IconColorStyles.iconColor() :
                             product.isStockAlwaysAvailable == null || product.isStockAlwaysAvailable! == false ?
-                            qty == stock ?
+                            qty == stock || stock == 0 ?
                             NeutralColorStyles.neutral04() :
                             IconColorStyles.iconColor() :
                             IconColorStyles.iconColor(),
@@ -851,12 +851,14 @@ class _HomeFragmentState extends State<HomeFragment> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            BackFromThisPage(context: context).go();
+                            if(stock > 0) {
+                              BackFromThisPage(context: context).go();
 
-                            updateTrolley(index, product, qty);
+                              updateTrolley(index, product, qty);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: PrimaryColorStyles.primaryMain(),
+                            backgroundColor: stock > 0 ? PrimaryColorStyles.primaryMain() : NeutralColorStyles.neutral04(),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
@@ -864,9 +866,9 @@ class _HomeFragmentState extends State<HomeFragment> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.shopping_cart,
-                                  color: Colors.white,
+                                  color: stock > 0 ? Colors.white : NeutralColorStyles.neutral06(),
                                 ),
                                 const SizedBox(
                                   width: 5.0,
@@ -874,7 +876,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                 Text(
                                   'Tambah ke Troli',
                                   style: LTextStyles.medium().copyWith(
-                                    color: Colors.white,
+                                    color: stock > 0 ? Colors.white : NeutralColorStyles.neutral06(),
                                   ),
                                 ),
                               ],
@@ -1544,7 +1546,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                             target: const ProductListPage(
                               filterType: 'Terbaru',
                             ),
-                            callback: (_) => loadData(),
+                            callback: (callbackResult) {
+                              if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                widget.onTransactionPageCallback(callbackResult);
+                              } else {
+                                loadData();
+                              }
+                            },
                           ).go(),
                           child: Text(
                             'Lihat semua',
@@ -1602,7 +1610,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                                       onTap: () => MoveToPage(
                                         context: context,
                                         target: ProductPage(productId: newProductList[index].sId!),
-                                        callback: (_) => loadData(),
+                                        callback: (callbackResult) {
+                                          if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                            widget.onTransactionPageCallback(callbackResult);
+                                          } else {
+                                            loadData();
+                                          }
+                                        },
                                       ).go(),
                                       customBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10.0),
@@ -1740,7 +1754,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                             target: ProductListBannerPage(
                               bannerData: bannerData,
                             ),
-                            callback: (_) => loadData(),
+                            callback: (callbackResult) {
+                              if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                widget.onTransactionPageCallback(callbackResult);
+                              } else {
+                                loadData();
+                              }
+                            },
                           ).go(),
                           customBorder: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -1839,7 +1859,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                                           filterType: 'Kategori_${categoryList[categoryIndex].name}',
                                           categoryData: categoryList[categoryIndex],
                                         ),
-                                        callback: (_) => loadData(),
+                                        callback: (callbackResult) {
+                                          if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                            widget.onTransactionPageCallback(callbackResult);
+                                          } else {
+                                            loadData();
+                                          }
+                                        },
                                       ).go(),
                                       customBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10.0),
@@ -1902,7 +1928,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                             onTap: () => MoveToPage(
                               context: context,
                               target: ProductPage(productId: popularProductList[index].sId!),
-                              callback: (_) => loadData(),
+                              callback: (callbackResult) {
+                                if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                  widget.onTransactionPageCallback(callbackResult);
+                                } else {
+                                  loadData();
+                                }
+                              },
                             ).go(),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
@@ -2076,7 +2108,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                             target: const ProductListPage(
                               filterType: 'Diskon',
                             ),
-                            callback: (_) => loadData(),
+                            callback: (callbackResult) {
+                              if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                widget.onTransactionPageCallback(callbackResult);
+                              } else {
+                                loadData();
+                              }
+                            },
                           ).go(),
                           child: Text(
                             'Lihat semua',
@@ -2121,7 +2159,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                                       onTap: () => MoveToPage(
                                         context: context,
                                         target: ProductPage(productId: discountProductList[index].sId!),
-                                        callback: (_) => loadData(),
+                                        callback: (callbackResult) {
+                                          if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                            widget.onTransactionPageCallback(callbackResult);
+                                          } else {
+                                            loadData();
+                                          }
+                                        },
                                       ).go(),
                                       customBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10.0),

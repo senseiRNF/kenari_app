@@ -148,9 +148,12 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
         status = 'on proccess';
         break;
       case 3:
-        status = 'done';
+        status = 'ready to pickup';
         break;
       case 4:
+        status = 'done';
+        break;
+      case 5:
         status = 'canceled';
         break;
       default:
@@ -433,7 +436,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                   height: 30.0,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 5,
+                    itemCount: 6,
                     separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
                       return const SizedBox(
                         width: 10.0,
@@ -465,7 +468,7 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                 child: Text(
-                                  index == 0 ? 'Semua' : index == 1 ? 'Menunggu Konfirmasi Penjual' : index == 2 ? 'Diproses' : index == 3 ? 'Selesai' : index == 4 ? 'Gagal' : '(Tidak diketahui) Status',
+                                  index == 0 ? 'Semua' : index == 1 ? 'Menunggu Konfirmasi Penjual' : index == 2 ? 'Diproses' : index == 3 ? 'Siap diambil' : index == 4 ? 'Selesai' : index == 5 ? 'Gagal' : '(Tidak diketahui) Status',
                                   style: orderTabIndex == index ? STextStyles.medium() : STextStyles.regular(),
                                 ),
                               ),
@@ -873,7 +876,11 @@ class _TransactionFragmentState extends State<TransactionFragment> with TickerPr
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () => MoveToPage(context: context, target: TransactionDetailPage(transactionId: transactionOrderList[index].sId,)).go(),
+                    onTap: () => MoveToPage(
+                      context: context,
+                      target: TransactionDetailPage(transactionId: transactionOrderList[index].sId,),
+                      callback: (_) => loadData(),
+                    ).go(),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                       child: Column(

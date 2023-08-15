@@ -40,12 +40,15 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
         status = 'waiting';
         break;
       case 2:
-        status = 'ready to pickup';
+        status = 'on proccess';
         break;
       case 3:
-        status = 'done';
+        status = 'ready to pickup';
         break;
       case 4:
+        status = 'done';
+        break;
+      case 5:
         status = 'canceled';
         break;
       default:
@@ -120,7 +123,7 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
               color: Colors.white,
               child: DefaultTabController(
                 initialIndex: 0,
-                length: 5,
+                length: 6,
                 child: TabBar(
                   isScrollable: true,
                   indicator: UnderlineTabIndicator(
@@ -157,7 +160,7 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                     ),
                     Tab(
                       child: Text(
-                        'Siap Diambil',
+                        'Diproses',
                         style: MTextStyles.medium().copyWith(
                           color: selectedTab == 2 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
                         ),
@@ -165,7 +168,7 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                     ),
                     Tab(
                       child: Text(
-                        'Selesai',
+                        'Siap Diambil',
                         style: MTextStyles.medium().copyWith(
                           color: selectedTab == 3 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
                         ),
@@ -173,9 +176,17 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                     ),
                     Tab(
                       child: Text(
-                        'Dibatalkan',
+                        'Selesai',
                         style: MTextStyles.medium().copyWith(
                           color: selectedTab == 4 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      child: Text(
+                        'Dibatalkan',
+                        style: MTextStyles.medium().copyWith(
+                          color: selectedTab == 5 ? PrimaryColorStyles.primaryMain() : TextColorStyles.textSecondary(),
                         ),
                       ),
                     ),
@@ -300,13 +311,20 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                             sellerOrderList[newOrderIndex].orderDetails![0].product != null ? sellerOrderList[newOrderIndex].orderDetails![0].product!.name ?? '(Produk tidak diketahui)' : '(Produk tidak diketahui)',
                                             style: MTextStyles.regular(),
                                           ),
-                                          const SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Text(
-                                            sellerOrderList[newOrderIndex].orderDetails![0].varianName ?? '',
-                                            style: XSTextStyles.regular(),
-                                          ),
+                                          sellerOrderList[newOrderIndex].orderDetails![0].varianName != null ?
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              const SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Text(
+                                                sellerOrderList[newOrderIndex].orderDetails![0].varianName ?? '',
+                                                style: XSTextStyles.regular(),
+                                              ),
+                                            ],
+                                          ) :
+                                          const Material(),
                                           const SizedBox(
                                             height: 10.0,
                                           ),
@@ -314,11 +332,11 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(sellerOrderList[newOrderIndex].totalAmount ?? '0')).replaceAll(',', '.')}',
+                                                'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(sellerOrderList[newOrderIndex].orderDetails![0].price ?? '0')).replaceAll(',', '.')}',
                                                 style: MTextStyles.medium(),
                                               ),
                                               Text(
-                                                'x${sellerOrderList[newOrderIndex].orderDetails!.length}',
+                                                'x${sellerOrderList[newOrderIndex].orderDetails![0].qty}',
                                                 style: MTextStyles.regular(),
                                               ),
                                             ],
@@ -346,7 +364,7 @@ class _SellerOrderListPageState extends State<SellerOrderListPage> {
                                         style: STextStyles.regular(),
                                       ),
                                       Text(
-                                        '- Hari',
+                                        '1 Hari',
                                         style: STextStyles.medium().copyWith(
                                           color: InfoColorStyles.infoMain(),
                                         ),

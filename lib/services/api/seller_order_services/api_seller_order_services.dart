@@ -146,7 +146,7 @@ class APISellerOrderServices {
     return result;
   }
 
-  Future<bool> cancelOrder(String? id) async {
+  Future<bool> cancelOrderBySeller(String? id) async {
     bool result = false;
 
     await LocalSharedPrefs().readKey('token').then((token) async {

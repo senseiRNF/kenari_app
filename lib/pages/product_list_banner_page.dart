@@ -482,9 +482,18 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
               ),
             ) :
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              child: ListView(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Text(
+                      bannerDetailData!.title ?? '',
+                      style: HeadingTextStyles.headingS(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 25.0,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Text(

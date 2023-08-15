@@ -43,7 +43,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
 
   Widget activeTopWidget() {
     if(orderDetailData != null && orderDetailData!.status != null) {
-      if(orderDetailData!.status!.contains('waiting')) {
+      if(orderDetailData!.status! == 'waiting') {
         return Container(
           color: Colors.white,
           child: Padding(
@@ -209,8 +209,30 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         width: 10.0,
                       ),
                       Expanded(
-                        child: Text(
-                          orderDetailData!.status!.contains('seller') ? 'Penjual membatalkan pesanan.' : 'Anda membatalkan pesanan.',
+                        child: orderDetailData!.status!.contains('seller') ?
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              'Penjual membatalkan pesanan.',
+                              style: XSTextStyles.medium().copyWith(
+                                color: DangerColorStyles.dangerMain(),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Text(
+                              'Pesanan penjual membatalkan pesanan karena stok produk tidak mencukupi/tersedia.',
+                              style: XSTextStyles.regular().copyWith(
+                                color: DangerColorStyles.dangerMain(),
+                              ),
+                            ),
+                          ],
+                        ) :
+                        Text(
+                          'Anda membatalkan pesanan.',
                           style: XSTextStyles.medium().copyWith(
                             color: DangerColorStyles.dangerMain(),
                           ),
@@ -233,7 +255,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
 
   Widget activeBottomWidget() {
     if(orderDetailData != null && orderDetailData!.status != null) {
-      if(orderDetailData!.status == 'Konfirmasi Pesanan') {
+      if(orderDetailData!.status!.contains('waiting')) {
         return Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
@@ -243,15 +265,10 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               ElevatedButton(
                 onPressed: () => OptionDialog(
                   context: context,
-                  title: 'Terima Pesanan?',
-                  message: 'Setelah pesanan diterima, silahkan siapkan produk yang di pesan.',
+                  title: 'Batalkan Pesanan?',
+                  message: 'Anda yakin untuk menolak Pesanan ini?',
                   yesText: 'Konfirmasi',
-                  yesFunction: () {
-                    SuccessDialog(
-                      context: context,
-                      message: 'Pesanan Berhasil di Terima',
-                    ).show();
-                  },
+                  yesFunction: () => cancelOrder(),
                   noText: 'Batal',
                 ).show(),
                 style: ElevatedButton.styleFrom(
@@ -260,36 +277,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
-                    'Terima Pesanan',
-                    style: LTextStyles.medium().copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () => OptionDialog(
-                  context: context,
-                  title: 'Batalkan Pesanan?',
-                  message: 'Anda yakin untuk menolak Pesanan ini?',
-                  yesText: 'Konfirmasi',
-                  yesFunction: () {
-                    SuccessDialog(
-                      context: context,
-                      message: 'Pesanan Berhasil di Batalkan',
-                    ).show();
-                  },
-                  noText: 'Batal',
-                ).show(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: PrimaryColorStyles.primarySurface(),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Text(
                     'Batalkan Pesanan',
                     style: LTextStyles.medium().copyWith(
-                      color: PrimaryColorStyles.primaryMain(),
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -297,7 +287,32 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             ],
           ),
         );
-      } else if(orderDetailData!.status == 'Segera Siapkan Pesanan') {
+      } else if(orderDetailData!.status!.contains('on proccess')) {
+        return Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: NeutralColorStyles.neutral04(),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Text(
+                    'Batalkan Pesanan',
+                    style: LTextStyles.medium().copyWith(
+                      color: NeutralColorStyles.neutral06(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else if(orderDetailData!.status!.contains('ready to pickup')) {
         return Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
@@ -307,15 +322,10 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               ElevatedButton(
                 onPressed: () => OptionDialog(
                   context: context,
-                  title: 'Siap diambil Pembeli',
-                  message: 'Konfirmasi bahwa produk ini telah selesai disiapkan, dan produk siap di ambil oleh pembeli.',
+                  title: 'Konfirmasi Pengambilan',
+                  message: 'Dengan mengonfirmasi Pengambilan Pesanan anda telah memastikan barang yang diterima telah sesuai dengan yang di Pesan.',
                   yesText: 'Konfirmasi',
-                  yesFunction: () {
-                    SuccessDialog(
-                      context: context,
-                      message: 'Pesanan Siap diambil Pembeli',
-                    ).show();
-                  },
+                  yesFunction: () => completeOrder(),
                   noText: 'Batal',
                 ).show(),
                 style: ElevatedButton.styleFrom(
@@ -324,7 +334,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
-                    'Pesanan Siap',
+                    'Telah di Ambil',
                     style: LTextStyles.medium().copyWith(
                       color: Colors.white,
                     ),
@@ -340,6 +350,30 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     } else {
       return const Material();
     }
+  }
+
+  Future cancelOrder() async {
+    await APITransactionServices(context: context).cancelOrderByBuyer(orderDetailData!.sId).then((cancelResult) {
+      if(cancelResult == true) {
+        SuccessDialog(
+          context: context,
+          message: 'Pesanan Berhasil di Batalkan',
+          okFunction: () => BackFromThisPage(context: context).go(),
+        ).show();
+      }
+    });
+  }
+
+  Future completeOrder() async {
+    await APITransactionServices(context: context).completeOrder(orderDetailData!.sId).then((completeResult) {
+      if(completeResult == true) {
+        SuccessDialog(
+          context: context,
+          message: 'Pesanan Berhasil di Ambil',
+          okFunction: () => BackFromThisPage(context: context).go(),
+        ).show();
+      }
+    });
   }
 
   @override

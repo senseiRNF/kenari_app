@@ -46,14 +46,27 @@ class _HomePageState extends State<HomePage> {
           onTransactionPageCallback: (callbackResult) {
             if(callbackResult != null) {
               if(callbackResult['target'] == 'transaction') {
-                selectedMenu = 2;
-                selectedTranscationTab = callbackResult['index'];
+                setState(() {
+                  selectedMenu = 2;
+                  selectedTranscationTab = callbackResult['index'];
+                });
               }
             }
           },
         );
       case 1:
-        return const SearchFragment();
+        return SearchFragment(
+          onTransactionPageCallback: (callbackResult) {
+            if(callbackResult != null) {
+              if(callbackResult['target'] == 'transaction') {
+                setState(() {
+                  selectedMenu = 2;
+                  selectedTranscationTab = callbackResult['index'];
+                });
+              }
+            }
+          },
+        );
       case 2:
         return TransactionFragment(
           tabSelected: selectedTranscationTab,
