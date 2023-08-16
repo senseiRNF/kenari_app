@@ -151,6 +151,8 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                         callback: (callbackResult) {
                           if(callbackResult != null) {
                             BackFromThisPage(context: context, callbackData: callbackResult).go();
+                          } else {
+                            loadData();
                           }
                         },
                       ).go();
@@ -322,6 +324,29 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                           );
                         },
                         itemBuilder: (BuildContext popularContext, int index) {
+                          String price = '';
+                          String? discountPrice;
+
+                          // if(bannerDetailData!.products![index].varians == null || bannerDetailData!.products![index].varians!.isEmpty) {
+                          //   price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].price ?? '0')).replaceAll(',', '.')}';
+                          //
+                          //   if(bannerDetailData!.products![index].isPromo != null && bannerDetailData!.products![index].isPromo == true) {
+                          //     discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                          //   }
+                          // } else {
+                          //   price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].varians![0].price ?? '0')).replaceAll(',', '.')}';
+                          //
+                          //   if(bannerDetailData!.products![index].varians![0].isPromo != null && bannerDetailData!.products![index].varians![0].isPromo == true) {
+                          //     discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
+                          //   }
+                          // }
+
+                          price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].price ?? '0')).replaceAll(',', '.')}';
+
+                          if(bannerDetailData!.products![index].isPromo != null && bannerDetailData!.products![index].isPromo == true) {
+                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                          }
+                          
                           return Padding(
                             padding: index == bannerDetailData!.products!.length - 1 ?
                             const EdgeInsets.only(left: 25.0, bottom: 20.0, right: 25.0) :
@@ -389,45 +414,37 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                           ),
                                         ],
                                       ),
+                                      discountPrice != null ?
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          const SizedBox(
+                                            height: 10.0,
+                                          ),
+                                          Text(
+                                            discountPrice,
+                                            style: STextStyles.regular().copyWith(
+                                              color: PrimaryColorStyles.primaryMain(),
+                                            ),
+                                          ),
+                                        ],
+                                      ) :
+                                      const Material(),
                                       Row(
                                         crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
                                           Expanded(
-                                            child: bannerDetailData!.products![index].promoPrice != null && bannerDetailData!.products![index].promoPrice != '' ?
-                                            Column(
+                                            child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.stretch,
                                               children: [
                                                 const SizedBox(
                                                   height: 10.0,
                                                 ),
                                                 Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].promoPrice ?? '0')).replaceAll(',', '.')}',
+                                                  price,
                                                   style: STextStyles.regular().copyWith(
-                                                    color: PrimaryColorStyles.primaryMain(),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 5.0,
-                                                ),
-                                                Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
-                                                    color: TextColorStyles.textDisabled(),
-                                                    decoration: TextDecoration.lineThrough,
-                                                  ),
-                                                ),
-                                              ],
-                                            ) :
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                                              children: [
-                                                const SizedBox(
-                                                  height: 25.0,
-                                                ),
-                                                Text(
-                                                  'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].price ?? '0')).replaceAll(',', '.')}',
-                                                  style: STextStyles.regular().copyWith(
-                                                    color: PrimaryColorStyles.primaryMain(),
+                                                    color: discountPrice != null ? TextColorStyles.textDisabled() : PrimaryColorStyles.primaryMain(),
+                                                    decoration: discountPrice != null ? TextDecoration.lineThrough : null,
                                                   ),
                                                 ),
                                               ],

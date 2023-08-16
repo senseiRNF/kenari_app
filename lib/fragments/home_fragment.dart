@@ -109,7 +109,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                         ),
                         queryParameters: {
                           'take': '3',
-                          'filter_by': 'best_seller',
+                          'filter_by': 'populer',
                         },
                       ).then((getResult) async {
                         ProductModel? tempPopularProductModel = ProductModel.fromJson(getResult.data);
@@ -1573,34 +1573,19 @@ class _HomeFragmentState extends State<HomeFragment> {
                             itemCount: newProductList.length,
                             itemBuilder: (BuildContext listContext, int index) {
                               String price = '';
+                              String? discountPrice;
 
                               if(newProductList[index].varians == null || newProductList[index].varians!.isEmpty) {
+                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].price ?? '0')).replaceAll(',', '.')}';
+
                                 if(newProductList[index].isPromo != null && newProductList[index].isPromo == true) {
-                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
-                                } else {
-                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].price ?? '0')).replaceAll(',', '.')}';
+                                  discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
                                 }
                               } else {
-                                if(newProductList[index].varians!.length > 1) {
-                                  List sortedVariantPrice = newProductList[index].varians!;
+                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
 
-                                  sortedVariantPrice.sort((a, b) => a.isPromo != null && a.isPromo == true ?
-                                  int.parse(a.promoPrice ?? '0').compareTo(int.parse(b.promoPrice ?? '0')) :
-                                  int.parse(a.price ?? '0').compareTo(int.parse(b.price ?? '0')));
-
-                                  int lowest = int.parse(sortedVariantPrice[0].isPromo != null && sortedVariantPrice[0].isPromo == true ?
-                                  sortedVariantPrice[0].promoPrice ?? '0' : sortedVariantPrice[0].price ?? '0');
-
-                                  int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].isPromo != null && sortedVariantPrice[sortedVariantPrice.length - 1].isPromo == true ?
-                                  sortedVariantPrice[sortedVariantPrice.length - 1].promoPrice ?? '0' :
-                                  sortedVariantPrice[sortedVariantPrice.length - 1].price ?? '0');
-
-                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
-                                } else {
-                                  int productPrice = int.parse(newProductList[index].varians![0].isPromo != null && newProductList[index].varians![0].isPromo == true ?
-                                  newProductList[index].varians![0].promoPrice ?? '0' : newProductList[index].varians![0].price ?? '0');
-
-                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(productPrice).replaceAll(',', '.')}';
+                                if(newProductList[index].varians![0].isPromo != null && newProductList[index].varians![0].isPromo == true) {
+                                  discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
                                 }
                               }
 
@@ -1691,7 +1676,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                                     children: [
                                                       Expanded(
                                                         child: Text(
-                                                          price,
+                                                          discountPrice ?? price,
                                                           style: XSTextStyles.medium().copyWith(
                                                             color: PrimaryColorStyles.primaryMain(),
                                                           ),
@@ -1743,51 +1728,72 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  CarouselSlider(
-                    options: CarouselOptions(
-                      height: 150,
-                      enableInfiniteScroll: true,
-                      viewportFraction: 0.9,
-                    ),
-                    items: bannerList.map((bannerData) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: InkWell(
-                          onTap: () => MoveToPage(
-                            context: context,
-                            target: ProductListBannerPage(
-                              bannerData: bannerData,
-                            ),
-                            callback: (callbackResult) {
-                              if(callbackResult != null && callbackResult['target'] == 'transaction') {
-                                widget.onTransactionPageCallback(callbackResult);
-                              } else {
-                                loadData();
-                              }
-                            },
-                          ).go(),
-                          customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: bannerData.bannerImage != null ?
-                          CachedNetworkImage(
-                            imageUrl: "$baseURL/${bannerData.bannerImage!.url ?? ''}",
-                            imageBuilder: (context, imgProvider) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  image: DecorationImage(
-                                    image: imgProvider,
-                                    fit: BoxFit.cover,
-                                  ),
+                  bannerList.isNotEmpty ?
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(
+                        height: 30.0,
+                      ),
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: 150,
+                          enableInfiniteScroll: true,
+                          viewportFraction: 0.9,
+                        ),
+                        items: bannerList.map((bannerData) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: InkWell(
+                              onTap: () => MoveToPage(
+                                context: context,
+                                target: ProductListBannerPage(
+                                  bannerData: bannerData,
                                 ),
-                              );
-                            },
-                            errorWidget: (errContext, url, error) {
-                              return Column(
+                                callback: (callbackResult) {
+                                  if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                    widget.onTransactionPageCallback(callbackResult);
+                                  } else {
+                                    loadData();
+                                  }
+                                },
+                              ).go(),
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: bannerData.bannerImage != null ?
+                              CachedNetworkImage(
+                                imageUrl: "$baseURL/${bannerData.bannerImage!.url ?? ''}",
+                                imageBuilder: (context, imgProvider) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      image: DecorationImage(
+                                        image: imgProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (errContext, url, error) {
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Icon(
+                                        Icons.broken_image_outlined,
+                                        color: IconColorStyles.iconColor(),
+                                      ),
+                                      Text(
+                                        'Tidak dapat memuat gambar',
+                                        style: XSTextStyles.medium(),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ) :
+                              Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
@@ -1801,28 +1807,14 @@ class _HomeFragmentState extends State<HomeFragment> {
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
-                              );
-                            },
-                          ) :
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Icon(
-                                Icons.broken_image_outlined,
-                                color: IconColorStyles.iconColor(),
                               ),
-                              Text(
-                                'Tidak dapat memuat gambar',
-                                style: XSTextStyles.medium(),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ) :
+                  const Material(),
                   const SizedBox(
                     height: 30.0,
                   ),
@@ -1929,6 +1921,23 @@ class _HomeFragmentState extends State<HomeFragment> {
                         );
                       },
                       itemBuilder: (BuildContext popularContext, int index) {
+                        String price = '';
+                        String? discountPrice;
+
+                        if(popularProductList[index].varians == null || popularProductList[index].varians!.isEmpty) {
+                          price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].price ?? '0')).replaceAll(',', '.')}';
+
+                          if(popularProductList[index].isPromo != null && popularProductList[index].isPromo == true) {
+                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                          }
+                        } else {
+                          price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
+
+                          if(popularProductList[index].varians![0].isPromo != null && popularProductList[index].varians![0].isPromo == true) {
+                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
+                          }
+                        }
+
                         return Material(
                           color: Colors.transparent,
                           child: InkWell(
@@ -2016,45 +2025,37 @@ class _HomeFragmentState extends State<HomeFragment> {
                                             ),
                                           ],
                                         ),
+                                        discountPrice != null ?
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            const SizedBox(
+                                              height: 10.0,
+                                            ),
+                                            Text(
+                                              discountPrice,
+                                              style: STextStyles.regular().copyWith(
+                                                color: PrimaryColorStyles.primaryMain(),
+                                              ),
+                                            ),
+                                          ],
+                                        ) :
+                                        const Material(),
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
                                             Expanded(
-                                              child: popularProductList[index].isPromo != null && popularProductList[index].isPromo == true ?
-                                              Column(
+                                              child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                                 children: [
                                                   const SizedBox(
                                                     height: 10.0,
                                                   ),
                                                   Text(
-                                                    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
+                                                    price,
                                                     style: STextStyles.regular().copyWith(
-                                                      color: PrimaryColorStyles.primaryMain(),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5.0,
-                                                  ),
-                                                  Text(
-                                                    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                    style: STextStyles.regular().copyWith(
-                                                      color: TextColorStyles.textDisabled(),
-                                                      decoration: TextDecoration.lineThrough,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ) :
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                children: [
-                                                  const SizedBox(
-                                                    height: 10.0,
-                                                  ),
-                                                  Text(
-                                                    'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                    style: STextStyles.regular().copyWith(
-                                                      color: PrimaryColorStyles.primaryMain(),
+                                                      color: discountPrice != null ? TextColorStyles.textDisabled() : PrimaryColorStyles.primaryMain(),
+                                                      decoration: discountPrice != null ? TextDecoration.lineThrough : null,
                                                     ),
                                                   ),
                                                 ],
@@ -2147,14 +2148,27 @@ class _HomeFragmentState extends State<HomeFragment> {
                             scrollDirection: Axis.horizontal,
                             itemCount: discountProductList.length,
                             itemBuilder: (BuildContext listContext, int index) {
-                              String normalPrice = '';
-                              String discountPrice = '';
+                              String price = '';
+                              String? discountPrice;
 
-                              normalPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].price ?? '0')).replaceAll(',', '.')}';
-                              discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                              if(discountProductList[index].varians == null || discountProductList[index].varians!.isEmpty) {
+                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].price ?? '0')).replaceAll(',', '.')}';
+
+                                if(discountProductList[index].isPromo != null && discountProductList[index].isPromo == true) {
+                                  discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                                }
+                              } else {
+                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
+
+                                if(discountProductList[index].varians![0].isPromo != null && discountProductList[index].varians![0].isPromo == true) {
+                                  discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
+                                }
+                              }
 
                               return Padding(
-                                padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 5.0) : index == discountProductList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0) : const EdgeInsets.symmetric(horizontal: 5.0),
+                                padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 5.0) : index == discountProductList.length - 1 ?
+                                const EdgeInsets.only(left: 5.0, right: 25.0) :
+                                const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: SizedBox(
                                   width: 150.0,
                                   height: 200.0,
@@ -2236,6 +2250,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                                 const SizedBox(
                                                   height: 10.0,
                                                 ),
+                                                discountPrice != null ?
                                                 Padding(
                                                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                   child: Text(
@@ -2244,7 +2259,8 @@ class _HomeFragmentState extends State<HomeFragment> {
                                                       color: PrimaryColorStyles.primaryMain(),
                                                     ),
                                                   ),
-                                                ),
+                                                ) :
+                                                const Material(),
                                                 Padding(
                                                   padding: const EdgeInsets.all(10.0),
                                                   child: Row(
@@ -2252,10 +2268,10 @@ class _HomeFragmentState extends State<HomeFragment> {
                                                     children: [
                                                       Expanded(
                                                         child: Text(
-                                                          normalPrice,
+                                                          price,
                                                           style: XSTextStyles.medium().copyWith(
-                                                            color: TextColorStyles.textDisabled(),
-                                                            decoration: TextDecoration.lineThrough,
+                                                            color: discountPrice != null ? TextColorStyles.textDisabled() : PrimaryColorStyles.primaryMain(),
+                                                            decoration: discountPrice != null ? TextDecoration.lineThrough : null,
                                                           ),
                                                         ),
                                                       ),

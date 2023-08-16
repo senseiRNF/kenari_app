@@ -333,6 +333,23 @@ class _SearchFragmentState extends State<SearchFragment> {
                           );
                         },
                         itemBuilder: (BuildContext popularContext, int index) {
+                          String price = '';
+                          String? discountPrice;
+
+                          if(productList[index].varians == null || productList[index].varians!.isEmpty) {
+                            price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}';
+
+                            if(productList[index].isPromo != null && productList[index].isPromo == true) {
+                              discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                            }
+                          } else {
+                            price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
+
+                            if(productList[index].varians![0].isPromo != null && productList[index].varians![0].isPromo == true) {
+                              discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
+                            }
+                          }
+                          
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Material(
@@ -410,45 +427,37 @@ class _SearchFragmentState extends State<SearchFragment> {
                                                 ),
                                               ],
                                             ),
+                                            discountPrice != null ?
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                const SizedBox(
+                                                  height: 10.0,
+                                                ),
+                                                Text(
+                                                  discountPrice,
+                                                  style: STextStyles.regular().copyWith(
+                                                    color: PrimaryColorStyles.primaryMain(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ) :
+                                            const Material(),
                                             Row(
                                               crossAxisAlignment: CrossAxisAlignment.end,
                                               children: [
                                                 Expanded(
-                                                  child: productList[index].isPromo != null && productList[index].isPromo == true ?
-                                                  Column(
+                                                  child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                                     children: [
                                                       const SizedBox(
                                                         height: 10.0,
                                                       ),
                                                       Text(
-                                                        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
+                                                        price,
                                                         style: STextStyles.regular().copyWith(
-                                                          color: PrimaryColorStyles.primaryMain(),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5.0,
-                                                      ),
-                                                      Text(
-                                                        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                        style: STextStyles.regular().copyWith(
-                                                          color: TextColorStyles.textDisabled(),
-                                                          decoration: TextDecoration.lineThrough,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ) :
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                    children: [
-                                                      const SizedBox(
-                                                        height: 25.0,
-                                                      ),
-                                                      Text(
-                                                        'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
-                                                        style: STextStyles.regular().copyWith(
-                                                          color: PrimaryColorStyles.primaryMain(),
+                                                          color: discountPrice != null ? TextColorStyles.textDisabled() : PrimaryColorStyles.primaryMain(),
+                                                          decoration: discountPrice != null ? TextDecoration.lineThrough : null,
                                                         ),
                                                       ),
                                                     ],

@@ -32,7 +32,9 @@ class _ProductPageState extends State<ProductPage> {
 
   DetailProductData? detailProductData;
 
+  int? selectedVarian;
   int imageSelected = 1;
+  int productPrice = 0;
 
   bool expandDesc = false;
 
@@ -49,6 +51,26 @@ class _ProductPageState extends State<ProductPage> {
         setState(() {
           detailProductData = detailResult.detailProductData;
         });
+
+        if(detailResult.detailProductData!.varians != null && detailResult.detailProductData!.varians!.isNotEmpty) {
+          setState(() {
+            selectedVarian = 0;
+
+            if(detailResult.detailProductData!.varians![0].isPromo != null && detailResult.detailProductData!.varians![0].isPromo == true) {
+              productPrice = int.parse(detailResult.detailProductData!.varians![0].promoPrice ?? '0');
+            } else {
+              productPrice = int.parse(detailResult.detailProductData!.varians![0].price ?? '0');
+            }
+          });
+        } else {
+          setState(() {
+            if(detailResult.detailProductData!.isPromo != null && detailResult.detailProductData!.isPromo == true) {
+              productPrice = int.parse(detailResult.detailProductData!.promoPrice ?? '0');
+            } else {
+              productPrice = int.parse(detailResult.detailProductData!.price ?? '0');
+            }
+          });
+        }
       }
 
       loadTrolley();
@@ -335,14 +357,30 @@ class _ProductPageState extends State<ProductPage> {
                                     if(product.varians != null && product.varians!.isNotEmpty) {
                                       if(product.varians![index].isPromo != null && product.varians![index].isPromo == true) {
                                         price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}';
+
+                                        setState(() {
+                                          productPrice = int.parse(product.varians![index].promoPrice ?? '0');
+                                        });
                                       } else {
                                         price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}';
+
+                                        setState(() {
+                                          productPrice = int.parse(product.varians![index].price ?? '0');
+                                        });
                                       }
                                     } else {
                                       if(product.isPromo != null && product.isPromo == true) {
                                         price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
+
+                                        setState(() {
+                                          productPrice = int.parse(product.promoPrice ?? '0');
+                                        });
                                       } else {
                                         price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
+
+                                        setState(() {
+                                          productPrice = int.parse(product.price ?? '0');
+                                        });
                                       }
                                     }
 
@@ -359,6 +397,10 @@ class _ProductPageState extends State<ProductPage> {
                                         stock = int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
                                       }
                                     }
+                                  });
+
+                                  setState(() {
+                                    selectedVarian = itemIndex;
                                   });
                                 },
                                 customBorder: RoundedRectangleBorder(
@@ -645,6 +687,8 @@ class _ProductPageState extends State<ProductPage> {
                           callback: (callbackResult) {
                             if(callbackResult != null) {
                               BackFromThisPage(context: context, callbackData: callbackResult).go();
+                            } else {
+                              loadData();
                             }
                           },
                         ).go();
@@ -799,7 +843,7 @@ class _ProductPageState extends State<ProductPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Text(
-                              'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(detailProductData!.isPromo != null && detailProductData!.isPromo == true ? detailProductData!.promoPrice ?? '0' : detailProductData!.price ?? '0')).replaceAll(',', '.')}',
+                              'Rp ${NumberFormat('#,###', 'en_id').format(productPrice).replaceAll(',', '.')}',
                               style: LTextStyles.medium().copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
                               ),
@@ -944,12 +988,22 @@ class _ProductPageState extends State<ProductPage> {
                                           decoration: BoxDecoration(
                                             border: Border.all(
                                               width: 1.0,
-                                              color: BorderColorStyles.borderStrokes(),
+                                              color: selectedVarian != null && selectedVarian == itemIndex ? PrimaryColorStyles.primaryMain() : BorderColorStyles.borderStrokes(),
                                             ),
                                             borderRadius: BorderRadius.circular(5.0),
                                           ),
                                           child: InkWell(
                                             onTap: () {
+                                              setState(() {
+                                                selectedVarian = itemIndex;
+
+                                                if(detailProductData!.varians![itemIndex].isPromo != null && detailProductData!.varians![itemIndex].isPromo == true) {
+                                                  productPrice = int.parse(detailProductData!.varians![itemIndex].promoPrice ?? '0');
+                                                } else {
+                                                  productPrice = int.parse(detailProductData!.varians![itemIndex].price ?? '0');
+                                                }
+                                              });
+
                                               showProductBottomDialog(detailProductData!, itemIndex);
                                             },
                                             customBorder: RoundedRectangleBorder(
@@ -1104,7 +1158,7 @@ class _ProductPageState extends State<ProductPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                 child: ElevatedButton(
-                  onPressed: () => showProductBottomDialog(detailProductData!, 0),
+                  onPressed: () => showProductBottomDialog(detailProductData!, selectedVarian ?? 0),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PrimaryColorStyles.primaryMain(),
                   ),
