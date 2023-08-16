@@ -67,8 +67,8 @@ class _ProductPageState extends State<ProductPage> {
 
   Future updateTrolley(int index, DetailProductData product, int qty) async {
     String? price = product.varians != null && product.varians!.isNotEmpty ?
-    product.varians![index].promoPrice != null && product.varians![index].promoPrice != '0' ? product.varians![index].promoPrice : product.varians![index].price :
-    product.promoPrice != null && product.promoPrice != '0' ? product.promoPrice : product.price;
+    product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice ?? '0': product.varians![index].price ?? '0' :
+    product.isPromo != null && product.isPromo == true ? product.promoPrice ?? '0' : product.price ?? '0';
 
     await APITrolleyServices(context: context).update(
       LocalTrolleyProduct(
@@ -111,9 +111,9 @@ class _ProductPageState extends State<ProductPage> {
     product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
     product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
 
-    String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].promoPrice != null && product.varians![index].promoPrice != '0' ?
+    String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].isPromo != null && product.varians![index].isPromo == true ?
     'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}' :
-    product.promoPrice != null && product.promoPrice != '0' ?
+    product.isPromo != null && product.isPromo == true ?
     'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
 
     String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
@@ -333,13 +333,13 @@ class _ProductPageState extends State<ProductPage> {
                                     qty = 1;
 
                                     if(product.varians != null && product.varians!.isNotEmpty) {
-                                      if(product.varians![index].promoPrice != null && product.varians![index].promoPrice != '0') {
+                                      if(product.varians![index].isPromo != null && product.varians![index].isPromo == true) {
                                         price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}';
                                       } else {
                                         price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}';
                                       }
                                     } else {
-                                      if(product.promoPrice != null && product.promoPrice != '0') {
+                                      if(product.isPromo != null && product.isPromo == true) {
                                         price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
                                       } else {
                                         price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
@@ -799,7 +799,7 @@ class _ProductPageState extends State<ProductPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25.0),
                             child: Text(
-                              'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(detailProductData!.promoPrice != null && detailProductData!.promoPrice != '0' ? detailProductData!.promoPrice ?? '0' : detailProductData!.price ?? '0')).replaceAll(',', '.')}',
+                              'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(detailProductData!.isPromo != null && detailProductData!.isPromo == true ? detailProductData!.promoPrice ?? '0' : detailProductData!.price ?? '0')).replaceAll(',', '.')}',
                               style: LTextStyles.medium().copyWith(
                                 color: PrimaryColorStyles.primaryMain(),
                               ),

@@ -225,8 +225,8 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Future updateTrolley(int index, ProductData product, int qty) async {
     String? price = product.varians != null && product.varians!.isNotEmpty ?
-    product.varians![index].promoPrice != null && product.varians![index].promoPrice != '0' ? product.varians![index].promoPrice : product.varians![index].price :
-    product.promoPrice != null && product.promoPrice != '0' ? product.promoPrice : product.price;
+    product.varians![index].isPromo != null && product.varians![index].isPromo == true ? product.varians![index].promoPrice ?? '0' : product.varians![index].price ?? '0' :
+    product.isPromo != null && product.isPromo == true ? product.promoPrice ?? '0' : product.price ?? '0';
 
     await APITrolleyServices(context: context).update(
       LocalTrolleyProduct(
@@ -271,37 +271,33 @@ class _HomeFragmentState extends State<HomeFragment> {
             'images': 'assets/images/icon_iuran.png',
             'title': 'Iuran',
             'description': 'Bayar Iuran wajib dan berjangka Perusahaan kamu disini',
-            'function': () {
-              MoveToPage(
-                context: context,
-                target: const FeePage(),
-                callback: (callbackResult) {
-                  if(callbackResult != null) {
-                    widget.onFeePageCallback(callbackResult);
-                  } else {
-                    loadData();
-                  }
-                },
-              ).go();
-            },
+            'function': () => MoveToPage(
+              context: context,
+              target: const FeePage(),
+              callback: (callbackResult) {
+                if(callbackResult != null) {
+                  widget.onFeePageCallback(callbackResult);
+                } else {
+                  loadData();
+                }
+              },
+            ).go(),
           },
           {
             'images': 'assets/images/icon_pinjaman.png',
             'title': 'Pinjaman',
             'description': 'Dapatkan pinjaman uang untuk pengembangan usaha mu dan kebutuhan lainnya disini',
-            'function': () {
-              MoveToPage(
-                context: context,
-                target: const LoanPage(),
-                callback: (callbackResult) {
-                  if(callbackResult != null) {
-                    widget.onLoanPageCallback(callbackResult);
-                  } else {
-                    loadData();
-                  }
-                },
-              ).go();
-            },
+            'function': () => MoveToPage(
+              context: context,
+              target: const LoanPage(),
+              callback: (callbackResult) {
+                if(callbackResult != null) {
+                  widget.onLoanPageCallback(callbackResult);
+                } else {
+                  loadData();
+                }
+              },
+            ).go(),
           },
         ],
       },
@@ -312,13 +308,11 @@ class _HomeFragmentState extends State<HomeFragment> {
             'images': 'assets/images/icon_titip_jual.png',
             'title': 'Titip Jual',
             'description': 'Dapatkan penghasilan tambahan dengan Titip Jual barang apapun disini',
-            'function': () {
-              MoveToPage(
-                context: context,
-                target: const SellerPage(),
-                callback: (_) => loadData(),
-              ).go();
-            },
+            'function': () => MoveToPage(
+              context: context,
+              target: const SellerPage(),
+              callback: (_) => loadData(),
+            ).go(),
           },
         ],
       },
@@ -411,7 +405,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                             return Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0),
                               child: InkWell(
-                                onTap: () => menuBottom[index]['data'][subIndex]['function'](),
+                                onTap: () => BackFromThisPage(context: context, callbackData: () => menuBottom[index]['data'][subIndex]).go(),
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12.0),
                                 ),
@@ -470,7 +464,7 @@ class _HomeFragmentState extends State<HomeFragment> {
       },
     ).then((dialogResult) {
       if(dialogResult != null) {
-
+        dialogResult['function']();
       }
     });
   }
@@ -482,9 +476,9 @@ class _HomeFragmentState extends State<HomeFragment> {
     product.varians![index].isStockAlwaysAvailable != null && product.varians![index].isStockAlwaysAvailable == true ? 1 : int.parse(product.varians![index].stock != null && product.varians![index].stock != '' ? product.varians![index].stock! : '0') :
     product.isStockAlwaysAvailable != null && product.isStockAlwaysAvailable! == true ? 1 : int.parse(product.stock != null && product.stock != '' ? product.stock! : '0');
 
-    String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].promoPrice != null && product.varians![index].promoPrice != '0' ?
+    String price = product.varians != null && product.varians!.isNotEmpty ? product.varians![index].isPromo != null && product.varians![index].isPromo == true ?
     'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}' :
-    product.promoPrice != null && product.promoPrice != '0' ?
+    product.isPromo != null && product.isPromo == true ?
     'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}' : 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
 
     String imagePath = "$baseURL/${product.images != null && product.images!.isNotEmpty && product.images![0].url != null ? product.images![0].url! : ''}";
@@ -709,13 +703,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                                   variant = product.varians![itemIndex].name1 ?? '(Varian tidak diketahui)';
 
                                   if(product.varians != null && product.varians!.isNotEmpty) {
-                                    if(product.varians![index].promoPrice != null && product.varians![index].promoPrice != '0') {
+                                    if(product.varians![index].isPromo != null && product.varians![index].isPromo == true) {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].promoPrice ?? '0')).replaceAll(',', '.')}';
                                     } else {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.varians![index].price ?? '0')).replaceAll(',', '.')}';
                                     }
                                   } else {
-                                    if(product.promoPrice != null && product.promoPrice != '0') {
+                                    if(product.isPromo != null && product.isPromo == true) {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.promoPrice ?? '0')).replaceAll(',', '.')}';
                                     } else {
                                       price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(product.price ?? '0')).replaceAll(',', '.')}';
@@ -1581,19 +1575,32 @@ class _HomeFragmentState extends State<HomeFragment> {
                               String price = '';
 
                               if(newProductList[index].varians == null || newProductList[index].varians!.isEmpty) {
-                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].price ?? '0')).replaceAll(',', '.')}';
+                                if(newProductList[index].isPromo != null && newProductList[index].isPromo == true) {
+                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                                } else {
+                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].price ?? '0')).replaceAll(',', '.')}';
+                                }
                               } else {
                                 if(newProductList[index].varians!.length > 1) {
                                   List sortedVariantPrice = newProductList[index].varians!;
 
-                                  sortedVariantPrice.sort((a, b) => a.promoPrice != null ? int.parse(a.promoPrice ?? '0').compareTo(int.parse(b.promoPrice ?? '0')) : int.parse(a.price ?? '0').compareTo(int.parse(b.price ?? '0')));
+                                  sortedVariantPrice.sort((a, b) => a.isPromo != null && a.isPromo == true ?
+                                  int.parse(a.promoPrice ?? '0').compareTo(int.parse(b.promoPrice ?? '0')) :
+                                  int.parse(a.price ?? '0').compareTo(int.parse(b.price ?? '0')));
 
-                                  int lowest = int.parse(sortedVariantPrice[0].promoPrice ?? sortedVariantPrice[0].price ?? '0');
-                                  int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].promoPrice ?? sortedVariantPrice[sortedVariantPrice.length - 1].price ?? '0');
+                                  int lowest = int.parse(sortedVariantPrice[0].isPromo != null && sortedVariantPrice[0].isPromo == true ?
+                                  sortedVariantPrice[0].promoPrice ?? '0' : sortedVariantPrice[0].price ?? '0');
+
+                                  int highest = int.parse(sortedVariantPrice[sortedVariantPrice.length - 1].isPromo != null && sortedVariantPrice[sortedVariantPrice.length - 1].isPromo == true ?
+                                  sortedVariantPrice[sortedVariantPrice.length - 1].promoPrice ?? '0' :
+                                  sortedVariantPrice[sortedVariantPrice.length - 1].price ?? '0');
 
                                   price = 'Rp ${NumberFormat('#,###', 'en_id').format(lowest).replaceAll(',', '.')} - ${NumberFormat('#,###', 'en_id').format(highest).replaceAll(',', '.')}';
                                 } else {
-                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
+                                  int productPrice = int.parse(newProductList[index].varians![0].isPromo != null && newProductList[index].varians![0].isPromo == true ?
+                                  newProductList[index].varians![0].promoPrice ?? '0' : newProductList[index].varians![0].price ?? '0');
+
+                                  price = 'Rp ${NumberFormat('#,###', 'en_id').format(productPrice).replaceAll(',', '.')}';
                                 }
                               }
 
@@ -2013,7 +2020,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                           crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
                                             Expanded(
-                                              child: popularProductList[index].promoPrice != null && popularProductList[index].promoPrice != '0' ?
+                                              child: popularProductList[index].isPromo != null && popularProductList[index].isPromo == true ?
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                                 children: [
@@ -2042,7 +2049,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                                 children: [
                                                   const SizedBox(
-                                                    height: 25.0,
+                                                    height: 10.0,
                                                   ),
                                                   Text(
                                                     'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(popularProductList[index].price ?? '0')).replaceAll(',', '.')}',

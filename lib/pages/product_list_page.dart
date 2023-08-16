@@ -452,7 +452,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                 crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
                                                   Expanded(
-                                                    child: productList[index].promoPrice != null && productList[index].promoPrice != '' ?
+                                                    child: productList[index].isPromo != null && productList[index].isPromo == true ?
                                                     Column(
                                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                                       children: [

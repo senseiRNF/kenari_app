@@ -414,7 +414,7 @@ class _SearchFragmentState extends State<SearchFragment> {
                                               crossAxisAlignment: CrossAxisAlignment.end,
                                               children: [
                                                 Expanded(
-                                                  child: productList[index].promoPrice != null && productList[index].promoPrice != '0' ?
+                                                  child: productList[index].isPromo != null && productList[index].isPromo == true ?
                                                   Column(
                                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                                     children: [
