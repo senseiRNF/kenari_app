@@ -327,24 +327,18 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                           String price = '';
                           String? discountPrice;
 
-                          // if(bannerDetailData!.products![index].varians == null || bannerDetailData!.products![index].varians!.isEmpty) {
-                          //   price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].price ?? '0')).replaceAll(',', '.')}';
-                          //
-                          //   if(bannerDetailData!.products![index].isPromo != null && bannerDetailData!.products![index].isPromo == true) {
-                          //     discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].promoPrice ?? '0')).replaceAll(',', '.')}';
-                          //   }
-                          // } else {
-                          //   price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].varians![0].price ?? '0')).replaceAll(',', '.')}';
-                          //
-                          //   if(bannerDetailData!.products![index].varians![0].isPromo != null && bannerDetailData!.products![index].varians![0].isPromo == true) {
-                          //     discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
-                          //   }
-                          // }
+                          if(bannerDetailData!.products![index].varians == null || bannerDetailData!.products![index].varians!.isEmpty) {
+                            price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].price ?? '0')).replaceAll(',', '.')}';
 
-                          price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].price ?? '0')).replaceAll(',', '.')}';
+                            if(bannerDetailData!.products![index].isPromo != null && bannerDetailData!.products![index].isPromo == true) {
+                              discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                            }
+                          } else {
+                            price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].varians![0].price ?? '0')).replaceAll(',', '.')}';
 
-                          if(bannerDetailData!.products![index].isPromo != null && bannerDetailData!.products![index].isPromo == true) {
-                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                            if(bannerDetailData!.products![index].varians![0].isPromo != null && bannerDetailData!.products![index].varians![0].isPromo == true) {
+                              discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(bannerDetailData!.products![index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
+                            }
                           }
                           
                           return Padding(

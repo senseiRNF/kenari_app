@@ -97,7 +97,7 @@ class Products {
   String? company;
   String? address;
   bool? isPreOrder;
-  List<String>? varians;
+  List<Varians>? varians;
   List<Images>? images;
   // List<Null>? tipeVarian;
   bool? isCompleted;
@@ -156,7 +156,12 @@ class Products {
     company = json['company'];
     address = json['address'];
     isPreOrder = json['is_pre_order'];
-    varians = json['varians'].cast<String>();
+    if (json['varians'] != null) {
+      varians = <Varians>[];
+      json['varians'].forEach((v) {
+        varians!.add(Varians.fromJson(v));
+      });
+    }
     if (json['images'] != null) {
       images = <Images>[];
       json['images'].forEach((v) {
@@ -197,7 +202,9 @@ class Products {
     data['company'] = company;
     data['address'] = address;
     data['is_pre_order'] = isPreOrder;
-    data['varians'] = varians;
+    if (varians != null) {
+      data['varians'] = varians!.map((v) => v.toJson()).toList();
+    }
     if (images != null) {
       data['images'] = images!.map((v) => v.toJson()).toList();
     }
@@ -218,6 +225,106 @@ class Products {
     data['promo_price'] = promoPrice;
     data['total_discount'] = totalDiscount;
     data['total_sell'] = totalSell;
+    return data;
+  }
+}
+
+// class ProductCategory {
+//   String? sId;
+//   String? name;
+//   bool? status;
+//   String? createdAt;
+//   int? iV;
+//   String? updatedAt;
+//
+//   ProductCategory({
+//     this.sId,
+//     this.name,
+//     this.status,
+//     this.createdAt,
+//     this.iV,
+//     this.updatedAt,
+//   });
+//
+//   ProductCategory.fromJson(Map<String, dynamic> json) {
+//     sId = json['_id'];
+//     name = json['name'];
+//     status = json['status'];
+//     createdAt = json['createdAt'];
+//     iV = json['__v'];
+//     updatedAt = json['updatedAt'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['_id'] = sId;
+//     data['name'] = name;
+//     data['status'] = status;
+//     data['createdAt'] = createdAt;
+//     data['__v'] = iV;
+//     data['updatedAt'] = updatedAt;
+//     return data;
+//   }
+// }
+
+class Varians {
+  String? sId;
+  bool? isPromo;
+  String? deletedAt;
+  String? createdAt;
+  String? price;
+  String? stock;
+  bool? isStockAlwaysAvailable;
+  String? varianType1;
+  String? name1;
+  String? promoPrice;
+  String? updatedAt;
+  int? iV;
+
+  Varians({
+    this.sId,
+    this.isPromo,
+    this.deletedAt,
+    this.createdAt,
+    this.price,
+    this.stock,
+    this.isStockAlwaysAvailable,
+    this.varianType1,
+    this.name1,
+    this.promoPrice,
+    this.updatedAt,
+    this.iV,
+  });
+
+  Varians.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    isPromo = json['is_promo'];
+    deletedAt = json['deletedAt'];
+    createdAt = json['createdAt'];
+    price = json['price'];
+    stock = json['stock'];
+    isStockAlwaysAvailable = json['is_stock_always_available'];
+    varianType1 = json['varianType1'];
+    name1 = json['name1'];
+    promoPrice = json['promo_price'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['is_promo'] = isPromo;
+    data['deletedAt'] = deletedAt;
+    data['createdAt'] = createdAt;
+    data['price'] = price;
+    data['stock'] = stock;
+    data['is_stock_always_available'] = isStockAlwaysAvailable;
+    data['varianType1'] = varianType1;
+    data['name1'] = name1;
+    data['promo_price'] = promoPrice;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
     return data;
   }
 }
