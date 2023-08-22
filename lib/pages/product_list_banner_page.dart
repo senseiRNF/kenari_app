@@ -396,12 +396,8 @@ class _ProductListBannerPageState extends State<ProductListBannerPage> {
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                                              // child: Text(
-                                              //   bannerDetailData!.products![index].productCategory != null && bannerDetailData!.products![index].productCategory!.name != null ? bannerDetailData!.products![index].productCategory!.name! : '',
-                                              //   style: XSTextStyles.regular(),
-                                              // ),
                                               child: Text(
-                                                bannerDetailData!.products![index].productCategory ?? '',
+                                                bannerDetailData!.products![index].productCategory != null && bannerDetailData!.products![index].productCategory!.name != null ? bannerDetailData!.products![index].productCategory!.name! : '',
                                                 style: XSTextStyles.regular(),
                                               ),
                                             ),

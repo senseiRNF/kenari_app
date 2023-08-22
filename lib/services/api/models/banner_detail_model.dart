@@ -93,7 +93,7 @@ class Products {
   String? price;
   String? stock;
   bool? isStockAlwaysAvailable;
-  String? productCategory;
+  ProductCategory? productCategory;
   String? company;
   String? address;
   bool? isPreOrder;
@@ -152,7 +152,9 @@ class Products {
     price = json['price'];
     stock = json['stock'];
     isStockAlwaysAvailable = json['is_stock_always_available'];
-    productCategory = json['productCategory'];
+    productCategory = json['productCategory'] != null
+        ? ProductCategory.fromJson(json['productCategory'])
+        : null;
     company = json['company'];
     address = json['address'];
     isPreOrder = json['is_pre_order'];
@@ -198,7 +200,9 @@ class Products {
     data['price'] = price;
     data['stock'] = stock;
     data['is_stock_always_available'] = isStockAlwaysAvailable;
-    data['productCategory'] = productCategory;
+    if (productCategory != null) {
+      data['productCategory'] = productCategory!.toJson();
+    }
     data['company'] = company;
     data['address'] = address;
     data['is_pre_order'] = isPreOrder;
@@ -229,43 +233,43 @@ class Products {
   }
 }
 
-// class ProductCategory {
-//   String? sId;
-//   String? name;
-//   bool? status;
-//   String? createdAt;
-//   int? iV;
-//   String? updatedAt;
-//
-//   ProductCategory({
-//     this.sId,
-//     this.name,
-//     this.status,
-//     this.createdAt,
-//     this.iV,
-//     this.updatedAt,
-//   });
-//
-//   ProductCategory.fromJson(Map<String, dynamic> json) {
-//     sId = json['_id'];
-//     name = json['name'];
-//     status = json['status'];
-//     createdAt = json['createdAt'];
-//     iV = json['__v'];
-//     updatedAt = json['updatedAt'];
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = <String, dynamic>{};
-//     data['_id'] = sId;
-//     data['name'] = name;
-//     data['status'] = status;
-//     data['createdAt'] = createdAt;
-//     data['__v'] = iV;
-//     data['updatedAt'] = updatedAt;
-//     return data;
-//   }
-// }
+class ProductCategory {
+  String? sId;
+  String? name;
+  bool? status;
+  String? createdAt;
+  int? iV;
+  String? updatedAt;
+
+  ProductCategory({
+    this.sId,
+    this.name,
+    this.status,
+    this.createdAt,
+    this.iV,
+    this.updatedAt,
+  });
+
+  ProductCategory.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    name = json['name'];
+    status = json['status'];
+    createdAt = json['createdAt'];
+    iV = json['__v'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['name'] = name;
+    data['status'] = status;
+    data['createdAt'] = createdAt;
+    data['__v'] = iV;
+    data['updatedAt'] = updatedAt;
+    return data;
+  }
+}
 
 class Varians {
   String? sId;
