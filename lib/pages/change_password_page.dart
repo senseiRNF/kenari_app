@@ -124,6 +124,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                               ),
                             ),
                             errorText: showOldPassErrorHint ? errorHintMessage : null,
+                            errorMaxLines: 3,
                           ),
                           textInputAction: TextInputAction.done,
                           onChanged: (_) {
@@ -160,6 +161,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                               ),
                             ),
                             errorText: showNewPassErrorHint ? errorHintMessage : null,
+                            errorMaxLines: 3,
                           ),
                           textInputAction: TextInputAction.done,
                           onChanged: (_) {
@@ -196,6 +198,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                               ),
                             ),
                             errorText: showConfNewPassErrorHint ? errorHintMessage : null,
+                            errorMaxLines: 3,
                           ),
                           textInputAction: TextInputAction.done,
                           onChanged: (_) {

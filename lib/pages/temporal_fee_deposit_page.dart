@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/miscellaneous/separator_formatter.dart';
 import 'package:kenari_app/pages/fee_payment_result_page.dart';
 import 'package:kenari_app/services/api/fee_services/api_temporal_fee_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
@@ -406,6 +407,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                             prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                             hintText: '0',
                             errorText: showUnmatchedAmountFee ? 'Minimal kelipatan Rp 100.000' : null,
+                            errorMaxLines: 3,
                           ),
                           keyboardType: TextInputType.number,
                           onChanged: (newData) {
@@ -440,6 +442,7 @@ class _TemporalFeeDepositPageState extends State<TemporalFeeDepositPage> {
                           },
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
+                            ThousandsSeparatorInputFormatter(),
                           ],
                         ),
                       ],

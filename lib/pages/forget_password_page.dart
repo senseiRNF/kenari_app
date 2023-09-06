@@ -119,6 +119,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           color: TextColorStyles.textDisabled(),
                         ),
                         errorText: showErrorHint ? 'Email tidak terdaftar' : null,
+                        errorMaxLines: 3,
                       ),
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,

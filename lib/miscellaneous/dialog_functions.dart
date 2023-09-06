@@ -318,7 +318,6 @@ class ErrorHandler {
           } else {
             errMessage = 'Not Found.\n\nPermintaan tidak ditemukan, silahkan hubungi Admin untuk informasi lebih lanjut.';
           }
-
           break;
         case 500:
           if(serverErrMessage != null) {

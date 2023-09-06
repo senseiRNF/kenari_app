@@ -1118,7 +1118,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                   CarouselSlider(
                     options: CarouselOptions(
                       enableInfiniteScroll: false,
-                      viewportFraction: 0.85,
+                      viewportFraction: 0.90,
                       onPageChanged: (page, reason) {
                         setState(() {
                           selectedCard = page;
@@ -1298,9 +1298,6 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -1344,8 +1341,8 @@ class _HomeFragmentState extends State<HomeFragment> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              width: 54.0,
-                              height: 54.0,
+                              width: 44.0,
+                              height: 44.0,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
@@ -1380,7 +1377,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                               ),
                             ),
                             const SizedBox(
-                              height: 8.0,
+                              height: 5.0,
                             ),
                             Text(
                               'Iuran',
@@ -1393,8 +1390,8 @@ class _HomeFragmentState extends State<HomeFragment> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              width: 54.0,
-                              height: 54.0,
+                              width: 44.0,
+                              height: 44.0,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
@@ -1429,7 +1426,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                               ),
                             ),
                             const SizedBox(
-                              height: 8.0,
+                              height: 5.0,
                             ),
                             Text(
                               'Pinjaman',
@@ -1442,8 +1439,8 @@ class _HomeFragmentState extends State<HomeFragment> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              width: 54.0,
-                              height: 54.0,
+                              width: 44.0,
+                              height: 44.0,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
@@ -1472,7 +1469,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                               ),
                             ),
                             const SizedBox(
-                              height: 8.0,
+                              height: 5.0,
                             ),
                             Text(
                               'Titip Jual',
@@ -1485,8 +1482,8 @@ class _HomeFragmentState extends State<HomeFragment> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              width: 54.0,
-                              height: 54.0,
+                              width: 44.0,
+                              height: 44.0,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
@@ -1511,7 +1508,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                               ),
                             ),
                             const SizedBox(
-                              height: 8.0,
+                              height: 5.0,
                             ),
                             Text(
                               'Semua',
@@ -1521,9 +1518,6 @@ class _HomeFragmentState extends State<HomeFragment> {
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 40.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -1558,9 +1552,6 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
                   Row(
                     children: [
                       Expanded(
@@ -1590,7 +1581,9 @@ class _HomeFragmentState extends State<HomeFragment> {
                               }
 
                               return Padding(
-                                padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 5.0) : index == newProductList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0) : const EdgeInsets.symmetric(horizontal: 5.0),
+                                padding: index == 0 ? const EdgeInsets.only(left: 20.0, right: 1.0) : index == newProductList.length - 1 ?
+                                const EdgeInsets.only(left: 1.0, right: 25.0) :
+                                const EdgeInsets.symmetric(horizontal: 1.0),
                                 child: SizedBox(
                                   width: 150.0,
                                   height: 200.0,
@@ -1733,7 +1726,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(
-                        height: 30.0,
+                        height: 20.0,
                       ),
                       CarouselSlider(
                         options: CarouselOptions(
@@ -1816,7 +1809,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                   ) :
                   const Material(),
                   const SizedBox(
-                    height: 30.0,
+                    height: 10.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -1914,10 +1907,13 @@ class _HomeFragmentState extends State<HomeFragment> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: popularProductList.length,
                       separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
-                        return Divider(
-                          thickness: 0.5,
-                          height: 1.0,
-                          color: BorderColorStyles.borderDivider(),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Divider(
+                            thickness: 0.5,
+                            height: 1.0,
+                            color: BorderColorStyles.borderDivider(),
+                          ),
                         );
                       },
                       itemBuilder: (BuildContext popularContext, int index) {
@@ -2134,14 +2130,11 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
                   Row(
                     children: [
                       Expanded(
                         child: SizedBox(
-                          height: 210.0,
+                          height: 200.0,
                           child: discountProductList.isNotEmpty ?
                           ListView.builder(
                             shrinkWrap: true,
@@ -2166,9 +2159,9 @@ class _HomeFragmentState extends State<HomeFragment> {
                               }
 
                               return Padding(
-                                padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 5.0) : index == discountProductList.length - 1 ?
-                                const EdgeInsets.only(left: 5.0, right: 25.0) :
-                                const EdgeInsets.symmetric(horizontal: 5.0),
+                                padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 1.0) : index == discountProductList.length - 1 ?
+                                const EdgeInsets.only(left: 1.0, right: 25.0) :
+                                const EdgeInsets.symmetric(horizontal: 1.0),
                                 child: SizedBox(
                                   width: 150.0,
                                   height: 200.0,

@@ -139,6 +139,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           ),
                         ),
                         errorText: showErrorPasswordHint ? passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : null,
+                        errorMaxLines: 3,
                       ),
                       textInputAction: TextInputAction.next,
                       onChanged: (_) {
@@ -182,6 +183,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           ),
                         ),
                         errorText: showErrorPasswordConfHint ? confirmPasswordController.text != '' ? 'Password harus sama' : 'Harap masukkan kembali password terlebih dahulu' : null,
+                        errorMaxLines: 3,
                       ),
                       textInputAction: TextInputAction.done,
                       onChanged: (_) {

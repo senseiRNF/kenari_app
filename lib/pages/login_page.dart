@@ -103,6 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       errorText: showErrorHint ? errorHintMessage : null,
+                      errorMaxLines: 3,
                     ),
                     textInputAction: TextInputAction.done,
                     onChanged: (_) {

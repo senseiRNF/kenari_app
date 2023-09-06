@@ -167,7 +167,7 @@ class SellerPage extends StatelessWidget {
                                   context: context,
                                   target: const SellerProductListPage(),
                                   callback: (callbackResult) {
-                                    if(callbackResult['target'] == 'home') {
+                                    if(callbackResult != null && callbackResult['target'] == 'home') {
                                       BackFromThisPage(context: context, callbackData: callbackResult).go();
                                     }
                                   },
