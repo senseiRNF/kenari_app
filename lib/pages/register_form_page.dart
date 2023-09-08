@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/authorization_services/api_register_services.dart';
 import 'package:kenari_app/services/local/models/register_form_result.dart';
@@ -53,21 +54,28 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
       if(phoneController.text == '') {
         setState(() {
           showErrorPhoneHint = true;
-          errorPhoneMessage = phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu';
+          // errorPhoneMessage = phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu';
+          errorPhoneMessage = 'Harap masukkan nomor terlebih dahulu';
         });
       } else {
         if(emailController.text == '') {
           setState(() {
             showErrorEmailHint = true;
-            errorEmailMessage = emailController.text != '' ? 'Email telah terdaftar' : 'Harap masukkan email terlebih dahulu';
+            // errorEmailMessage = emailController.text != '' ? 'Email telah terdaftar' : 'Harap masukkan email terlebih dahulu';
+            errorEmailMessage = 'Harap masukkan email terlebih dahulu';
           });
         } else {
           RegExp regExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
 
-          if(passwordController.text == '' || !regExp.hasMatch(passwordController.text) == true || passwordController.text.length < 7) {
+          if(passwordController.text == '') {
             setState(() {
               showErrorPasswordHint = true;
-              errorPasswordMessage = passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Harap masukkan password terlebih dahulu';
+              errorPasswordMessage = 'Harap masukkan password terlebih dahulu';
+            });
+          } else if(!regExp.hasMatch(passwordController.text) == true || passwordController.text.length < 7) {
+            setState(() {
+              showErrorPasswordHint = true;
+              errorPasswordMessage = 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka';
             });
           } else {
             if(confirmPasswordController.text == '' || confirmPasswordController.text != passwordController.text) {
@@ -1306,6 +1314,9 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                           });
                         }
                       },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                      ],
                     ),
                     const SizedBox(
                       height: 25.0,
@@ -1325,6 +1336,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                         errorMaxLines: 3,
                       ),
                       keyboardType: TextInputType.phone,
+                      maxLength: 13,
                       textInputAction: TextInputAction.next,
                       onChanged: (_) {
                         if(showErrorPhoneHint == true) {
@@ -1333,6 +1345,9 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                           });
                         }
                       },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                      ],
                     ),
                     const SizedBox(
                       height: 25.0,
@@ -1463,7 +1478,17 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                   child: Text(
                     'Lanjutkan',
                     style: LTextStyles.medium().copyWith(
-                      color: nameController.text != '' && phoneController.text != '' && emailController.text != '' && passwordController.text != '' && confirmPasswordController.text != '' ? Colors.white : Colors.black54,
+                      color: showErrorNameHint == false &&
+                          showErrorPhoneHint == false &&
+                          showErrorEmailHint == false &&
+                          showErrorPasswordHint == false &&
+                          showErrorPasswordConfHint == false &&
+                          nameController.text != '' &&
+                          phoneController.text != '' &&
+                          emailController.text != '' &&
+                          passwordController.text != '' &&
+                          confirmPasswordController.text != '' ?
+                      Colors.white : Colors.black54,
                     ),
                   ),
                 ),

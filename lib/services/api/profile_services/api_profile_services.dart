@@ -122,4 +122,49 @@ class APIProfileServices {
 
     return result;
   }
+
+  Future<bool> updatePassword(String oldPass, String newPass, String confPass) async {
+    bool result = false;
+
+    FormData formData = FormData();
+
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await LocalSharedPrefs().readKey('member_id').then((memberId) async {
+        formData.fields.addAll({
+          MapEntry('old_password', oldPass),
+          MapEntry('password', newPass),
+          MapEntry('password_confirmation', confPass),
+        });
+
+        await APIOptions.init().then((dio) async {
+          LoadingDialog(context: context).show();
+
+          try {
+            await dio.patch(
+              '/member/update-password/$memberId',
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer $token',
+                  'Content-Type': 'multipart/form-data',
+                },
+              ),
+              data: formData,
+            ).then((patchResult) {
+              if(patchResult.statusCode == 200 || patchResult.statusCode == 201) {
+                result = true;
+              }
+
+              BackFromThisPage(context: context).go();
+            });
+          } on DioException catch(dioExc) {
+            BackFromThisPage(context: context).go();
+
+            ErrorHandler(context: context, dioExc: dioExc).handle();
+          }
+        });
+      });
+    });
+
+    return result;
+  }
 }

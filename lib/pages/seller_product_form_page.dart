@@ -394,7 +394,7 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                           itemBuilder: (BuildContext imgContext, int index) {
                             if(index == 0) {
                               return Container(
-                                height: 60.0,
+                                margin: const EdgeInsets.only(top: 5.0),
                                 decoration: BoxDecoration(
                                   color: PrimaryColorStyles.primarySurface(),
                                   border: Border.all(
@@ -479,125 +479,156 @@ class _SellerProductFormPageState extends State<SellerProductFormPage> {
                               );
                             } else {
                               return productImg[index-1].xFile != null ?
-                              Container(
-                                height: 60.0,
-                                decoration: BoxDecoration(
-                                  color: PrimaryColorStyles.primarySurface(),
-                                  border: Border.all(
-                                    color: PrimaryColorStyles.primaryBorder(),
-                                  ),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  image: DecorationImage(
-                                    image: FileImage(
-                                      File(productImg[index-1].xFile!.path),
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onLongPress: () {
-                                      setState(() {
-                                        productImg.removeAt(index - 1);
-                                      });
-                                    },
-                                    customBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: const Material(
-                                      color: Colors.transparent,
-                                    ),
-                                  ),
-                                ),
-                              ) :
-                              CachedNetworkImage(
-                                imageUrl: "$baseURL/${productImg[index-1].url ?? ''}",
-                                imageBuilder: (context, imgProvider) {
-                                  return Container(
-                                    height: 60.0,
-                                    decoration: BoxDecoration(
-                                      color: PrimaryColorStyles.primarySurface(),
-                                      border: Border.all(
-                                        color: PrimaryColorStyles.primaryBorder(),
-                                      ),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      image: DecorationImage(
-                                        image: imgProvider,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        onLongPress: () {
-                                          OptionDialog(
-                                            context: context,
-                                            message: 'Hapus gambar yang telah tersimpan, Anda yakin?',
-                                            yesFunction: () async {
-                                              await APISellerProductServices(context: context).dioRemoveImage(productImg[index-1].sId).then((removeResult) {
-                                                if(removeResult == true) {
-                                                  setState(() {
-                                                    productImg.removeAt(index - 1);
-                                                  });
-                                                }
-                                              });
-                                            },
-                                          ).show();
-                                        },
-                                        customBorder: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5.0),
+                              Stack(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          margin: const EdgeInsets.only(top: 5.0),
+                                          decoration: BoxDecoration(
+                                            color: PrimaryColorStyles.primarySurface(),
+                                            border: Border.all(
+                                              color: PrimaryColorStyles.primaryBorder(),
+                                            ),
+                                            borderRadius: BorderRadius.circular(5.0),
+                                            image: DecorationImage(
+                                              image: FileImage(
+                                                File(productImg[index-1].xFile!.path),
+                                              ),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
-                                        child: const Material(
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: IconColorStyles.iconColor(),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Material(
+                                          shape: const CircleBorder(),
                                           color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: () => setState(() {
+                                              productImg.removeAt(index - 1);
+                                            }),
+                                            customBorder: const CircleBorder(),
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(2.0),
+                                              child: Icon(
+                                                Icons.close,
+                                                size: 10.0,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                errorWidget: (errContext, url, error) {
-                                  return SizedBox(
-                                    height: 60.0,
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        onLongPress: () {
-                                          OptionDialog(
-                                            context: context,
-                                            message: 'Hapus gambar yang telah tersimpan, Anda yakin?',
-                                            yesFunction: () async {
-                                              await APISellerProductServices(context: context).dioRemoveImage(productImg[index-1].sId).then((removeResult) {
-                                                if(removeResult == true) {
-                                                  setState(() {
-                                                    productImg.removeAt(index - 1);
-                                                  });
-                                                }
-                                              });
-                                            },
-                                          ).show();
-                                        },
-                                        customBorder: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5.0),
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                                          children: [
-                                            Icon(
-                                              Icons.broken_image_outlined,
-                                              color: IconColorStyles.iconColor(),
-                                            ),
-                                            Text(
-                                              'Tidak dapat memuat gambar',
-                                              style: XSTextStyles.medium(),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
+                                    ],
+                                  ),
+                                ],
+                              ) :
+                              Stack(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Expanded(
+                                        child: CachedNetworkImage(
+                                          imageUrl: "$baseURL/${productImg[index-1].url ?? ''}",
+                                          imageBuilder: (context, imgProvider) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                color: PrimaryColorStyles.primarySurface(),
+                                                border: Border.all(
+                                                  color: PrimaryColorStyles.primaryBorder(),
+                                                ),
+                                                borderRadius: BorderRadius.circular(5.0),
+                                                image: DecorationImage(
+                                                  image: imgProvider,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                              margin: const EdgeInsets.only(top: 5.0),
+                                            );
+                                          },
+                                          errorWidget: (errContext, url, error) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                color: PrimaryColorStyles.primarySurface(),
+                                                border: Border.all(
+                                                  color: PrimaryColorStyles.primaryBorder(),
+                                                ),
+                                                borderRadius: BorderRadius.circular(5.0),
+                                              ),
+                                              margin: const EdgeInsets.only(top: 5.0),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                children: [
+                                                  Icon(
+                                                    Icons.broken_image_outlined,
+                                                    color: IconColorStyles.iconColor(),
+                                                  ),
+                                                  Text(
+                                                    'Tidak dapat memuat gambar',
+                                                    style: XSTextStyles.medium(),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: IconColorStyles.iconColor(),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Material(
+                                          shape: const CircleBorder(),
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: () => OptionDialog(
+                                              context: context,
+                                              message: 'Hapus gambar yang telah tersimpan, Anda yakin?',
+                                              yesFunction: () async {
+                                                await APISellerProductServices(context: context).dioRemoveImage(productImg[index-1].sId).then((removeResult) {
+                                                  if(removeResult == true) {
+                                                    setState(() {
+                                                      productImg.removeAt(index - 1);
+                                                    });
+                                                  }
+                                                });
+                                              },
+                                            ).show(),
+                                            customBorder: const CircleBorder(),
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(2.0),
+                                              child: Icon(
+                                                Icons.close,
+                                                size: 10.0,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               );
                             }
                           },

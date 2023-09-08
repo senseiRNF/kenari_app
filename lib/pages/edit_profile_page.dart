@@ -356,7 +356,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: ListView(
                 children: [
                   const SizedBox(
-                    height: 30.0,
+                    height: 10.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -365,8 +365,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         profileImage != null ?
                         profileImage!.xFile != null ?
                         Container(
-                          width: 70.0,
-                          height: 70.0,
+                          width: 80.0,
+                          height: 80.0,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
@@ -382,8 +382,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ) :
                         CachedNetworkImage(
                           imageUrl: "$baseURL/${profileImage!.url ?? ''}",
-                          width: 70.0,
-                          height: 70.0,
+                          width: 80.0,
+                          height: 80.0,
                           imageBuilder: (context, imgProvider) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             child: Container(

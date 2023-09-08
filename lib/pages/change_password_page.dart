@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
+import 'package:kenari_app/services/api/profile_services/api_profile_services.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
@@ -218,7 +220,19 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async => await APIProfileServices(context: context).updatePassword(
+                  oldPasswordController.text,
+                  newPasswordController.text,
+                  confNewPasswordController.text,
+                ).then((updateResult) {
+                  if(updateResult == true) {
+                    SuccessDialog(
+                      context: context,
+                      message: 'Sukses memperbaharui kata sandi',
+                      okFunction: () => BackFromThisPage(context: context).go(),
+                    ).show();
+                  }
+                }),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: oldPasswordController.text != '' && newPasswordController.text != '' && confNewPasswordController.text != '' ?
                   PrimaryColorStyles.primaryMain() :

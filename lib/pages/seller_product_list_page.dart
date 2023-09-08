@@ -66,7 +66,7 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                           context: context,
                           target: SellerProductDetailPage(productId: sellerProductDataList[waitingIndex].sId!, isActive: false),
                           callback: (callbackResult) {
-                            if(callbackResult['target'] == 'home') {
+                            if(callbackResult != null && callbackResult['target'] == 'home') {
                               BackFromThisPage(context: context, callbackData: callbackResult).go();
                             } else {
                               loadData();
@@ -213,7 +213,7 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                           context: context,
                           target: SellerProductDetailPage(productId: sellerProductDataList[activeIndex].sId!, isActive: true),
                           callback: (callbackResult) {
-                            if(callbackResult['target'] == 'home') {
+                            if(callbackResult != null && callbackResult['target'] == 'home') {
                               BackFromThisPage(context: context, callbackData: callbackResult).go();
                             } else {
                               loadData();
@@ -357,7 +357,7 @@ class _SellerProductListPageState extends State<SellerProductListPage> {
                           context: context,
                           target: SellerProductDetailPage(productId: sellerProductDataList[completedIndex].sId!, isActive: false),
                           callback: (callbackResult) {
-                            if(callbackResult['target'] == 'home') {
+                            if(callbackResult != null && callbackResult['target'] == 'home') {
                               BackFromThisPage(context: context, callbackData: callbackResult).go();
                             } else {
                               loadData();
