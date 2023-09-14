@@ -292,7 +292,6 @@ class ErrorHandler {
 
     if(dioExc.response != null) {
       errCode = dioExc.response!.statusCode;
-
       if(dioExc.response!.data != null && dioExc.response!.data['message'] != null && dioExc.response!.data['message'] != '') {
         serverErrMessage = dioExc.response!.data['message'];
       }

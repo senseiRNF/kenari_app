@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
@@ -45,101 +46,135 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
   late String errorPasswordConfMessage;
 
   void checkForm() {
+    bool isValid = true;
+
+    RegExp checkPassword = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+
     if(nameController.text == '') {
+      isValid = false;
+
       setState(() {
         showErrorNameHint = true;
         errorNameMessage = 'Harap masukkan nama terlebih dahulu';
       });
-    } else {
-      if(phoneController.text == '') {
-        setState(() {
-          showErrorPhoneHint = true;
-          // errorPhoneMessage = phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu';
-          errorPhoneMessage = 'Harap masukkan nomor terlebih dahulu';
-        });
-      } else {
-        if(emailController.text == '') {
-          setState(() {
-            showErrorEmailHint = true;
-            // errorEmailMessage = emailController.text != '' ? 'Email telah terdaftar' : 'Harap masukkan email terlebih dahulu';
-            errorEmailMessage = 'Harap masukkan email terlebih dahulu';
-          });
-        } else {
-          RegExp regExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    }
 
-          if(passwordController.text == '') {
-            setState(() {
-              showErrorPasswordHint = true;
-              errorPasswordMessage = 'Harap masukkan password terlebih dahulu';
-            });
-          } else if(!regExp.hasMatch(passwordController.text) == true || passwordController.text.length < 7) {
-            setState(() {
-              showErrorPasswordHint = true;
-              errorPasswordMessage = 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka';
-            });
-          } else {
-            if(confirmPasswordController.text == '' || confirmPasswordController.text != passwordController.text) {
-              setState(() {
-                showErrorPasswordConfHint = true;
-                errorPasswordConfMessage = confirmPasswordController.text != '' ? 'Password harus sama' : 'Harap masukkan kembali password terlebih dahulu';
-              });
+    if(phoneController.text == '') {
+      isValid = false;
+
+      setState(() {
+        showErrorPhoneHint = true;
+        errorPhoneMessage = 'Harap masukkan nomor terlebih dahulu';
+      });
+    }
+
+    if(phoneController.text.length < 10) {
+      isValid = false;
+
+      setState(() {
+        showErrorPhoneHint = true;
+        errorPhoneMessage = 'Nomor minimal 11 digit, maksimal 13 digit';
+      });
+    }
+
+    if(emailController.text == '') {
+      isValid = false;
+
+      setState(() {
+        showErrorEmailHint = true;
+        errorEmailMessage = 'Harap masukkan email terlebih dahulu';
+      });
+    }
+
+    if(EmailValidator.validate(emailController.text) == false) {
+      isValid = false;
+
+      setState(() {
+        showErrorEmailHint = true;
+        errorEmailMessage = 'Format penulisan email salah';
+      });
+    }
+
+    if(passwordController.text == '') {
+      isValid = false;
+
+      setState(() {
+        showErrorPasswordHint = true;
+        errorPasswordMessage = 'Harap masukkan password terlebih dahulu';
+      });
+    }
+
+    if(!checkPassword.hasMatch(passwordController.text) == true || passwordController.text.length < 7) {
+      isValid = false;
+
+      setState(() {
+        showErrorPasswordHint = true;
+        errorPasswordMessage = 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka';
+      });
+    }
+
+    if(confirmPasswordController.text == '' || confirmPasswordController.text != passwordController.text) {
+      isValid = false;
+
+      setState(() {
+        showErrorPasswordConfHint = true;
+        errorPasswordConfMessage = confirmPasswordController.text != '' ? 'Password harus sama' : 'Harap masukkan kembali password terlebih dahulu';
+      });
+    }
+
+    if(isValid == true) {
+      showUserAgreementBottomDialog().then((result) async {
+        if(result != null && result == true) {
+          await APIRegisterServices(
+            context: context,
+            companyId: widget.companyId,
+            name: nameController.text,
+            phone: phoneController.text,
+            email: emailController.text,
+            password: passwordController.text,
+          ).register().then((callResult) {
+            if(callResult.apiResult == true) {
+              BackFromThisPage(
+                context: context,
+                callbackData: RegisterFormResult(
+                  registerResult: true,
+                  email: emailController.text,
+                ),
+              ).go();
             } else {
-              showUserAgreementBottomDialog().then((result) async {
-                if(result != null && result == true) {
-                  await APIRegisterServices(
-                    context: context,
-                    companyId: widget.companyId,
-                    name: nameController.text,
-                    phone: phoneController.text,
-                    email: emailController.text,
-                    password: passwordController.text,
-                  ).register().then((callResult) {
-                    if(callResult.apiResult == true) {
-                      BackFromThisPage(
-                        context: context,
-                        callbackData: RegisterFormResult(
-                          registerResult: true,
-                          email: emailController.text,
-                        ),
-                      ).go();
-                    } else {
-                      if(callResult.dioException != null && callResult.dioException!.response != null && callResult.dioException!.response!.statusCode == 412) {
-                        if(callResult.dioException!.response!.data['data']['errors']['name'] != null) {
-                          setState(() {
-                            showErrorNameHint = true;
-                            errorNameMessage = 'Harap masukkan nama terlebih dahulu';
-                          });
-                        }
-
-                        if(callResult.dioException!.response!.data['data']['errors']['email'] != null) {
-                          setState(() {
-                            showErrorEmailHint = true;
-                            errorEmailMessage = 'Email telah terdaftar!';
-                          });
-                        }
-
-                        if(callResult.dioException!.response!.data['data']['errors']['phone'] != null) {
-                          setState(() {
-                            showErrorPhoneHint = true;
-                            errorPhoneMessage = phoneController.text != '' ? 'Nomor telah tedaftar' : 'Harap masukkan nomor terlebih dahulu';
-                          });
-                        }
-
-                        if(callResult.dioException!.response!.data['data']['errors']['password'] != null) {
-                          setState(() {
-                            showErrorPasswordHint = true;
-                            errorPasswordMessage = passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Harap masukkan password terlebih dahulu';
-                          });
-                        }
-                      }
-                    }
+              if(callResult.dioException != null && callResult.dioException!.response != null && callResult.dioException!.response!.statusCode == 412) {
+                if(callResult.dioException!.response!.data['data']['errors']['name'] != null) {
+                  setState(() {
+                    showErrorNameHint = true;
+                    errorNameMessage = 'Harap masukkan nama terlebih dahulu';
                   });
                 }
-              });
+
+                if(callResult.dioException!.response!.data['data']['errors']['email'] != null) {
+                  setState(() {
+                    showErrorEmailHint = true;
+                    errorEmailMessage = 'Email telah terdaftar!';
+                  });
+                }
+
+                if(callResult.dioException!.response!.data['data']['errors']['phone'] != null) {
+                  setState(() {
+                    showErrorPhoneHint = true;
+                    errorPhoneMessage = 'Nomor telah tedaftar';
+                  });
+                }
+
+                if(callResult.dioException!.response!.data['data']['errors']['password'] != null) {
+                  setState(() {
+                    showErrorPasswordHint = true;
+                    errorPasswordMessage = 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka';
+                  });
+                }
+              }
             }
-          }
+          });
         }
-      }
+      });
     }
   }
 
@@ -1315,7 +1350,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                         }
                       },
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
                       ],
                     ),
                     const SizedBox(
@@ -1350,7 +1385,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                       ],
                     ),
                     const SizedBox(
-                      height: 25.0,
+                      height: 10.0,
                     ),
                     Text(
                       'Email',
@@ -1469,7 +1504,16 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
               child: ElevatedButton(
                 onPressed: () => checkForm(),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: nameController.text != '' && phoneController.text != '' && emailController.text != '' && passwordController.text != '' && confirmPasswordController.text != '' ?
+                  backgroundColor: nameController.text != '' &&
+                      phoneController.text != '' &&
+                      emailController.text != '' &&
+                      passwordController.text != '' &&
+                      confirmPasswordController.text != '' &&
+                      showErrorNameHint == false &&
+                      showErrorPhoneHint == false &&
+                      showErrorEmailHint == false &&
+                      showErrorPasswordHint == false &&
+                      showErrorPasswordConfHint == false ?
                   PrimaryColorStyles.primaryMain() :
                   NeutralColorStyles.neutral04(),
                 ),

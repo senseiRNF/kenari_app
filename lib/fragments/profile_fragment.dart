@@ -112,11 +112,11 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                   child: profileData != null && profileData!.profileImage != null ?
                                   CachedNetworkImage(
                                     imageUrl: "$baseURL/${profileData!.profileImage!.url ?? ''}",
-                                    width: 70.0,
-                                    height: 70.0,
                                     imageBuilder: (context, imgProvider) => Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                                       child: Container(
+                                        width: 70.0,
+                                        height: 70.0,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           image: DecorationImage(
@@ -128,6 +128,8 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                     ),
                                     errorWidget: (errContext, url, err) {
                                       return Container(
+                                        width: 70.0,
+                                        height: 70.0,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           border: Border.all(
@@ -135,15 +137,18 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                           ),
                                           shape: BoxShape.circle,
                                         ),
+                                        margin: const EdgeInsets.all(10.0),
                                         child: Icon(
                                           Icons.person,
-                                          size: 40.0,
+                                          size: 50.0,
                                           color: IconColorStyles.iconColor(),
                                         ),
                                       );
                                     },
                                   ) :
                                   Container(
+                                    width: 70.0,
+                                    height: 70.0,
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
@@ -151,9 +156,10 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                       ),
                                       shape: BoxShape.circle,
                                     ),
+                                    margin: const EdgeInsets.all(10.0),
                                     child: Icon(
                                       Icons.person,
-                                      size: 40.0,
+                                      size: 50.0,
                                       color: IconColorStyles.iconColor(),
                                     ),
                                   ),
@@ -170,9 +176,7 @@ class _ProfileFragmentState extends State<ProfileFragment> {
                                             context: context,
                                             target: const EditProfilePage(),
                                             callback: (callback) {
-                                              if(callback != null && callback == true) {
-                                                loadData();
-                                              }
+                                              loadData();
                                             },
                                           ).go(),
                                           customBorder: RoundedRectangleBorder(

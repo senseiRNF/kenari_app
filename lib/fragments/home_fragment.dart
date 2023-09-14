@@ -1327,7 +1327,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                     ],
                   ),
                   const SizedBox(
-                    height: 30.0,
+                    height: 10.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -1528,163 +1528,165 @@ class _HomeFragmentState extends State<HomeFragment> {
                           'Produk Terbaru',
                           style: MTextStyles.medium(),
                         ),
-                        TextButton(
-                          onPressed: () => MoveToPage(
-                            context: context,
-                            target: const ProductListPage(
-                              filterType: 'Terbaru',
-                            ),
-                            callback: (callbackResult) {
-                              if(callbackResult != null && callbackResult['target'] == 'transaction') {
-                                widget.onTransactionPageCallback(callbackResult);
-                              } else {
-                                loadData();
-                              }
-                            },
-                          ).go(),
-                          child: Text(
-                            'Lihat semua',
-                            style: MTextStyles.medium().copyWith(
-                              color: PrimaryColorStyles.primaryMain(),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => MoveToPage(
+                              context: context,
+                              target: const ProductListPage(
+                                filterType: 'Terbaru',
+                              ),
+                              callback: (callbackResult) {
+                                if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                  widget.onTransactionPageCallback(callbackResult);
+                                } else {
+                                  loadData();
+                                }
+                              },
+                            ).go(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(
+                                'Lihat semua',
+                                style: MTextStyles.medium().copyWith(
+                                  color: PrimaryColorStyles.primaryMain(),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 200.0,
-                          child: newProductList.isNotEmpty ?
-                          ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: newProductList.length,
-                            itemBuilder: (BuildContext listContext, int index) {
-                              String price = '';
-                              String? discountPrice;
+                  SizedBox(
+                    height: 200.0,
+                    child: newProductList.isNotEmpty ?
+                    ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: newProductList.length,
+                      itemBuilder: (BuildContext listContext, int index) {
+                        String price = '';
+                        String? discountPrice;
 
-                              if(newProductList[index].varians == null || newProductList[index].varians!.isEmpty) {
-                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].price ?? '0')).replaceAll(',', '.')}';
+                        if(newProductList[index].varians == null || newProductList[index].varians!.isEmpty) {
+                          price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].price ?? '0')).replaceAll(',', '.')}';
 
-                                if(newProductList[index].isPromo != null && newProductList[index].isPromo == true) {
-                                  discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
-                                }
-                              } else {
-                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
+                          if(newProductList[index].isPromo != null && newProductList[index].isPromo == true) {
+                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                          }
+                        } else {
+                          price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
 
-                                if(newProductList[index].varians![0].isPromo != null && newProductList[index].varians![0].isPromo == true) {
-                                  discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
-                                }
-                              }
+                          if(newProductList[index].varians![0].isPromo != null && newProductList[index].varians![0].isPromo == true) {
+                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(newProductList[index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
+                          }
+                        }
 
-                              return Padding(
-                                padding: index == 0 ? const EdgeInsets.only(left: 20.0, right: 1.0) : index == newProductList.length - 1 ?
-                                const EdgeInsets.only(left: 1.0, right: 25.0) :
-                                const EdgeInsets.symmetric(horizontal: 1.0),
-                                child: SizedBox(
-                                  width: 150.0,
-                                  height: 200.0,
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () => MoveToPage(
-                                        context: context,
-                                        target: ProductPage(productId: newProductList[index].sId!),
-                                        callback: (callbackResult) {
-                                          if(callbackResult != null && callbackResult['target'] == 'transaction') {
-                                            widget.onTransactionPageCallback(callbackResult);
-                                          } else {
-                                            loadData();
-                                          }
-                                        },
-                                      ).go(),
-                                      customBorder: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Expanded(
-                                            child: CachedNetworkImage(
-                                              imageUrl: "$baseURL/${newProductList[index].images != null && newProductList[index].images!.isNotEmpty && newProductList[index].images![0].url != null ? newProductList[index].images![0].url! : ''}",
-                                              imageBuilder: (context, imgProvider) => Container(
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: imgProvider,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  borderRadius: const BorderRadius.only(
-                                                    topLeft: Radius.circular(10.0),
-                                                    topRight: Radius.circular(10.0),
-                                                  ),
+                        return Padding(
+                          padding: index == 0 ? const EdgeInsets.only(left: 20.0, right: 1.0) : index == newProductList.length - 1 ?
+                          const EdgeInsets.only(left: 1.0, right: 25.0) :
+                          const EdgeInsets.symmetric(horizontal: 1.0),
+                          child: SizedBox(
+                            width: 150.0,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: InkWell(
+                                onTap: () => MoveToPage(
+                                  context: context,
+                                  target: ProductPage(productId: newProductList[index].sId!),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                      widget.onTransactionPageCallback(callbackResult);
+                                    } else {
+                                      loadData();
+                                    }
+                                  },
+                                ).go(),
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: CachedNetworkImage(
+                                        imageUrl: "$baseURL/${newProductList[index].images != null && newProductList[index].images!.isNotEmpty && newProductList[index].images![0].url != null ? newProductList[index].images![0].url! : ''}",
+                                        imageBuilder: (context, imgProvider) => Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imgProvider,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10.0),
+                                              topRight: Radius.circular(10.0),
+                                            ),
+                                          ),
+                                        ),
+                                        errorWidget: (errContext, url, error) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                Icon(
+                                                  Icons.broken_image_outlined,
+                                                  color: IconColorStyles.iconColor(),
                                                 ),
-                                              ),
-                                              errorWidget: (errContext, url, error) {
-                                                return Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.broken_image_outlined,
-                                                      color: IconColorStyles.iconColor(),
-                                                    ),
-                                                    Text(
-                                                      'Tidak dapat memuat gambar',
-                                                      style: XSTextStyles.medium(),
-                                                      textAlign: TextAlign.center,
-                                                    ),
-                                                  ],
-                                                );
-                                              },
+                                                Text(
+                                                  'Tidak dapat memuat gambar',
+                                                  style: XSTextStyles.medium(),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(
+                                              newProductList[index].productCategory != null && newProductList[index].productCategory!.name != null ? newProductList[index].productCategory!.name! : 'Unknow Category',
+                                              style: XSTextStyles.regular(),
                                             ),
                                           ),
                                           Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                              child: Text(
+                                                newProductList[index].name ?? '(Produk tidak diketahui)',
+                                                style: STextStyles.medium(),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(10.0),
-                                                  child: Text(
-                                                    newProductList[index].productCategory != null && newProductList[index].productCategory!.name != null ? newProductList[index].productCategory!.name! : 'Unknow Category',
-                                                    style: XSTextStyles.regular(),
-                                                  ),
-                                                ),
                                                 Expanded(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                    child: Text(
-                                                      newProductList[index].name ?? '(Produk tidak diketahui)',
-                                                      style: STextStyles.medium(),
+                                                  child: Text(
+                                                    discountPrice ?? price,
+                                                    style: XSTextStyles.medium().copyWith(
+                                                      color: PrimaryColorStyles.primaryMain(),
                                                     ),
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(10.0),
-                                                  child: Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Text(
-                                                          discountPrice ?? price,
-                                                          style: XSTextStyles.medium().copyWith(
-                                                            color: PrimaryColorStyles.primaryMain(),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () => showProductBottomDialog(newProductList[index]),
-                                                        customBorder: const CircleBorder(),
-                                                        child: Icon(
-                                                          Icons.more_horiz,
-                                                          size: 15.0,
-                                                          color: IconColorStyles.iconColor(),
-                                                        ),
-                                                      ),
-                                                    ],
+                                                InkWell(
+                                                  onTap: () => showProductBottomDialog(newProductList[index]),
+                                                  customBorder: const CircleBorder(),
+                                                  child: Icon(
+                                                    Icons.more_horiz,
+                                                    size: 15.0,
+                                                    color: IconColorStyles.iconColor(),
                                                   ),
                                                 ),
                                               ],
@@ -1693,133 +1695,135 @@ class _HomeFragmentState extends State<HomeFragment> {
                                         ],
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              );
-                            },
-                          ) :
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Image.asset(
-                                'assets/images/icon_empty.png',
-                                width: 150,
-                                height: 130,
-                              ),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              Text(
-                                'Oops! Untuk saat ini kategori ini masih kosong',
-                                style: STextStyles.medium(),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  bannerList.isNotEmpty ?
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          height: 150,
-                          enableInfiniteScroll: true,
-                          viewportFraction: 0.9,
-                        ),
-                        items: bannerList.map((bannerData) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: InkWell(
-                              onTap: () => MoveToPage(
-                                context: context,
-                                target: ProductListBannerPage(
-                                  bannerData: bannerData,
-                                ),
-                                callback: (callbackResult) {
-                                  if(callbackResult != null && callbackResult['target'] == 'transaction') {
-                                    widget.onTransactionPageCallback(callbackResult);
-                                  } else {
-                                    loadData();
-                                  }
-                                },
-                              ).go(),
-                              customBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: bannerData.bannerImage != null ?
-                              CachedNetworkImage(
-                                imageUrl: "$baseURL/${bannerData.bannerImage!.url ?? ''}",
-                                imageBuilder: (context, imgProvider) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      image: DecorationImage(
-                                        image: imgProvider,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                errorWidget: (errContext, url, error) {
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Icon(
-                                        Icons.broken_image_outlined,
-                                        color: IconColorStyles.iconColor(),
-                                      ),
-                                      Text(
-                                        'Tidak dapat memuat gambar',
-                                        style: XSTextStyles.medium(),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ) :
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Icon(
-                                    Icons.broken_image_outlined,
-                                    color: IconColorStyles.iconColor(),
-                                  ),
-                                  Text(
-                                    'Tidak dapat memuat gambar',
-                                    style: XSTextStyles.medium(),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
                               ),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
+                          ),
+                        );
+                      },
+                    ) :
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Image.asset(
+                          'assets/images/icon_empty.png',
+                          width: 150,
+                          height: 130,
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        Text(
+                          'Oops! Untuk saat ini kategori ini masih kosong',
+                          style: STextStyles.medium(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                  bannerList.isNotEmpty ?
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            height: 150,
+                            enableInfiniteScroll: true,
+                            viewportFraction: 0.9,
+                          ),
+                          items: bannerList.map((bannerData) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                              child: InkWell(
+                                onTap: () => MoveToPage(
+                                  context: context,
+                                  target: ProductListBannerPage(
+                                    bannerData: bannerData,
+                                  ),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                      widget.onTransactionPageCallback(callbackResult);
+                                    } else {
+                                      loadData();
+                                    }
+                                  },
+                                ).go(),
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: bannerData.bannerImage != null ?
+                                CachedNetworkImage(
+                                  imageUrl: "$baseURL/${bannerData.bannerImage!.url ?? ''}",
+                                  imageBuilder: (context, imgProvider) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        image: DecorationImage(
+                                          image: imgProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  errorWidget: (errContext, url, error) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Icon(
+                                            Icons.broken_image_outlined,
+                                            color: IconColorStyles.iconColor(),
+                                          ),
+                                          Text(
+                                            'Tidak dapat memuat gambar',
+                                            style: XSTextStyles.medium(),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ) :
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Icon(
+                                      Icons.broken_image_outlined,
+                                      color: IconColorStyles.iconColor(),
+                                    ),
+                                    Text(
+                                      'Tidak dapat memuat gambar',
+                                      style: XSTextStyles.medium(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ) :
-                  const Material(),
                   const SizedBox(
                     height: 10.0,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                     child: Text(
                       'Kategori Produk',
                       style: MTextStyles.medium(),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10.0,
                   ),
                   Row(
                     children: [
@@ -1888,9 +1892,6 @@ class _HomeFragmentState extends State<HomeFragment> {
                         ),
                       ),
                     ],
-                  ),
-                  const SizedBox(
-                    height: 20.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
@@ -2097,6 +2098,9 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
@@ -2106,178 +2110,180 @@ class _HomeFragmentState extends State<HomeFragment> {
                           'Diskon',
                           style: MTextStyles.medium(),
                         ),
-                        TextButton(
-                          onPressed: () => MoveToPage(
-                            context: context,
-                            target: const ProductListPage(
-                              filterType: 'Diskon',
-                            ),
-                            callback: (callbackResult) {
-                              if(callbackResult != null && callbackResult['target'] == 'transaction') {
-                                widget.onTransactionPageCallback(callbackResult);
-                              } else {
-                                loadData();
-                              }
-                            },
-                          ).go(),
-                          child: Text(
-                            'Lihat semua',
-                            style: MTextStyles.medium().copyWith(
-                              color: PrimaryColorStyles.primaryMain(),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => MoveToPage(
+                              context: context,
+                              target: const ProductListPage(
+                                filterType: 'Diskon',
+                              ),
+                              callback: (callbackResult) {
+                                if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                  widget.onTransactionPageCallback(callbackResult);
+                                } else {
+                                  loadData();
+                                }
+                              },
+                            ).go(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(
+                                'Lihat semua',
+                                style: MTextStyles.medium().copyWith(
+                                  color: PrimaryColorStyles.primaryMain(),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 200.0,
-                          child: discountProductList.isNotEmpty ?
-                          ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: discountProductList.length,
-                            itemBuilder: (BuildContext listContext, int index) {
-                              String price = '';
-                              String? discountPrice;
+                  SizedBox(
+                    height: 200.0,
+                    child: discountProductList.isNotEmpty ?
+                    ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: discountProductList.length,
+                      itemBuilder: (BuildContext listContext, int index) {
+                        String price = '';
+                        String? discountPrice;
 
-                              if(discountProductList[index].varians == null || discountProductList[index].varians!.isEmpty) {
-                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].price ?? '0')).replaceAll(',', '.')}';
+                        if(discountProductList[index].varians == null || discountProductList[index].varians!.isEmpty) {
+                          price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].price ?? '0')).replaceAll(',', '.')}';
 
-                                if(discountProductList[index].isPromo != null && discountProductList[index].isPromo == true) {
-                                  discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
-                                }
-                              } else {
-                                price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
+                          if(discountProductList[index].isPromo != null && discountProductList[index].isPromo == true) {
+                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                          }
+                        } else {
+                          price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
 
-                                if(discountProductList[index].varians![0].isPromo != null && discountProductList[index].varians![0].isPromo == true) {
-                                  discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
-                                }
-                              }
+                          if(discountProductList[index].varians![0].isPromo != null && discountProductList[index].varians![0].isPromo == true) {
+                            discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(discountProductList[index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
+                          }
+                        }
 
-                              return Padding(
-                                padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 1.0) : index == discountProductList.length - 1 ?
-                                const EdgeInsets.only(left: 1.0, right: 25.0) :
-                                const EdgeInsets.symmetric(horizontal: 1.0),
-                                child: SizedBox(
-                                  width: 150.0,
-                                  height: 200.0,
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () => MoveToPage(
-                                        context: context,
-                                        target: ProductPage(productId: discountProductList[index].sId!),
-                                        callback: (callbackResult) {
-                                          if(callbackResult != null && callbackResult['target'] == 'transaction') {
-                                            widget.onTransactionPageCallback(callbackResult);
-                                          } else {
-                                            loadData();
-                                          }
-                                        },
-                                      ).go(),
-                                      customBorder: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Expanded(
-                                            child: CachedNetworkImage(
-                                              imageUrl: "$baseURL/${discountProductList[index].images != null && discountProductList[index].images!.isNotEmpty && discountProductList[index].images![0].url != null ? discountProductList[index].images![0].url! : ''}",
-                                              imageBuilder: (context, imgProvider) => Container(
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: imgProvider,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  borderRadius: const BorderRadius.only(
-                                                    topLeft: Radius.circular(10.0),
-                                                    topRight: Radius.circular(10.0),
-                                                  ),
+                        return Padding(
+                          padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 1.0) : index == discountProductList.length - 1 ?
+                          const EdgeInsets.only(left: 1.0, right: 25.0) :
+                          const EdgeInsets.symmetric(horizontal: 1.0),
+                          child: SizedBox(
+                            width: 150.0,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: InkWell(
+                                onTap: () => MoveToPage(
+                                  context: context,
+                                  target: ProductPage(productId: discountProductList[index].sId!),
+                                  callback: (callbackResult) {
+                                    if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                      widget.onTransactionPageCallback(callbackResult);
+                                    } else {
+                                      loadData();
+                                    }
+                                  },
+                                ).go(),
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: CachedNetworkImage(
+                                        imageUrl: "$baseURL/${discountProductList[index].images != null && discountProductList[index].images!.isNotEmpty && discountProductList[index].images![0].url != null ? discountProductList[index].images![0].url! : ''}",
+                                        imageBuilder: (context, imgProvider) => Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imgProvider,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10.0),
+                                              topRight: Radius.circular(10.0),
+                                            ),
+                                          ),
+                                        ),
+                                        errorWidget: (errContext, url, error) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                Icon(
+                                                  Icons.broken_image_outlined,
+                                                  color: IconColorStyles.iconColor(),
                                                 ),
-                                              ),
-                                              errorWidget: (errContext, url, error) {
-                                                return Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.broken_image_outlined,
-                                                      color: IconColorStyles.iconColor(),
-                                                    ),
-                                                    Text(
-                                                      'Tidak dapat memuat gambar',
-                                                      style: XSTextStyles.medium(),
-                                                      textAlign: TextAlign.center,
-                                                    ),
-                                                  ],
-                                                );
-                                              },
+                                                Text(
+                                                  'Tidak dapat memuat gambar',
+                                                  style: XSTextStyles.medium(),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(
+                                              discountProductList[index].productCategory != null && discountProductList[index].productCategory!.name != null ? discountProductList[index].productCategory!.name! : '(Kategori tidak diketahui)',
+                                              style: XSTextStyles.regular(),
                                             ),
                                           ),
                                           Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                              child: Text(
+                                                discountProductList[index].name ?? '(Produk tidak diketahui)',
+                                                style: STextStyles.medium(),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10.0,
+                                          ),
+                                          discountPrice != null ?
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                            child: Text(
+                                              discountPrice,
+                                              style: XSTextStyles.medium().copyWith(
+                                                color: PrimaryColorStyles.primaryMain(),
+                                              ),
+                                            ),
+                                          ) :
+                                          const Material(),
+                                          Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(10.0),
-                                                  child: Text(
-                                                    discountProductList[index].productCategory != null && discountProductList[index].productCategory!.name != null ? discountProductList[index].productCategory!.name! : '(Kategori tidak diketahui)',
-                                                    style: XSTextStyles.regular(),
-                                                  ),
-                                                ),
                                                 Expanded(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                    child: Text(
-                                                      discountProductList[index].name ?? '(Produk tidak diketahui)',
-                                                      style: STextStyles.medium(),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10.0,
-                                                ),
-                                                discountPrice != null ?
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                                   child: Text(
-                                                    discountPrice,
+                                                    price,
                                                     style: XSTextStyles.medium().copyWith(
-                                                      color: PrimaryColorStyles.primaryMain(),
+                                                      color: discountPrice != null ? TextColorStyles.textDisabled() : PrimaryColorStyles.primaryMain(),
+                                                      decoration: discountPrice != null ? TextDecoration.lineThrough : null,
                                                     ),
                                                   ),
-                                                ) :
-                                                const Material(),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(10.0),
-                                                  child: Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Text(
-                                                          price,
-                                                          style: XSTextStyles.medium().copyWith(
-                                                            color: discountPrice != null ? TextColorStyles.textDisabled() : PrimaryColorStyles.primaryMain(),
-                                                            decoration: discountPrice != null ? TextDecoration.lineThrough : null,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () => showProductBottomDialog(discountProductList[index]),
-                                                        customBorder: const CircleBorder(),
-                                                        child: Icon(
-                                                          Icons.more_horiz,
-                                                          size: 15.0,
-                                                          color: IconColorStyles.iconColor(),
-                                                        ),
-                                                      ),
-                                                    ],
+                                                ),
+                                                InkWell(
+                                                  onTap: () => showProductBottomDialog(discountProductList[index]),
+                                                  customBorder: const CircleBorder(),
+                                                  child: Icon(
+                                                    Icons.more_horiz,
+                                                    size: 15.0,
+                                                    color: IconColorStyles.iconColor(),
                                                   ),
                                                 ),
                                               ],
@@ -2286,33 +2292,33 @@ class _HomeFragmentState extends State<HomeFragment> {
                                         ],
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              );
-                            },
-                          ) :
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Image.asset(
-                                'assets/images/icon_empty.png',
-                                width: 150,
-                                height: 130,
                               ),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              Text(
-                                'Oops! Untuk saat ini kategori ini masih kosong',
-                                style: STextStyles.medium(),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                            ),
                           ),
+                        );
+                      },
+                    ) :
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Image.asset(
+                          'assets/images/icon_empty.png',
+                          width: 150,
+                          height: 130,
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        Text(
+                          'Oops! Untuk saat ini kategori ini masih kosong',
+                          style: STextStyles.medium(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 25.0,

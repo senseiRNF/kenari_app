@@ -8,6 +8,7 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/profile_model.dart';
 import 'package:kenari_app/services/api/profile_services/api_profile_services.dart';
+import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
 import 'package:kenari_app/services/local/models/local_profile_form_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -53,6 +54,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
           if(profileResult.profileImage != null) {
             profileImage = MediaProfileData(
+              sId: profileResult.profileImage!.sId,
               url: profileResult.profileImage!.url,
             );
           }
@@ -294,14 +296,34 @@ class _EditProfilePageState extends State<EditProfilePage> {
         SuccessDialog(
           context: context,
           message: 'Sukses Memperbaharui Data',
-          okFunction: () => BackFromThisPage(context: context, callbackData: true).go(),
+          okFunction: () => BackFromThisPage(context: context).go(),
         ).show();
       }
     });
   }
 
   Future removeProfileImage() async {
-
+    if(profileImage != null) {
+      if(profileImage!.url != null) {
+        await APISellerProductServices(context: context).dioRemoveImage(profileImage!.sId).then((removeResult) {
+          if(removeResult == true) {
+            setState(() {
+              profileImage = null;
+            });
+          }
+        });
+      } else if(profileImage!.xFile != null) {
+        setState(() {
+          profileImage = null;
+        });
+      }
+    } else {
+      await OkDialog(
+        context: context,
+        message: 'Tidak dapat menghapus foto, foto tidak tersedia',
+        showIcon: false,
+      ).show();
+    }
   }
 
   @override
