@@ -104,7 +104,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
       });
     }
 
-    if(!checkPassword.hasMatch(passwordController.text) == true || passwordController.text.length < 7) {
+    if(!checkPassword.hasMatch(passwordController.text) == true) {
       isValid = false;
 
       setState(() {

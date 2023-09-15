@@ -5,7 +5,12 @@ import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
 class ResetPasswordPage extends StatefulWidget {
-  const ResetPasswordPage({super.key});
+  final String email;
+
+  const ResetPasswordPage({
+    super.key,
+    required this.email,
+  });
 
   @override
   State<ResetPasswordPage> createState() => _ResetPasswordPageState();
@@ -21,29 +26,47 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool showErrorPasswordHint = false;
   bool showErrorPasswordConfHint = false;
 
+  String? errorPasswordHintMessage;
+  String? errorPasswordConfHintMessage;
+
   void checkForm() {
     RegExp regExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
 
-    if(passwordController.text == '' || !regExp.hasMatch(passwordController.text) == true || passwordController.text.length < 7) {
+    if(passwordController.text == '') {
       setState(() {
         showErrorPasswordHint = true;
+        errorPasswordHintMessage = 'Kata sandi tidak boleh kosong!';
       });
-    } else {
-      if(confirmPasswordController.text == '' || confirmPasswordController.text != passwordController.text) {
-        setState(() {
-          showErrorPasswordConfHint = true;
-        });
-      } else {
-        OkDialog(
-          context: context,
-          title: 'Password Berhasil Diubah',
-          message: 'Silahkan kembali ke menu Login untuk masuk ke Aplikasi Kenari',
-          okText: 'Masuk',
-          okFunction: () {
-            BackFromThisPage(context: context).go();
-          },
-        ).show();
-      }
+    } else if(!regExp.hasMatch(passwordController.text) == true) {
+      setState(() {
+        showErrorPasswordHint = true;
+        errorPasswordHintMessage = 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka';
+      });
+    }
+
+    if(confirmPasswordController.text == '') {
+      setState(() {
+        showErrorPasswordConfHint = true;
+        errorPasswordConfHintMessage = 'Kata sandi tidak boleh kosong!';
+      });
+    } else if(confirmPasswordController.text != passwordController.text) {
+      setState(() {
+        showErrorPasswordConfHint = true;
+        errorPasswordConfHintMessage = 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka';
+      });
+    }
+
+    if(showErrorPasswordHint == false && showErrorPasswordConfHint == false) {
+
+      OkDialog(
+        context: context,
+        title: 'Password Berhasil Diubah',
+        message: 'Silahkan kembali ke menu Login untuk masuk ke Aplikasi Kenari',
+        okText: 'Masuk',
+        okFunction: () {
+          BackFromThisPage(context: context).go();
+        },
+      ).show();
     }
   }
 
@@ -138,13 +161,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             ),
                           ),
                         ),
-                        errorText: showErrorPasswordHint ? passwordController.text != '' ? 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka' : null,
+                        errorText: showErrorPasswordHint ? errorPasswordHintMessage : null,
                         errorMaxLines: 3,
                       ),
                       textInputAction: TextInputAction.next,
                       onChanged: (_) {
-                        setState(() {});
-
                         if(showErrorPasswordHint == true) {
                           setState(() {
                             showErrorPasswordHint = false;
@@ -182,13 +203,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             ),
                           ),
                         ),
-                        errorText: showErrorPasswordConfHint ? confirmPasswordController.text != '' ? 'Password harus sama' : 'Harap masukkan kembali password terlebih dahulu' : null,
+                        errorText: showErrorPasswordConfHint ? errorPasswordConfHintMessage : null,
                         errorMaxLines: 3,
                       ),
                       textInputAction: TextInputAction.done,
                       onChanged: (_) {
-                        setState(() {});
-
                         if(showErrorPasswordConfHint == true) {
                           setState(() {
                             showErrorPasswordConfHint = false;

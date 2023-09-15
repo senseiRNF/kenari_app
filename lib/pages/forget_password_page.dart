@@ -34,7 +34,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         title: 'Email berhasil terkirim!',
         message: 'Silahkan cek email Anda untuk mengatur ulang kata sandi',
         okFunction: () {
-          ReplaceToPage(context: context, target: const ResetPasswordPage()).go();
+          ReplaceToPage(context: context, target: ResetPasswordPage(email: emailController.text)).go();
         },
       ).show();
     }
@@ -124,8 +124,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
                       onChanged: (_) {
-                        setState(() {});
-
                         if(showErrorHint == true) {
                           setState(() {
                             showErrorHint = false;

@@ -167,4 +167,44 @@ class APIProfileServices {
 
     return result;
   }
+
+  Future<bool> forgotPassword(String email, String newPass, String confPass) async {
+    bool result = false;
+
+    FormData formData = FormData();
+
+    formData.fields.addAll({
+      MapEntry('email', email),
+      MapEntry('password', newPass),
+      MapEntry('password_confirmation', confPass),
+    });
+
+    await APIOptions.init().then((dio) async {
+      LoadingDialog(context: context).show();
+
+      try {
+        await dio.post(
+          '/auth/forgot-password',
+          options: Options(
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          ),
+          data: formData,
+        ).then((postResult) {
+          if(postResult.statusCode == 200 || postResult.statusCode == 201) {
+            result = true;
+          }
+
+          BackFromThisPage(context: context).go();
+        });
+      } on DioException catch(dioExc) {
+        BackFromThisPage(context: context).go();
+
+        ErrorHandler(context: context, dioExc: dioExc).handle();
+      }
+    });
+
+    return result;
+  }
 }

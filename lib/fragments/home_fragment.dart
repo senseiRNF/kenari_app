@@ -1585,7 +1585,7 @@ class _HomeFragmentState extends State<HomeFragment> {
 
                         return Padding(
                           padding: index == 0 ? const EdgeInsets.only(left: 20.0, right: 1.0) : index == newProductList.length - 1 ?
-                          const EdgeInsets.only(left: 1.0, right: 25.0) :
+                          const EdgeInsets.only(left: 1.0, right: 20.0) :
                           const EdgeInsets.symmetric(horizontal: 1.0),
                           child: SizedBox(
                             width: 150.0,
@@ -1723,9 +1723,12 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ],
                     ),
                   ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
                   bannerList.isNotEmpty ?
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10.0),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -1815,9 +1818,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ],
                     ),
                   ) :
-                  const SizedBox(
-                    height: 10.0,
-                  ),
+                  const Material(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                     child: Text(
@@ -2166,8 +2167,8 @@ class _HomeFragmentState extends State<HomeFragment> {
                         }
 
                         return Padding(
-                          padding: index == 0 ? const EdgeInsets.only(left: 25.0, right: 1.0) : index == discountProductList.length - 1 ?
-                          const EdgeInsets.only(left: 1.0, right: 25.0) :
+                          padding: index == 0 ? const EdgeInsets.only(left: 20.0, right: 1.0) : index == discountProductList.length - 1 ?
+                          const EdgeInsets.only(left: 1.0, right: 20.0) :
                           const EdgeInsets.symmetric(horizontal: 1.0),
                           child: SizedBox(
                             width: 150.0,

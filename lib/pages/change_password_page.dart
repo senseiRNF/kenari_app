@@ -25,24 +25,62 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool showNewPassErrorHint = false;
   bool showConfNewPassErrorHint = false;
 
-  String errorHintMessage = 'Kata sandi tidak boleh kosong!';
+  String? oldPassErrorHintMessage;
+  String? newPassErrorHintMessage;
+  String? confNewPassErrorHintMessage;
 
   Future changePassword() async {
+    RegExp regExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+
     if(oldPasswordController.text == '') {
       setState(() {
         showOldPassErrorHint = true;
+        oldPassErrorHintMessage = 'Kata sandi tidak boleh kosong!';
+      });
+    } else if(!regExp.hasMatch(oldPasswordController.text) == true) {
+      setState(() {
+        showOldPassErrorHint = true;
+        oldPassErrorHintMessage = 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka';
       });
     }
 
     if(newPasswordController.text == '') {
       setState(() {
         showNewPassErrorHint = true;
+        newPassErrorHintMessage = 'Kata sandi tidak boleh kosong!';
+      });
+    } else if(!regExp.hasMatch(newPasswordController.text) == true) {
+      setState(() {
+        showNewPassErrorHint = true;
+        newPassErrorHintMessage = 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka';
       });
     }
 
     if(confNewPasswordController.text == '') {
       setState(() {
         showConfNewPassErrorHint = true;
+        confNewPassErrorHintMessage = 'Kata sandi tidak boleh kosong!';
+      });
+    } else if(!regExp.hasMatch(confNewPasswordController.text) == true) {
+      setState(() {
+        showConfNewPassErrorHint = true;
+        confNewPassErrorHintMessage = 'Password minimal 8 karakter, terdiri dari huruf kapital, huruf kecil, simbol dan angka';
+      });
+    }
+
+    if(showOldPassErrorHint == false && showNewPassErrorHint == false && showConfNewPassErrorHint == false) {
+      await APIProfileServices(context: context).updatePassword(
+        oldPasswordController.text,
+        newPasswordController.text,
+        confNewPasswordController.text,
+      ).then((updateResult) {
+        if(updateResult == true) {
+          SuccessDialog(
+            context: context,
+            message: 'Sukses memperbaharui kata sandi',
+            okFunction: () => BackFromThisPage(context: context).go(),
+          ).show();
+        }
       });
     }
   }
@@ -125,7 +163,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 ),
                               ),
                             ),
-                            errorText: showOldPassErrorHint ? errorHintMessage : null,
+                            errorText: showOldPassErrorHint ? oldPassErrorHintMessage : null,
                             errorMaxLines: 3,
                           ),
                           textInputAction: TextInputAction.done,
@@ -162,7 +200,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 ),
                               ),
                             ),
-                            errorText: showNewPassErrorHint ? errorHintMessage : null,
+                            errorText: showNewPassErrorHint ? newPassErrorHintMessage : null,
                             errorMaxLines: 3,
                           ),
                           textInputAction: TextInputAction.done,
@@ -199,7 +237,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 ),
                               ),
                             ),
-                            errorText: showConfNewPassErrorHint ? errorHintMessage : null,
+                            errorText: showConfNewPassErrorHint ? confNewPassErrorHintMessage : null,
                             errorMaxLines: 3,
                           ),
                           textInputAction: TextInputAction.done,
@@ -220,19 +258,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
               child: ElevatedButton(
-                onPressed: () async => await APIProfileServices(context: context).updatePassword(
-                  oldPasswordController.text,
-                  newPasswordController.text,
-                  confNewPasswordController.text,
-                ).then((updateResult) {
-                  if(updateResult == true) {
-                    SuccessDialog(
-                      context: context,
-                      message: 'Sukses memperbaharui kata sandi',
-                      okFunction: () => BackFromThisPage(context: context).go(),
-                    ).show();
-                  }
-                }),
+                onPressed: () => changePassword(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: oldPasswordController.text != '' && newPasswordController.text != '' && confNewPasswordController.text != '' ?
                   PrimaryColorStyles.primaryMain() :
