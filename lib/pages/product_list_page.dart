@@ -370,23 +370,38 @@ class _ProductListPageState extends State<ProductListPage> {
                               ),
                             );
                           },
-                          itemBuilder: (BuildContext popularContext, int index) {
+                          itemBuilder: (BuildContext productContext, int index) {
+                            String price = '';
+                            String? discountPrice;
+
+                            if(productList[index].varians == null || productList[index].varians!.isEmpty) {
+                              price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}';
+
+                              if(productList[index].isPromo != null && productList[index].isPromo == true) {
+                                discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}';
+                              }
+                            } else {
+                              price = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].varians![0].price ?? '0')).replaceAll(',', '.')}';
+
+                              if(productList[index].varians![0].isPromo != null && productList[index].varians![0].isPromo == true) {
+                                discountPrice = 'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].varians![0].promoPrice ?? '0')).replaceAll(',', '.')}';
+                              }
+                            }
+
                             return Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0),
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  onTap: () {
-                                    MoveToPage(
-                                      context: context,
-                                      target: ProductPage(productId: productList[index].sId!),
-                                      callback: (callbackResult) {
-                                        if(callbackResult != null) {
-                                          BackFromThisPage(context: context, callbackData: callbackResult).go();
-                                        }
-                                      },
-                                    ).go();
-                                  },
+                                  onTap: () => MoveToPage(
+                                    context: context,
+                                    target: ProductPage(productId: productList[index].sId!),
+                                    callback: (callbackResult) {
+                                      if(callbackResult != null) {
+                                        BackFromThisPage(context: context, callbackData: callbackResult).go();
+                                      }
+                                    },
+                                  ).go(),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 15.0),
                                     child: Row(
@@ -452,7 +467,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                 crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
                                                   Expanded(
-                                                    child: productList[index].isPromo != null && productList[index].isPromo == true ?
+                                                    child: discountPrice != null ?
                                                     Column(
                                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                                       children: [
@@ -460,7 +475,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                           height: 10.0,
                                                         ),
                                                         Text(
-                                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].promoPrice ?? '0')).replaceAll(',', '.')}',
+                                                          discountPrice,
                                                           style: STextStyles.regular().copyWith(
                                                             color: PrimaryColorStyles.primaryMain(),
                                                           ),
@@ -469,7 +484,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                           height: 5.0,
                                                         ),
                                                         Text(
-                                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
+                                                          price,
                                                           style: STextStyles.regular().copyWith(
                                                             color: TextColorStyles.textDisabled(),
                                                             decoration: TextDecoration.lineThrough,
@@ -484,7 +499,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                           height: 25.0,
                                                         ),
                                                         Text(
-                                                          'Rp ${NumberFormat('#,###', 'en_id').format(int.parse(productList[index].price ?? '0')).replaceAll(',', '.')}',
+                                                          price,
                                                           style: STextStyles.regular().copyWith(
                                                             color: PrimaryColorStyles.primaryMain(),
                                                           ),

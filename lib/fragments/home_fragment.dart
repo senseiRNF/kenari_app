@@ -1520,7 +1520,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -1728,7 +1728,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                   ),
                   bannerList.isNotEmpty ?
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -1826,73 +1826,76 @@ class _HomeFragmentState extends State<HomeFragment> {
                       style: MTextStyles.medium(),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 50.0,
-                          child: categoryList.isNotEmpty ?
-                          ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: categoryList.length,
-                            itemBuilder: (BuildContext categoryContext, int categoryIndex) {
-                              return Padding(
-                                padding: categoryIndex == 0 ? const EdgeInsets.only(left: 25.0, right: 5) : categoryIndex == categoryList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0,) : const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: BorderColorStyles.borderStrokes(),
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: Colors.white,
-                                  ),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () => MoveToPage(
-                                        context: context,
-                                        target: ProductListPage(
-                                          filterType: 'Kategori_${categoryList[categoryIndex].name}',
-                                          categoryData: categoryList[categoryIndex],
-                                        ),
-                                        callback: (callbackResult) {
-                                          if(callbackResult != null && callbackResult['target'] == 'transaction') {
-                                            widget.onTransactionPageCallback(callbackResult);
-                                          } else {
-                                            loadData();
-                                          }
-                                        },
-                                      ).go(),
-                                      customBorder: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 50.0,
+                            child: categoryList.isNotEmpty ?
+                            ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: categoryList.length,
+                              itemBuilder: (BuildContext categoryContext, int categoryIndex) {
+                                return Padding(
+                                  padding: categoryIndex == 0 ? const EdgeInsets.only(left: 25.0, right: 5) : categoryIndex == categoryList.length - 1 ? const EdgeInsets.only(left: 5.0, right: 25.0,) : const EdgeInsets.symmetric(horizontal: 5.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: BorderColorStyles.borderStrokes(),
                                       ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Text(
-                                            categoryList[categoryIndex].name ?? '(Kategori tidak diketahui)',
-                                            style: MTextStyles.regular(),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: Colors.white,
+                                    ),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: () => MoveToPage(
+                                          context: context,
+                                          target: ProductListPage(
+                                            filterType: 'Kategori_${categoryList[categoryIndex].name}',
+                                            categoryData: categoryList[categoryIndex],
+                                          ),
+                                          callback: (callbackResult) {
+                                            if(callbackResult != null && callbackResult['target'] == 'transaction') {
+                                              widget.onTransactionPageCallback(callbackResult);
+                                            } else {
+                                              loadData();
+                                            }
+                                          },
+                                        ).go(),
+                                        customBorder: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(
+                                              categoryList[categoryIndex].name ?? '(Kategori tidak diketahui)',
+                                              style: MTextStyles.regular(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          ) :
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              'Kategori tidak ditemukan...',
-                              style: MTextStyles.medium(),
-                              textAlign: TextAlign.center,
+                                );
+                              },
+                            ) :
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Text(
+                                'Kategori tidak ditemukan...',
+                                style: MTextStyles.medium(),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
@@ -1903,6 +1906,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                   ),
                   Container(
                     color: Colors.white,
+                    margin: const EdgeInsets.symmetric(vertical: 5.0),
                     child: popularProductList.isNotEmpty ?
                     ListView.separated(
                       shrinkWrap: true,
@@ -2099,11 +2103,8 @@ class _HomeFragmentState extends State<HomeFragment> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -2250,9 +2251,6 @@ class _HomeFragmentState extends State<HomeFragment> {
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 10.0,
-                                          ),
                                           discountPrice != null ?
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -2265,7 +2263,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                                           ) :
                                           const Material(),
                                           Padding(
-                                            padding: const EdgeInsets.all(10.0),
+                                            padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
                                             child: Row(
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
