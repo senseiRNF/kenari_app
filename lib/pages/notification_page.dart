@@ -28,51 +28,20 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Future loadData() async {
-    await APINotificationServices(context: context).call().then((notificationResult) {
-      if(notificationResult != null && notificationResult!.notificationData != null) {
+    await APINotificationServices(context: context).call(
+      selectedTab,
+      selectedFilter,
+    ).then((notificationResult) {
+      if(notificationResult != null && notificationResult.notificationData != null) {
         setState(() {
-          notificationList = notificationResult!.notificationData;
+          notificationList = notificationResult.notificationData!;
         });
       }
     });
   }
 
-  void changeFilter(int filter) {
-    if(selectedTab == 0) {
-      switch(filter) {
-        case 1:
-          break;
-        case 2:
-          break;
-        case 3:
-          break;
-        case 4:
-          break;
-        default:
-          break;
-      }
-    } else {
-      switch(filter) {
-        case 1:
-          break;
-        case 2:
-          break;
-        case 3:
-          break;
-        case 4:
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    changeFilter(selectedFilter);
-
-    notificationList.sort((b, a) => a.date.compareTo(b.date));
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -138,6 +107,8 @@ class _NotificationPageState extends State<NotificationPage> {
                       setState(() {
                         selectedTab = index;
                       });
+
+                      loadData();
                     },
                     tabs: [
                       Tab(
@@ -188,6 +159,8 @@ class _NotificationPageState extends State<NotificationPage> {
                                       selectedFilter = 0;
                                     });
                                   }
+
+                                  loadData();
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -222,6 +195,8 @@ class _NotificationPageState extends State<NotificationPage> {
                                       selectedFilter = 1;
                                     });
                                   }
+
+                                  loadData();
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -256,6 +231,8 @@ class _NotificationPageState extends State<NotificationPage> {
                                       selectedFilter = 2;
                                     });
                                   }
+
+                                  loadData();
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -290,6 +267,8 @@ class _NotificationPageState extends State<NotificationPage> {
                                       selectedFilter = 3;
                                     });
                                   }
+
+                                  loadData();
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -324,6 +303,8 @@ class _NotificationPageState extends State<NotificationPage> {
                                       selectedFilter = 4;
                                     });
                                   }
+
+                                  loadData();
                                 },
                                 customBorder: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -360,15 +341,15 @@ class _NotificationPageState extends State<NotificationPage> {
                   separatorBuilder: (BuildContext separatorContext, int separatorIndex) {
                     bool showDivider = true;
 
-                    if(separatorIndex < notificationList.length) {
-                      if(notificationList[separatorIndex].date.year != notificationList[separatorIndex + 1].date.year) {
-                        showDivider = false;
-                      } else {
-                        if(notificationList[separatorIndex].date.month != notificationList[separatorIndex + 1].date.month) {
-                          showDivider = false;
-                        }
-                      }
-                    }
+                    // if(separatorIndex < notificationList.length) {
+                    //   if(notificationList[separatorIndex].date.year != notificationList[separatorIndex + 1].date.year) {
+                    //     showDivider = false;
+                    //   } else {
+                    //     if(notificationList[separatorIndex].date.month != notificationList[separatorIndex + 1].date.month) {
+                    //       showDivider = false;
+                    //     }
+                    //   }
+                    // }
 
                     return showDivider == true ?
                     Padding(
@@ -383,17 +364,19 @@ class _NotificationPageState extends State<NotificationPage> {
                   itemBuilder: (BuildContext listContext, int index) {
                     bool showMonthHeading = false;
 
-                    if(index == 0) {
-                      showMonthHeading = true;
-                    } else {
-                      if(notificationList[index].date.year != notificationList[index -1].date.year) {
-                        showMonthHeading = true;
-                      } else {
-                        if(notificationList[index].date.month != notificationList[index - 1].date.month) {
-                          showMonthHeading = true;
-                        }
-                      }
-                    }
+                    // if(index == 0) {
+                    //   showMonthHeading = true;
+                    // } else {
+                    //   if(notificationList[index].date.year != notificationList[index -1].date.year) {
+                    //     showMonthHeading = true;
+                    //   } else {
+                    //     if(notificationList[index].date.month != notificationList[index - 1].date.month) {
+                    //       showMonthHeading = true;
+                    //     }
+                    //   }
+                    // }
+
+                    showMonthHeading = true;
 
                     return selectedTab == 0 ?
                     Column(
@@ -410,13 +393,15 @@ class _NotificationPageState extends State<NotificationPage> {
                             const SizedBox(
                               height: 10.0,
                             ),
+                            notificationList[index].createdAt != null ?
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0),
                               child: Text(
-                                DateFormat('MMMM yyyy').format(notificationList[index].date),
+                                DateFormat('MMMM yyyy').format(DateTime.parse(notificationList[index].createdAt!)),
                                 style: XSTextStyles.medium(),
                               ),
-                            ),
+                            ) :
+                            const Material(),
                             const SizedBox(
                               height: 20.0,
                             ),
@@ -431,7 +416,7 @@ class _NotificationPageState extends State<NotificationPage> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  notificationList[index].title,
+                                  notificationList[index].title ?? 'Unknown',
                                   style: MTextStyles.medium().copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -440,16 +425,18 @@ class _NotificationPageState extends State<NotificationPage> {
                                   height: 10.0,
                                 ),
                                 Text(
-                                  notificationList[index].subtitle ?? '',
+                                  notificationList[index].content ?? '',
                                   style: STextStyles.regular(),
                                 ),
                                 const SizedBox(
                                   height: 10.0,
                                 ),
+                                notificationList[index].createdAt != null ?
                                 Text(
-                                  DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
+                                  DateFormat('dd MMM yyyy, HH:mm').format(DateTime.parse(notificationList[index].createdAt!)),
                                   style: STextStyles.regular(),
-                                ),
+                                ) :
+                                const Material(),
                               ],
                             ),
                           ),
@@ -470,13 +457,15 @@ class _NotificationPageState extends State<NotificationPage> {
                             const SizedBox(
                               height: 10.0,
                             ),
+                            notificationList[index].createdAt != null ?
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 25.0),
                               child: Text(
-                                DateFormat('MMMM yyyy').format(notificationList[index].date),
+                                DateFormat('MMMM yyyy').format(DateTime.parse(notificationList[index].createdAt!)),
                                 style: XSTextStyles.medium(),
                               ),
-                            ),
+                            ) :
+                            const Material(),
                             const SizedBox(
                               height: 20.0,
                             ),
@@ -498,37 +487,39 @@ class _NotificationPageState extends State<NotificationPage> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        notificationList[index].title,
+                                        notificationList[index].title ?? 'Unknown',
                                         style: MTextStyles.medium().copyWith(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      notificationList[index].total != null ?
-                                      Text(
-                                        "${notificationList[index].total! < 0 ? '-Rp ' : '+Rp '}${NumberFormat('#,###', 'en_id').format(notificationList[index].total!.abs()).replaceAll(',', '.')}",
-                                        style: MTextStyles.medium().copyWith(
-                                          color: notificationList[index].total! < 0 ? Colors.red : Colors.green,
-                                        ),
-                                      ) :
+                                      // notificationList[index].total != null ?
+                                      // Text(
+                                      //   "${notificationList[index].total! < 0 ? '-Rp ' : '+Rp '}${NumberFormat('#,###', 'en_id').format(notificationList[index].total!.abs()).replaceAll(',', '.')}",
+                                      //   style: MTextStyles.medium().copyWith(
+                                      //     color: notificationList[index].total! < 0 ? Colors.red : Colors.green,
+                                      //   ),
+                                      // ) :
                                       const Material(),
                                     ],
                                   ),
                                   const SizedBox(
                                     height: 10.0,
                                   ),
-                                  notificationList[index].subtitle != null ?
+                                  notificationList[index].content != null ?
                                   Text(
-                                    notificationList[index].subtitle!,
+                                    notificationList[index].content!,
                                     style: STextStyles.regular(),
                                   ) :
                                   const Material(),
                                   const SizedBox(
                                     height: 10.0,
                                   ),
+                                  notificationList[index].createdAt != null ?
                                   Text(
-                                    DateFormat('dd MMM yyyy, HH:mm').format(notificationList[index].date),
+                                    DateFormat('dd MMM yyyy, HH:mm').format(DateTime.parse(notificationList[index].createdAt!)),
                                     style: STextStyles.regular(),
-                                  ),
+                                  ) :
+                                  const Material(),
                                 ],
                               ),
                             ),

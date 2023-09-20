@@ -77,7 +77,7 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                           style: STextStyles.regular(),
                         ),
                         Text(
-                          widget.notificationData.title,
+                          widget.notificationData.title ?? 'No Title',
                           style: STextStyles.medium(),
                         ),
                       ],
@@ -115,8 +115,20 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        // Text(
+                        //   widget.notificationData.title != null ?
+                        //   widget.notificationData.title!.contains('Iuran Wajib') ?
+                        //   'Autodebet' :
+                        //   widget.notificationData.title!.contains('Penjualan') ||
+                        //       widget.notificationData.title!.contains('Pinjaman') &&
+                        //           widget.notificationData.content != null ?
+                        //   'Metode Pencairan' :
+                        //   'Metode Pembayaran' :
+                        //   'Unknown',
+                        //   style: STextStyles.regular(),
+                        // ),
                         Text(
-                          widget.notificationData.title.contains('Iuran Wajib') ? 'Autodebet' : widget.notificationData.title.contains('Penjualan') || widget.notificationData.title.contains('Pinjaman') && widget.notificationData.total != null && widget.notificationData.total! > 0 ? 'Metode Pencairan' : 'Metode Pembayaran',
+                          widget.notificationData.title ?? 'Unknown',
                           style: STextStyles.regular(),
                         ),
                         Expanded(
@@ -175,11 +187,13 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                           'Waktu dan Tanggal',
                           style: STextStyles.regular(),
                         ),
+                        widget.notificationData.createdAt != null ?
                         Text(
-                          DateFormat('dd MMMM yyyy,\nHH:mm').format(widget.notificationData.date),
+                          DateFormat('dd MMMM yyyy,\nHH:mm').format(DateTime.parse(widget.notificationData.createdAt!)),
                           style: STextStyles.medium(),
                           textAlign: TextAlign.end,
-                        ),
+                        ) :
+                        const Material(),
                       ],
                     ),
                   ),
@@ -206,11 +220,13 @@ class _NotificationTransactionDetailPageState extends State<NotificationTransact
                           'Jumlah',
                           style: STextStyles.regular(),
                         ),
-                        Text(
-                          "Rp ${NumberFormat('#,###', 'en_id').format(widget.notificationData.total!.abs()).replaceAll(',', '.')}",
-                          style: STextStyles.medium(),
-                          textAlign: TextAlign.end,
-                        ),
+                        // widget.notificationData.total != null ?
+                        // Text(
+                        //   "Rp ${NumberFormat('#,###', 'en_id').format(widget.notificationData.total!.abs()).replaceAll(',', '.')}",
+                        //   style: STextStyles.medium(),
+                        //   textAlign: TextAlign.end,
+                        // ) :
+                        const Material(),
                       ],
                     ),
                   ),
