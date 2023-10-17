@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
@@ -10,6 +11,7 @@ import 'package:kenari_app/pages/edit_profile_page.dart';
 import 'package:kenari_app/pages/splash_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/profile_model.dart';
+import 'package:kenari_app/services/api/notification_services/api_notification_services.dart';
 import 'package:kenari_app/services/api/profile_services/api_profile_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
@@ -24,6 +26,8 @@ class ProfileFragment extends StatefulWidget {
 
 class _ProfileFragmentState extends State<ProfileFragment> {
   ProfileData? profileData;
+
+  final _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -45,10 +49,12 @@ class _ProfileFragmentState extends State<ProfileFragment> {
   }
 
   Future logoutSession() async {
-    await LocalSharedPrefs().removeAllKey().then((removeResult) {
-      if(removeResult == true) {
-        RedirectToPage(context: context, target: const SplashPage()).go();
-      }
+    await LocalSharedPrefs().removeAllKey().then((removeResult) async {
+      await _firebaseMessaging.getToken().then((token) async {
+        await APINotificationServices(context: context).removeNotificationToken(token).then((_) {
+          RedirectToPage(context: context, target: const SplashPage()).go();
+        });
+      });
     });
   }
 

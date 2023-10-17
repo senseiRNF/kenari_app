@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kenari_app/fragments/home_fragment.dart';
@@ -6,6 +7,7 @@ import 'package:kenari_app/fragments/search_fragment.dart';
 import 'package:kenari_app/fragments/transaction_fragment.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/seller_product_form_page.dart';
+import 'package:kenari_app/services/api/notification_services/api_notification_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
@@ -23,11 +25,31 @@ class _HomePageState extends State<HomePage> {
 
   bool isOnBoarding = false;
 
+  final _firebaseMessaging = FirebaseMessaging.instance;
+
   @override
   void initState() {
     super.initState();
 
-    checkIfBoarding();
+    checkIfSendingFCMTOken();
+  }
+
+  checkIfSendingFCMTOken() async {
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      if(token != null) {
+        checkIfBoarding();
+      } else {
+        await LocalSharedPrefs().readKey('user_id').then((userId) async {
+          await LocalSharedPrefs().writeKey('token', '').then((_) async {
+            await _firebaseMessaging.getToken().then((token) async {
+              await APINotificationServices(context: context).postNotificationToken(token, userId).then((_) {
+                checkIfBoarding();
+              });
+            });
+          });
+        });
+      }
+    });
   }
 
   Widget activeFragment() {

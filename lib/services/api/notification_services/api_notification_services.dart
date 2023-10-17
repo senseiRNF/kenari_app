@@ -5,6 +5,7 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/notification_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
+import 'package:kenari_app/services/local/models/api_response_result.dart';
 
 class APINotificationServices {
   BuildContext context;
@@ -69,6 +70,59 @@ class APINotificationServices {
         });
       });
     });
+
+    return result;
+  }
+
+  Future<bool> postNotificationToken(String? token, String? userId) async {
+    bool result = false;
+
+    await APIOptions.init().then((dio) async {
+      try {
+        await dio.post(
+          '/token',
+          data: {
+            'token': token,
+            'user_id': userId,
+          },
+        ).then((postResult) {
+          BackFromThisPage(context: context).go();
+
+          result = true;
+        });
+      } on DioException catch(dioExc) {
+        BackFromThisPage(context: context).go();
+
+        ErrorHandler(context: context, dioExc: dioExc, isLoginService: true).handle();
+
+        result = false;
+      }
+    });
+
+    return result;
+  }
+
+  Future<bool> removeNotificationToken(String? token) async {
+    bool result = false;
+
+    await APIOptions.init().then((dio) async {
+      try {
+        await dio.post(
+          '/token/$token',
+        ).then((postResult) {
+          BackFromThisPage(context: context).go();
+
+          result = true;
+        });
+      } on DioException catch(dioExc) {
+        BackFromThisPage(context: context).go();
+
+        ErrorHandler(context: context, dioExc: dioExc, isLoginService: true).handle();
+
+        result = false;
+      }
+    });
+
 
     return result;
   }
