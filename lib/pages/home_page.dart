@@ -35,15 +35,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   checkIfSendingFCMTOken() async {
-    await LocalSharedPrefs().readKey('token').then((token) async {
-      if(token != null) {
+    await LocalSharedPrefs().readKey('fcm_token').then((fcmToken) async {
+      if(fcmToken != null) {
         checkIfBoarding();
       } else {
         await LocalSharedPrefs().readKey('user_id').then((userId) async {
-          await LocalSharedPrefs().writeKey('token', '').then((_) async {
-            await _firebaseMessaging.getToken().then((token) async {
-              await APINotificationServices(context: context).postNotificationToken(token, userId).then((_) {
-                checkIfBoarding();
+          await LocalSharedPrefs().readKey('token').then((token) async {
+            await _firebaseMessaging.getToken().then((resultToken) async {
+              await APINotificationServices(context: context).postNotificationToken(resultToken, token, userId).then((_) async {
+                await LocalSharedPrefs().writeKey('fcm_token', resultToken).then((_) {
+                  checkIfBoarding();
+                });
               });
             });
           });

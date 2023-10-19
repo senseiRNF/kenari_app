@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "357614804461",
-    "project_id": "kenari0",
-    "storage_bucket": "kenari0.appspot.com"
+    "project_number": "35651382440",
+    "project_id": "kenar-admin",
+    "storage_bucket": "kenar-admin.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:357614804461:android:c36da8038c275916ac5be4",
+        "mobilesdk_app_id": "1:35651382440:android:0844761cc04891ee91e69d",
         "android_client_info": {
           "package_name": "com.kenariapp.kenari_app"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC9J0KtMLCKMCYXOsVT-2dNAUOd4EoqrXo"
+          "current_key": "AIzaSyCsSZuBR5YdOMTMFI0RBXHurC_sVJC-DMg"
         }
       ],
       "services": {

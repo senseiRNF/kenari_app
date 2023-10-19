@@ -49,10 +49,12 @@ class _ProfileFragmentState extends State<ProfileFragment> {
   }
 
   Future logoutSession() async {
-    await LocalSharedPrefs().removeAllKey().then((removeResult) async {
-      await _firebaseMessaging.getToken().then((token) async {
-        await APINotificationServices(context: context).removeNotificationToken(token).then((_) {
-          RedirectToPage(context: context, target: const SplashPage()).go();
+    await LocalSharedPrefs().readKey('token').then((token) async {
+      await _firebaseMessaging.getToken().then((fcmToken) async {
+        await APINotificationServices(context: context).removeNotificationToken(fcmToken, token).then((_) async {
+          await LocalSharedPrefs().removeAllKey().then((removeResult) {
+            RedirectToPage(context: context, target: const SplashPage()).go();
+          });
         });
       });
     });

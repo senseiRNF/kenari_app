@@ -5,7 +5,6 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/notification_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
-import 'package:kenari_app/services/local/models/api_response_result.dart';
 
 class APINotificationServices {
   BuildContext context;
@@ -74,17 +73,26 @@ class APINotificationServices {
     return result;
   }
 
-  Future<bool> postNotificationToken(String? token, String? userId) async {
+  Future<bool> postNotificationToken(String? fcmToken, String? token, String? userId) async {
+    print('FCM Token: $fcmToken');
+
     bool result = false;
 
     await APIOptions.init().then((dio) async {
+      LoadingDialog(context: context).show();
+
       try {
         await dio.post(
           '/token',
           data: {
-            'token': token,
+            'token': fcmToken,
             'user_id': userId,
           },
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ),
         ).then((postResult) {
           BackFromThisPage(context: context).go();
 
@@ -93,7 +101,7 @@ class APINotificationServices {
       } on DioException catch(dioExc) {
         BackFromThisPage(context: context).go();
 
-        ErrorHandler(context: context, dioExc: dioExc, isLoginService: true).handle();
+        ErrorHandler(context: context, dioExc: dioExc).handle();
 
         result = false;
       }
@@ -102,13 +110,20 @@ class APINotificationServices {
     return result;
   }
 
-  Future<bool> removeNotificationToken(String? token) async {
+  Future<bool> removeNotificationToken(String? fcmToken, String? token) async {
     bool result = false;
 
     await APIOptions.init().then((dio) async {
+      LoadingDialog(context: context).show();
+
       try {
-        await dio.post(
-          '/token/$token',
+        await dio.delete(
+          '/token/$fcmToken',
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ),
         ).then((postResult) {
           BackFromThisPage(context: context).go();
 
@@ -117,12 +132,11 @@ class APINotificationServices {
       } on DioException catch(dioExc) {
         BackFromThisPage(context: context).go();
 
-        ErrorHandler(context: context, dioExc: dioExc, isLoginService: true).handle();
+        ErrorHandler(context: context, dioExc: dioExc).handle();
 
         result = false;
       }
     });
-
 
     return result;
   }
