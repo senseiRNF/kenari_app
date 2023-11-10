@@ -7,8 +7,8 @@ import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/temporal_fee_model.dart';
 import 'package:kenari_app/services/api/models/temporal_fee_result_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
-import 'package:kenari_app/services/local/models/api_response_result.dart';
-import 'package:kenari_app/services/local/models/local_temporal_fee_data.dart';
+import 'package:kenari_app/services/local/jsons/api_response_result.dart';
+import 'package:kenari_app/services/local/jsons/local_temporal_fee_data.dart';
 
 class APITemporalFeeServices {
   BuildContext context;

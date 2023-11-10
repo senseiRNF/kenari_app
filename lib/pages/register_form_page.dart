@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/authorization_services/api_register_services.dart';
-import 'package:kenari_app/services/local/models/register_form_result.dart';
+import 'package:kenari_app/services/local/jsons/register_form_result.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 

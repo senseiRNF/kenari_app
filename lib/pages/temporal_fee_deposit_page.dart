@@ -7,7 +7,7 @@ import 'package:kenari_app/miscellaneous/separator_formatter.dart';
 import 'package:kenari_app/pages/fee_payment_result_page.dart';
 import 'package:kenari_app/services/api/fee_services/api_temporal_fee_services.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
-import 'package:kenari_app/services/local/models/local_temporal_fee_data.dart';
+import 'package:kenari_app/services/local/jsons/local_temporal_fee_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kenari_app/services/local/models/local_status_color_data.dart';
+import 'package:kenari_app/services/local/jsons/local_status_color_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 
 LocalStatusColorData checkStatusColor(String? status) {

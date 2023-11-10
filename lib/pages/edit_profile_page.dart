@@ -9,7 +9,7 @@ import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/profile_model.dart';
 import 'package:kenari_app/services/api/profile_services/api_profile_services.dart';
 import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
-import 'package:kenari_app/services/local/models/local_profile_form_data.dart';
+import 'package:kenari_app/services/local/jsons/local_profile_form_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 

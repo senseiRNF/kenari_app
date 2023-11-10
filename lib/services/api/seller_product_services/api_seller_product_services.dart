@@ -7,7 +7,7 @@ import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/seller_product_detail_model.dart';
 import 'package:kenari_app/services/api/models/seller_product_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
-import 'package:kenari_app/services/local/models/local_seller_product_data.dart';
+import 'package:kenari_app/services/local/jsons/local_seller_product_data.dart';
 
 class APISellerProductServices {
   BuildContext context;

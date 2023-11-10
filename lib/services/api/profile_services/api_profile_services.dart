@@ -6,7 +6,7 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/profile_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
-import 'package:kenari_app/services/local/models/local_profile_form_data.dart';
+import 'package:kenari_app/services/local/jsons/local_profile_form_data.dart';
 
 class APIProfileServices {
   BuildContext context;

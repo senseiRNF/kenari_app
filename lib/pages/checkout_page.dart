@@ -5,7 +5,7 @@ import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/pages/transaction_result_page.dart';
 import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/transaction_services/api_transaction_services.dart';
-import 'package:kenari_app/services/local/models/local_trolley_product.dart';
+import 'package:kenari_app/services/local/jsons/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 

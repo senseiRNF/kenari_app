@@ -6,7 +6,7 @@ import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/transaction_order_detail_model.dart';
 import 'package:kenari_app/services/api/models/transaction_order_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
-import 'package:kenari_app/services/local/models/local_trolley_product.dart';
+import 'package:kenari_app/services/local/jsons/local_trolley_product.dart';
 
 class APITransactionServices {
   BuildContext context;

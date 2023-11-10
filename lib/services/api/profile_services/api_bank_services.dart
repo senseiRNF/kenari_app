@@ -6,7 +6,7 @@ import 'package:kenari_app/services/api/api_options.dart';
 import 'package:kenari_app/services/api/models/bank_model.dart';
 import 'package:kenari_app/services/api/models/list_bank_model.dart';
 import 'package:kenari_app/services/local/local_shared_prefs.dart';
-import 'package:kenari_app/services/local/models/local_bank_account_data.dart';
+import 'package:kenari_app/services/local/jsons/local_bank_account_data.dart';
 
 class APIBankServices {
   BuildContext context;

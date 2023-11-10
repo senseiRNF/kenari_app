@@ -9,7 +9,7 @@ import 'package:kenari_app/services/api/models/detail_product_model.dart';
 import 'package:kenari_app/services/api/models/trolley_model.dart';
 import 'package:kenari_app/services/api/product_services/api_product_services.dart';
 import 'package:kenari_app/services/api/trolley_services/api_trolley_services.dart';
-import 'package:kenari_app/services/local/models/local_trolley_product.dart';
+import 'package:kenari_app/services/local/jsons/local_trolley_product.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 

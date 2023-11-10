@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kenari_app/miscellaneous/dialog_functions.dart';
 import 'package:kenari_app/miscellaneous/route_functions.dart';
 import 'package:kenari_app/services/api/api_options.dart';
-import 'package:kenari_app/services/local/models/api_response_result.dart';
+import 'package:kenari_app/services/local/jsons/api_response_result.dart';
 
 class APIRegisterServices {
   BuildContext context;

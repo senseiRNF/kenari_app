@@ -17,8 +17,8 @@ import 'package:kenari_app/services/api/models/company_model.dart';
 import 'package:kenari_app/services/api/models/seller_product_detail_model.dart';
 import 'package:kenari_app/services/api/product_services/api_category_services.dart';
 import 'package:kenari_app/services/api/seller_product_services/api_seller_product_services.dart';
-import 'package:kenari_app/services/local/models/local_seller_product_data.dart';
-import 'package:kenari_app/services/local/models/local_variant_data.dart';
+import 'package:kenari_app/services/local/jsons/local_seller_product_data.dart';
+import 'package:kenari_app/services/local/jsons/local_variant_data.dart';
 import 'package:kenari_app/styles/color_styles.dart';
 import 'package:kenari_app/styles/text_styles.dart';
 
